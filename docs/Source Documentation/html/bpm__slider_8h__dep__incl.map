@@ -1,0 +1,7 @@
+<map id="src/editor_components/bpm_slider.h" name="src/editor_components/bpm_slider.h">
+<area shape="rect" id="Node000001" title="Slider pour l&#39;affichage et le pilotage du BPM (tempo)." alt="" coords="88,5,241,48"/>
+<area shape="rect" id="Node000002" href="$bpm__slider_8cpp.html" title=" " alt="" coords="5,96,159,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,61,103,98,99,94,133,58"/>
+<area shape="rect" id="Node000003" href="$bpm__section_8cpp.html" title="UI implementation for the BPM control section." alt="" coords="183,96,314,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="197,58,231,94,227,98,193,61"/>
+</map>

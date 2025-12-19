@@ -1,0 +1,24 @@
+<map id="src/editor_components/modulation_highlight.h" name="src/editor_components/modulation_highlight.h">
+<area shape="rect" id="Node000001" title="Visuel indiquant qu&#39;un paramètre est modulé (highlight / feedback)." alt="" coords="72,5,227,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="45,171,147,197"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,50,109,72,95,97,90,127,92,155,87,156,85,126,90,95,104,69,123,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="105,96,194,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="152,49,152,80,147,80,147,49"/>
+<area shape="rect" id="Node000004" href="$synth__slider_8h.html" title=" " alt="" coords="218,96,321,123"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="182,46,240,85,237,89,179,51"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="240,126,142,167,139,162,238,121"/>
+<area shape="rect" id="Node000005" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="199,171,340,197"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="272,123,272,155,267,155,267,123"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="5,245,70,272"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="230,200,85,245,84,240,228,195"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="94,245,157,272"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="246,200,166,240,163,235,243,195"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="181,245,267,272"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="264,199,242,233,238,231,259,196"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="292,245,338,272"/>
+<area shape="poly" id="edge9_Node000005_Node000009" title=" " alt="" coords="280,196,301,231,297,233,275,199"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="362,245,415,272"/>
+<area shape="poly" id="edge10_Node000005_Node000010" title=" " alt="" coords="292,196,356,235,353,239,289,200"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="439,245,508,272"/>
+<area shape="poly" id="edge11_Node000005_Node000011" title=" " alt="" coords="306,195,425,237,423,242,304,200"/>
+</map>

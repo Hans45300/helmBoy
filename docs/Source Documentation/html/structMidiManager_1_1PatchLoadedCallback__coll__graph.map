@@ -1,0 +1,7 @@
+<map id="MidiManager::PatchLoadedCallback" name="MidiManager::PatchLoadedCallback">
+<area shape="rect" id="Node000001" title=" " alt="" coords="65,189,234,296"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,27,120,96"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,108,127,188,122,191,83,111"/>
+<area shape="rect" id="Node000003" href="$classMidiManager_1_1Listener.html" title="Listener interface for MIDI&#45;triggered parameter changes." alt="" coords="144,5,331,117"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="213,118,185,175,180,173,208,116"/>
+</map>

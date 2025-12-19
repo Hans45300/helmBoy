@@ -1,0 +1,63 @@
+<map id="src/editor_sections/lfo_section.h" name="src/editor_sections/lfo_section.h">
+<area shape="rect" id="Node000001" title="UI section for LFO controls and visualization." alt="" coords="530,5,662,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="495,245,598,272"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="530,36,398,50,239,77,163,95,97,117,45,143,26,157,13,172,8,185,12,196,23,206,41,216,96,231,168,242,334,253,480,255,480,261,334,258,167,247,95,236,39,221,20,211,7,199,3,185,8,169,22,153,42,138,95,112,162,90,238,71,397,45,529,31"/>
+<area shape="rect" id="Node000003" href="$open__gl__wave__viewer_8h.html" title=" " alt="" coords="194,96,355,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="530,47,341,94,339,89,529,42"/>
+<area shape="rect" id="Node000014" href="$synth__section_8h.html" title="Base class for UI sections used in the HelmBoy interface." alt="" coords="871,96,985,123"/>
+<area shape="poly" id="edge18_Node000001_Node000014" title=" " alt="" coords="663,41,861,89,860,94,661,46"/>
+<area shape="rect" id="Node000017" href="$retrigger__selector_8h.html" title="Sélecteur de mode de retrigger pour les oscillateurs/enveloppes." alt="" coords="379,96,511,123"/>
+<area shape="poly" id="edge27_Node000001_Node000017" title=" " alt="" coords="558,51,483,91,481,86,556,46"/>
+<area shape="rect" id="Node000018" href="$tempo__selector_8h.html" title="Contrôle de tempo/selector de tempo pour l&#39;interface." alt="" coords="535,96,657,123"/>
+<area shape="poly" id="edge30_Node000001_Node000018" title=" " alt="" coords="599,49,599,80,593,80,593,49"/>
+<area shape="rect" id="Node000019" href="$wave__selector_8h.html" title="Sélecteur graphique de formes d&#39;onde pour oscillateurs." alt="" coords="680,96,797,123"/>
+<area shape="poly" id="edge33_Node000001_Node000019" title=" " alt="" coords="634,46,704,86,702,90,631,51"/>
+<area shape="rect" id="Node000020" href="$wave__viewer_8h.html" title="Visualiseur d&#39;onde/waveform pour oscillateurs et sources." alt="" coords="1139,96,1247,123"/>
+<area shape="poly" id="edge36_Node000001_Node000020" title=" " alt="" coords="662,34,1124,96,1123,101,662,40"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="194,116,123,124,59,139,35,149,22,162,19,177,30,195,51,207,93,217,215,233,357,245,480,252,480,257,357,250,215,239,92,222,49,212,26,199,14,178,17,159,32,145,57,134,122,119,194,111"/>
+<area shape="rect" id="Node000004" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="898,245,1038,272"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="306,121,404,158,529,195,622,214,718,229,883,248,882,253,717,234,621,219,527,200,402,163,304,126"/>
+<area shape="rect" id="Node000011" href="$open__gl__background_8h.html" title="Helper pour gérer le fond graphique OpenGL et le shader d&#39;image." alt="" coords="40,171,192,197"/>
+<area shape="poly" id="edge11_Node000003_Node000011" title=" " alt="" coords="248,126,159,166,157,161,246,121"/>
+<area shape="rect" id="Node000012" href="$open__gl__component_8h.html" title="Base pour composants OpenGL accélérés (lifecycle init/render/destroy)." alt="" coords="215,171,363,197"/>
+<area shape="poly" id="edge13_Node000003_Node000012" title=" " alt="" coords="280,123,286,155,281,156,274,124"/>
+<area shape="rect" id="Node000013" href="$synth__slider_8h.html" title=" " alt="" coords="539,171,642,197"/>
+<area shape="poly" id="edge15_Node000003_Node000013" title=" " alt="" coords="331,121,525,165,523,170,329,126"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="1026,320,1091,347"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="985,270,1033,308,1030,312,982,275"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="659,320,722,347"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="918,275,738,322,737,317,917,270"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="746,320,832,347"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="938,275,835,316,833,311,936,270"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="1115,320,1162,347"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="999,270,1102,314,1100,319,997,275"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="856,320,909,347"/>
+<area shape="poly" id="edge9_Node000004_Node000009" title=" " alt="" coords="955,275,910,312,907,308,951,271"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="934,320,1002,347"/>
+<area shape="poly" id="edge10_Node000004_Node000010" title=" " alt="" coords="971,273,971,304,965,304,965,273"/>
+<area shape="poly" id="edge12_Node000011_Node000002" title=" " alt="" coords="192,195,480,244,479,249,191,201"/>
+<area shape="poly" id="edge14_Node000012_Node000002" title=" " alt="" coords="335,195,488,238,486,243,333,200"/>
+<area shape="poly" id="edge16_Node000013_Node000002" title=" " alt="" coords="585,199,564,233,560,231,581,196"/>
+<area shape="poly" id="edge17_Node000013_Node000004" title=" " alt="" coords="643,193,887,239,886,244,642,198"/>
+<area shape="poly" id="edge19_Node000014_Node000002" title=" " alt="" coords="890,126,756,173,590,241,588,236,754,168,889,121"/>
+<area shape="poly" id="edge22_Node000014_Node000004" title=" " alt="" coords="982,121,1019,139,1036,152,1050,170,1055,190,1046,209,1029,226,1009,240,1006,235,1026,222,1042,206,1049,189,1045,172,1033,156,1017,143,979,126"/>
+<area shape="poly" id="edge26_Node000014_Node000008" title=" " alt="" coords="983,121,1029,139,1051,152,1071,169,1096,201,1115,238,1136,304,1131,306,1110,240,1092,204,1067,173,1048,157,1027,144,981,126"/>
+<area shape="rect" id="Node000015" href="$modulation__button_8h.html" title="Bouton permettant d&#39;ajouter/retirer des connexions de modulation." alt="" coords="767,171,905,197"/>
+<area shape="poly" id="edge20_Node000014_Node000015" title=" " alt="" coords="914,125,865,163,862,159,910,121"/>
+<area shape="rect" id="Node000016" href="$synth__button_8h.html" title="Boutons stylisés pour l&#39;interface (toggle, contextual labels)." alt="" coords="929,171,1036,197"/>
+<area shape="poly" id="edge23_Node000014_Node000016" title=" " alt="" coords="940,122,966,156,962,160,935,125"/>
+<area shape="poly" id="edge21_Node000015_Node000002" title=" " alt="" coords="786,200,613,244,611,238,785,195"/>
+<area shape="poly" id="edge24_Node000016_Node000002" title=" " alt="" coords="929,198,918,200,614,250,613,244,917,195,928,193"/>
+<area shape="poly" id="edge25_Node000016_Node000004" title=" " alt="" coords="983,198,976,231,971,230,977,197"/>
+<area shape="poly" id="edge28_Node000017_Node000002" title=" " alt="" coords="456,122,532,231,527,234,452,125"/>
+<area shape="poly" id="edge29_Node000017_Node000013" title=" " alt="" coords="472,121,553,161,550,166,469,126"/>
+<area shape="poly" id="edge31_Node000018_Node000002" title=" " alt="" coords="575,125,550,145,530,172,527,186,527,201,535,231,530,232,522,202,521,185,525,170,546,141,572,121"/>
+<area shape="poly" id="edge32_Node000018_Node000013" title=" " alt="" coords="598,123,595,155,590,155,592,123"/>
+<area shape="poly" id="edge34_Node000019_Node000002" title=" " alt="" coords="730,125,698,160,655,199,589,240,586,236,652,195,695,156,726,121"/>
+<area shape="poly" id="edge35_Node000019_Node000013" title=" " alt="" coords="714,126,631,166,629,161,712,121"/>
+<area shape="poly" id="edge37_Node000020_Node000002" title=" " alt="" coords="1210,121,1226,137,1240,157,1247,179,1245,189,1239,199,1212,209,1155,217,981,234,614,257,613,251,981,228,1154,212,1211,203,1236,195,1240,188,1241,179,1235,160,1222,141,1206,125"/>
+<area shape="poly" id="edge39_Node000020_Node000004" title=" " alt="" coords="1224,121,1251,135,1275,154,1289,175,1289,187,1283,199,1268,212,1246,222,1188,238,1120,249,1054,256,1053,250,1120,244,1187,233,1244,217,1265,207,1279,196,1284,186,1284,177,1271,157,1248,140,1221,125"/>
+<area shape="poly" id="edge40_Node000020_Node000013" title=" " alt="" coords="1139,120,657,177,657,172,1138,115"/>
+<area shape="rect" id="Node000021" title=" " alt="" coords="1162,171,1225,197"/>
+<area shape="poly" id="edge38_Node000020_Node000021" title=" " alt="" coords="1196,123,1196,155,1191,155,1191,123"/>
+</map>

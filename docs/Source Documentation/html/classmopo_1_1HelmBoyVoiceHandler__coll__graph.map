@@ -1,0 +1,16 @@
+<map id="mopo::HelmBoyVoiceHandler" name="mopo::HelmBoyVoiceHandler">
+<area shape="rect" id="Node000001" title=" " alt="" coords="189,820,398,1423"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,391,93,460"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="57,474,74,590,89,659,108,726,146,828,191,926,186,929,141,830,103,727,84,660,69,591,52,475"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1HelmBoyModule.html" title=" " alt="" coords="117,124,328,727"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="257,741,265,820,260,820,252,741"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="168,5,277,75"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="225,90,225,124,220,124,220,90"/>
+<area shape="rect" id="Node000005" href="$classmopo_1_1Gate.html" title=" " alt="" coords="352,348,463,503"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="398,503,348,804,343,803,393,502"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="452,5,521,75"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="479,90,426,349,421,348,474,89"/>
+<area shape="rect" id="Node000007" href="$classmopo_1_1HelmBoyLfo.html" title=" " alt="" coords="487,327,646,524"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="499,89,549,326,544,327,494,90"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="560,524,539,656,521,728,498,797,458,884,409,966,405,963,453,881,493,795,516,726,534,655,555,523"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="Overlay" name="Overlay">
+<area shape="rect" id="Node000001" title=" " alt="" coords="311,123,432,320"/>
+<area shape="rect" id="Node000003" href="$classAboutSection.html" title=" " alt="" coords="5,496,174,949"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="300,266,240,311,212,339,188,369,155,431,130,497,125,495,150,429,184,367,208,335,236,307,297,262"/>
+<area shape="rect" id="Node000004" href="$classDeleteSection.html" title=" " alt="" coords="198,560,357,885"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="353,335,311,561,305,560,348,334"/>
+<area shape="rect" id="Node000005" href="$classPatchBrowser.html" title=" " alt="" coords="382,368,547,1077"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="395,334,401,368,396,369,390,335"/>
+<area shape="rect" id="Node000006" href="$classSaveSection.html" title=" " alt="" coords="571,379,769,1067"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="446,262,507,308,536,336,561,366,573,384,569,387,557,370,532,339,504,312,443,266"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="332,5,410,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="374,90,374,123,368,123,368,90"/>
+</map>

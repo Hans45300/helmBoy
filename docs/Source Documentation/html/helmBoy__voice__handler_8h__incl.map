@@ -1,0 +1,27 @@
+<map id="src/synthesis/helmBoy_voice_handler.h" name="src/synthesis/helmBoy_voice_handler.h">
+<area shape="rect" id="Node000001" title="Polyphonic voice management and synthesis engine for HelmBoy." alt="" coords="138,5,292,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,245,70,272"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,51,119,71,86,98,65,129,52,164,44,200,41,230,36,230,39,199,46,163,60,126,82,94,117,66,155,46"/>
+<area shape="rect" id="Node000003" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="197,171,337,197"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="226,48,244,95,262,155,257,156,239,97,221,50"/>
+<area shape="rect" id="Node000009" href="$helmBoy__module_8h.html" title="Base class utilities for HelmBoy modules and control creation helpers." alt="" coords="97,96,229,123"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="204,50,181,84,177,81,199,47"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="361,171,418,197"/>
+<area shape="poly" id="edge14_Node000001_Node000010" title=" " alt="" coords="240,47,366,158,362,162,236,51"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="228,200,86,245,84,240,226,195"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="334,245,397,272"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="286,196,338,234,335,238,282,200"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="421,245,507,272"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="302,195,416,237,414,242,300,200"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="94,245,141,272"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="242,200,156,242,154,237,240,195"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="164,245,218,272"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="255,200,217,237,213,233,252,196"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="242,245,310,272"/>
+<area shape="poly" id="edge8_Node000003_Node000008" title=" " alt="" coords="271,198,275,230,270,230,266,198"/>
+<area shape="poly" id="edge10_Node000009_Node000002" title=" " alt="" coords="138,125,106,145,76,172,58,202,47,232,42,230,53,199,71,169,102,141,135,121"/>
+<area shape="poly" id="edge11_Node000009_Node000003" title=" " alt="" coords="182,121,238,159,235,164,179,125"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="203,121,347,166,345,171,202,126"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="86,171,173,197"/>
+<area shape="poly" id="edge13_Node000009_Node000011" title=" " alt="" coords="159,124,144,158,139,155,155,122"/>
+</map>

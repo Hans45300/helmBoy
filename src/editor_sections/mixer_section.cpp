@@ -1,0 +1,106 @@
+/* Copyright 2025 Marc Scheffer
+ *
+ * helmBoy is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ *
+ * This work is based on bepzi's Helm project, <https://github.com/bepzi/helm>,
+ * itself based on Matt Tytel's Helm <https://tytel.org/helm/>
+ *
+ * helmBoy is distributedin the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with helmBoy.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "mixer_section.h"
+
+#include "colors.h"
+#include "fonts.h"
+#include "modulation_look_and_feel.h"
+#include "synth_slider.h"
+
+#define SLIDER_WIDTH 30
+#define TEXT_SECTION_WIDTH 18
+
+/**
+ * @file mixer_section.cpp
+ * @brief Implementation of the MixerSection UI.
+ */
+
+MixerSection::MixerSection(String name) : SynthSection(name) {
+  addSlider((osc_1_ = std::make_unique<SynthSlider>("osc_1_volume")).get());
+  osc_1_->setSliderStyle(Slider::LinearBarVertical);
+  osc_1_->flipColoring(true);
+
+  addSlider((osc_2_ = std::make_unique<SynthSlider>("osc_2_volume")).get());
+  osc_2_->setSliderStyle(Slider::LinearBarVertical);
+  osc_2_->flipColoring(true);
+
+  addSlider((sub_ = std::make_unique<SynthSlider>("sub_volume")).get());
+  sub_->setSliderStyle(Slider::LinearBarVertical);
+  sub_->flipColoring(true);
+
+  addSlider((noise_ = std::make_unique<SynthSlider>("noise_volume")).get());
+  noise_->setSliderStyle(Slider::LinearBarVertical);
+  noise_->flipColoring(true);
+}
+
+/**
+ * @file mixer_section.cpp
+ * @brief Implementation of the MixerSection UI.
+ */
+
+MixerSection::~MixerSection() {
+  osc_1_ = nullptr;
+  osc_2_ = nullptr;
+  sub_ = nullptr;
+  noise_ = nullptr;
+}
+
+void MixerSection::paintBackground(Graphics& g) {
+  static const DropShadow component_shadow(Colour(Colors::Color_88000000), 2, Point<int>(0, 1));
+  SynthSection::paintBackground(g);
+
+  int text_section_width = size_ratio_ * TEXT_SECTION_WIDTH;
+  int text_y = getHeight() - text_section_width;
+  int slider_width = size_ratio_ * SLIDER_WIDTH;
+  float buffer = (getWidth() - 4 * slider_width) / 3.0f;
+  g.setColour(Colors::control_label_text);
+  g.setFont(Fonts::instance()->proportional_regular().withPointHeight(size_ratio_ * 10.0f));
+
+  g.drawText(TRANS("OSC 1"), 0, text_y,
+             slider_width, text_section_width,
+             Justification::centred, false);
+
+  g.drawText(TRANS("OSC 2"), slider_width + buffer, text_y,
+             slider_width, text_section_width,
+             Justification::centred, false);
+
+  g.drawText(TRANS("SUB"), 2 * (slider_width + buffer), text_y,
+             slider_width, text_section_width,
+             Justification::centred, false);
+
+  g.drawText(TRANS("NOISE"), 3 * (slider_width + buffer), text_y,
+             slider_width, text_section_width,
+             Justification::centred, false);
+}
+
+void MixerSection::resized() {
+  int slider_width = size_ratio_ * SLIDER_WIDTH;
+  float buffer = (getWidth() - 4 * slider_width) / 3.0f;
+  int title_width = getTitleWidth();
+  int text_section_width = size_ratio_ * TEXT_SECTION_WIDTH;
+  float slider_height = getHeight() - text_section_width - title_width;
+
+  osc_1_->setBounds(0, title_width, slider_width, slider_height);
+  osc_2_->setBounds(slider_width + buffer, title_width, slider_width, slider_height);
+  sub_->setBounds(2 * (slider_width + buffer), title_width, slider_width, slider_height);
+  noise_->setBounds(3 * (slider_width + buffer), title_width, slider_width, slider_height);
+  SynthSection::resized();
+}

@@ -1,0 +1,17 @@
+<map id="src/synthesis/fixed_point_wave.h" name="src/synthesis/fixed_point_wave.h">
+<area shape="rect" id="Node000001" title="Fixed&#45;point waveform lookup utilities and helpers used by oscillators." alt="" coords="244,5,375,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,96,88,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="244,51,103,94,101,88,242,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="112,96,176,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="268,51,185,91,182,86,265,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="200,96,256,123"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="290,51,253,87,249,83,286,47"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="280,96,339,123"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="312,49,312,80,306,80,306,49"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="363,96,420,123"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="332,47,370,83,366,87,329,51"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="445,96,504,123"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="353,46,436,86,434,91,351,51"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="528,96,589,123"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="374,46,514,91,512,96,373,51"/>
+</map>

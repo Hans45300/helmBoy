@@ -1,0 +1,13 @@
+<map id="src/plugin/value_bridge.h" name="src/plugin/value_bridge.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="68,5,233,32"/>
+<area shape="rect" id="Node000002" href="$helmBoy__plugin_8h.html" title=" " alt="" coords="84,80,216,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,48,153,80,148,80,148,48"/>
+<area shape="rect" id="Node000003" href="$plugin_2helmBoy__editor_8cpp.html" title=" " alt="" coords="5,261,138,304"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,134,87,152,74,172,67,194,65,218,69,260,64,261,60,218,62,193,69,170,83,148,101,130"/>
+<area shape="rect" id="Node000004" href="$plugin_2helmBoy__editor_8h.html" title=" " alt="" coords="84,171,216,213"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="153,138,153,170,148,170,148,138"/>
+<area shape="rect" id="Node000005" href="$helmBoy__plugin_8cpp.html" title=" " alt="" coords="175,261,307,304"/>
+<area shape="poly" id="edge6_Node000002_Node000005" title=" " alt="" coords="198,131,216,148,231,169,240,193,245,218,246,261,240,261,239,218,235,194,226,172,212,152,194,135"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="124,227,92,263,88,259,120,223"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="184,222,222,259,218,263,180,226"/>
+</map>

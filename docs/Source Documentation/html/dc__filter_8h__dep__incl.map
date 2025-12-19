@@ -1,0 +1,7 @@
+<map id="src/synthesis/dc_filter.h" name="src/synthesis/dc_filter.h">
+<area shape="rect" id="Node000001" title="Header for a simple DC blocking filter processor." alt="" coords="106,5,266,32"/>
+<area shape="rect" id="Node000002" href="$dc__filter_8cpp.html" title="Simple DC blocking filter implementation used to remove DC offset from audio streams." alt="" coords="5,88,180,115"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,44,108,90,105,86,158,40"/>
+<area shape="rect" id="Node000003" href="$helmBoy__engine_8cpp.html" title="Top&#45;level synth engine: constructs processors and routing for HelmBoy." alt="" coords="203,80,358,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="214,40,258,77,255,82,211,44"/>
+</map>

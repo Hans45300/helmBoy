@@ -1,0 +1,30 @@
+<map id="src/editor_components/text_selector.cpp" name="src/editor_components/text_selector.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="397,5,550,48"/>
+<area shape="rect" id="Node000002" href="$text__selector_8h.html" title="Sélecteur affichant options textuelles pour un contrôle." alt="" coords="304,96,411,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="445,51,389,89,386,85,442,46"/>
+<area shape="rect" id="Node000012" href="$default__look__and__feel_8h.html" title=" " alt="" coords="394,171,553,197"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="476,48,476,155,471,155,471,48"/>
+<area shape="rect" id="Node000013" href="$fonts_8h.html" title=" " alt="" coords="535,96,596,123"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="499,47,542,84,538,88,495,51"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="393,245,495,272"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="362,123,369,157,385,196,400,216,418,233,414,237,396,219,381,199,364,159,357,124"/>
+<area shape="rect" id="Node000004" href="$synth__slider_8h.html" title=" " alt="" coords="218,171,321,197"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="344,125,298,163,295,159,340,121"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="301,195,401,236,398,241,299,200"/>
+<area shape="rect" id="Node000005" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="199,245,340,272"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="272,198,272,230,267,230,267,198"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="5,320,70,347"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="230,275,85,320,84,315,228,270"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="94,320,157,347"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="246,275,166,315,163,310,243,270"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="181,320,267,347"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="264,274,242,308,238,305,259,271"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="292,320,338,347"/>
+<area shape="poly" id="edge9_Node000005_Node000009" title=" " alt="" coords="280,271,301,305,297,308,275,274"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="362,320,415,347"/>
+<area shape="poly" id="edge10_Node000005_Node000010" title=" " alt="" coords="292,270,356,309,353,314,289,275"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="439,320,508,347"/>
+<area shape="poly" id="edge11_Node000005_Node000011" title=" " alt="" coords="306,270,425,312,423,317,304,275"/>
+<area shape="poly" id="edge13_Node000012_Node000003" title=" " alt="" coords="471,199,457,232,452,230,466,197"/>
+<area shape="poly" id="edge15_Node000013_Node000003" title=" " alt="" coords="572,123,576,158,574,179,566,199,542,225,511,242,508,237,539,220,562,196,569,178,571,158,566,123"/>
+</map>

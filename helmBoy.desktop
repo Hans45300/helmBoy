@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=HelmBoy
+Comment=A free polyphonic synth
+Comment[fr]=Un synthétiseur polyphonique libre
+GenericName=Synth
+GenericName[fr]=Synthétiseur
+Exec=helmBoy
+Icon=helmBoy
+Terminal=false
+Type=Application
+Categories=Audio;AudioVideo;
+MimeType=text/helmBoy;

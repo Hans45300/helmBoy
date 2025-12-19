@@ -1,0 +1,10 @@
+<map id="src/editor_components/HelmBoyGraphics.cpp" name="src/editor_components/HelmBoyGraphics.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="83,5,239,48"/>
+<area shape="rect" id="Node000002" href="$HelmBoyGraphics_8h.html" title="Petites primitives graphiques partagées (logo, icônes de modulation)." alt="" coords="5,96,144,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="141,51,101,87,97,83,137,47"/>
+<area shape="rect" id="Node000004" href="$colors_8h.html" title=" " alt="" coords="168,96,331,123"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="186,47,226,83,222,87,182,51"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="110,171,212,197"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="91,121,136,159,133,163,88,125"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="236,125,190,163,186,159,232,121"/>
+</map>

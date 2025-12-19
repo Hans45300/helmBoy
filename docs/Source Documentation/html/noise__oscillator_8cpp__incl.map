@@ -1,0 +1,7 @@
+<map id="src/synthesis/noise_oscillator.cpp" name="src/synthesis/noise_oscillator.cpp">
+<area shape="rect" id="Node000001" title="White&#45;noise oscillator processor producing sample&#45;rate independent random output." alt="" coords="5,5,140,48"/>
+<area shape="rect" id="Node000002" href="$noise__oscillator_8h.html" title="Header for a simple white&#45;noise oscillator processor." alt="" coords="11,96,134,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,49,75,80,70,80,70,49"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="40,171,105,197"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="75,123,75,155,70,155,70,123"/>
+</map>

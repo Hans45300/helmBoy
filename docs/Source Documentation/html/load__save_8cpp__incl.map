@@ -1,0 +1,76 @@
+<map id="src/common/load_save.cpp" name="src/common/load_save.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="645,5,827,32"/>
+<area shape="rect" id="Node000002" href="$load__save_8h.html" title="Patch, bank and configuration persistence utilities." alt="" coords="314,80,406,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="671,35,422,83,421,78,670,30"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="330,229,433,256"/>
+<area shape="poly" id="edge17_Node000001_Node000003" title=" " alt="" coords="672,35,612,51,546,76,479,111,448,132,421,156,401,185,390,215,385,213,397,182,417,153,445,128,476,106,544,71,611,46,670,30"/>
+<area shape="rect" id="Node000006" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="450,304,590,331"/>
+<area shape="poly" id="edge20_Node000001_Node000006" title=" " alt="" coords="645,22,550,25,448,34,401,42,359,52,327,65,305,82,291,104,281,142,281,166,286,193,299,223,321,254,344,276,373,292,404,302,435,309,434,314,402,308,371,297,341,280,317,258,294,226,281,195,275,167,276,141,286,101,301,78,324,61,358,47,400,37,447,29,550,19,645,17"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="1330,379,1398,405"/>
+<area shape="poly" id="edge18_Node000001_Node000011" title=" " alt="" coords="827,18,1000,25,1099,34,1197,47,1286,66,1359,91,1388,106,1409,124,1423,144,1428,166,1428,244,1424,279,1413,312,1384,367,1379,364,1408,310,1419,278,1423,244,1423,167,1418,146,1405,128,1385,111,1357,96,1285,71,1196,52,1099,39,1000,31,827,23"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="1463,80,1540,107"/>
+<area shape="poly" id="edge19_Node000001_Node000015" title=" " alt="" coords="827,21,1104,40,1274,56,1444,77,1449,78,1448,83,1444,83,1273,61,1103,45,827,27"/>
+<area shape="rect" id="Node000016" href="$midi__manager_8h.html" title="MIDI input handling and controller mapping." alt="" coords="1165,155,1278,181"/>
+<area shape="poly" id="edge21_Node000001_Node000016" title=" " alt="" coords="779,30,1166,147,1164,152,777,35"/>
+<area shape="rect" id="Node000018" href="$synth__base_8h.html" title="Base synthesizer abstraction shared by plugin and standalone builds." alt="" coords="686,80,786,107"/>
+<area shape="poly" id="edge27_Node000001_Node000018" title=" " alt="" coords="739,33,739,64,733,64,733,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="361,107,360,141,363,181,372,214,367,216,357,182,355,141,356,107"/>
+<area shape="rect" id="Node000004" href="$helmBoy__engine_8h.html" title="Declaration of the HelmBoyEngine: central synth engine and parameter routing." alt="" coords="112,155,240,181"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="329,110,223,151,221,146,327,105"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="115,379,179,405"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="143,184,102,204,62,231,30,264,12,305,8,318,12,329,29,349,51,363,100,381,99,386,49,368,26,353,7,332,3,318,7,303,26,261,58,227,99,199,140,180"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="188,180,225,217,249,237,276,254,315,271,356,285,436,303,434,308,355,290,313,276,274,258,246,241,221,221,184,183"/>
+<area shape="rect" id="Node000012" href="$helmBoy__module_8h.html" title="Base class utilities for HelmBoy modules and control creation helpers." alt="" coords="73,229,205,256"/>
+<area shape="poly" id="edge12_Node000004_Node000012" title=" " alt="" coords="172,183,154,217,150,214,167,181"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="455,334,195,384,194,379,454,329"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="439,379,502,405"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="514,333,490,367,486,364,509,330"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="526,379,613,405"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="531,330,555,364,550,367,527,333"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="854,379,901,405"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="583,329,839,380,838,385,582,334"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="1191,379,1244,405"/>
+<area shape="poly" id="edge10_Node000006_Node000010" title=" " alt="" coords="591,323,1175,384,1175,389,591,329"/>
+<area shape="poly" id="edge11_Node000006_Node000011" title=" " alt="" coords="591,321,881,343,1256,376,1315,382,1315,388,1256,381,881,349,591,326"/>
+<area shape="poly" id="edge13_Node000012_Node000005" title=" " alt="" coords="142,256,148,363,143,363,137,257"/>
+<area shape="poly" id="edge14_Node000012_Node000006" title=" " alt="" coords="206,254,439,298,438,303,205,259"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="277,304,334,331"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="169,254,263,295,261,300,167,259"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="22,304,109,331"/>
+<area shape="poly" id="edge16_Node000012_Node000014" title=" " alt="" coords="128,258,91,295,87,291,124,255"/>
+<area shape="poly" id="edge22_Node000016_Node000003" title=" " alt="" coords="1165,182,1152,184,448,239,448,234,1152,179,1164,177"/>
+<area shape="poly" id="edge24_Node000016_Node000006" title=" " alt="" coords="1209,184,1160,222,1127,242,1092,259,1051,270,998,280,867,296,606,315,606,309,867,290,997,274,1050,264,1090,253,1125,238,1157,218,1206,180"/>
+<area shape="poly" id="edge26_Node000016_Node000009" title=" " alt="" coords="1213,184,1181,219,1136,258,1079,296,1019,329,916,378,914,373,1016,325,1076,292,1133,254,1177,215,1209,180"/>
+<area shape="poly" id="edge25_Node000016_Node000010" title=" " alt="" coords="1224,182,1221,364,1215,363,1219,182"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="1255,229,1337,256"/>
+<area shape="poly" id="edge23_Node000016_Node000017" title=" " alt="" coords="1236,180,1274,217,1271,221,1233,184"/>
+<area shape="poly" id="edge29_Node000018_Node000003" title=" " alt="" coords="686,98,635,103,576,113,514,130,456,157,423,185,398,218,394,214,419,182,453,152,512,125,575,108,635,98,686,93"/>
+<area shape="poly" id="edge33_Node000018_Node000004" title=" " alt="" coords="686,104,256,159,256,154,686,98"/>
+<area shape="poly" id="edge32_Node000018_Node000006" title=" " alt="" coords="718,109,620,175,572,210,548,231,533,260,526,290,521,288,528,258,543,228,569,205,617,171,715,105"/>
+<area shape="poly" id="edge44_Node000018_Node000010" title=" " alt="" coords="786,93,903,96,1051,105,1193,123,1250,136,1292,152,1324,172,1347,195,1358,223,1357,239,1352,257,1332,293,1306,324,1251,372,1248,368,1302,321,1328,290,1347,255,1352,238,1352,224,1342,198,1320,176,1290,157,1249,141,1192,128,1051,110,903,101,786,98"/>
+<area shape="poly" id="edge45_Node000018_Node000014" title=" " alt="" coords="686,99,358,119,193,136,134,146,101,157,79,177,67,198,62,224,63,256,65,288,60,289,57,256,57,223,62,196,74,173,99,152,133,141,192,130,358,113,686,94"/>
+<area shape="poly" id="edge35_Node000018_Node000016" title=" " alt="" coords="787,99,1150,152,1149,157,786,104"/>
+<area shape="rect" id="Node000019" title=" " alt="" coords="1020,155,1140,181"/>
+<area shape="poly" id="edge28_Node000018_Node000019" title=" " alt="" coords="787,103,1005,148,1004,153,786,108"/>
+<area shape="rect" id="Node000020" title=" " alt="" coords="467,155,595,181"/>
+<area shape="poly" id="edge30_Node000018_Node000020" title=" " alt="" coords="701,110,582,152,580,147,699,105"/>
+<area shape="rect" id="Node000021" title=" " alt="" coords="827,155,893,181"/>
+<area shape="poly" id="edge31_Node000018_Node000021" title=" " alt="" coords="759,105,827,144,824,149,756,110"/>
+<area shape="rect" id="Node000022" title=" " alt="" coords="917,155,995,181"/>
+<area shape="poly" id="edge34_Node000018_Node000022" title=" " alt="" coords="775,105,904,147,902,152,774,110"/>
+<area shape="rect" id="Node000023" href="$safe__audio__buffer_8h.html" title="Modern C++20 safe audio buffer management with std::span and SIMD optimizations." alt="" coords="669,155,803,181"/>
+<area shape="poly" id="edge36_Node000018_Node000023" title=" " alt="" coords="739,107,739,139,733,139,733,107"/>
+<area shape="poly" id="edge38_Node000023_Node000013" title=" " alt="" coords="695,184,546,232,349,302,347,297,545,227,693,179"/>
+<area shape="rect" id="Node000024" title=" " alt="" coords="941,229,990,256"/>
+<area shape="poly" id="edge37_Node000023_Node000024" title=" " alt="" coords="778,179,927,226,925,231,777,185"/>
+<area shape="rect" id="Node000025" title=" " alt="" coords="1015,229,1079,256"/>
+<area shape="poly" id="edge39_Node000023_Node000025" title=" " alt="" coords="796,179,1000,226,999,231,795,185"/>
+<area shape="rect" id="Node000026" title=" " alt="" coords="558,229,632,256"/>
+<area shape="poly" id="edge40_Node000023_Node000026" title=" " alt="" coords="713,184,634,224,632,219,710,179"/>
+<area shape="rect" id="Node000027" title=" " alt="" coords="656,229,733,256"/>
+<area shape="poly" id="edge41_Node000023_Node000027" title=" " alt="" coords="731,183,712,217,707,215,727,181"/>
+<area shape="rect" id="Node000028" title=" " alt="" coords="758,229,818,256"/>
+<area shape="poly" id="edge42_Node000023_Node000028" title=" " alt="" coords="747,180,773,215,768,218,743,183"/>
+<area shape="rect" id="Node000029" title=" " alt="" coords="843,229,917,256"/>
+<area shape="poly" id="edge43_Node000023_Node000029" title=" " alt="" coords="762,179,842,219,840,224,760,184"/>
+</map>

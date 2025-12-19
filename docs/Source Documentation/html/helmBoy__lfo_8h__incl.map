@@ -1,0 +1,7 @@
+<map id="src/synthesis/helmBoy_lfo.h" name="src/synthesis/helmBoy_lfo.h">
+<area shape="rect" id="Node000001" title="Header for HelmBoyLfo: low&#45;frequency oscillator for modulation." alt="" coords="22,5,176,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,96,95,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,50,68,84,63,81,84,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="118,96,182,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="115,47,136,81,132,84,110,50"/>
+</map>

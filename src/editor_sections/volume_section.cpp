@@ -1,0 +1,56 @@
+/* Copyright 2025 Marc Scheffer
+ *
+ * helmBoy is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ *
+ * This work is based on bepzi's Helm project, <https://github.com/bepzi/helm>,
+ * itself based on Matt Tytel's Helm <https://tytel.org/helm/>
+ *
+ * helmBoy is distributedin the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with helmBoy.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "volume_section.h"
+#include "synth_slider.h"
+
+/**
+ * @file volume_section.cpp
+ * @brief Implementation of VolumeSection UI (volume slider + peak meters).
+ */
+
+VolumeSection::VolumeSection(String name) : SynthSection(name) {
+  addSlider((volume_ = std::make_unique<SynthSlider>("volume")).get());
+  addOpenGLComponent((peak_meter_left_ = std::make_unique<OpenGLPeakMeter>(true)).get());
+  addOpenGLComponent((peak_meter_right_ = std::make_unique<OpenGLPeakMeter>(false)).get());
+  volume_->setSliderStyle(Slider::LinearBar);
+  volume_->setPopupPlacement(BubbleComponent::below, 0);
+}
+
+/**
+ * @file volume_section.cpp
+ * @brief Implementation of VolumeSection UI (volume slider + peak meters).
+ */
+
+VolumeSection::~VolumeSection() {
+  volume_ = nullptr;
+}
+
+void VolumeSection::resized() {
+  int title_width = getTitleWidth();
+  int height = getHeight() - title_width;
+  int meter_height = height / 4;
+  int volume_height = height - 2 * meter_height;
+  peak_meter_left_->setBounds(0, title_width, getWidth(), meter_height);
+  peak_meter_right_->setBounds(0, title_width + meter_height, getWidth(), meter_height);
+  volume_->setBounds(0, title_width + 2 * meter_height, getWidth(), volume_height);
+
+  SynthSection::resized();
+}

@@ -1,0 +1,71 @@
+/* Copyright 2025 Marc Scheffer
+ *
+ * mopo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This work is based on bepzi's Helm project, <https://github.com/bepzi/helm>,
+ * itself based on Matt Tytel's Helm <https://tytel.org/helm/>
+ *
+ * mopo is distributed in the hope that it will be useful,
+
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with mopo.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#pragma once
+/**
+ * @file mono_panner.h
+ * @brief Sépare un signal mono en sortie gauche/droite selon un paramètre de panoramique.
+ */
+#ifndef MONO_PANNER_H
+#define MONO_PANNER_H
+
+#include "processor.h"
+#include <xsimd/xsimd.hpp>
+
+namespace mopo {
+
+  // A processor that will split a single signal into two signals, left and
+  // right. The amplitude of the two outputs is set by the pan amount, ranging
+  // from all the way left, all the way right, or equally split.
+  /**
+   * @brief Processeur qui s�pare un signal mono en deux signaux (gauche/droite) selon un panoramique.
+   */
+  class MonoPanner : public Processor {
+    public:
+      /// Enum�ration des entr�es du MonoPanner
+      enum class Inputs {
+        Audio,
+        Pan,
+        NumInputs
+      };
+
+      /// Enum�ration des sorties du MonoPanner
+      enum class Outputs {
+        Left,
+        Right,
+        NumOutputs
+      };
+
+      MonoPanner();
+      virtual ~MonoPanner() { }
+
+      /// Clone le processeur MonoPanner
+      [[nodiscard]] virtual Processor* clone() const override {
+        return new MonoPanner(*this);
+      }
+
+      /**
+       * @brief Applique le traitement de panoramique sur le bloc courant.
+       */
+      virtual void process() override;
+  };
+} // namespace mopo
+
+#endif // MONO_PANNER_H

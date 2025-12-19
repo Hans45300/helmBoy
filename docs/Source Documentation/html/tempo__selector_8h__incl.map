@@ -1,0 +1,22 @@
+<map id="src/editor_components/tempo_selector.h" name="src/editor_components/tempo_selector.h">
+<area shape="rect" id="Node000001" title="Contrôle de tempo/selector de tempo pour l&#39;interface." alt="" coords="92,5,245,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="73,171,175,197"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,49,134,156,129,155,160,47"/>
+<area shape="rect" id="Node000003" href="$synth__slider_8h.html" title=" " alt="" coords="161,96,263,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="182,47,200,81,196,83,177,50"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="199,125,153,163,149,159,195,121"/>
+<area shape="rect" id="Node000004" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="199,171,340,197"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="224,122,252,157,248,160,220,125"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,245,70,272"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="230,200,85,245,84,240,228,195"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="94,245,157,272"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="246,200,166,240,163,235,243,195"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="181,245,267,272"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="264,199,242,233,238,231,259,196"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="292,245,338,272"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="280,196,301,231,297,233,275,199"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="362,245,415,272"/>
+<area shape="poly" id="edge9_Node000004_Node000009" title=" " alt="" coords="292,196,356,235,353,239,289,200"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="439,245,508,272"/>
+<area shape="poly" id="edge10_Node000004_Node000010" title=" " alt="" coords="306,195,425,237,423,242,304,200"/>
+</map>

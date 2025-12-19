@@ -1,0 +1,5 @@
+<map id="mopo::PeakMeter" name="mopo::PeakMeter">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,123,143,256"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="40,5,109,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,90,77,123,72,123,72,90"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="GlobalToolTip" name="GlobalToolTip">
+<area shape="rect" id="Node000001" title="Global tooltip system for parameter feedback and help." alt="" coords="5,123,168,363"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,83,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="57,89,64,122,59,123,52,90"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="108,5,151,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="122,90,115,123,110,122,117,89"/>
+</map>

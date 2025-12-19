@@ -1,0 +1,27 @@
+<map id="src/editor_sections/synth_section.h" name="src/editor_sections/synth_section.h">
+<area shape="rect" id="Node000001" title="Base class for UI sections used in the HelmBoy interface." alt="" coords="252,5,383,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="120,171,222,197"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="252,41,156,64,116,80,92,98,87,106,87,114,95,131,111,147,132,161,129,165,108,151,90,134,81,115,82,105,87,94,113,75,154,59,251,36"/>
+<area shape="rect" id="Node000003" href="$modulation__button_8h.html" title="Bouton permettant d&#39;ajouter/retirer des connexions de modulation." alt="" coords="102,96,240,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="281,51,208,91,205,86,278,46"/>
+<area shape="rect" id="Node000004" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="247,171,388,197"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="348,47,369,68,385,95,389,109,385,124,371,146,352,163,349,159,367,142,380,122,384,109,380,97,365,71,344,50"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="461,245,507,272"/>
+<area shape="poly" id="edge14_Node000001_Node000008" title=" " alt="" coords="351,46,379,68,405,94,429,129,449,165,477,230,472,232,444,168,424,131,401,98,375,72,348,51"/>
+<area shape="rect" id="Node000011" href="$synth__button_8h.html" title="Boutons stylisés pour l&#39;interface (toggle, contextual labels)." alt="" coords="264,96,371,123"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="320,49,320,80,315,80,315,49"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="174,123,174,155,168,155,168,123"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,245,70,272"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="267,201,85,247,84,242,266,195"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="94,245,157,272"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="285,200,172,243,170,238,283,195"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="181,245,267,272"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="303,200,254,238,251,234,300,196"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="348,195,448,239,446,244,345,200"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="291,245,344,272"/>
+<area shape="poly" id="edge9_Node000004_Node000009" title=" " alt="" coords="320,198,320,230,315,230,315,198"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="369,245,437,272"/>
+<area shape="poly" id="edge10_Node000004_Node000010" title=" " alt="" coords="334,196,379,233,375,237,331,200"/>
+<area shape="poly" id="edge12_Node000011_Node000002" title=" " alt="" coords="293,126,211,166,209,161,291,121"/>
+<area shape="poly" id="edge13_Node000011_Node000004" title=" " alt="" coords="320,123,320,155,315,155,315,123"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="src/look_and_feel/browser_look_and_feel.h" name="src/look_and_feel/browser_look_and_feel.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,179,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="38,245,140,272"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,49,67,97,64,132,67,168,82,230,77,231,62,169,58,132,61,95,79,47"/>
+<area shape="rect" id="Node000003" href="$text__look__and__feel_8h.html" title=" " alt="" coords="76,96,217,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="108,47,132,82,127,85,104,50"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="141,124,117,172,98,231,93,229,112,170,137,122"/>
+<area shape="rect" id="Node000004" href="$default__look__and__feel_8h.html" title=" " alt="" coords="126,171,284,197"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="159,122,188,157,184,160,155,125"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="187,200,124,239,121,234,184,196"/>
+</map>

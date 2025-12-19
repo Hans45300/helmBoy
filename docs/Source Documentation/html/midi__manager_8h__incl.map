@@ -1,0 +1,23 @@
+<map id="src/common/midi_manager.h" name="src/common/midi_manager.h">
+<area shape="rect" id="Node000001" title="MIDI input handling and controller mapping." alt="" coords="214,5,403,32"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,80,108,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="265,35,116,78,114,73,264,30"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="131,80,214,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="286,35,211,75,208,70,284,30"/>
+<area shape="rect" id="Node000004" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="238,80,379,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="311,33,311,64,306,64,306,33"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="388,155,434,181"/>
+<area shape="poly" id="edge11_Node000001_Node000008" title=" " alt="" coords="336,30,366,50,393,79,407,109,412,139,407,140,402,110,389,81,363,54,333,35"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="458,155,511,181"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="339,30,377,50,417,78,447,109,470,140,466,143,443,112,413,82,375,55,336,35"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="212,155,277,181"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="299,109,268,145,264,141,295,105"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="301,155,364,181"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="315,106,326,139,321,141,310,108"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="9,155,96,181"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="265,110,111,153,110,148,263,105"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="328,105,382,143,379,147,325,109"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="340,105,444,147,442,152,338,110"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="120,155,188,181"/>
+<area shape="poly" id="edge9_Node000004_Node000010" title=" " alt="" coords="283,110,196,150,193,145,280,105"/>
+</map>

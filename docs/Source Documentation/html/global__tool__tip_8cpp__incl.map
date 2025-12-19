@@ -1,0 +1,13 @@
+<map id="src/editor_components/global_tool_tip.cpp" name="src/editor_components/global_tool_tip.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="98,5,252,48"/>
+<area shape="rect" id="Node000002" href="$global__tool__tip_8h.html" title="Système global de tooltip pour afficher noms et valeurs de paramètres." alt="" coords="5,96,121,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="148,51,94,89,91,85,145,46"/>
+<area shape="rect" id="Node000004" href="$fonts_8h.html" title=" " alt="" coords="144,96,206,123"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="178,49,178,80,172,80,172,49"/>
+<area shape="rect" id="Node000005" href="$colors_8h.html" title=" " alt="" coords="229,96,297,123"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="199,47,240,83,236,87,196,51"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="124,171,226,197"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="84,121,144,160,141,164,81,125"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="178,123,178,155,172,155,172,123"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="249,125,204,163,200,159,246,121"/>
+</map>

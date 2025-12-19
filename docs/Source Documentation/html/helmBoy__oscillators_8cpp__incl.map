@@ -1,0 +1,28 @@
+<map id="src/synthesis/helmBoy_oscillators.cpp" name="src/synthesis/helmBoy_oscillators.cpp">
+<area shape="rect" id="Node000001" title="Implementation of HelmBoy&#45;specific oscillator coordination and unison handling." alt="" coords="278,5,432,48"/>
+<area shape="rect" id="Node000002" href="$helmBoy__oscillators_8h.html" title="Dual&#45;oscillator engine with advanced unison and cross&#45;modulation." alt="" coords="224,96,374,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="343,50,319,85,314,82,338,47"/>
+<area shape="rect" id="Node000012" href="$detune__lookup_8h.html" title="Provides a lookup singleton to convert cent detune values to frequency ratios." alt="" coords="409,171,525,197"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="372,47,451,156,447,159,367,50"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="144,171,208,197"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="279,126,212,165,210,160,276,121"/>
+<area shape="rect" id="Node000004" href="$fixed__point__wave_8h.html" title="Fixed&#45;point waveform lookup utilities and helpers used by oscillators." alt="" coords="232,171,366,197"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="302,123,302,155,296,155,296,123"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="343,245,426,272"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="316,196,360,233,357,237,312,200"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="173,245,236,272"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="284,200,234,238,231,234,281,196"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="450,245,506,272"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="331,195,436,238,434,243,329,200"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="260,245,319,272"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="300,198,296,230,291,230,295,198"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="530,245,588,272"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="346,195,516,242,515,247,345,200"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="5,245,65,272"/>
+<area shape="poly" id="edge9_Node000004_Node000010" title=" " alt="" coords="252,201,81,247,79,242,250,195"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="89,245,149,272"/>
+<area shape="poly" id="edge10_Node000004_Node000011" title=" " alt="" coords="269,200,164,242,162,237,267,195"/>
+<area shape="poly" id="edge12_Node000012_Node000005" title=" " alt="" coords="454,200,412,237,408,233,451,196"/>
+<area shape="poly" id="edge13_Node000012_Node000007" title=" " alt="" coords="471,197,476,230,471,230,466,198"/>
+<area shape="poly" id="edge14_Node000012_Node000009" title=" " alt="" coords="485,196,533,234,530,238,481,200"/>
+</map>

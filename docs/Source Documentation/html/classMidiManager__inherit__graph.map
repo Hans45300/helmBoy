@@ -1,0 +1,5 @@
+<map id="MidiManager" name="MidiManager">
+<area shape="rect" id="Node000001" title="MIDI input management and controller mapping system." alt="" coords="5,123,215,747"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="53,5,168,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,90,113,123,108,123,108,90"/>
+</map>

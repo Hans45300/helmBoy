@@ -1,0 +1,86 @@
+/* Copyright 2025 Marc Scheffer
+ *
+ * helmBoy is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ *
+ * This work is based on bepzi's Helm project, <https://github.com/bepzi/helm>,
+ * itself based on Matt Tytel's Helm <https://tytel.org/helm/>
+ *
+ * helmBoy is distributedin the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with helmBoy.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "formant_section.h"
+#include "colors.h"
+
+#include "synth_button.h"
+#include "synth_slider.h"
+
+#define SLIDER_WIDTH 10
+
+/**
+ * @file formant_section.cpp
+ * @brief Implementation of the FormantSection UI.
+ */
+
+FormantSection::FormantSection(String name) : SynthSection(name) {
+    addSlider((x_ = std::make_unique<SynthSlider>("formant_x")).get());
+  x_->setSliderStyle(Slider::LinearBar);
+  x_->setPopupPlacement(BubbleComponent::below, 0);
+
+  addSlider((y_ = std::make_unique<SynthSlider>("formant_y")).get());
+  y_->setSliderStyle(Slider::LinearBarVertical);
+  y_->setPopupPlacement(BubbleComponent::right, 0);
+
+  addAndMakeVisible((xy_pad_ = std::make_unique<XYPad>()).get());
+  xy_pad_->setXSlider(x_.get());
+  xy_pad_->setYSlider(y_.get());
+
+  addButton((on_ = std::make_unique<SynthButton>("formant_on")).get());
+  setActivator(on_.get());
+}
+
+/**
+ * @file formant_section.cpp
+ * @brief Implementation of the FormantSection UI.
+ */
+
+FormantSection::~FormantSection() {
+  on_ = nullptr;
+  x_ = nullptr;
+  y_ = nullptr;
+  xy_pad_ = nullptr;
+}
+
+void FormantSection::paintBackground(Graphics& g) {
+  static const DropShadow component_shadow(Colour(Colors::Color_88000000), 2, Point<int>(0, 1));
+  SynthSection::paintBackground(g);
+  component_shadow.drawForRectangle(g, xy_pad_->getBounds());
+}
+
+void FormantSection::resized() {
+  int title_width = getTitleWidth();
+  on_->setBounds(size_ratio_ * 2.0f, 0, title_width, title_width);
+
+  int slider_width = size_ratio_ * SLIDER_WIDTH;
+  x_->setBounds(0, getHeight() - slider_width, getWidth() - slider_width, slider_width);
+  y_->setBounds(getWidth() - slider_width, title_width, slider_width,
+                getHeight() - title_width - slider_width);
+  xy_pad_->setBounds(0, title_width, getWidth() - slider_width,
+                     getHeight() - title_width - slider_width);
+
+  SynthSection::resized();
+}
+
+void FormantSection::setActive(bool active) {
+  SynthSection::setActive(active);
+  xy_pad_->setActive(active);
+}

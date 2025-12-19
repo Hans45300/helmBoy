@@ -1,0 +1,9 @@
+<map id="src/synthesis/gate.h" name="src/synthesis/gate.h">
+<area shape="rect" id="Node000001" title="Gate processor header: selects one of several inputs as an output." alt="" coords="190,5,329,32"/>
+<area shape="rect" id="Node000002" href="$gate_8cpp.html" title="Gate processor implementation: chooses an input buffer based on a selector." alt="" coords="5,88,159,115"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="219,41,111,90,108,85,217,36"/>
+<area shape="rect" id="Node000003" href="$helmBoy__module_8cpp.html" title="Implementation of HelmBoyModule helpers (control creation, modulation maps)." alt="" coords="182,80,336,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="262,48,262,80,257,80,257,48"/>
+<area shape="rect" id="Node000004" href="$helmBoy__voice__handler_8cpp.html" title="Voice handler implementation: allocation, stealing and voice I/O." alt="" coords="361,80,515,123"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="302,36,393,77,391,82,300,41"/>
+</map>

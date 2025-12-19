@@ -1,0 +1,7 @@
+<map id="src/editor_components/modulation_meter.h" name="src/editor_components/modulation_meter.h">
+<area shape="rect" id="Node000001" title="Affiche l&#39;intensité de modulation (mono / poly) pour un paramètre." alt="" coords="97,5,251,48"/>
+<area shape="rect" id="Node000002" href="$modulation__meter_8cpp.html" title=" " alt="" coords="5,96,159,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,61,105,98,101,94,140,57"/>
+<area shape="rect" id="Node000003" href="$modulation__manager_8cpp.html" title="Implementation of modulation manager: highlights, meters and sliders." alt="" coords="182,96,352,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="208,57,248,94,244,98,205,61"/>
+</map>

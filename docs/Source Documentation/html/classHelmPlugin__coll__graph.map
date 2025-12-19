@@ -1,0 +1,41 @@
+<map id="HelmPlugin" name="HelmPlugin">
+<area shape="rect" id="Node000001" title="Main plugin class for HelmBoy synthesizer." alt="" coords="405,3059,582,3469"/>
+<area shape="rect" id="Node000002" href="$classSynthBase.html" title="Base synthesizer class providing core functionality." alt="" coords="225,2129,418,3009"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="424,2977,432,3009,444,3058,439,3059,427,3010,419,2978"/>
+<area shape="rect" id="Node000003" href="$classMidiManager_1_1Listener.html" title="Listener interface for MIDI&#45;triggered parameter changes." alt="" coords="5,1764,192,1876"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="122,1889,228,2244,222,2245,117,1891"/>
+<area shape="rect" id="Node000004" href="$classmopo_1_1ModulationConnectionBank.html" title=" " alt="" coords="217,1732,426,1908"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="324,1908,324,2112,319,2112,319,1908"/>
+<area shape="rect" id="Node000005" href="$classmopo_1_1HelmBoyEngine.html" title="The main synthesis engine for HelmBoy synthesizer." alt="" coords="450,1583,636,2057"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="472,2058,449,2107,432,2131,427,2141,422,2139,427,2128,445,2104,467,2056"/>
+<area shape="rect" id="Node000006" href="$classmopo_1_1HelmBoyModule.html" title=" " alt="" coords="572,124,783,727"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="659,742,624,1256,600,1559,596,1583,591,1583,595,1558,618,1255,654,741"/>
+<area shape="rect" id="Node000009" href="$classmopo_1_1HelmBoyVoiceHandler.html" title=" " alt="" coords="325,908,534,1511"/>
+<area shape="poly" id="edge10_Node000009_Node000006" title=" " alt="" coords="609,742,571,885,536,978,531,976,566,883,604,741"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="623,5,732,75"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="680,90,680,124,675,124,675,90"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="657,1175,741,1244"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="696,1259,676,1395,661,1477,641,1559,635,1584,629,1582,636,1558,655,1476,671,1394,691,1258"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="488,1510,498,1566,493,1567,483,1511"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="324,391,412,460"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="374,475,403,884,405,908,399,909,398,884,369,475"/>
+<area shape="rect" id="Node000011" href="$classmopo_1_1Gate.html" title=" " alt="" coords="437,348,548,503"/>
+<area shape="poly" id="edge11_Node000009_Node000011" title=" " alt="" coords="477,503,453,619,434,751,426,891,421,891,429,750,447,618,471,502"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="185,5,255,75"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="270,46,309,55,351,70,392,92,426,122,445,147,459,175,480,234,492,294,496,348,491,348,487,294,475,235,455,177,440,150,422,126,389,96,349,75,307,60,269,51"/>
+<area shape="rect" id="Node000013" href="$classmopo_1_1HelmBoyLfo.html" title=" " alt="" coords="141,327,300,524"/>
+<area shape="poly" id="edge14_Node000013_Node000012" title=" " alt="" coords="223,90,223,327,218,327,218,90"/>
+<area shape="rect" id="Node000016" href="$classmopo_1_1PeakMeter.html" title=" " alt="" coords="34,751,172,884"/>
+<area shape="poly" id="edge19_Node000016_Node000012" title=" " alt="" coords="176,73,150,96,131,125,100,207,80,294,69,382,65,469,68,552,74,629,92,751,87,751,69,629,62,553,60,469,64,381,74,293,95,206,126,123,146,93,172,69"/>
+<area shape="poly" id="edge17_Node000005_Node000013" title=" " alt="" coords="221,524,219,772,223,1081,229,1229,238,1358,251,1455,259,1488,269,1509,286,1528,304,1539,345,1549,390,1556,414,1565,439,1581,436,1585,412,1570,388,1561,343,1554,302,1544,282,1532,264,1512,254,1490,246,1456,232,1358,223,1230,218,1081,214,772,216,524"/>
+<area shape="poly" id="edge13_Node000009_Node000013" title=" " alt="" coords="236,523,266,692,286,789,310,883,322,924,317,926,305,885,281,790,260,693,231,524"/>
+<area shape="rect" id="Node000014" href="$classmopo_1_1ValueSwitch.html" title=" " alt="" coords="772,1100,895,1319"/>
+<area shape="poly" id="edge15_Node000005_Node000014" title=" " alt="" coords="816,1319,791,1414,755,1512,705,1604,648,1690,643,1687,700,1601,750,1510,786,1413,811,1318"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="807,391,868,460"/>
+<area shape="poly" id="edge16_Node000014_Node000015" title=" " alt="" coords="840,475,837,1100,831,1100,835,475"/>
+<area shape="poly" id="edge18_Node000005_Node000016" title=" " alt="" coords="87,884,60,1009,50,1088,45,1172,48,1260,60,1347,84,1431,102,1471,123,1509,143,1531,163,1542,219,1556,263,1561,322,1563,383,1567,412,1572,436,1581,435,1586,410,1578,383,1573,321,1568,262,1567,218,1561,161,1547,139,1536,119,1512,97,1474,79,1433,55,1348,42,1260,40,1172,45,1087,55,1009,81,883"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="442,2535,545,2604"/>
+<area shape="poly" id="edge20_Node000001_Node000017" title=" " alt="" coords="496,2619,496,3059,491,3059,491,2619"/>
+<area shape="rect" id="Node000018" href="$classValueBridge_1_1Listener.html" title=" " alt="" coords="569,2524,711,2615"/>
+<area shape="poly" id="edge21_Node000001_Node000018" title=" " alt="" coords="633,2630,601,2801,559,3010,547,3060,542,3058,554,3009,596,2800,627,2629"/>
+</map>

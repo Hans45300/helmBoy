@@ -1,0 +1,7 @@
+<map id="src/synthesis/helmBoy_voice_handler.h" name="src/synthesis/helmBoy_voice_handler.h">
+<area shape="rect" id="Node000001" title="Polyphonic voice management and synthesis engine for HelmBoy." alt="" coords="95,5,249,48"/>
+<area shape="rect" id="Node000002" href="$helmBoy__engine_8cpp.html" title="Top&#45;level synth engine: constructs processors and routing for HelmBoy." alt="" coords="5,96,160,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,61,105,98,101,94,138,57"/>
+<area shape="rect" id="Node000003" href="$helmBoy__voice__handler_8cpp.html" title="Voice handler implementation: allocation, stealing and voice I/O." alt="" coords="184,96,338,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="205,57,242,94,239,98,201,61"/>
+</map>

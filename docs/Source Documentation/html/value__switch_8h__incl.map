@@ -1,0 +1,5 @@
+<map id="src/synthesis/value_switch.h" name="src/synthesis/value_switch.h">
+<area shape="rect" id="Node000001" title="Header for ValueSwitch: routes one input buffer to output and enables processors." alt="" coords="5,5,140,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="41,96,104,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,49,75,80,70,80,70,49"/>
+</map>

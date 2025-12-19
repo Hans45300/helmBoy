@@ -1,0 +1,9 @@
+<map id="mopo::HelmBoyVoiceHandler" name="mopo::HelmBoyVoiceHandler">
+<area shape="rect" id="Node000001" title=" " alt="" coords="31,773,240,1376"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,389,93,459"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="58,473,98,773,93,774,53,474"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1HelmBoyModule.html" title=" " alt="" coords="117,123,328,725"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="183,741,179,774,173,773,178,740"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="168,5,277,75"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="225,90,225,123,220,123,220,90"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="src/look_and_feel/browser_look_and_feel.cpp" name="src/look_and_feel/browser_look_and_feel.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="71,5,244,48"/>
+<area shape="rect" id="Node000002" href="$browser__look__and__feel_8h.html" title=" " alt="" coords="13,96,179,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,50,117,85,113,82,139,47"/>
+<area shape="rect" id="Node000006" href="$fonts_8h.html" title=" " alt="" coords="203,171,264,197"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="170,47,223,155,218,158,165,49"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="21,320,123,347"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="68,125,39,145,26,157,16,172,10,189,8,207,16,244,33,278,53,306,49,309,29,281,11,245,3,207,4,188,11,169,22,154,35,140,65,121"/>
+<area shape="rect" id="Node000004" href="$text__look__and__feel_8h.html" title=" " alt="" coords="25,171,167,197"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="99,123,99,155,93,155,93,123"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="80,200,59,220,42,246,40,261,42,277,55,306,50,308,37,278,34,261,37,244,55,217,77,196"/>
+<area shape="rect" id="Node000005" href="$default__look__and__feel_8h.html" title=" " alt="" coords="51,245,210,272"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="104,197,120,230,116,232,100,199"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="122,274,94,309,90,306,118,271"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="238,197,238,234,233,255,223,274,206,291,185,305,139,323,137,318,182,301,202,287,219,270,228,253,233,233,232,197"/>
+</map>

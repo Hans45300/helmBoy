@@ -1,0 +1,75 @@
+/* Copyright 2025 Marc Scheffer
+ *
+ * helmBoy is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ *
+ * This work is based on bepzi's Helm project, <https://github.com/bepzi/helm>,
+ * itself based on Matt Tytel's Helm <https://tytel.org/helm/>
+ *
+ * helmBoy is distributedin the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with helmBoy.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "feedback_section.h"
+
+#include "colors.h"
+#include "fonts.h"
+
+/**
+ * @file feedback_section.cpp
+ * @brief Implementation of the FeedbackSection UI.
+ */
+
+FeedbackSection::FeedbackSection(String name) : SynthSection(name) {
+  static const int TRANSPOSE_MOUSE_SENSITIVITY = 800;
+
+  addSlider((transpose_ = std::make_unique<SynthSlider>("osc_feedback_transpose")).get());
+  transpose_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  transpose_->setBipolar();
+  transpose_->setMouseDragSensitivity(TRANSPOSE_MOUSE_SENSITIVITY);
+
+  addSlider((amount_ = std::make_unique<SynthSlider>("osc_feedback_amount")).get());
+  amount_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  amount_->setBipolar();
+
+  addSlider((tune_ = std::make_unique<SynthSlider>("osc_feedback_tune")).get());
+  tune_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  tune_->setBipolar();
+}
+
+FeedbackSection::~FeedbackSection() {
+  transpose_ = nullptr;
+  amount_ = nullptr;
+  tune_ = nullptr;
+}
+
+void FeedbackSection::paintBackground(Graphics& g) {
+  SynthSection::paintBackground(g);
+
+  g.setColour(Colors::control_label_text);
+  g.setFont(Fonts::instance()->proportional_regular().withPointHeight(size_ratio_ * 10.0f));
+
+  drawTextForComponent(g, TRANS("TRANSPOSE"), transpose_.get());
+  drawTextForComponent(g, TRANS("TUNE"), tune_.get());
+  drawTextForComponent(g, TRANS("AMOUNT"), amount_.get());
+}
+
+void FeedbackSection::resized() {
+  int knob_width = getStandardKnobSize();
+  float space = (getWidth() - (3.0f * knob_width)) / 4.0f;
+  int y = size_ratio_ * 26;
+
+  transpose_->setBounds(space, y, knob_width, knob_width);
+  tune_->setBounds((knob_width + space) + space, y, knob_width, knob_width);
+  amount_->setBounds(2 * (knob_width + space) + space, y, knob_width, knob_width);
+
+  SynthSection::resized();
+}

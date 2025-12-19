@@ -1,0 +1,38 @@
+<map id="src/editor_sections/delete_section.cpp" name="src/editor_sections/delete_section.cpp">
+<area shape="rect" id="Node000001" title="Implementation of the DeleteSection overlay." alt="" coords="220,5,354,48"/>
+<area shape="rect" id="Node000002" href="$delete__section_8h.html" title="Overlay used to confirm deletion of patches or folders." alt="" coords="25,96,142,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="236,51,130,92,128,87,234,46"/>
+<area shape="rect" id="Node000006" href="$colors_8h.html" title=" " alt="" coords="166,96,233,123"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="266,51,226,87,223,83,263,47"/>
+<area shape="rect" id="Node000007" href="$fonts_8h.html" title=" " alt="" coords="257,96,318,123"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="290,49,290,80,285,80,285,49"/>
+<area shape="rect" id="Node000008" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="404,96,544,123"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="336,46,432,87,430,92,334,51"/>
+<area shape="rect" id="Node000015" href="$text__look__and__feel_8h.html" title=" " alt="" coords="725,96,866,123"/>
+<area shape="poly" id="edge17_Node000001_Node000015" title=" " alt="" coords="355,36,710,92,709,97,354,41"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="142,245,244,272"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,122,177,231,172,234,91,125"/>
+<area shape="rect" id="Node000004" href="$overlay_8h.html" title="Composant overlay réutilisable pour afficher panneaux modaux/overlays." alt="" coords="5,171,79,197"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="78,125,59,159,54,156,74,122"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="69,195,154,236,152,241,67,200"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="22,245,62,272"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="45,198,45,230,39,230,39,198"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="201,123,197,230,191,230,196,123"/>
+<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="280,125,246,172,209,233,204,230,241,169,275,122"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="255,171,320,197"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="442,126,335,167,333,162,441,121"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="344,171,407,197"/>
+<area shape="poly" id="edge12_Node000008_Node000010" title=" " alt="" coords="458,125,406,164,403,159,455,121"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="431,171,517,197"/>
+<area shape="poly" id="edge13_Node000008_Node000011" title=" " alt="" coords="477,123,477,155,471,155,471,123"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="542,171,588,197"/>
+<area shape="poly" id="edge14_Node000008_Node000012" title=" " alt="" coords="491,121,539,159,536,163,488,125"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="611,171,665,197"/>
+<area shape="poly" id="edge15_Node000008_Node000013" title=" " alt="" coords="504,121,598,162,596,167,501,126"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="689,171,758,197"/>
+<area shape="poly" id="edge16_Node000008_Node000014" title=" " alt="" coords="518,121,675,166,673,171,517,126"/>
+<area shape="poly" id="edge18_Node000015_Node000003" title=" " alt="" coords="798,123,794,161,786,182,772,199,744,211,694,222,554,238,394,250,259,257,259,252,394,245,554,233,694,216,742,206,768,195,781,179,789,160,793,123"/>
+<area shape="rect" id="Node000016" href="$default__look__and__feel_8h.html" title=" " alt="" coords="832,171,990,197"/>
+<area shape="poly" id="edge19_Node000015_Node000016" title=" " alt="" coords="817,121,879,160,877,164,814,125"/>
+<area shape="poly" id="edge20_Node000016_Node000003" title=" " alt="" coords="832,198,814,200,260,254,259,249,814,195,831,193"/>
+</map>

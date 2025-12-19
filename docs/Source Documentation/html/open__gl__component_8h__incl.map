@@ -1,0 +1,5 @@
+<map id="src/editor_components/open_gl_component.h" name="src/editor_components/open_gl_component.h">
+<area shape="rect" id="Node000001" title="Base pour composants OpenGL accélérés (lifecycle init/render/destroy)." alt="" coords="5,5,159,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="31,96,133,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,49,85,80,79,80,79,49"/>
+</map>

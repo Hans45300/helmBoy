@@ -1,0 +1,49 @@
+<map id="src/editor_sections/update_check_section.cpp" name="src/editor_sections/update_check_section.cpp">
+<area shape="rect" id="Node000001" title="Implementation for the update check UI and supporting singleton." alt="" coords="368,5,549,48"/>
+<area shape="rect" id="Node000002" href="$colors_8h.html" title=" " alt="" coords="286,96,354,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="424,51,356,90,353,86,421,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="355,245,458,272"/>
+<area shape="poly" id="edge24_Node000001_Node000003" title=" " alt="" coords="498,46,523,67,544,95,546,109,544,123,539,163,533,180,521,199,493,224,462,241,459,237,490,219,516,196,528,178,534,162,539,122,541,109,539,97,520,71,494,50"/>
+<area shape="rect" id="Node000004" href="$update__check__section_8h.html" title="UI component for update checking and the Update memory singleton." alt="" coords="5,171,168,197"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="385,51,318,72,249,98,180,132,121,165,118,160,177,127,247,94,316,67,383,46"/>
+<area shape="rect" id="Node000005" href="$fonts_8h.html" title=" " alt="" coords="192,171,253,197"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="369,51,320,70,276,98,252,127,235,158,230,155,247,124,273,94,318,65,367,46"/>
+<area shape="rect" id="Node000006" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="792,320,933,347"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="550,40,632,60,674,75,714,94,765,124,783,143,803,169,824,203,839,240,859,304,854,306,834,242,819,206,799,172,779,146,761,129,712,98,672,80,630,65,549,45"/>
+<area shape="rect" id="Node000013" href="$load__save_8h.html" title="Patch, bank and configuration persistence utilities." alt="" coords="610,96,702,123"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="510,46,612,87,610,92,508,51"/>
+<area shape="rect" id="Node000018" href="$text__look__and__feel_8h.html" title=" " alt="" coords="388,96,529,123"/>
+<area shape="poly" id="edge25_Node000001_Node000018" title=" " alt="" coords="461,49,461,80,456,80,456,49"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="318,124,312,158,312,178,318,196,337,219,361,236,358,240,333,223,313,199,307,179,306,158,313,123"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="143,195,341,240,339,245,142,201"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="255,195,361,237,360,242,253,200"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="530,395,595,421"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="811,350,610,398,609,393,809,345"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="642,395,705,421"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="830,350,720,392,718,387,829,345"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="729,395,815,421"/>
+<area shape="poly" id="edge10_Node000006_Node000009" title=" " alt="" coords="848,349,801,387,797,383,845,345"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="839,395,886,421"/>
+<area shape="poly" id="edge11_Node000006_Node000010" title=" " alt="" coords="865,347,865,379,860,379,860,347"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="909,395,962,421"/>
+<area shape="poly" id="edge12_Node000006_Node000011" title=" " alt="" coords="877,345,914,382,910,385,873,349"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="987,395,1055,421"/>
+<area shape="poly" id="edge13_Node000006_Node000012" title=" " alt="" coords="891,345,981,385,978,390,889,350"/>
+<area shape="poly" id="edge15_Node000013_Node000003" title=" " alt="" coords="652,125,630,161,613,182,593,199,565,217,534,231,474,249,472,244,532,226,562,212,590,195,609,178,625,158,648,122"/>
+<area shape="rect" id="Node000014" href="$helmBoy__engine_8h.html" title="Declaration of the HelmBoyEngine: central synth engine and parameter routing." alt="" coords="661,171,789,197"/>
+<area shape="poly" id="edge16_Node000013_Node000014" title=" " alt="" coords="670,121,705,157,701,161,666,125"/>
+<area shape="poly" id="edge18_Node000014_Node000006" title=" " alt="" coords="740,196,788,243,844,306,840,310,785,247,737,200"/>
+<area shape="poly" id="edge17_Node000014_Node000007" title=" " alt="" coords="700,200,668,219,631,246,596,280,572,321,565,351,563,380,558,379,559,350,567,319,592,277,627,242,665,214,698,195"/>
+<area shape="rect" id="Node000015" href="$helmBoy__module_8h.html" title="Base class utilities for HelmBoy modules and control creation helpers." alt="" coords="642,245,774,272"/>
+<area shape="poly" id="edge19_Node000014_Node000015" title=" " alt="" coords="725,198,717,231,712,229,720,197"/>
+<area shape="poly" id="edge21_Node000015_Node000006" title=" " alt="" coords="736,270,823,311,821,315,734,275"/>
+<area shape="poly" id="edge20_Node000015_Node000007" title=" " alt="" coords="665,275,626,294,607,306,591,322,576,350,568,380,563,378,571,348,587,318,604,302,623,289,663,270"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="600,320,658,347"/>
+<area shape="poly" id="edge22_Node000015_Node000016" title=" " alt="" coords="696,275,656,311,652,307,692,271"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="682,320,769,347"/>
+<area shape="poly" id="edge23_Node000015_Node000017" title=" " alt="" coords="713,272,721,304,716,305,708,273"/>
+<area shape="poly" id="edge26_Node000018_Node000003" title=" " alt="" coords="474,122,498,156,504,177,500,198,480,223,455,240,452,236,476,219,495,196,499,177,493,158,469,125"/>
+<area shape="rect" id="Node000019" href="$default__look__and__feel_8h.html" title=" " alt="" coords="327,171,486,197"/>
+<area shape="poly" id="edge27_Node000018_Node000019" title=" " alt="" coords="452,125,426,160,422,157,447,122"/>
+<area shape="poly" id="edge28_Node000019_Node000003" title=" " alt="" coords="409,198,409,230,404,230,404,198"/>
+</map>

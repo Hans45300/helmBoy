@@ -1,0 +1,43 @@
+<map id="src/editor_sections/volume_section.cpp" name="src/editor_sections/volume_section.cpp">
+<area shape="rect" id="Node000001" title="Implementation of VolumeSection UI (volume slider + peak meters)." alt="" coords="208,5,350,48"/>
+<area shape="rect" id="Node000002" href="$volume__section_8h.html" title=" " alt="" coords="416,96,540,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="331,46,434,87,432,92,329,51"/>
+<area shape="rect" id="Node000016" href="$synth__slider_8h.html" title=" " alt="" coords="116,245,218,272"/>
+<area shape="poly" id="edge23_Node000001_Node000016" title=" " alt="" coords="272,50,182,233,177,230,267,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="443,320,545,347"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="540,113,655,127,718,139,777,156,826,176,845,189,859,203,868,218,870,235,865,254,852,274,832,289,803,301,727,319,640,329,561,333,560,328,639,323,726,313,802,296,829,284,848,270,860,252,865,235,863,220,855,206,842,193,824,181,776,161,717,145,654,132,540,118"/>
+<area shape="rect" id="Node000004" href="$synth__section_8h.html" title="Base class for UI sections used in the HelmBoy interface." alt="" coords="285,171,398,197"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="455,126,380,165,378,161,453,121"/>
+<area shape="rect" id="Node000014" href="$open__gl__peak__meter_8h.html" title="OpenGL&#45;accelerated peak meter for audio levels." alt="" coords="550,171,702,197"/>
+<area shape="poly" id="edge18_Node000002_Node000014" title=" " alt="" coords="505,121,587,161,585,166,502,126"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="353,196,379,231,414,270,463,309,460,313,411,274,375,234,348,200"/>
+<area shape="rect" id="Node000005" href="$modulation__button_8h.html" title="Bouton permettant d&#39;ajouter/retirer des connexions de modulation." alt="" coords="425,245,563,272"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="369,195,455,236,452,241,367,200"/>
+<area shape="rect" id="Node000006" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="181,320,321,347"/>
+<area shape="poly" id="edge7_Node000004_Node000006" title=" " alt="" coords="285,194,180,214,134,229,117,237,107,247,101,258,100,268,105,277,113,285,141,301,175,313,173,318,139,306,110,290,100,280,95,269,96,257,102,244,114,233,132,224,179,209,284,189"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="5,395,52,421"/>
+<area shape="poly" id="edge17_Node000004_Node000010" title=" " alt="" coords="285,187,239,191,189,201,138,219,94,247,69,277,52,313,40,349,34,380,29,379,35,348,47,311,65,274,91,243,136,214,187,196,238,186,284,182"/>
+<area shape="rect" id="Node000013" href="$synth__button_8h.html" title="Boutons stylisés pour l&#39;interface (toggle, contextual labels)." alt="" coords="243,245,350,272"/>
+<area shape="poly" id="edge14_Node000004_Node000013" title=" " alt="" coords="336,199,315,233,310,231,332,196"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="496,273,496,304,491,304,491,273"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="443,395,507,421"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="291,345,429,389,427,394,289,350"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="76,395,139,421"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="227,350,147,390,145,385,225,345"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="163,395,249,421"/>
+<area shape="poly" id="edge10_Node000006_Node000009" title=" " alt="" coords="246,349,224,383,220,380,241,346"/>
+<area shape="poly" id="edge11_Node000006_Node000010" title=" " alt="" coords="212,350,67,396,66,391,210,345"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="272,395,326,421"/>
+<area shape="poly" id="edge12_Node000006_Node000011" title=" " alt="" coords="262,346,285,380,280,383,257,349"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="350,395,419,421"/>
+<area shape="poly" id="edge13_Node000006_Node000012" title=" " alt="" coords="276,345,349,385,347,389,273,350"/>
+<area shape="poly" id="edge15_Node000013_Node000003" title=" " alt="" coords="332,270,446,312,444,317,330,275"/>
+<area shape="poly" id="edge16_Node000013_Node000006" title=" " alt="" coords="291,274,269,308,265,305,286,271"/>
+<area shape="poly" id="edge19_Node000014_Node000003" title=" " alt="" coords="631,198,633,233,630,254,621,274,594,300,560,318,558,313,591,296,617,270,625,253,628,233,626,198"/>
+<area shape="poly" id="edge20_Node000014_Node000006" title=" " alt="" coords="625,199,609,236,595,257,577,274,535,293,473,307,337,327,336,322,472,302,533,288,574,270,591,254,604,234,620,197"/>
+<area shape="rect" id="Node000015" href="$open__gl__component_8h.html" title="Base pour composants OpenGL accélérés (lifecycle init/render/destroy)." alt="" coords="689,245,837,272"/>
+<area shape="poly" id="edge21_Node000014_Node000015" title=" " alt="" coords="651,196,727,235,724,240,649,200"/>
+<area shape="poly" id="edge22_Node000015_Node000003" title=" " alt="" coords="717,275,556,318,555,313,716,270"/>
+<area shape="poly" id="edge24_Node000016_Node000003" title=" " alt="" coords="220,269,428,315,427,320,218,274"/>
+<area shape="poly" id="edge25_Node000016_Node000006" title=" " alt="" coords="184,271,227,308,223,312,180,275"/>
+</map>

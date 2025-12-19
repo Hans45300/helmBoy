@@ -1,0 +1,9 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,5,187,32"/>
+<area shape="rect" id="Node000001" href="$classHelmBoyApplication_1_1MainWindow.html" title=" " alt="" coords="235,48,374,91"/>
+<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="169,34,235,50,234,55,168,39"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="44,56,148,83"/>
+<area shape="poly" id="edge2_Node000002_Node000001" title=" " alt="" coords="164,67,234,67,234,72,164,72"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="32,107,160,133"/>
+<area shape="poly" id="edge3_Node000003_Node000001" title=" " alt="" coords="168,100,234,84,235,89,169,105"/>
+</map>

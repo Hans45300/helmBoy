@@ -1,0 +1,29 @@
+<map id="src/synthesis/fixed_point_oscillator.cpp" name="src/synthesis/fixed_point_oscillator.cpp">
+<area shape="rect" id="Node000001" title="Fixed&#45;point oscillator implementation using precomputed wave buffers." alt="" coords="355,5,495,48"/>
+<area shape="rect" id="Node000002" href="$fixed__point__oscillator_8h.html" title="Header for FixedPointOscillator which reads from fixed&#45;point wave lookups." alt="" coords="171,96,325,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="381,51,290,92,288,87,378,46"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="350,96,410,123"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="416,50,397,84,392,81,411,47"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="435,96,509,123"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="439,47,459,81,455,84,435,50"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="533,96,600,123"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="463,46,533,86,530,90,460,51"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="154,171,219,197"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="239,125,209,161,205,157,235,121"/>
+<area shape="rect" id="Node000004" href="$fixed__point__wave_8h.html" title="Fixed&#45;point waveform lookup utilities and helpers used by oscillators." alt="" coords="242,171,376,197"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="261,121,291,157,287,161,256,125"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,245,88,272"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="264,200,103,245,102,239,263,195"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="112,245,176,272"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="281,200,188,241,186,236,279,195"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="200,245,256,272"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="297,200,255,237,251,233,293,196"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="280,245,339,272"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="312,198,312,230,306,230,306,198"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="363,245,420,272"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="325,196,368,233,364,237,322,200"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="445,245,504,272"/>
+<area shape="poly" id="edge9_Node000004_Node000010" title=" " alt="" coords="339,195,432,236,430,241,337,200"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="528,245,589,272"/>
+<area shape="poly" id="edge10_Node000004_Node000011" title=" " alt="" coords="353,195,514,242,513,247,352,200"/>
+</map>

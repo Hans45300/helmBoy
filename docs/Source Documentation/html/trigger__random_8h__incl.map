@@ -1,0 +1,5 @@
+<map id="src/synthesis/trigger_random.h" name="src/synthesis/trigger_random.h">
+<area shape="rect" id="Node000001" title="Header for TriggerRandom processor which outputs a random value on trigger." alt="" coords="5,5,145,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="30,96,120,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="78,49,78,80,72,80,72,49"/>
+</map>

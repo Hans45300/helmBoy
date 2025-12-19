@@ -1,0 +1,17 @@
+<map id="src/common/helmBoy_common.cpp" name="src/common/helmBoy_common.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="195,5,344,48"/>
+<area shape="rect" id="Node000002" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="199,96,340,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="272,49,272,80,267,80,267,49"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,171,70,197"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="230,126,85,171,84,166,228,121"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="94,171,157,197"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="246,126,166,166,163,161,243,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="181,171,267,197"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="264,125,242,159,238,156,259,122"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="292,171,338,197"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="280,122,301,156,297,159,275,125"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="362,171,415,197"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="292,121,356,160,353,165,289,125"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="439,171,508,197"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="306,121,425,163,423,168,304,126"/>
+</map>

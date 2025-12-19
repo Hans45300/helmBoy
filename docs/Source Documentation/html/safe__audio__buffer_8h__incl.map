@@ -1,0 +1,17 @@
+<map id="src/common/safe_audio_buffer.h" name="src/common/safe_audio_buffer.h">
+<area shape="rect" id="Node000001" title="Modern C++20 safe audio buffer management with std::span and SIMD optimizations." alt="" coords="206,5,366,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,96,55,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="219,51,70,97,69,92,217,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="79,96,136,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="241,51,150,92,148,87,239,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="160,96,225,123"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="264,51,220,88,217,84,260,47"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="249,96,323,123"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="289,49,289,80,283,80,283,49"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="347,96,425,123"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="313,47,360,84,357,88,310,51"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="449,96,510,123"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="337,46,436,87,434,92,335,51"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="534,96,608,123"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="360,46,520,91,518,96,359,51"/>
+</map>

@@ -1,0 +1,49 @@
+<map id="src/synthesis/helmBoy_engine.cpp" name="src/synthesis/helmBoy_engine.cpp">
+<area shape="rect" id="Node000001" title="Top&#45;level synth engine: constructs processors and routing for HelmBoy." alt="" coords="418,5,572,48"/>
+<area shape="rect" id="Node000002" href="$helmBoy__engine_8h.html" title="Declaration of the HelmBoyEngine: central synth engine and parameter routing." alt="" coords="362,96,490,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="479,50,448,86,444,82,475,47"/>
+<area shape="rect" id="Node000013" href="$dc__filter_8h.html" title="Header for a simple DC blocking filter processor." alt="" coords="5,245,84,272"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="418,39,270,63,203,79,157,98,122,128,94,164,73,200,57,232,53,229,68,198,90,161,119,124,154,94,201,74,269,57,417,34"/>
+<area shape="rect" id="Node000014" href="$helmBoy__lfo_8h.html" title="Header for HelmBoyLfo: low&#45;frequency oscillator for modulation." alt="" coords="514,96,618,123"/>
+<area shape="poly" id="edge17_Node000001_Node000014" title=" " alt="" coords="515,47,547,82,543,86,511,50"/>
+<area shape="rect" id="Node000017" href="$helmBoy__voice__handler_8h.html" title="Polyphonic voice management and synthesis engine for HelmBoy." alt="" coords="167,96,338,123"/>
+<area shape="poly" id="edge20_Node000001_Node000017" title=" " alt="" coords="434,51,306,93,304,88,432,46"/>
+<area shape="rect" id="Node000018" href="$peak__meter_8h.html" title="Header for PeakMeter: tracks stereo peak levels with decay smoothing." alt="" coords="642,96,743,123"/>
+<area shape="poly" id="edge25_Node000001_Node000018" title=" " alt="" coords="547,46,649,87,647,92,545,51"/>
+<area shape="rect" id="Node000019" href="$value__switch_8h.html" title="Header for ValueSwitch: routes one input buffer to output and enables processors." alt="" coords="733,171,841,197"/>
+<area shape="poly" id="edge27_Node000001_Node000019" title=" " alt="" coords="573,27,619,33,668,45,715,65,757,94,777,123,786,154,781,156,772,125,753,98,713,70,666,51,618,39,573,32"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="316,320,381,347"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="424,124,360,306,355,305,419,122"/>
+<area shape="rect" id="Node000004" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="461,245,601,272"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="437,122,515,231,511,234,433,125"/>
+<area shape="rect" id="Node000010" href="$helmBoy__module_8h.html" title="Base class utilities for HelmBoy modules and control creation helpers." alt="" coords="209,171,341,197"/>
+<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="401,126,316,166,314,161,398,121"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="500,275,396,316,394,311,498,270"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="756,320,819,347"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="576,270,742,316,740,322,575,275"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="575,320,661,347"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="548,270,593,308,590,312,545,275"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="685,320,732,347"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="563,270,672,314,670,319,561,275"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="404,320,458,347"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="515,275,463,313,459,308,512,270"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="482,320,551,347"/>
+<area shape="poly" id="edge9_Node000004_Node000009" title=" " alt="" coords="531,273,525,305,519,304,526,272"/>
+<area shape="poly" id="edge11_Node000010_Node000003" title=" " alt="" coords="296,196,321,216,342,244,351,275,353,304,348,305,346,276,337,247,317,220,293,200"/>
+<area shape="poly" id="edge12_Node000010_Node000004" title=" " alt="" coords="320,195,473,238,471,243,319,200"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="158,245,216,272"/>
+<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="262,200,216,237,212,233,258,196"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="240,245,327,272"/>
+<area shape="poly" id="edge14_Node000010_Node000012" title=" " alt="" coords="279,198,283,229,277,230,274,198"/>
+<area shape="poly" id="edge16_Node000013_Node000003" title=" " alt="" coords="85,267,302,318,301,323,84,272"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="620,171,709,197"/>
+<area shape="poly" id="edge18_Node000014_Node000015" title=" " alt="" coords="585,121,637,159,634,164,581,125"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="533,171,596,197"/>
+<area shape="poly" id="edge19_Node000014_Node000016" title=" " alt="" coords="568,123,568,155,562,155,563,123"/>
+<area shape="poly" id="edge21_Node000017_Node000003" title=" " alt="" coords="235,125,199,153,162,190,149,210,141,231,140,251,149,271,164,286,181,299,220,317,262,326,301,330,300,335,261,332,218,322,178,303,160,290,145,273,135,252,136,230,144,208,158,186,196,149,232,121"/>
+<area shape="poly" id="edge22_Node000017_Node000004" title=" " alt="" coords="278,121,495,236,493,240,275,126"/>
+<area shape="poly" id="edge23_Node000017_Node000010" title=" " alt="" coords="259,122,269,155,264,157,254,124"/>
+<area shape="poly" id="edge24_Node000017_Node000011" title=" " alt="" coords="238,125,217,145,199,172,191,201,188,230,183,230,185,200,194,170,213,142,234,121"/>
+<area shape="poly" id="edge26_Node000018_Node000015" title=" " alt="" coords="690,124,677,157,672,155,685,122"/>
+<area shape="poly" id="edge28_Node000019_Node000005" title=" " alt="" coords="790,198,790,304,784,304,784,198"/>
+</map>

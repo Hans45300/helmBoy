@@ -1,0 +1,15 @@
+<map id="src/synthesis/helmBoy_lfo.cpp" name="src/synthesis/helmBoy_lfo.cpp">
+<area shape="rect" id="Node000001" title="Implementation of the HelmBoy low&#45;frequency oscillator used for modulation." alt="" coords="186,5,340,48"/>
+<area shape="rect" id="Node000002" href="$helmBoy__lfo_8h.html" title="Header for HelmBoyLfo: low&#45;frequency oscillator for modulation." alt="" coords="47,96,152,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,51,140,91,138,86,220,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="176,96,258,123"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="254,50,234,84,229,81,249,47"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="282,96,338,123"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="278,47,297,81,293,84,273,50"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="363,96,420,123"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="298,46,360,85,357,90,295,51"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,171,95,197"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="93,125,69,159,65,156,89,122"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="118,171,182,197"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="110,122,135,157,131,160,106,125"/>
+</map>

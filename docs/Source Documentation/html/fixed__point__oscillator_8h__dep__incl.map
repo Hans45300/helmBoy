@@ -1,0 +1,7 @@
+<map id="src/synthesis/fixed_point_oscillator.h" name="src/synthesis/fixed_point_oscillator.h">
+<area shape="rect" id="Node000001" title="Header for FixedPointOscillator which reads from fixed&#45;point wave lookups." alt="" coords="95,5,226,48"/>
+<area shape="rect" id="Node000002" href="$fixed__point__oscillator_8cpp.html" title="Fixed&#45;point oscillator implementation using precomputed wave buffers." alt="" coords="5,96,146,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="132,61,97,98,93,94,128,58"/>
+<area shape="rect" id="Node000003" href="$helmBoy__voice__handler_8cpp.html" title="Voice handler implementation: allocation, stealing and voice I/O." alt="" coords="170,96,325,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="193,57,229,94,226,98,190,61"/>
+</map>

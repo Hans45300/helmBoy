@@ -1,0 +1,5 @@
+<map id="src/editor_sections/modulation_manager.h" name="src/editor_sections/modulation_manager.h">
+<area shape="rect" id="Node000001" title="Manages modulation overlays, meters and modulation sliders." alt="" coords="12,5,169,48"/>
+<area shape="rect" id="Node000002" href="$modulation__manager_8cpp.html" title="Implementation of modulation manager: highlights, meters and sliders." alt="" coords="5,96,176,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,64,93,96,88,96,88,64"/>
+</map>

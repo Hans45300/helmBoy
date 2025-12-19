@@ -1,0 +1,22 @@
+var searchData=
+[
+  ['name_0',['name',['../structmopo_1_1ValueDetails.html#a6f7af17160ac657f7203d56e10e32071',1,'mopo::ValueDetails']]],
+  ['name_5f_1',['name_',['../classValueBridge.html#ae41efc5114e438c85e2def71edf525b8',1,'ValueBridge']]],
+  ['needs_5fcheck_5f_2',['needs_check_',['../classUpdateMemory.html#a5a937da1585c26b186377fbb339937b2',1,'UpdateMemory']]],
+  ['new_5fbackground_5f_3',['new_background_',['../classOpenGLBackground.html#af73ae0c3722c7af713788f26f092004d',1,'OpenGLBackground']]],
+  ['next_5fpatch_5f_4',['next_patch_',['../classPatchSelector.html#a8e916de2b687fd7e3ed151c3cdddd68b',1,'PatchSelector']]],
+  ['nine_5fpyramid_5f_5',['nine_pyramid_',['../classWaveSelector.html#ad49d5686bb4198a8cae9af22714bb8c1',1,'WaveSelector::nine_pyramid_'],['../classmopo_1_1FixedPointWaveLookup.html#a9adf431a1778832731896ff907bdadfd',1,'mopo::FixedPointWaveLookup::nine_pyramid_']]],
+  ['noise_5f_6',['noise_',['../classWaveSelector.html#a462a65aee4a58af58a38342b1c3a569c',1,'WaveSelector::noise_'],['../classMixerSection.html#a87a9ef7635205408a61bb6cdac54bcff',1,'MixerSection::noise_']]],
+  ['noise_5fconstant_7',['NOISE_CONSTANT',['../namespacemopo.html#a13d7b6c047ee18ad9cff277375973a66',1,'mopo']]],
+  ['noise_5fint_5fconstant_8',['NOISE_INT_CONSTANT',['../namespacemopo.html#a4c6e7f049202b96de4247c8dee677ca9',1,'mopo']]],
+  ['nope_5fbutton_5f_9',['nope_button_',['../classUpdateCheckSection.html#a97b857c5be72cd6a45033668abdb2c5c',1,'UpdateCheckSection']]],
+  ['note_5ffrom_5fcenter_5f_10',['note_from_center_',['../classmopo_1_1HelmBoyVoiceHandler.html#a3d4c9f6588b2c8ace5af79c2b827ea6f',1,'mopo::HelmBoyVoiceHandler']]],
+  ['note_5fmod_5f_11',['note_mod_',['../classExtraModSection.html#a486525833c8a91fdf305fac36f3f6e5c',1,'ExtraModSection']]],
+  ['note_5fretriggered_5f_12',['note_retriggered_',['../classmopo_1_1HelmBoyVoiceHandler.html#a16034ce44e812c5938a924bc433766ca',1,'mopo::HelmBoyVoiceHandler']]],
+  ['num_5fchannels_13',['NUM_CHANNELS',['../namespacemopo.html#ad26244b9cfc796a063e3931576e9846e',1,'mopo']]],
+  ['num_5fchannels_5f_14',['num_channels_',['../classhelmboy_1_1SafeAudioBuffer.html#a27d3053937f2aaf47bad5bcb80aae60e',1,'helmboy::SafeAudioBuffer']]],
+  ['num_5fformants_15',['NUM_FORMANTS',['../namespacemopo.html#a29c8a90359ac337fc0445c4a0b8d695b',1,'mopo']]],
+  ['num_5fsamples_5f_16',['num_samples_',['../classhelmboy_1_1SafeAudioBuffer.html#aa49f068702fa660e4d90bf4c7e3ad093',1,'helmboy::SafeAudioBuffer']]],
+  ['num_5fsteps_5f_17',['num_steps_',['../classGraphicalStepSequencer.html#a83cc1645baba18a6d5cbc460a0cc47da',1,'GraphicalStepSequencer::num_steps_'],['../classStepSequencerSection.html#a1af1b529f7400f4db7362e1acddb5548',1,'StepSequencerSection::num_steps_']]],
+  ['num_5fsteps_5fslider_5f_18',['num_steps_slider_',['../classGraphicalStepSequencer.html#a8af59ddf0648ac030bacfeadeaa95b60',1,'GraphicalStepSequencer']]]
+];

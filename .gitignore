@@ -1,0 +1,68 @@
+# === CMake build folders ===
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# === Submodules folders ===
+externals/
+
+# === inno setup generated binary folder ===
+installer/
+
+# === JUCE artefacts ===
+*_artefacts/
+*.jucer
+*.sln
+*.vcxproj*
+*.xcodeproj
+*.xcworkspace
+*.idea/
+*.vscode/
+
+# === Compiled binaries ===
+*.exe
+*.dll
+*.dylib
+*.so
+*.a
+*.lib
+*.app
+*.o
+*.obj
+
+# === Plugin formats ===
+*.vst3/
+*.component/
+*.lv2/
+*.vst/
+
+# === JUCE auto-generated files ===
+juce_*_AppConfig.h
+juce_*_BinaryData.*
+juce_*_Main.cpp
+
+# === OS-specific ===
+.DS_Store
+Thumbs.db
+
+# === Logs and temporary files ===
+*.log
+*.tmp
+*.bak
+*.swp
+generation_log.txt
+
+# === User-specific configs ===
+*.user
+*.sublime-workspace
+*.sublime-project
+
+# === Python or scripting artifacts ===
+__pycache__/
+*.pyc
+
+# === Patch or preset folders (if generated) ===
+patches/generated/
+

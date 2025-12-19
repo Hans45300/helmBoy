@@ -1,0 +1,17 @@
+<map id="src/editor_sections/save_section.h" name="src/editor_sections/save_section.h">
+<area shape="rect" id="Node000001" title="Overlay used to save patches and create banks/folders." alt="" coords="45,5,177,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,320,108,347"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="74,51,49,71,30,97,20,124,16,152,19,210,31,263,47,305,42,307,26,264,13,210,10,152,15,123,25,95,45,67,71,46"/>
+<area shape="rect" id="Node000003" href="$file__list__box__model_8h.html" title="List model used to display and manage patch/bank files in the GUI." alt="" coords="40,96,183,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="114,49,114,80,108,80,108,49"/>
+<area shape="rect" id="Node000005" href="$overlay_8h.html" title="Composant overlay réutilisable pour afficher panneaux modaux/overlays." alt="" coords="129,245,202,272"/>
+<area shape="poly" id="edge9_Node000001_Node000005" title=" " alt="" coords="149,46,175,67,197,95,211,121,217,145,217,169,210,198,201,217,190,235,185,232,196,215,205,196,212,168,212,145,206,123,193,97,171,71,145,50"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="100,125,83,146,68,172,59,206,55,242,56,304,51,304,50,242,54,205,63,170,78,143,96,121"/>
+<area shape="rect" id="Node000004" href="$delete__section_8h.html" title="Overlay used to confirm deletion of patches or folders." alt="" coords="78,171,195,197"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="118,122,130,155,125,157,113,124"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="132,199,73,307,68,305,127,197"/>
+<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="144,197,158,230,153,232,139,199"/>
+<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="148,275,89,314,87,309,145,270"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="146,320,186,347"/>
+<area shape="poly" id="edge8_Node000005_Node000006" title=" " alt="" coords="168,273,168,304,163,304,163,273"/>
+</map>

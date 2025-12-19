@@ -1,0 +1,9 @@
+<map id="ValueBridge" name="ValueBridge">
+<area shape="rect" id="Node000001" title=" " alt="" coords="175,360,332,771"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,112,168,181"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,194,177,367,172,369,103,196"/>
+<area shape="rect" id="Node000003" href="$structmopo_1_1ValueDetails.html" title=" " alt="" coords="192,5,315,288"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="256,288,256,343,251,343,251,288"/>
+<area shape="rect" id="Node000004" href="$classValueBridge_1_1Listener.html" title=" " alt="" coords="340,101,482,192"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="397,193,339,345,334,343,392,191"/>
+</map>

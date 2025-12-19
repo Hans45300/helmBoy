@@ -1,0 +1,12 @@
+[submodule "externals/JUCE"]
+	path = externals/JUCE
+	url = https://github.com/juce-framework/JUCE.git
+	branch = master
+[submodule "externals/VST3_SDK"]
+	path = externals/VST3_SDK
+	url = https://github.com/steinbergmedia/vst3sdk.git
+	branch = master
+[submodule "externals/xsimd"]
+	path = externals/xsimd
+	url = https://github.com/xtensor-stack/xsimd
+	branch = master

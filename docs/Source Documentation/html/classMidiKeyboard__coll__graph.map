@@ -1,0 +1,5 @@
+<map id="MidiKeyboard" name="MidiKeyboard">
+<area shape="rect" id="Node000001" title=" " alt="" coords="23,123,144,213"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,162,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="86,89,86,123,81,123,81,89"/>
+</map>

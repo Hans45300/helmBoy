@@ -1,0 +1,22 @@
+<map id="src/synthesis/helmBoy_module.h" name="src/synthesis/helmBoy_module.h">
+<area shape="rect" id="Node000001" title="Base class utilities for HelmBoy modules and control creation helpers." alt="" coords="208,5,363,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,171,70,197"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="235,51,189,72,143,98,99,130,63,162,59,158,96,126,140,94,187,68,233,46"/>
+<area shape="rect" id="Node000003" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="154,96,294,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="272,50,245,85,241,82,268,47"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="318,96,376,123"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="303,47,330,82,326,85,299,50"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="399,96,486,123"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="327,46,406,86,403,91,325,51"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="193,126,85,167,83,162,191,121"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="94,171,157,197"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="209,125,156,164,153,159,205,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="181,171,267,197"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="227,123,227,155,222,155,222,123"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="292,171,338,197"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="242,121,289,159,286,163,238,125"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="362,171,415,197"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="254,121,348,162,346,167,252,126"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="439,171,508,197"/>
+<area shape="poly" id="edge8_Node000003_Node000008" title=" " alt="" coords="268,121,425,166,424,171,267,126"/>
+</map>

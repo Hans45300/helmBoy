@@ -1,0 +1,35 @@
+<map id="src/editor_sections/reverb_section.h" name="src/editor_sections/reverb_section.h">
+<area shape="rect" id="Node000001" title="UI section for reverb effect controls (feedback, damping, mix)." alt="" coords="258,5,389,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="347,245,449,272"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="369,46,405,67,443,94,477,129,503,170,505,192,494,212,474,228,451,241,448,236,471,224,490,209,500,191,498,172,473,132,439,98,402,71,367,51"/>
+<area shape="rect" id="Node000003" href="$synth__button_8h.html" title="Boutons stylisés pour l&#39;interface (toggle, contextual labels)." alt="" coords="147,171,254,197"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="309,50,222,160,218,156,305,47"/>
+<area shape="rect" id="Node000011" href="$synth__section_8h.html" title="Base class for UI sections used in the HelmBoy interface." alt="" coords="292,96,405,123"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="332,48,342,80,337,82,327,49"/>
+<area shape="rect" id="Node000013" href="$synth__slider_8h.html" title=" " alt="" coords="20,171,122,197"/>
+<area shape="poly" id="edge18_Node000001_Node000013" title=" " alt="" coords="291,51,106,164,103,160,288,46"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="236,195,350,237,348,242,234,200"/>
+<area shape="rect" id="Node000004" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="157,245,297,272"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="208,197,220,230,215,232,203,199"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="286,320,350,347"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="245,270,292,308,289,312,241,275"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="374,320,438,347"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="259,270,362,311,360,316,257,275"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="5,320,92,347"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="197,275,95,316,93,311,195,270"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="497,320,544,347"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="279,270,483,320,481,325,278,275"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="115,320,168,347"/>
+<area shape="poly" id="edge9_Node000004_Node000009" title=" " alt="" coords="214,275,170,312,166,308,211,271"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="193,320,261,347"/>
+<area shape="poly" id="edge10_Node000004_Node000010" title=" " alt="" coords="230,273,230,304,224,304,224,273"/>
+<area shape="poly" id="edge12_Node000011_Node000002" title=" " alt="" coords="407,119,448,138,466,152,482,169,486,190,478,209,461,226,440,240,437,235,457,222,473,206,481,189,477,172,463,155,445,142,405,124"/>
+<area shape="poly" id="edge16_Node000011_Node000003" title=" " alt="" coords="324,126,241,166,239,161,322,121"/>
+<area shape="poly" id="edge15_Node000011_Node000004" title=" " alt="" coords="340,125,249,235,245,232,336,121"/>
+<area shape="poly" id="edge17_Node000011_Node000008" title=" " alt="" coords="406,116,458,134,482,149,503,169,520,202,528,239,530,274,528,305,522,304,524,274,523,239,515,204,498,172,479,153,456,139,405,121"/>
+<area shape="rect" id="Node000012" href="$modulation__button_8h.html" title="Bouton permettant d&#39;ajouter/retirer des connexions de modulation." alt="" coords="329,171,467,197"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="359,122,383,156,379,159,355,125"/>
+<area shape="poly" id="edge14_Node000012_Node000002" title=" " alt="" coords="400,198,400,230,395,230,395,198"/>
+<area shape="poly" id="edge19_Node000013_Node000002" title=" " alt="" coords="124,194,332,240,331,245,122,199"/>
+<area shape="poly" id="edge20_Node000013_Node000004" title=" " alt="" coords="99,195,187,236,185,241,97,200"/>
+</map>

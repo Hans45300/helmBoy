@@ -1,0 +1,9 @@
+/**
+ * @defgroup UI User Interface
+ * @brief UI components and editor widgets used by HelmBoy.
+ */
+
+/**
+ * @defgroup user_interface User Interface (alias)
+ * @brief Alias group so headers using `@ingroup user_interface` resolve.
+ */

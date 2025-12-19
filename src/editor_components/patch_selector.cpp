@@ -1,0 +1,217 @@
+/* Copyright 2025 Marc Scheffer
+ *
+ * helmBoy is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ *
+ * This work is based on bepzi's Helm project, <https://github.com/bepzi/helm>,
+ * itself based on Matt Tytel's Helm <https://tytel.org/helm/>
+ *
+ * helmBoy is distributedin the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with helmBoy.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "patch_selector.h"
+
+#include "browser_look_and_feel.h"
+#include "colors.h"
+#include "default_look_and_feel.h"
+#include "fonts.h"
+#include "load_save.h"
+#include "synth_gui_interface.h"
+
+#define TEXT_PADDING 4.0f
+#define BROWSE_PERCENT 0.35f
+
+namespace {
+  static void initPatchCallback(int result, PatchSelector* patch_selector) {
+    if (patch_selector != nullptr && result != 0)
+      patch_selector->initPatch();
+  }
+}
+
+PatchSelector::PatchSelector() : SynthSection("patch_selector"),
+                                 browser_(nullptr), save_section_(nullptr), modified_(false) {
+  setLookAndFeel(BrowserLookAndFeel::instance());
+  addButton((prev_patch_ = std::make_unique<TextButton>("prev_patch")).get());
+  prev_patch_->setButtonText(TRANS("<"));
+  prev_patch_->setColour(TextButton::buttonColourId, Colour(Colors::Color_ff464646));
+  prev_patch_->setColour(TextButton::textColourOffId, Colours::white);
+
+  addButton((next_patch_ = std::make_unique<TextButton>("next_patch")).get());
+  next_patch_->setButtonText(TRANS(">"));
+  next_patch_->setColour(TextButton::buttonColourId, Colour(Colors::Color_ff464646));
+  next_patch_->setColour(TextButton::textColourOffId, Colours::white);
+
+  addButton((save_ = std::make_unique<TextButton>("save")).get());
+  save_->setButtonText(TRANS("SAVE"));
+  save_->setColour(TextButton::buttonColourId, Colour(Colors::Color_ff303030));
+  save_->setColour(TextButton::textColourOffId, Colours::white);
+
+  addButton((export_ = std::make_unique<TextButton>("export")).get());
+  export_->setButtonText(TRANS("EXPORT"));
+  export_->setColour(TextButton::buttonColourId, Colour(Colors::Color_ff303030));
+  export_->setColour(TextButton::textColourOffId, Colours::white);
+
+  addButton((browse_ = std::make_unique<TextButton>("browse")).get());
+  browse_->setButtonText(TRANS("BROWSE"));
+  browse_->setColour(TextButton::buttonColourId, Colour(Colors::Color_ff303030));
+  browse_->setColour(TextButton::textColourOffId, Colours::white);
+  browse_mode_ = false;
+}
+
+PatchSelector::~PatchSelector() {
+  prev_patch_ = nullptr;
+  next_patch_ = nullptr;
+  save_ = nullptr;
+  export_ = nullptr;
+  browse_ = nullptr;
+}
+
+void PatchSelector::paint(Graphics& g) {
+  SynthSection::paint(g);
+
+  SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+  patch_text_ = parent->getSynth()->getPatchName();
+  if (patch_text_ == "")
+    patch_text_ = TRANS("init");
+
+  if (modified_)
+    patch_text_ = "*" + patch_text_;
+  folder_text_ = parent->getSynth()->getFolderName();
+
+  int browse_height = proportionOfHeight(BROWSE_PERCENT);
+  Rectangle<int> top(proportionOfWidth(0.1f) + TEXT_PADDING, 0,
+                     proportionOfWidth(0.8f) - TEXT_PADDING, browse_height);
+  Rectangle<int> bottom(proportionOfWidth(0.1f) + TEXT_PADDING, browse_height,
+                        proportionOfWidth(0.8f) - TEXT_PADDING, browse_height);
+
+  g.setFont(Fonts::instance()->monospace().withPointHeight(size_ratio_ * 12.0f));
+  g.setColour(Colors::control_label_text);
+  g.drawFittedText(folder_text_, top, Justification::centredLeft, 1);
+  g.setColour(Colour(Colors::Color_ffffffff));
+  g.drawFittedText(patch_text_, bottom, Justification::centredLeft, 1);
+}
+
+
+void PatchSelector::paintBackground(Graphics& g) {
+  static const DropShadow shadow(Colour(Colors::Color_ff000000), 4, Point<int>(0, 0));
+
+  g.setColour(Colour(Colors::Color_ff383838));
+  g.fillRect(0, 0, getWidth(), proportionOfHeight(BROWSE_PERCENT));
+
+  g.setColour(Colour(Colors::Color_ff444444));
+  g.fillRect(0, proportionOfHeight(BROWSE_PERCENT), getWidth(), proportionOfHeight(BROWSE_PERCENT));
+
+  int browse_height = proportionOfHeight(BROWSE_PERCENT);
+
+  Rectangle<int> left(0, 0, proportionOfWidth(0.1f), 2 * browse_height);
+  Rectangle<int> right(proportionOfWidth(0.9f), 0, proportionOfWidth(0.1f), 2 * browse_height);
+  shadow.drawForRectangle(g, left);
+  shadow.drawForRectangle(g, right);
+}
+
+void PatchSelector::resized() {
+  int full_browse_height = 2 * proportionOfHeight(BROWSE_PERCENT);
+  prev_patch_->setBounds(0, 0, proportionOfWidth(0.1f), full_browse_height);
+  next_patch_->setBounds(getWidth() - proportionOfWidth(0.1f), 0,
+                         proportionOfWidth(0.1f), full_browse_height);
+
+  int button_width = (getWidth() - 2.0) / 3.0 - 1;
+  int button_height = getHeight() - full_browse_height;
+  int last_button_width = getWidth() - 2 * button_width - 2;
+  save_->setBounds(0, full_browse_height, button_width, button_height);
+  export_->setBounds(button_width + 1, full_browse_height, button_width, button_height);
+  browse_->setBounds(2 * button_width + 2, full_browse_height, last_button_width, button_height);
+  SynthSection::resized();
+}
+
+void PatchSelector::mouseUp(const MouseEvent& event) {
+  if (event.mods.isPopupMenu()) {
+    PopupMenu m;
+    m.setLookAndFeel(DefaultLookAndFeel::instance());
+
+    m.addItem(1, "Load Init Patch");
+    m.showMenuAsync(PopupMenu::Options(),
+                    ModalCallbackFunction::forComponent(initPatchCallback, this));
+  }
+  else if (browser_)
+    browser_->setVisible(!browser_->isVisible());
+}
+
+void PatchSelector::buttonClicked(Button* clicked_button) {
+  if (browser_ == nullptr)
+    return;
+
+  if (clicked_button == save_.get() && save_section_)
+    save_section_->setVisible(true);
+  else if (clicked_button == browse_.get()) {
+    browse_mode_ = !browse_mode_;
+    browser_->setVisible(browse_mode_);
+    if (browse_mode_)
+      browse_->setButtonText(TRANS("EDIT"));
+    else
+      browse_->setButtonText(TRANS("BROWSE"));
+  }
+  else if (clicked_button == export_.get()) {
+    SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+    if (parent == nullptr)
+      return;
+
+    SynthBase* synth = parent->getSynth();
+    // exportToFile() is async and will handle the file dialog
+    // The callback in exportToFile will update the UI when done
+    synth->exportToFile();
+  }
+  else if (clicked_button == prev_patch_.get())
+    browser_->loadPrevPatch();
+  else if (clicked_button == next_patch_.get())
+    browser_->loadNextPatch();
+}
+
+void PatchSelector::newPatchSelected(File patch) {
+  repaint();
+}
+
+void PatchSelector::setModified(bool modified) {
+  if (modified_ == modified)
+    return;
+
+  modified_ = modified;
+  repaint();
+}
+
+void PatchSelector::loadFromFile(File& patch) {
+  SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+  (void)parent->getSynth()->loadFromFile(patch);
+}
+
+int PatchSelector::getBrowseHeight() {
+  return 2 * proportionOfHeight(BROWSE_PERCENT);
+}
+
+void PatchSelector::initPatch() {
+  SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+  parent->getSynth()->loadInitPatch();
+  browser_->externalPatchLoaded(File());
+  parent->updateFullGui();
+  parent->notifyFresh();
+}
+
+void PatchSelector::ensureBrowseButtonIsBrowse() {
+  if (browse_ == nullptr)
+    return;
+  // If the button currently shows EDIT, reset it to BROWSE and clear browse mode
+  String text = browse_->getButtonText();
+  if (text == TRANS("EDIT")) {
+    browse_mode_ = false;
+    browse_->setButtonText(TRANS("BROWSE"));
+  }
+}

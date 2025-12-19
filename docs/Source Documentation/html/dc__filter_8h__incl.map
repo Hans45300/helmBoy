@@ -1,0 +1,5 @@
+<map id="src/synthesis/dc_filter.h" name="src/synthesis/dc_filter.h">
+<area shape="rect" id="Node000001" title="Header for a simple DC blocking filter processor." alt="" coords="5,5,166,32"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="53,80,118,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,33,88,64,83,64,83,33"/>
+</map>

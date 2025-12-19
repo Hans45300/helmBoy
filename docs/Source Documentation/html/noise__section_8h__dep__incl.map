@@ -1,0 +1,5 @@
+<map id="src/editor_sections/noise_section.h" name="src/editor_sections/noise_section.h">
+<area shape="rect" id="Node000001" title="UI section for noise generator controls (volume)." alt="" coords="5,5,137,48"/>
+<area shape="rect" id="Node000002" href="$noise__section_8cpp.html" title="Implementation of the NoiseSection UI." alt="" coords="5,96,137,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="74,64,74,96,68,96,68,64"/>
+</map>

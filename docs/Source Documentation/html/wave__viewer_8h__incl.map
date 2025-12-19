@@ -1,0 +1,25 @@
+<map id="src/editor_components/wave_viewer.h" name="src/editor_components/wave_viewer.h">
+<area shape="rect" id="Node000001" title="Visualiseur d&#39;onde/waveform pour oscillateurs et sources." alt="" coords="96,5,249,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="58,171,161,197"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,51,99,71,77,97,73,112,76,127,91,157,86,160,70,129,68,112,72,95,95,67,124,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="87,96,150,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,50,138,84,133,81,156,47"/>
+<area shape="rect" id="Node000004" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="199,171,340,197"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="234,46,265,66,290,95,296,110,296,127,287,157,282,156,291,126,291,111,286,97,262,70,231,51"/>
+<area shape="rect" id="Node000011" href="$synth__slider_8h.html" title=" " alt="" coords="174,96,277,123"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="188,47,211,81,206,84,184,50"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,245,70,272"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="230,200,85,245,84,240,228,195"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="94,245,157,272"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="246,200,166,240,163,235,243,195"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="181,245,267,272"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="264,199,242,233,238,231,259,196"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="292,245,338,272"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="280,196,301,231,297,233,275,199"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="362,245,415,272"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="292,196,356,235,353,239,289,200"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="439,245,508,272"/>
+<area shape="poly" id="edge9_Node000004_Node000010" title=" " alt="" coords="306,195,425,237,423,242,304,200"/>
+<area shape="poly" id="edge11_Node000011_Node000002" title=" " alt="" coords="207,125,144,164,141,160,204,121"/>
+<area shape="poly" id="edge12_Node000011_Node000004" title=" " alt="" coords="235,122,256,156,252,159,231,125"/>
+</map>

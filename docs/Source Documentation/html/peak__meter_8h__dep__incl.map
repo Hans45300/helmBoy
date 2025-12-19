@@ -1,0 +1,7 @@
+<map id="src/synthesis/peak_meter.h" name="src/synthesis/peak_meter.h">
+<area shape="rect" id="Node000001" title="Header for PeakMeter: tracks stereo peak levels with decay smoothing." alt="" coords="100,5,231,48"/>
+<area shape="rect" id="Node000002" href="$helmBoy__engine_8cpp.html" title="Top&#45;level synth engine: constructs processors and routing for HelmBoy." alt="" coords="5,96,160,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,61,104,98,100,94,134,58"/>
+<area shape="rect" id="Node000003" href="$peak__meter_8cpp.html" title="Simple peak meter processor that tracks peak levels for stereo signals." alt="" coords="184,96,315,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="197,58,232,94,228,98,193,61"/>
+</map>

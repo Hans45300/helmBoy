@@ -1,0 +1,13 @@
+<map id="src/common/border_bounds_constrainer.h" name="src/common/border_bounds_constrainer.h">
+<area shape="rect" id="Node000001" title="Constrains window/component bounds within configurable borders." alt="" coords="5,5,188,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="37,245,140,272"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,49,76,96,74,132,75,168,85,230,79,231,70,169,68,132,71,96,85,48"/>
+<area shape="rect" id="Node000003" href="$delete__section_8h.html" title="Overlay used to confirm deletion of patches or folders." alt="" coords="86,96,203,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="111,47,131,81,127,84,107,50"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="142,124,101,232,96,230,137,122"/>
+<area shape="rect" id="Node000004" href="$overlay_8h.html" title="Composant overlay réutilisable pour afficher panneaux modaux/overlays." alt="" coords="137,171,210,197"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="152,122,166,155,161,157,147,124"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="161,200,116,237,113,233,157,196"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="164,245,203,272"/>
+<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="178,198,182,230,177,230,173,198"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="src/synthesis/gate.h" name="src/synthesis/gate.h">
+<area shape="rect" id="Node000001" title="Gate processor header: selects one of several inputs as an output." alt="" coords="5,5,145,32"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="43,80,107,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="78,33,78,64,72,64,72,33"/>
+</map>

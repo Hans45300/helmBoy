@@ -1,0 +1,27 @@
+<map id="src/editor_components/filter_selector.cpp" name="src/editor_components/filter_selector.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="354,5,508,48"/>
+<area shape="rect" id="Node000002" href="$filter__selector_8h.html" title="Sélecteur graphique de type de filtre (LP/HP/BP/shelf/etc.)." alt="" coords="330,96,441,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="421,50,402,84,398,81,417,47"/>
+<area shape="rect" id="Node000012" href="$colors_8h.html" title=" " alt="" coords="422,171,586,197"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="443,47,494,155,489,158,438,49"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="364,245,466,272"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="391,123,412,230,407,231,385,124"/>
+<area shape="rect" id="Node000004" href="$synth__slider_8h.html" title=" " alt="" coords="246,171,349,197"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="372,125,326,163,323,159,368,121"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="319,196,383,235,380,239,317,200"/>
+<area shape="rect" id="Node000005" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="199,245,340,272"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="295,199,282,232,277,230,290,197"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="5,320,70,347"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="230,275,85,320,84,315,228,270"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="94,320,157,347"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="246,275,166,315,163,310,243,270"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="181,320,267,347"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="264,274,242,308,238,305,259,271"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="292,320,338,347"/>
+<area shape="poly" id="edge9_Node000005_Node000009" title=" " alt="" coords="280,271,301,305,297,308,275,274"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="362,320,415,347"/>
+<area shape="poly" id="edge10_Node000005_Node000010" title=" " alt="" coords="292,270,356,309,353,314,289,275"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="439,320,508,347"/>
+<area shape="poly" id="edge11_Node000005_Node000011" title=" " alt="" coords="306,270,425,312,423,317,304,275"/>
+<area shape="poly" id="edge13_Node000012_Node000003" title=" " alt="" coords="490,200,444,237,440,233,487,196"/>
+</map>

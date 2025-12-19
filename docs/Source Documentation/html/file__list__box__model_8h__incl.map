@@ -1,0 +1,13 @@
+<map id="src/common/file_list_box_model.h" name="src/common/file_list_box_model.h">
+<area shape="rect" id="Node000001" title="List model used to display and manage patch/bank files in the GUI." alt="" coords="5,5,144,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="15,245,118,272"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="68,49,54,96,52,132,53,168,63,230,57,231,48,169,46,132,49,96,63,48"/>
+<area shape="rect" id="Node000003" href="$delete__section_8h.html" title="Overlay used to confirm deletion of patches or folders." alt="" coords="64,96,181,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="89,47,109,81,105,84,85,50"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="120,124,79,232,74,230,115,122"/>
+<area shape="rect" id="Node000004" href="$overlay_8h.html" title="Composant overlay réutilisable pour afficher panneaux modaux/overlays." alt="" coords="115,171,188,197"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="130,122,144,155,139,157,125,124"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="139,200,94,237,91,233,135,196"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="142,245,181,272"/>
+<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="156,198,160,230,155,230,151,198"/>
+</map>

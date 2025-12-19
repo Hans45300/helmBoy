@@ -1,0 +1,44 @@
+<map id="src/editor_sections/oscillator_section.h" name="src/editor_sections/oscillator_section.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="250,5,388,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="244,245,346,272"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="251,41,191,57,127,82,96,99,67,120,42,144,21,172,17,184,21,196,34,206,53,216,107,232,169,243,229,250,228,255,168,248,105,237,51,221,31,211,17,199,11,184,17,169,38,140,64,116,93,95,125,77,190,52,250,36"/>
+<area shape="rect" id="Node000003" href="$synth__section_8h.html" title="Base class for UI sections used in the HelmBoy interface." alt="" coords="172,96,285,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="298,51,256,88,252,84,294,47"/>
+<area shape="rect" id="Node000013" href="$wave__selector_8h.html" title="Sélecteur graphique de formes d&#39;onde pour oscillateurs." alt="" coords="330,96,447,123"/>
+<area shape="poly" id="edge17_Node000001_Node000013" title=" " alt="" coords="339,47,370,82,366,86,335,50"/>
+<area shape="rect" id="Node000015" href="$wave__viewer_8h.html" title="Visualiseur d&#39;onde/waveform pour oscillateurs et sources." alt="" coords="524,96,632,123"/>
+<area shape="poly" id="edge22_Node000001_Node000015" title=" " alt="" coords="387,46,523,88,522,93,385,51"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="229,123,227,158,229,177,235,196,248,216,265,233,262,237,244,220,230,198,224,178,222,158,224,123"/>
+<area shape="rect" id="Node000004" href="$modulation__button_8h.html" title="Bouton permettant d&#39;ajouter/retirer des connexions de modulation." alt="" coords="31,171,170,197"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="207,126,137,165,135,160,205,121"/>
+<area shape="rect" id="Node000005" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="370,245,511,272"/>
+<area shape="poly" id="edge6_Node000003_Node000005" title=" " alt="" coords="269,121,316,140,365,169,399,199,425,231,421,235,395,203,362,173,314,145,267,126"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="35,320,81,347"/>
+<area shape="poly" id="edge16_Node000003_Node000009" title=" " alt="" coords="172,122,82,142,44,156,21,172,13,188,9,205,13,241,26,276,43,306,38,309,21,278,8,242,4,204,8,186,17,169,42,151,81,137,171,117"/>
+<area shape="rect" id="Node000012" href="$synth__button_8h.html" title="Boutons stylisés pour l&#39;interface (toggle, contextual labels)." alt="" coords="244,171,351,197"/>
+<area shape="poly" id="edge13_Node000003_Node000012" title=" " alt="" coords="242,121,277,157,273,161,239,125"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="135,195,248,237,246,242,133,200"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="584,320,649,347"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="472,270,572,311,570,316,470,275"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="217,320,280,347"/>
+<area shape="poly" id="edge8_Node000005_Node000007" title=" " alt="" coords="408,275,295,317,293,312,406,270"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="304,320,390,347"/>
+<area shape="poly" id="edge9_Node000005_Node000008" title=" " alt="" coords="426,275,377,313,374,308,423,270"/>
+<area shape="poly" id="edge10_Node000005_Node000009" title=" " alt="" coords="374,275,97,327,96,322,373,270"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="414,320,467,347"/>
+<area shape="poly" id="edge11_Node000005_Node000010" title=" " alt="" coords="443,273,443,304,438,304,438,273"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="492,320,560,347"/>
+<area shape="poly" id="edge12_Node000005_Node000011" title=" " alt="" coords="457,271,502,308,498,312,454,275"/>
+<area shape="poly" id="edge14_Node000012_Node000002" title=" " alt="" coords="300,198,299,230,294,230,295,198"/>
+<area shape="poly" id="edge15_Node000012_Node000005" title=" " alt="" coords="324,195,403,235,401,240,321,200"/>
+<area shape="poly" id="edge18_Node000013_Node000002" title=" " alt="" coords="390,123,382,159,365,199,348,220,328,238,325,234,344,217,361,196,377,157,385,122"/>
+<area shape="rect" id="Node000014" href="$synth__slider_8h.html" title=" " alt="" coords="527,171,629,197"/>
+<area shape="poly" id="edge19_Node000013_Node000014" title=" " alt="" coords="422,121,531,162,529,167,421,126"/>
+<area shape="poly" id="edge20_Node000014_Node000002" title=" " alt="" coords="529,200,360,244,359,238,528,195"/>
+<area shape="poly" id="edge21_Node000014_Node000005" title=" " alt="" coords="555,200,479,240,477,235,553,196"/>
+<area shape="poly" id="edge23_Node000015_Node000002" title=" " alt="" coords="555,126,334,240,331,236,552,121"/>
+<area shape="poly" id="edge25_Node000015_Node000005" title=" " alt="" coords="633,118,676,130,714,147,728,158,737,170,738,184,731,199,717,210,698,220,647,236,587,247,527,254,526,249,586,241,646,230,696,215,714,206,726,196,733,183,732,172,725,161,712,152,674,135,632,123"/>
+<area shape="poly" id="edge26_Node000015_Node000014" title=" " alt="" coords="580,123,580,155,575,155,575,123"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="653,171,716,197"/>
+<area shape="poly" id="edge24_Node000015_Node000016" title=" " alt="" coords="598,121,655,159,652,164,595,125"/>
+</map>

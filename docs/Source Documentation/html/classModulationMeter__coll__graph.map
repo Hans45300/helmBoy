@@ -1,0 +1,26 @@
+<map id="ModulationMeter" name="ModulationMeter">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,2121,141,2617"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="13,16,91,85"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="55,100,55,499,55,1781,57,1954,63,2121,58,2122,52,1954,49,1781,49,499,49,100"/>
+<area shape="rect" id="Node000007" href="$classSynthSection.html" title="Base class for all synthesizer UI sections." alt="" coords="89,145,273,855"/>
+<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="68,99,92,181,87,182,63,100"/>
+<area shape="rect" id="Node000003" href="$classSynthSlider.html" title="Custom slider control for synthesis parameters." alt="" coords="326,1511,463,2049"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="329,1907,152,2230,147,2228,324,1905"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="413,1148,456,1217"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="434,1233,415,1511,410,1511,429,1232"/>
+<area shape="rect" id="Node000005" href="$structmopo_1_1ValueDetails.html" title=" " alt="" coords="481,1041,604,1324"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="510,1324,468,1495,463,1493,505,1323"/>
+<area shape="rect" id="Node000006" href="$classFullInterface.html" title=" " alt="" coords="217,927,388,1439"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="345,1438,353,1493,348,1494,339,1439"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="250,869,260,926,255,927,244,870"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="115,16,213,85"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="169,100,170,145,165,146,163,100"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="237,16,339,85"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="279,100,268,146,263,145,274,99"/>
+<area shape="rect" id="Node000010" href="$classSynthButton_1_1ButtonListener.html" title=" " alt="" coords="363,5,538,96"/>
+<area shape="poly" id="edge10_Node000007_Node000010" title=" " alt="" coords="352,103,312,126,287,147,275,163,271,160,283,144,309,122,349,98"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="298,465,409,535"/>
+<area shape="poly" id="edge11_Node000006_Node000011" title=" " alt="" coords="352,550,324,927,319,927,347,549"/>
+<area shape="rect" id="Node000012" href="$classOpenGLBackground.html" title=" " alt="" coords="433,263,609,737"/>
+<area shape="poly" id="edge12_Node000006_Node000012" title=" " alt="" coords="460,738,424,855,396,937,391,936,419,854,455,736"/>
+</map>

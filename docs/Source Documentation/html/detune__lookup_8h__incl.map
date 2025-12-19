@@ -1,0 +1,9 @@
+<map id="src/synthesis/detune_lookup.h" name="src/synthesis/detune_lookup.h">
+<area shape="rect" id="Node000001" title="Provides a lookup singleton to convert cent detune values to frequency ratios." alt="" coords="69,5,211,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,96,88,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,51,74,88,71,84,114,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="112,96,168,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="142,49,142,80,137,80,137,49"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="192,96,250,123"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="163,47,200,83,196,87,159,51"/>
+</map>

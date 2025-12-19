@@ -1,0 +1,7 @@
+<map id="src/synthesis/noise_oscillator.h" name="src/synthesis/noise_oscillator.h">
+<area shape="rect" id="Node000001" title="Header for a simple white&#45;noise oscillator processor." alt="" coords="99,5,234,48"/>
+<area shape="rect" id="Node000002" href="$helmBoy__voice__handler_8cpp.html" title="Voice handler implementation: allocation, stealing and voice I/O." alt="" coords="5,96,160,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,61,104,98,100,94,135,58"/>
+<area shape="rect" id="Node000003" href="$noise__oscillator_8cpp.html" title="White&#45;noise oscillator processor producing sample&#45;rate independent random output." alt="" coords="183,96,318,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="198,58,233,94,229,98,195,61"/>
+</map>

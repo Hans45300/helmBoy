@@ -1,0 +1,11 @@
+<map id="src/synthesis/value_switch.h" name="src/synthesis/value_switch.h">
+<area shape="rect" id="Node000001" title="Header for ValueSwitch: routes one input buffer to output and enables processors." alt="" coords="283,5,418,48"/>
+<area shape="rect" id="Node000002" href="$helmBoy__engine_8cpp.html" title="Top&#45;level synth engine: constructs processors and routing for HelmBoy." alt="" coords="5,96,160,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="274,56,146,98,145,93,272,51"/>
+<area shape="rect" id="Node000003" href="$helmBoy__module_8cpp.html" title="Implementation of HelmBoyModule helpers (control creation, modulation maps)." alt="" coords="184,96,338,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="321,61,284,98,280,94,317,57"/>
+<area shape="rect" id="Node000004" href="$helmBoy__voice__handler_8cpp.html" title="Voice handler implementation: allocation, stealing and voice I/O." alt="" coords="363,96,517,139"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="384,57,421,94,417,98,380,61"/>
+<area shape="rect" id="Node000005" href="$value__switch_8cpp.html" title="A lightweight switch/value multiplexer that routes one of several input buffers to an output." alt="" coords="541,96,675,139"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="426,51,548,93,547,98,424,56"/>
+</map>

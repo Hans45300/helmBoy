@@ -1,0 +1,26 @@
+<map id="src/synthesis/helmBoy_engine.h" name="src/synthesis/helmBoy_engine.h">
+<area shape="rect" id="Node000001" title="Declaration of the HelmBoyEngine: central synth engine and parameter routing." alt="" coords="70,5,224,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,245,70,272"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,50,92,72,70,97,54,130,45,166,39,230,34,230,40,165,49,128,66,95,89,68,114,46"/>
+<area shape="rect" id="Node000003" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="267,171,408,197"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="174,46,312,159,309,163,170,51"/>
+<area shape="rect" id="Node000009" href="$helmBoy__module_8h.html" title="Base class utilities for HelmBoy modules and control creation helpers." alt="" coords="81,96,213,123"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="150,49,150,80,144,80,144,49"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="286,201,85,249,84,243,284,195"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="116,245,180,272"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="305,200,195,242,193,237,304,195"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="204,245,290,272"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="323,200,276,238,272,234,320,196"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="314,245,361,272"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="340,198,340,230,335,230,335,198"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="384,245,438,272"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="352,196,389,232,385,236,348,200"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="462,245,530,272"/>
+<area shape="poly" id="edge8_Node000003_Node000008" title=" " alt="" coords="366,195,456,236,453,241,364,200"/>
+<area shape="poly" id="edge10_Node000009_Node000002" title=" " alt="" coords="122,125,92,145,65,172,51,201,43,231,38,230,46,199,61,169,89,141,119,121"/>
+<area shape="poly" id="edge11_Node000009_Node000003" title=" " alt="" coords="181,121,291,162,289,167,179,126"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="186,171,244,197"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="161,121,195,157,191,161,157,125"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="75,171,162,197"/>
+<area shape="poly" id="edge13_Node000009_Node000011" title=" " alt="" coords="144,124,132,157,127,155,139,122"/>
+</map>

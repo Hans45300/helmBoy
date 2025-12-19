@@ -1,0 +1,7 @@
+/**
+ * @mainpage HelmBoy Documentation
+ *
+ * @section intro_sec Introduction
+ * HelmBoy is a modern subtractive polyphonic synthesizer. This documentation
+ * provides an overview of modules, synthesis engine, UI and plugin integrations.
+ */

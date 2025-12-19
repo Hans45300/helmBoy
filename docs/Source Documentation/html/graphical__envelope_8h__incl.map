@@ -1,0 +1,23 @@
+<map id="src/editor_components/graphical_envelope.h" name="src/editor_components/graphical_envelope.h">
+<area shape="rect" id="Node000001" title="Widget graphique pour édition visuelle d&#39;enveloppe ADSR." alt="" coords="113,5,266,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="65,171,167,197"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,50,146,72,129,97,121,126,118,156,113,155,115,125,124,95,142,68,162,47"/>
+<area shape="rect" id="Node000003" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="199,171,340,197"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="216,46,237,68,255,95,265,125,270,155,265,156,260,127,250,97,232,72,212,50"/>
+<area shape="rect" id="Node000010" href="$synth__slider_8h.html" title=" " alt="" coords="138,96,241,123"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="192,49,192,80,187,80,187,49"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,245,70,272"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="230,200,85,245,84,240,228,195"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="94,245,157,272"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="246,200,166,240,163,235,243,195"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="181,245,267,272"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="264,199,242,233,238,231,259,196"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="292,245,338,272"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="280,196,301,231,297,233,275,199"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="362,245,415,272"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="292,196,356,235,353,239,289,200"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="439,245,508,272"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="306,195,425,237,423,242,304,200"/>
+<area shape="poly" id="edge10_Node000010_Node000002" title=" " alt="" coords="179,125,142,161,138,158,175,121"/>
+<area shape="poly" id="edge11_Node000010_Node000003" title=" " alt="" coords="205,121,246,158,243,162,202,125"/>
+</map>

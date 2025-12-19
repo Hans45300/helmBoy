@@ -1,0 +1,21 @@
+<map id="SynthSlider" name="SynthSlider">
+<area shape="rect" id="Node000001" title="Custom slider control for synthesis parameters." alt="" coords="541,123,678,704"/>
+<area shape="rect" id="Node000003" href="$classBpmSlider.html" title=" " alt="" coords="5,1019,117,1109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="529,451,435,499,326,565,272,606,220,651,173,700,132,753,113,786,98,821,78,893,67,962,64,1019,59,1019,62,962,73,892,93,819,108,784,127,751,168,696,216,647,269,602,323,561,432,494,526,447"/>
+<area shape="rect" id="Node000004" href="$classFilterSelector.html" title=" " alt="" coords="142,837,269,1291"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="531,478,469,531,402,596,338,672,284,753,264,795,248,838,243,837,259,792,279,751,334,668,398,593,466,527,527,474"/>
+<area shape="rect" id="Node000005" href="$classModulationSlider.html" title=" " alt="" coords="294,976,442,1152"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="537,566,495,658,457,753,420,869,391,977,386,975,415,868,452,751,490,655,532,563"/>
+<area shape="rect" id="Node000006" href="$classRetriggerSelector.html" title=" " alt="" coords="467,987,600,1141"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="576,719,545,987,540,987,571,718"/>
+<area shape="rect" id="Node000007" href="$classTempoSelector.html" title=" " alt="" coords="624,923,746,1205"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="648,718,672,922,666,923,642,719"/>
+<area shape="rect" id="Node000008" href="$classTextSelector.html" title=" " alt="" coords="771,997,925,1131"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="686,570,725,659,761,751,803,881,835,997,829,998,798,883,756,753,720,661,681,572"/>
+<area shape="rect" id="Node000009" href="$classTextSlider.html" title=" " alt="" coords="950,965,1106,1163"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="691,475,752,529,819,594,884,669,940,751,966,803,987,859,1015,965,1010,966,982,860,961,805,935,753,880,673,815,598,749,533,688,479"/>
+<area shape="rect" id="Node000010" href="$classWaveSelector.html" title=" " alt="" coords="1130,752,1342,1376"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="693,447,790,495,904,563,963,603,1020,648,1073,697,1121,750,1132,766,1128,769,1117,754,1069,701,1017,652,960,607,902,567,788,500,690,452"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="588,5,631,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="612,89,612,123,607,123,607,89"/>
+</map>

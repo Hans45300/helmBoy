@@ -1,0 +1,9 @@
+<map id="mopo::HelmBoyEngine" name="mopo::HelmBoyEngine">
+<area shape="rect" id="Node000001" title="The main synthesis engine for HelmBoy synthesizer." alt="" coords="103,773,289,1269"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1HelmBoyModule.html" title=" " alt="" coords="5,123,216,725"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,740,163,773,158,774,153,741"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="56,5,165,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="114,90,114,123,108,123,108,90"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="241,389,325,459"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="278,474,235,774,229,773,273,473"/>
+</map>

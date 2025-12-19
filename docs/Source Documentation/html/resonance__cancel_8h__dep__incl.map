@@ -1,0 +1,7 @@
+<map id="src/synthesis/resonance_cancel.h" name="src/synthesis/resonance_cancel.h">
+<area shape="rect" id="Node000001" title="Header for ResonanceCancel: bypasses resonance control for shelf filter types." alt="" coords="92,5,255,48"/>
+<area shape="rect" id="Node000002" href="$helmBoy__voice__handler_8cpp.html" title="Voice handler implementation: allocation, stealing and voice I/O." alt="" coords="5,96,160,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,61,105,98,102,94,139,57"/>
+<area shape="rect" id="Node000003" href="$resonance__cancel_8cpp.html" title="Small helper processor to bypass resonance control for shelf filter types." alt="" coords="184,96,347,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="207,57,246,94,242,98,203,61"/>
+</map>

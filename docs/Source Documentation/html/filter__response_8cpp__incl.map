@@ -1,0 +1,36 @@
+<map id="src/editor_components/filter_response.cpp" name="src/editor_components/filter_response.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="232,5,385,48"/>
+<area shape="rect" id="Node000002" href="$filter__response_8h.html" title="Widget affichant la réponse en fréquence des filtres (low/band/high/shelf)." alt="" coords="183,96,300,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="293,50,264,86,260,82,289,47"/>
+<area shape="rect" id="Node000014" href="$colors_8h.html" title=" " alt="" coords="5,171,73,197"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="265,51,172,98,70,164,68,159,170,94,262,46"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="324,96,426,123"/>
+<area shape="poly" id="edge17_Node000001_Node000015" title=" " alt="" coords="328,47,357,82,353,86,323,50"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="450,96,506,123"/>
+<area shape="poly" id="edge18_Node000001_Node000016" title=" " alt="" coords="353,46,438,87,436,91,351,51"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="58,245,161,272"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="206,126,169,144,137,172,122,201,115,230,110,229,117,199,133,169,166,140,203,121"/>
+<area shape="rect" id="Node000004" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="200,245,340,272"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="249,122,263,170,271,229,265,230,258,171,244,124"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="322,171,425,197"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="266,121,339,161,336,165,263,126"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="449,171,594,197"/>
+<area shape="poly" id="edge11_Node000002_Node000012" title=" " alt="" coords="291,121,459,164,457,169,290,126"/>
+<area shape="rect" id="Node000013" href="$synth__slider_8h.html" title=" " alt="" coords="146,171,249,197"/>
+<area shape="poly" id="edge12_Node000002_Node000013" title=" " alt="" coords="236,125,215,159,211,156,232,122"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="6,320,70,347"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="230,275,85,320,84,315,228,270"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="94,320,157,347"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="246,275,166,315,163,310,243,270"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="181,320,268,347"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="264,274,243,308,238,305,260,271"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="292,320,338,347"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="280,271,301,305,297,308,275,274"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="362,320,415,347"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="292,270,356,309,353,314,289,275"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="440,320,508,347"/>
+<area shape="poly" id="edge9_Node000004_Node000010" title=" " alt="" coords="306,270,425,312,424,317,304,275"/>
+<area shape="poly" id="edge13_Node000013_Node000003" title=" " alt="" coords="184,200,138,237,135,233,181,196"/>
+<area shape="poly" id="edge14_Node000013_Node000004" title=" " alt="" coords="212,196,248,232,245,236,208,200"/>
+<area shape="poly" id="edge16_Node000014_Node000003" title=" " alt="" coords="53,196,89,232,85,236,49,200"/>
+</map>

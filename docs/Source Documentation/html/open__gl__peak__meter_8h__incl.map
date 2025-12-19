@@ -1,0 +1,22 @@
+<map id="src/editor_components/open_gl_peak_meter.h" name="src/editor_components/open_gl_peak_meter.h">
+<area shape="rect" id="Node000001" title="OpenGL&#45;accelerated peak meter for audio levels." alt="" coords="90,5,247,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,171,108,197"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,51,107,71,84,97,70,127,63,156,57,155,65,125,80,95,104,67,131,46"/>
+<area shape="rect" id="Node000003" href="$helmBoy__common_8h.html" title="Core types, constants and small utility classes used across helmBoy." alt="" coords="281,96,421,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="217,46,310,87,308,92,214,51"/>
+<area shape="rect" id="Node000010" href="$open__gl__component_8h.html" title="Base pour composants OpenGL accélérés (lifecycle init/render/destroy)." alt="" coords="94,96,243,123"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="171,49,171,80,166,80,166,49"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="132,171,197,197"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="320,126,212,167,210,162,318,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="221,171,284,197"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="336,125,283,164,280,159,332,121"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="308,171,394,197"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="354,123,354,155,348,155,348,123"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="419,171,465,197"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="369,121,416,159,413,163,365,125"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="488,171,542,197"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="381,121,475,162,473,167,379,126"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="566,171,635,197"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="395,121,552,166,551,171,394,126"/>
+<area shape="poly" id="edge10_Node000010_Node000002" title=" " alt="" coords="150,125,90,164,87,160,148,121"/>
+</map>

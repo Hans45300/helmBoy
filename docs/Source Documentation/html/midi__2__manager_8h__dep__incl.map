@@ -1,0 +1,17 @@
+<map id="src/common/midi_2_manager.h" name="src/common/midi_2_manager.h">
+<area shape="rect" id="Node000001" title="Optional MIDI 2.0 support with high&#45;resolution control." alt="" coords="250,5,453,32"/>
+<area shape="rect" id="Node000002" href="$midi__2__manager_8cpp.html" title="MIDI 2.0 manager implementation &#45; Phases 1, 2, and 3." alt="" coords="5,88,223,115"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="301,40,152,90,150,85,299,35"/>
+<area shape="rect" id="Node000003" href="$midi__2__phase4_8cpp.html" title="MIDI 2.0 Phase 4 Implementation &#45; Advanced Features." alt="" coords="247,88,456,115"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="354,48,354,88,349,88,349,48"/>
+<area shape="rect" id="Node000004" href="$helmBoy__plugin_8h.html" title=" " alt="" coords="480,80,612,123"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="397,36,497,77,495,82,395,41"/>
+<area shape="rect" id="Node000005" href="$plugin_2helmBoy__editor_8cpp.html" title=" " alt="" coords="401,261,534,304"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="500,134,483,152,470,172,463,194,461,218,465,260,460,261,456,218,458,193,465,170,479,148,497,130"/>
+<area shape="rect" id="Node000006" href="$plugin_2helmBoy__editor_8h.html" title=" " alt="" coords="480,171,612,213"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="549,138,549,170,543,170,543,138"/>
+<area shape="rect" id="Node000007" href="$helmBoy__plugin_8cpp.html" title=" " alt="" coords="570,261,703,304"/>
+<area shape="poly" id="edge8_Node000004_Node000007" title=" " alt="" coords="594,131,612,148,627,169,636,193,641,218,641,261,636,261,635,218,631,194,622,172,608,152,590,135"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="520,227,487,263,483,259,516,223"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="580,222,618,259,614,263,576,226"/>
+</map>
