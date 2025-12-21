@@ -36,7 +36,7 @@ It began as a personal gambit, playing back with c++, JUCE, and thinking of what
 * added a 250% size option to about window
 * lots of templates patches added, to allow easy sound design beginning
 * Full documentation:
-  * ![code](./docs/Source%20Documentation/index.html)
+  * ![code](./docs/Source%20Documentation/html/index.html)
   * ![user manual](./docs/helmBoy%20online%20manual/index.md)
 
 ### Known issues
