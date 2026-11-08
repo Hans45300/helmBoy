@@ -49,6 +49,7 @@ class ModulationButton : public ToggleButton {
     void mouseUp(const MouseEvent& e) override;
     /** @brief Ajoute un écouteur pour les déconnexions. */
     void addDisconnectListener(ModulationDisconnectListener* listener);
+    void removeDisconnectListener(ModulationDisconnectListener* listener) { std::erase(listeners_, listener); }
     /** @brief Déconnecte la modulation à l'index donné (interne). */
     void disconnectIndex(int index);
 

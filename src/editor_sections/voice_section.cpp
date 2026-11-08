@@ -61,10 +61,17 @@ void VoiceSection::paintBackground(Graphics& g) {
   paintKnobShadows(g);
 
   g.setColour(Colors::control_label_text);
-  g.setFont(Fonts::instance()->proportional_regular().withPointHeight(size_ratio_ * 10.0f));
-  drawTextForComponent(g, TRANS("VOICES"), polyphony_.get());
-  drawTextForComponent(g, TRANS("PITCH BEND"), pitch_bend_.get());
-  drawTextForComponent(g, TRANS("VEL TRACK"), velocity_track_.get());
+  g.setFont(Fonts::instance()->proportional_regular().withPointHeight(size_ratio_ * 8.0f));
+  int label_y = polyphony_->getBottom() + size_ratio_ * 4.0f;
+  int label_height = size_ratio_ * 10.0f;
+  int cell_width = getWidth() / 3;
+  g.drawFittedText(TRANS("VOICES"), 0, label_y, cell_width, label_height,
+                   Justification::centred, 1, 0.65f);
+  g.drawFittedText(TRANS("PITCH BEND"), cell_width, label_y, cell_width, label_height,
+                   Justification::centred, 1, 0.65f);
+  g.drawFittedText(TRANS("VEL TRACK"), 2 * cell_width, label_y,
+                   getWidth() - 2 * cell_width, label_height,
+                   Justification::centred, 1, 0.65f);
 }
 
 void VoiceSection::resized() {

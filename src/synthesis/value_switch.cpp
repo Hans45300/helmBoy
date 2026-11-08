@@ -50,7 +50,7 @@ namespace mopo {
   inline void ValueSwitch::setSource(int source) {
     bool enable_processors = source != 0;
     source = utils::iclamp(source, 0, numInputs() - 1);
-  output(ValueSwitch::kSwitch)->buffer = input(source)->source->buffer;
+    output(ValueSwitch::kSwitch)->buffer = input(source)->source->buffer;
 
     for (auto* processor : processors_)
       processor->enable(enable_processors);

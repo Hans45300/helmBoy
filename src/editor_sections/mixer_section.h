@@ -52,6 +52,8 @@ class MixerSection : public SynthSection {
     std::unique_ptr<SynthSlider> osc_2_;
     std::unique_ptr<SynthSlider> sub_;
     std::unique_ptr<SynthSlider> noise_;
+    std::unique_ptr<SynthSlider> ring_mod_osc1_;
+    std::unique_ptr<SynthSlider> ring_mod_osc2_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MixerSection)
 };

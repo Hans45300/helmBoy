@@ -9,7 +9,7 @@
  * This work is based on bepzi's Helm project, <https://github.com/bepzi/helm>,
  * itself based on Matt Tytel's Helm <https://tytel.org/helm/>
  *
- * helmBoy is distributedin the hope that it will be useful,
+ * helmBoy is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -22,6 +22,7 @@
 #define HELM_PLUGIN_H
 
 #include <JuceHeader.h>
+#include <array>
 #include <string_view>
 #include <optional>
 
@@ -119,6 +120,12 @@ class HelmPlugin : public SynthBase, public AudioProcessor, public ValueBridge::
      */
     void releaseResources() override;
 
+    /** Stop voices and effect tails without changing the patch or automation.
+      Normal serialized host calls complete synchronously, even while stopped.
+      An overlapping audio callback owns a pending reset until its exit; callers
+      must serialize lifecycle/state operations as required by JUCE wrappers. */
+    void reset() override;
+
     /**
      * @brief Processes one buffer of audio and MIDI data
      * @param buffer Audio buffer to process (input/output)
@@ -192,7 +199,10 @@ class HelmPlugin : public SynthBase, public AudioProcessor, public ValueBridge::
 
     /**
      * @brief Gets the plugin's tail length in seconds
-     * @return Tail length for reverb/delay effects
+    * @return Configuration estimate to -100 dB, including retained previous settings.
+    * VST3 receives infinity for unknown/non-decaying or sample-count-overflow cases.
+    * Other wrappers receive a finite 2^30-sample reporting ceiling; this is not
+    * an audible decay bound for Freeze. Query uses atomic snapshots, not live DSP.
      */
     [[nodiscard]] double getTailLengthSeconds() const override;
 
@@ -226,7 +236,7 @@ class HelmPlugin : public SynthBase, public AudioProcessor, public ValueBridge::
     void setStateInformation(const void* data, int size_in_bytes) override;
 
     // ValueBridge::Listener
-    void parameterChanged(std::string_view name, mopo::mopo_float value) override;
+    void parameterChanged(const std::string& name, mopo::mopo_float value) override;
 
     void loadPatches();
 
@@ -234,13 +244,19 @@ class HelmPlugin : public SynthBase, public AudioProcessor, public ValueBridge::
     bool isBusesLayoutSupported(const BusesLayout &layouts) const override;
 
   private:
-    uint32 set_state_time_;
+    double estimateTailLengthSeconds() const;
+    std::array<const std::atomic<mopo::mopo_float>*, helmboy::TailLength::Count> tail_controls_ {};
+    std::array<double, helmboy::TailLength::Count> tail_defaults_ {};
+    std::atomic<double> tail_sample_rate_ { 44100.0 };
+    std::atomic<double> retained_tail_seconds_ { 0.0 };
+    void finishHostCallback(AudioSampleBuffer* buffer = nullptr);
+    std::atomic_flag host_callback_busy_ = ATOMIC_FLAG_INIT;
+    std::atomic<bool> host_reset_pending_ { false };
+    std::atomic<uint32> set_state_time_ { 0 };
 
     int current_program_;
     Array<File> all_patches_;
-    AudioPlayHead::CurrentPositionInfo position_info_;
-
-    std::map<std::string, ValueBridge*> bridge_lookup_;
+    std::map<std::string, ValueBridge*, std::less<>> bridge_lookup_;
 
     std::unique_ptr<helmboy::Midi2Manager> midi2_manager_;
 

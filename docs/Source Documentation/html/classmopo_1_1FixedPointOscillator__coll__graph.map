@@ -1,5 +1,11 @@
 <map id="mopo::FixedPointOscillator" name="mopo::FixedPointOscillator">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,123,173,256"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="54,5,124,75"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,90,92,123,86,123,86,90"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,797,173,931"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="202,5,353,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,516,112,798,107,797,198,511"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="197,573,358,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="272,514,274,525,274,574,269,573,269,525,271,519"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="388,744,488,984"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="342,499,361,548,372,572,395,650,415,728,409,727,390,651,367,574,356,550,341,504"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="275,573,277,521,278,515,280,574"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="439,743,432,637,424,581,412,526,388,458,360,395,361,390,393,456,417,525,429,580,438,636,444,745"/>
 </map>

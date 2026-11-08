@@ -52,6 +52,10 @@ namespace mopo {
 
       /// Applique le traitement de feedback
       void process() override;
+      void resetState() override {
+        utils::zeroBuffer(std::span<mopo_float, MAX_BUFFER_SIZE>(buffer_, MAX_BUFFER_SIZE));
+        output(0)->clearBuffer();
+      }
 
         /**
          * @brief Rafraîchit la sortie du buffer de feedback.

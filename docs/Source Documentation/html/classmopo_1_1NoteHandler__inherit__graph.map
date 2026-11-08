@@ -1,0 +1,11 @@
+<map id="mopo::NoteHandler" name="mopo::NoteHandler">
+<area shape="rect" id="Node000001" title="Interface for handling MIDI note events in synthesis modules." alt="" coords="242,5,366,139"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Arpeggiator.html" title=" " alt="" coords="5,251,187,853"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="232,143,201,188,171,252,166,250,197,185,234,138"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1HelmBoyEngine.html" title="The main synthesis engine for HelmBoy synthesizer." alt="" coords="211,304,397,800"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="305,150,307,304,302,304,304,156"/>
+<area shape="rect" id="Node000004" href="$classmopo_1_1VoiceHandler.html" title="Gestionnaire de voix polyphoniques (allocation, �tat, etc.)." alt="" coords="421,187,625,917"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="376,138,412,185,424,207,418,208,407,188,377,144"/>
+<area shape="rect" id="Node000005" href="$classmopo_1_1HelmBoyVoiceHandler.html" title=" " alt="" coords="418,965,628,1568"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="524,930,526,967,520,965,522,935"/>
+</map>

@@ -34,7 +34,11 @@ namespace mopo {
   class ValueSwitch : public cr::Value {
     public:
       enum Outputs {
-  kValue = Value::Inputs::Set,
+        // Avant :
+        // kValue = Value::Inputs::Set,
+
+        // Après : Propre, standard et portable sur tous les compilateurs
+        kValue = static_cast<int>(Value::Inputs::Set),
         kSwitch,
         kNumOutputs
       };

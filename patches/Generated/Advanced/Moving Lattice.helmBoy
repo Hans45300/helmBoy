@@ -1,0 +1,44 @@
+{
+  "settings": {
+    "polyphony": 8,
+    "num_steps": 8,
+    "step_frequency": 0.5,
+    "step_smoothing": 0.03,
+    "step_seq_00": -0.8,
+    "step_seq_01": 0.35,
+    "step_seq_02": 0.72,
+    "step_seq_03": -0.15,
+    "step_seq_04": 0.55,
+    "step_seq_05": -0.45,
+    "step_seq_06": 0.9,
+    "step_seq_07": -0.25,
+    "osc_1_waveform": 4.0,
+    "osc_1_volume": 0.58,
+    "osc_2_waveform": 2.0,
+    "osc_2_volume": 0.34,
+    "filter_on": 1,
+    "filter_style": 0,
+    "cutoff": 68.0,
+    "resonance": 0.22,
+    "amp_attack": 0.02,
+    "amp_decay": 0.8,
+    "amp_sustain": 0.72,
+    "amp_release": 0.35,
+    "modulations": [
+      {
+        "amount": 26.0,
+        "destination": "cutoff",
+        "source": "step_sequencer"
+      },
+      {
+        "amount": 0.12,
+        "destination": "osc_2_tune",
+        "source": "step_sequencer"
+      }
+    ]
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Moving Lattice",
+  "folder_name": "Advanced",
+  "synth_version": "1.1.1"
+}

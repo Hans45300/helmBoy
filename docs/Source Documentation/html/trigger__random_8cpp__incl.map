@@ -1,9 +1,18 @@
 <map id="src/synthesis/trigger_random.cpp" name="src/synthesis/trigger_random.cpp">
-<area shape="rect" id="Node000001" title="Implementation of TriggerRandom: sample&#45;and&#45;hold random generator triggered by input." alt="" coords="51,5,190,48"/>
-<area shape="rect" id="Node000002" href="$trigger__random_8h.html" title="Header for TriggerRandom processor which outputs a random value on trigger." alt="" coords="5,96,124,123"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,50,84,85,80,82,104,47"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="148,96,208,123"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="137,47,162,82,158,85,133,50"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="20,171,109,197"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="67,123,67,155,62,155,62,123"/>
+<area shape="rect" id="Node000001" title="Implementation of TriggerRandom: sample&#45;and&#45;hold random generator triggered by input." alt="" coords="238,5,378,48"/>
+<area shape="rect" id="Node000002" href="$trigger__random_8h.html" title="Header for TriggerRandom processor which outputs a random value on trigger." alt="" coords="201,96,319,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="297,47,277,84,273,81,294,51"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="348,245,407,272"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="316,46,333,95,372,231,367,230,328,97,314,51"/>
+<area shape="rect" id="Node000003" href="$processor_8h.html" title="Définition de la classe Processor et des ports d&#39;entrée/sortie." alt="" coords="187,171,276,197"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="257,121,244,158,240,155,253,125"/>
+<area shape="rect" id="Node000004" href="$common_8h.html" title="Core definitions and constants for the mopo synthesis library." alt="" coords="5,245,88,272"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="201,200,94,242,92,237,199,195"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="112,245,173,272"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="219,197,171,238,168,233,214,199"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="196,245,254,272"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="233,196,230,231,226,228,229,200"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="258,195,341,238,336,238,257,200"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="278,245,324,272"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="245,195,281,234,276,233,243,200"/>
 </map>

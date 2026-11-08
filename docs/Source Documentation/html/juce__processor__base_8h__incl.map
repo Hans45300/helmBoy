@@ -1,0 +1,22 @@
+<map id="mopo/src/juce_processor_base.h" name="mopo/src/juce_processor_base.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="386,5,553,48"/>
+<area shape="rect" id="Node000002" href="$processor_8h.html" title="Définition de la classe Processor et des ports d&#39;entrée/sortie." alt="" coords="216,96,306,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="418,48,309,92,307,87,413,50"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="350,171,407,197"/>
+<area shape="poly" id="edge10_Node000001_Node000005" title=" " alt="" coords="435,47,409,71,389,97,380,126,378,157,374,153,375,125,384,95,405,67,430,50"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="399,96,539,123"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="471,47,471,82,467,79,467,51"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="564,96,638,123"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="504,46,570,88,565,88,503,51"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="663,96,713,123"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="526,46,651,93,645,94,525,51"/>
+<area shape="rect" id="Node000003" href="$common_8h.html" title="Core definitions and constants for the mopo synthesis library." alt="" coords="5,171,88,197"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="225,126,99,168,97,163,223,121"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="112,171,173,197"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="243,123,177,165,175,160,238,124"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="282,121,348,162,343,162,281,126"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="197,171,256,197"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="257,122,241,159,237,155,253,125"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="280,171,325,197"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="270,121,290,158,285,157,267,126"/>
+</map>

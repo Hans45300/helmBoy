@@ -37,6 +37,11 @@ class SynthButton : public ToggleButton {
       public:
         virtual ~ButtonListener() { }
         virtual void guiChanged(SynthButton* button) { }
+        virtual void modulationsChanged(SynthButton* button) { }
+        virtual bool modulationGesture(SynthButton* button, const ModifierKeys& mods) {
+          juce::ignoreUnused(button, mods);
+          return false;
+        }
     };
 
     SynthButton(String name);
@@ -50,19 +55,35 @@ class SynthButton : public ToggleButton {
     void setActive(bool active = true);
     bool isActive() const { return active_; }
 
+    void setModulated(bool modulated = true);
+    bool isModulated() const { return modulated_; }
+
+    void setModulationEditActive(bool active = true);
+    bool isModulationEditActive() const { return modulation_edit_active_; }
+
+    /** @brief Set whether modulation currently forces this button on. */
+    void setModulationActive(bool active);
+    /** @brief Return whether modulation currently forces this button on. */
+    bool isModulationActive() const { return modulation_active_; }
+
     void handlePopupResult(int result);
+    void notifyModulationsChanged();
 
     virtual void mouseDown(const MouseEvent& e) override;
     virtual void mouseUp(const MouseEvent& e) override;
     virtual void mouseEnter(const MouseEvent& e) override;
 
     void addButtonListener(ButtonListener* listener);
+    void removeButtonListener(ButtonListener* listener) { std::erase(button_listeners_, listener); }
 
   private:
     void buttonStateChanged() override;
     void notifyTooltip();
 
     bool active_;
+    bool modulated_;
+    bool modulation_edit_active_;
+    bool modulation_active_;
     const std::string* string_lookup_;
     FullInterface* parent_;
 

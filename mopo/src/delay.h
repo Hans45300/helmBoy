@@ -26,9 +26,12 @@
 #ifndef DELAY_H
 #define DELAY_H
 
+#include "biquad_filter.h"
 #include "memory.h"
 #include "processor.h"
 #include "utils.h"
+#include <array>
+#include <memory>
 
 namespace mopo {
 
@@ -46,6 +49,9 @@ namespace mopo {
         Wet,
         SampleDelay,
         Feedback,
+        AudioRight,
+        PingPong,
+        DelayLpCutoff,
         NumInputs
       };
 
@@ -61,6 +67,9 @@ namespace mopo {
 
       /// Applique le traitement de délai
       virtual void process() override;
+      void setSampleRate(int sample_rate) override;
+      /** Reset delay lines and filter state at an audio-block boundary. */
+      void resetState() override;
 
       /**
        * @brief Traite un échantillon du délai.
@@ -71,7 +80,26 @@ namespace mopo {
       inline void tick(int i, const mopo_float* audio, mopo_float* dest);
 
     protected:
+      struct FilterState {
+        mopo_float past_in_1 = 0.0;
+        mopo_float past_in_2 = 0.0;
+        mopo_float past_out_1 = 0.0;
+        mopo_float past_out_2 = 0.0;
+      };
+
+      void resetLowPassFilter();
+      void updateLowPassTarget(mopo_float cutoff);
+      void smoothLowPassCoefficients();
+      mopo_float processLowPassSample(int channel, mopo_float sample);
+
       Memory* memory_;
+      std::unique_ptr<Memory> right_memory_;
+      std::array<std::array<FilterState, 2>, 2> low_pass_state_;
+      std::array<BiquadFilter::Coefficients, 2> low_pass_coefficients_;
+      std::array<BiquadFilter::Coefficients, 2> low_pass_target_coefficients_;
+      mopo_float low_pass_target_cutoff_;
+      int low_pass_smoothing_samples_;
+      int low_pass_smoothing_remaining_;
       mopo_float current_feedback_;
       mopo_float current_wet_;
       mopo_float current_dry_;

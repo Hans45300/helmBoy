@@ -1,5 +1,11 @@
 <map id="mopo::HelmBoyOscillators" name="mopo::HelmBoyOscillators">
-<area shape="rect" id="Node000001" title="Dual oscillator engine with advanced unison capabilities." alt="" coords="5,123,173,917"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="54,5,124,75"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,90,92,123,87,123,87,90"/>
+<area shape="rect" id="Node000001" title="Dual oscillator engine with advanced unison capabilities." alt="" coords="5,573,180,1304"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="209,5,360,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="209,518,195,574,183,619,178,617,190,573,210,513"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="204,648,365,1229"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="280,514,282,525,282,648,277,648,277,525,279,519"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="396,819,496,1059"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="350,499,368,548,379,572,410,689,431,802,426,802,405,690,374,574,363,550,349,504"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="282,648,284,521,285,515,287,649"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="449,818,445,677,435,601,420,526,396,458,368,394,368,389,401,456,425,525,441,600,450,677,455,820"/>
 </map>

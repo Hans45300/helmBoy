@@ -1,0 +1,38 @@
+<map id="mopo/src/linear_slope.cpp" name="mopo/src/linear_slope.cpp">
+<area shape="rect" id="Node000001" title="Implements a sample&#45;accurate linear ramp processor." alt="" coords="386,5,560,32"/>
+<area shape="rect" id="Node000002" href="$linear__slope_8h.html" title="Rampe linéaire (smoothing/portamento) pour valeurs de contrôle." alt="" coords="102,80,204,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="415,35,220,80,218,75,419,31"/>
+<area shape="rect" id="Node000011" href="$utils_8h.html" title=" " alt="" coords="445,80,501,107"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="474,30,475,66,471,63,472,35"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="703,155,760,181"/>
+<area shape="poly" id="edge20_Node000001_Node000012" title=" " alt="" coords="496,30,699,146,694,147,494,35"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="93,155,213,181"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="154,105,156,140,150,138,152,110"/>
+<area shape="rect" id="Node000004" href="$value_8h.html" title="Processeurs Value : constantes ou control&#45;rate values." alt="" coords="5,155,69,181"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="131,110,72,148,69,144,134,105"/>
+<area shape="rect" id="Node000005" href="$processor_8h.html" title="Définition de la classe Processor et des ports d&#39;entrée/sortie." alt="" coords="318,229,407,256"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="68,176,82,179,304,227,301,232,80,184,70,181"/>
+<area shape="rect" id="Node000006" href="$common_8h.html" title="Core definitions and constants for the mopo synthesis library." alt="" coords="456,304,538,331"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="386,254,463,296,457,296,385,259"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="291,304,351,331"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="357,255,337,293,334,289,353,258"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="375,304,432,331"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="371,254,392,292,387,290,368,259"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="562,304,621,331"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="403,254,550,302,545,302,402,259"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="221,304,266,331"/>
+<area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="344,256,278,298,276,293,339,257"/>
+<area shape="poly" id="edge13_Node000011_Node000003" title=" " alt="" coords="443,103,225,153,223,148,446,99"/>
+<area shape="poly" id="edge12_Node000011_Node000004" title=" " alt="" coords="442,99,294,120,85,157,83,152,294,115,447,97"/>
+<area shape="poly" id="edge11_Node000011_Node000006" title=" " alt="" coords="486,105,504,127,518,154,525,190,523,227,509,291,505,287,518,227,519,191,513,156,500,130,485,110"/>
+<area shape="poly" id="edge16_Node000011_Node000009" title=" " alt="" coords="491,105,516,126,539,153,558,188,572,224,589,290,584,287,567,226,553,190,535,156,513,130,490,110"/>
+<area shape="poly" id="edge14_Node000011_Node000012" title=" " alt="" coords="502,100,691,153,686,154,502,105"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="630,155,679,181"/>
+<area shape="poly" id="edge15_Node000011_Node000013" title=" " alt="" coords="502,103,618,151,613,151,501,109"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="237,155,312,181"/>
+<area shape="poly" id="edge17_Node000011_Node000014" title=" " alt="" coords="442,106,325,151,322,146,447,104"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="336,155,418,181"/>
+<area shape="poly" id="edge18_Node000011_Node000015" title=" " alt="" coords="459,106,407,147,404,143,454,109"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="443,155,503,181"/>
+<area shape="poly" id="edge19_Node000011_Node000016" title=" " alt="" coords="475,105,475,140,471,138,471,109"/>
+</map>

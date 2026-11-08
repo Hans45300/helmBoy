@@ -39,12 +39,14 @@ class TextSlider : public SynthSlider {
     void mouseEvent(const MouseEvent& e);
     void mouseDown(const MouseEvent& e) override;
     void mouseDrag(const MouseEvent& e) override;
+    void setTextSizeScale(float scale) { text_size_scale_ = scale; }
 
     /** @brief Définit une table de correspondance courte pour les labels. */
     void setShortStringLookup(const std::string* lookup) { short_lookup_ = lookup; }
 
   private:
     const std::string* short_lookup_;
+    float text_size_scale_ = 0.7f;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TextSlider)
 };

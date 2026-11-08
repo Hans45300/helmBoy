@@ -4,22 +4,22 @@
 
 ![Poly LFO section example](../pictures/Poly%20LFO.png)
 
-Poly LFOs (Low-Frequency Oscillators) provide independent modulation for each voice, creating complex and evolving textures.
+HelmBoy has two Poly LFOs. Each voice has an independent LFO phase, allowing notes to move differently from one another.
 
 ## Parameters
 
 ### Frequency/Rate
 
-- **Range**: 0.01 Hz to 20 Hz (or tempo-synced)
-- **Per-voice**: Each voice can have different LFO phase
+- Choose a free-running rate or a tempo-synchronized division from 64/1
+  through 1/128, including dotted and triplet values.
 
 ### Waveform
 
-- Sine: Smooth, cyclical modulation
-- Triangle: Linear ramps
-- Square: On/off switching
-- Sawtooth: Ramp up or down
-- Random: Sample-and-hold random values
+- Sine, triangle, and square
+- Up and down sawtooth
+- 3-, 4-, and 8-step shapes
+- 3-, 5-, and 9-level pyramid shapes
+- Sample and hold, sample and glide, and Smooth Random
 
 ### Amplitude
 
@@ -27,12 +27,13 @@ Modulation depth from the LFO.
 
 ### Phase
 
-Starting position of the LFO cycle for the first voice.
+**PH** offsets the waveform cycle from -180° to +180°. At 0°, the LFO retains
+its default phase. The waveform viewer previews the offset.
 
-### Retrigger
+### Phase Stretch
 
-- **Free**: LFO continues from previous position
-- **Trigger**: Resets phase on each new note
+The **PS** control changes the LFO waveform's phase shape independently of PH.
+The waveform viewer previews both controls.
 
 ## Mono vs Poly
 

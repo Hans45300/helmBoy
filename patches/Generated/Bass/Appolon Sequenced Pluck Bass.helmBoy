@@ -1,0 +1,41 @@
+{
+  "settings": {
+    "polyphony": 1,
+    "legato": 0,
+    "osc_1_waveform": 4.0,
+    "osc_1_volume": 0.7,
+    "osc_2_waveform": 2.0,
+    "osc_2_transpose": 12.0,
+    "osc_2_volume": 0.26,
+    "sub_waveform": 2.0,
+    "sub_octave": 0,
+    "sub_volume": 0.2,
+    "filter_on": 1,
+    "filter_style": 0,
+    "cutoff": 45.0,
+    "resonance": 0.3,
+    "fil_env_depth": 62,
+    "fil_decay": 0.34,
+    "fil_sustain": 0.05,
+    "amp_attack": 0.002,
+    "amp_decay": 0.48,
+    "amp_sustain": 0.12,
+    "amp_release": 0.18,
+    "chorus_on": 0,
+    "reverb_on": 0,
+    "delay_on": 0,
+    "arp_on": 0,
+    "modulations": [
+      {
+        "amount": 12.0,
+        "destination": "cutoff",
+        "source": "velocity"
+      }
+    ],
+    "lfo_tempo_index_version": 2
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Appolon Sequenced Pluck Bass",
+  "folder_name": "Bass",
+  "synth_version": "1.1.1"
+}

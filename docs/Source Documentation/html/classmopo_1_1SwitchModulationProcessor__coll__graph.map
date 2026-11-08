@@ -1,0 +1,11 @@
+<map id="mopo::SwitchModulationProcessor" name="mopo::SwitchModulationProcessor">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,776,218,952"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="247,5,398,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="243,484,144,777,139,775,241,489"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="242,573,403,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="318,514,320,525,319,574,314,573,314,525,316,519"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="434,744,534,984"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="387,499,406,548,417,572,441,650,460,728,454,727,435,651,412,574,401,550,386,504"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="320,573,322,521,323,515,325,574"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="484,743,477,637,469,581,457,526,433,458,405,395,406,390,438,456,462,525,475,580,483,636,489,745"/>
+</map>

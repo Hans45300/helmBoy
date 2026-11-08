@@ -78,10 +78,6 @@ namespace mopo {
       void process() override;
 
       /**
-       * @brief Calcule un �chantillon d'oscillation
-       * @param i Indice de l'�chantillon
-       */
-      /**
        * @brief Calcule un échantillon d'oscillateur pour l'indice `i`.
        * @param i Indice de l'échantillon.
        */

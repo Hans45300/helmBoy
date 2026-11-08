@@ -1,0 +1,7 @@
+<map id="mopo::Arpeggiator" name="mopo::Arpeggiator">
+<area shape="rect" id="Node000001" title=" " alt="" coords="70,592,252,1195"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="5,5,156,544"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,556,125,592,119,592,117,562"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1NoteHandler.html" title="Interface for handling MIDI note events in synthesis modules." alt="" coords="180,208,304,341"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="232,353,203,593,198,592,231,358"/>
+</map>

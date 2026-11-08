@@ -1,3 +1,3 @@
 <map id="helmboy::Midi2Manager" name="helmboy::Midi2Manager">
-<area shape="rect" id="Node000001" title="Complete MIDI 2.0 message processor with high&#45;resolution parameter control." alt="" coords="5,5,201,923"/>
+<area shape="rect" id="Node000001" title="MIDI 1.0 callback adapter and bounded decoder for selected MIDI 2.0 UMPs." alt="" coords="5,5,201,1013"/>
 </map>

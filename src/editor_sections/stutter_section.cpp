@@ -25,7 +25,7 @@
 #include "text_look_and_feel.h"
 #include "synth_button.h"
 
-#define TEXT_Y 45
+#define TEXT_Y 30
 #define TEXT_HEIGHT 16
 #define TEXT_WIDTH 42
 #define SLIDER_HEIGHT 15
@@ -95,13 +95,13 @@ void StutterSection::paintBackground(Graphics& g) {
   SynthSection::paintBackground(g);
 
   g.setColour(Colors::control_label_text);
-  float font_size = size_ratio_ * 10.0f;
+  float font_size = size_ratio_ * 8.0f;
   g.setFont(Fonts::instance()->proportional_regular().withPointHeight(font_size));
 
   int text_height = size_ratio_ * TEXT_HEIGHT;
 
   int extra_bump = size_ratio_ * 5;
-  int text_buffer = size_ratio_ * 6;
+  int text_buffer = size_ratio_ * 4;
   g.drawText(TRANS("FREQUENCY"),
              stutter_frequency_->getBounds().getX() - extra_bump,
              stutter_frequency_->getBounds().getBottom() + text_buffer,
@@ -137,7 +137,7 @@ void StutterSection::resized() {
   resample_sync_->setBounds(resample_frequency_->getBounds().getRight(), text_y,
                             text_height, text_height);
 
-  int lower_buffer = size_ratio_ * 32;
+  int lower_buffer = size_ratio_ * 15;
   stutter_softness_->setBounds(0, getHeight() - slider_height - lower_buffer,
                                getWidth(), slider_height);
   SynthSection::resized();

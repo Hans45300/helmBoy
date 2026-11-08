@@ -26,7 +26,7 @@
 
 /**
  * @file retrigger_selector.h
- * @brief Sélecteur de mode de retrigger pour les oscillateurs/enveloppes.
+ * @brief Sï¿½lecteur de mode de retrigger pour les oscillateurs/enveloppes.
  */
 
 class RetriggerSelector : public SynthSlider {
@@ -36,9 +36,13 @@ class RetriggerSelector : public SynthSlider {
     void mouseDown(const MouseEvent& e) override;
     void paint(Graphics& g) override;
     void resized() override;
+    void valueChanged() override;
     void selectType(int type);
+    void setModulatedValue(float value);
 
   private:
+    int modulated_value_ = 0;
+    bool modulation_active_ = false;
     Path arrow_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RetriggerSelector)

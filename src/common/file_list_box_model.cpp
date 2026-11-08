@@ -20,6 +20,7 @@
 
 #include "file_list_box_model.h"
 
+#include <set>
 #include "colors.h"
 #include "fonts.h"
 #include "load_save.h"
@@ -37,8 +38,15 @@ void FileListBoxModel::paintListBoxItem(int row_number, Graphics& g,
     g.setColour(Colors::audio);
   }
 
+  const File& row_file = files_[row_number];
+  String display_name = row_file.getFileNameWithoutExtension();
+  if (show_relative_directory_paths_ && row_file.isDirectory()) {
+    File root = relative_root_.isDirectory() ? relative_root_ : LoadSave::getBankDirectory();
+    display_name = row_file.getRelativePathFrom(root).replaceCharacter('\\', '/');
+  }
+
   g.setFont(Fonts::instance()->monospace().withPointHeight(12.0f));
-  g.drawText(files_[row_number].getFileNameWithoutExtension(),
+  g.drawText(display_name,
              5, 0, width, height,
              Justification::centredLeft, true);
 
@@ -49,6 +57,11 @@ void FileListBoxModel::paintListBoxItem(int row_number, Graphics& g,
 void FileListBoxModel::selectedRowsChanged(int last_selected_row) {
   if (listener_)
     listener_->selectedFilesChanged(this);
+}
+
+void FileListBoxModel::listBoxItemDoubleClicked(int row_number, const MouseEvent&) {
+  if (listener_)
+    listener_->fileDoubleClicked(this, row_number);
 }
 
 void FileListBoxModel::deleteKeyPressed(int lastRowSelected) {
@@ -64,109 +77,26 @@ void FileListBoxModel::deleteKeyPressed(int lastRowSelected) {
 
 void FileListBoxModel::rescanFiles(const Array<File>& folders,
                                    String search,
-                                   bool find_files) {
+                                   bool find_files,
+                                   bool recursive) {
   static const FileSorterAscending file_sorter;
   files_.clear();
+  std::set<String> seen_paths;
 
   for (File folder : folders) {
     if (folder.isDirectory()) {
       Array<File> child_folders;
       if (find_files)
-        folder.findChildFiles(child_folders, File::findFiles, false, search);
+        LoadSave::findPatchFiles(folder, child_folders, recursive, search);
       else
-        folder.findChildFiles(child_folders, File::findDirectories, false);
+        folder.findChildFiles(child_folders, File::findDirectories, recursive);
 
       child_folders.sort(file_sorter);
-      files_.addArray(child_folders);
+      for (const auto& child : child_folders) {
+        String path = child.getFullPathName();
+        if (seen_paths.insert(path).second)
+          files_.add(child);
+      }
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

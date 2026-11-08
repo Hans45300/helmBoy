@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['implementation_20notes_0',['Implementation Notes',['../midi__2__manager_8cpp.html#implementation_notes',1,'']]],
-  ['implementations_1',['Concrete Implementations',['../classOpenGLComponent.html#opengl_implementations',1,'']]],
-  ['inheritance_20chain_2',['Inheritance Chain',['../classSynthSection.html#synthsection_inheritance',1,'']]],
-  ['integration_3',['Integration',['../classSynthSlider.html#synthslider_modulation',1,'Modulation Integration'],['../classOscilloscope.html#scope_integration',1,'System Integration'],['../classPatchSelector.html#integration',1,'System Integration']]],
-  ['integration_20usage_4',['Integration Usage',['../classGlobalToolTip.html#usage_integration',1,'']]],
-  ['interaction_5',['User Interaction',['../classSynthSlider.html#synthslider_interaction',1,'']]],
-  ['interaction_20model_6',['Interaction Model',['../classXYPad.html#xypad_interaction',1,'']]]
+  ['features_0',['Features',['../classMidiManager.html#midi_features',1,'Core Features'],['../classPatchSelector.html#selector_features',1,'Core Features'],['../classXYPad.html#xypad_features',1,'Core Features'],['../classSynthSection.html#synthsection_features',1,'Core Features'],['../classDelaySection.html#delay_features',1,'Effect Features'],['../midi__2__manager_8h.html#midi2_features',1,'Features'],['../classGlobalToolTip.html#tooltip_features',1,'Key Features'],['../classOscilloscope.html#scope_features',1,'Key Features'],['../classSynthSlider.html#synthslider_features',1,'Key Features'],['../classmopo_1_1HelmBoyOscillators.html#helmosc_features',1,'Oscillator Features'],['../classDefaultLookAndFeel.html#lookfeel_features',1,'Styling Features']]],
+  ['feedback_1',['Visual Feedback',['../classPatchSelector.html#visual_feedback',1,'']]],
+  ['file_20formats_2',['File Formats',['../classLoadSave.html#loadsave_formats',1,'']]],
+  ['format_20des_20patches_3',['Format des patches',['../state_and_parameters.html#autotoc_md29',1,'']]],
+  ['formats_4',['File Formats',['../classLoadSave.html#loadsave_formats',1,'']]],
+  ['functionality_5',['Core Functionality',['../classSynthBase.html#synthbase_core',1,'']]]
 ];

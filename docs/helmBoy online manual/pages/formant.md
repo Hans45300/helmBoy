@@ -4,7 +4,10 @@
 
 ![Formant section example](../pictures/Formant.png)
 
-The formant filter creates vowel-like sounds by emphasizing multiple frequency bands simultaneously.
+The Formant section adds vocal-like resonances. Use its XY pad to explore different formant positions.
+When the effect is enabled, the modulation-colored ring shows the effective XY
+position, including active modulation. The filled handle remains the editable
+base position.
 
 ## Parameters
 
@@ -16,30 +19,19 @@ Horizontal position in the formant space.
 
 ### Formant Y
 
-Vertical position in the formant space.
-
-- Adjusts formant character and brightness
-
-### Resonance
-
-Controls the sharpness of formant peaks.
-
-### Blend
-
-Mixes between the formant filter and the main filter.
-
-- **0%**: Only main filter
-- **100%**: Only formant filter
+Vertical position in the formant space. Drag the XY pad to adjust X and Y together.
 
 ## Vowel Spaces
 
-The formant filter can produce sounds reminiscent of:
+Formant positions can suggest vowel-like sounds, for example:
 
 - A (as in "father")
 - E (as in "bed")
 - I (as in "see")
 - O (as in "home")
 - U (as in "you")
+
+Use the section's on/off switch to enable or bypass the formant effect. There are no separate resonance or blend controls.
 
 ## Applications
 

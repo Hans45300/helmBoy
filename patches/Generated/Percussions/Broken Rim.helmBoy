@@ -1,0 +1,49 @@
+{
+  "settings": {
+    "fil_sustain": 0,
+    "filter_on": 1,
+    "osc_1_volume": 0.65,
+    "resonance": 0.58,
+    "noise_volume": 0.02,
+    "amp_attack": 0.001,
+    "amp_release": 0.07,
+    "mono_lfo_1_sync": 1,
+    "sub_phase_offset": 90,
+    "amp_decay": 0.09,
+    "polyphony": 8,
+    "distortion_drive": 8,
+    "distortion_on": 1,
+    "amp_sustain": 0,
+    "sub_octave": 0,
+    "osc_1_waveform": 6.0,
+    "mono_lfo_1_waveform": 3.0,
+    "sub_volume": 0.08,
+    "fil_attack": 0,
+    "reverb_dry_wet": 0.08,
+    "osc_1_phase_offset": 0,
+    "filter_style": 1,
+    "fil_env_depth": 68,
+    "osc_2_waveform": 4.0,
+    "osc_2_transpose": 12.0,
+    "arp_on": 0,
+    "reverb_on": 1,
+    "mono_lfo_1_tempo": 10.0,
+    "osc_2_volume": 0.22,
+    "modulations": [
+      {
+        "amount": 0.1,
+        "destination": "ring_modulation",
+        "source": "note"
+      }
+    ],
+    "cutoff": 102.0,
+    "mono_lfo_1_phase_offset": 135,
+    "noise_color": 0.18,
+    "osc_2_phase_offset": 22.5,
+    "lfo_tempo_index_version": 2
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Broken Rim",
+  "folder_name": "Percussions",
+  "synth_version": "1.1.1"
+}

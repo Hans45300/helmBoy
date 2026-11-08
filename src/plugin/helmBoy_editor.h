@@ -29,6 +29,7 @@
 class HelmEditor : public AudioProcessorEditor, public SynthGuiInterface {
   public:
     HelmEditor(HelmPlugin&);
+    virtual ~HelmEditor() override;
 
     // AudioProcessorEditor
     void paint(Graphics&) override;
@@ -41,6 +42,7 @@ class HelmEditor : public AudioProcessorEditor, public SynthGuiInterface {
 
     // SynthGuiInterface
     void updateFullGui() override;
+    helmboy::Midi2Manager* getMidi2Manager() override { return helm_.getMidi2Manager(); }
 
   private:
     void checkAnimate();
@@ -53,93 +55,3 @@ class HelmEditor : public AudioProcessorEditor, public SynthGuiInterface {
 };
 
 #endif // HELM_EDITOR_H
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

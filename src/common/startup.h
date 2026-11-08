@@ -27,16 +27,11 @@
 
 class SynthBase;
 
-namespace mopo {
-  class StringLayout;
-}
-
 class MidiManager;
 
 class Startup {
   public:
-    static void doStartupChecks(MidiManager* midi_manager,
-                                mopo::StringLayout* layout = nullptr);
+    static void doStartupChecks(MidiManager* midi_manager);
     static bool isFirstStartup();
     static void storeOldFactoryPatches();
     static void copyFactoryPatches();
@@ -47,93 +42,3 @@ class Startup {
 };
 
 #endif  // STARTUP_H
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

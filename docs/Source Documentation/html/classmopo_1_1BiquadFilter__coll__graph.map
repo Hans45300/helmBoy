@@ -1,0 +1,11 @@
+<map id="mopo::BiquadFilter" name="mopo::BiquadFilter">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,573,211,1155"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="241,5,392,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="237,487,210,575,205,573,235,492"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="236,573,397,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="312,514,314,525,313,574,308,573,308,525,310,519"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="428,744,528,984"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="381,499,400,548,411,572,435,650,454,728,448,727,429,651,406,574,395,550,380,504"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="314,573,316,521,317,515,319,574"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="478,743,471,637,463,581,451,526,427,458,399,395,400,390,432,456,456,525,469,580,477,636,483,745"/>
+</map>

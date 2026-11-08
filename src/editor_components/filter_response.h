@@ -32,7 +32,8 @@
 #include "state_variable_filter.h"
 #include "synth_slider.h"
 
-class FilterResponse : public Component, SynthSlider::SliderListener {
+class FilterResponse : public Component, SynthSlider::SliderListener,
+                       private juce::Timer {
   public:
     /**
      * @brief Constructeur.
@@ -90,12 +91,19 @@ class FilterResponse : public Component, SynthSlider::SliderListener {
     void mouseDown(const MouseEvent& e) override;
     /** @brief Événement souris : glissement. */
     void mouseDrag(const MouseEvent& e) override;
+    void mouseUp(const MouseEvent& e) override;
 
     /** @brief Active ou désactive le widget. */
     void setActive(bool active);
 
   private:
+    void timerCallback() override;
+    void computeFilterCoefficients(double cutoff, double resonance);
+    void setFilterCoefficients(double cutoff, double resonance);
+    Path createResponsePath();
+
     Path filter_response_path_;
+    Path base_filter_response_path_;
     int resolution_;
     mopo::StateVariableFilter::Styles style_;
     bool active_;
@@ -104,11 +112,18 @@ class FilterResponse : public Component, SynthSlider::SliderListener {
     mopo::BiquadFilter filter_band_;
     mopo::BiquadFilter filter_high_;
     mopo::BiquadFilter filter_shelf_;
+    mopo::BiquadFilter filter_notch_;
+    float comb_period_seconds_ = 0.0f;
+    float comb_feedback_ = 0.0f;
 
     SynthSlider* filter_blend_slider_;
     SynthSlider* filter_shelf_slider_;
     SynthSlider* cutoff_slider_;
     SynthSlider* resonance_slider_;
+    double displayed_cutoff_ = 0.0;
+    double displayed_resonance_ = 0.0;
+    bool displayed_parameters_valid_ = false;
+    bool effective_shape_differs_ = false;
 
     Image background_;
 

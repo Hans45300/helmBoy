@@ -26,6 +26,11 @@
 #include "synth_gui_interface.h"
 #include "text_look_and_feel.h"
 
+#include <cctype>
+#include <cmath>
+#include <cstdlib>
+#include <memory>
+
 #define DEFAULT_POPUP_BUFFER 10
 
 namespace {
@@ -34,14 +39,11 @@ namespace {
     kArmMidiLearn,
     kClearMidiLearn,
     kDefaultValue,
+    kEnterValue,
     kClearModulations,
     kModulationList
   };
 
-  static void sliderPopupCallback(int result, SynthSlider* slider) {
-    if (slider != nullptr && result != kCancel)
-      slider->handlePopupResult(result);
-  }
 } // namespace
 
 const float SynthSlider::rotary_angle = 0.8f * static_cast<float>(mopo::PI);
@@ -66,7 +68,8 @@ SynthSlider::SynthSlider(String name) : Slider(name), bipolar_(false), flip_colo
   setDoubleClickReturnValue(true, details_.default_value);
   setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
 
-  setBufferedToImage(true);
+  // Avoid stale cached bitmaps when controls are toggled or relayouted.
+  setBufferedToImage(false);
   setColour(Slider::backgroundColourId, Colour(Colors::Color_ff303030));
   setColour(Slider::textBoxOutlineColourId, Colour(Colors::Color_00000000));
 }
@@ -92,6 +95,8 @@ void SynthSlider::mouseDown(const MouseEvent& e) {
     if (isDoubleClickReturnEnabled())
       m.addItem(kDefaultValue, "Set to Default Value");
 
+    m.addItem(kEnterValue, "Enter Value...");
+
     std::vector<mopo::ModulationConnection*> connections;
     m.addItem(kArmMidiLearn, "Learn MIDI Assignment");
     if (parent->getSynth()->isMidiMapped(getName().toStdString()))
@@ -106,14 +111,13 @@ void SynthSlider::mouseDown(const MouseEvent& e) {
     if (connections.size() > 1)
       m.addItem(kClearModulations, "Disconnect all modulations");
 
-    m.showMenuAsync(PopupMenu::Options(),
-                    ModalCallbackFunction::forComponent(sliderPopupCallback, this));
+    showModulationPopup(m, this, false, kModulationList + static_cast<int>(connections.size()),
+               [this](int result) { handlePopupResult(result); });
   }
   else {
-    Slider::mouseDown(e);
-
     if (parent)
       synth->beginChangeGesture(getName().toStdString());
+    Slider::mouseDown(e);
     if (isRotary()) {
       click_position_ = e.getScreenPosition().toFloat();
       setMouseCursor(MouseCursor::NoCursor);
@@ -134,6 +138,16 @@ void SynthSlider::mouseUp(const MouseEvent& e) {
       Desktop::getInstance().getMainMouseSource().setScreenPosition(click_position_);
     }
   }
+}
+
+void SynthSlider::beginParameterEditHistoryGesture() {
+  if (auto* parent = findParentComponentOfClass<SynthGuiInterface>())
+    parent->getSynth()->beginParameterEditGesture(getName().toStdString());
+}
+
+void SynthSlider::endParameterEditHistoryGesture() {
+  if (auto* parent = findParentComponentOfClass<SynthGuiInterface>())
+    parent->getSynth()->endParameterEditGesture(getName().toStdString());
 }
 
 void SynthSlider::mouseEnter(const MouseEvent &e) {
@@ -315,22 +329,274 @@ void SynthSlider::handlePopupResult(int result) {
     synth->clearMidiLearn(getName().toStdString());
   else if (result == kDefaultValue)
     setValue(getDoubleClickReturnValue());
-  else if (result == kClearModulations) {
-    for (auto* connection : connections) {
-      std::string source = connection->source;
-      synth->disconnectModulation(connection);
-    }
-    for (auto* listener : slider_listeners_)
-      listener->modulationsChanged(getName().toStdString());
-  }
+  else if (result == kEnterValue)
+    promptForDirectValueEntry();
+  else if (result == kClearModulations)
+    disconnectAllModulations();
   else if (result >= kModulationList) {
     int connection_index = result - kModulationList;
+    if (connection_index < 0 || connection_index >= static_cast<int>(connections.size()))
+      return;
     std::string source = connections[connection_index]->source;
-    synth->disconnectModulation(connections[connection_index]);
-
-    for (auto* listener : slider_listeners_)
-      listener->modulationsChanged(getName().toStdString());
+    disconnectModulationFromSource(source);
   }
+}
+
+void SynthSlider::disconnectModulationFromSource(const std::string& source) {
+  auto* parent = findParentComponentOfClass<SynthGuiInterface>();
+  if (parent == nullptr)
+    return;
+
+  auto connections = parent->getSynth()->getDestinationConnections(getName().toStdString());
+  for (auto* connection : connections) {
+    if (connection->source == source) {
+      parent->getSynth()->disconnectModulation(connection);
+      for (auto* listener : slider_listeners_)
+        listener->modulationsChanged(getName().toStdString());
+      return;
+    }
+  }
+}
+
+void SynthSlider::disconnectAllModulations() {
+  auto* parent = findParentComponentOfClass<SynthGuiInterface>();
+  if (parent == nullptr)
+    return;
+
+  auto connections = parent->getSynth()->getDestinationConnections(getName().toStdString());
+  if (connections.empty())
+    return;
+
+  for (auto* connection : connections)
+    parent->getSynth()->disconnectModulation(connection);
+  for (auto* listener : slider_listeners_)
+    listener->modulationsChanged(getName().toStdString());
+}
+
+void SynthSlider::showModulationPopup(PopupMenu& menu, Component* owner, bool source_menu,
+                                      int first_value_id,
+                                      std::function<void(int)> handle_existing) {
+  auto* parent = owner->findParentComponentOfClass<SynthGuiInterface>();
+  if (parent == nullptr)
+    return;
+
+  const std::string name = owner->getName().toStdString();
+  const auto connections = source_menu ? parent->getSynth()->getSourceConnections(name) :
+                                        parent->getSynth()->getDestinationConnections(name);
+  std::vector<std::pair<std::string, std::string>> routes;
+  for (auto* connection : connections) {
+    menu.addItem(first_value_id + static_cast<int>(routes.size()),
+                 "Enter Value for " + String(source_menu ? connection->destination : connection->source));
+    routes.emplace_back(connection->source, connection->destination);
+  }
+
+  SafePointer<Component> safe_owner(owner);
+  menu.showMenuAsync(PopupMenu::Options(), ModalCallbackFunction::create(
+      [safe_owner, routes, first_value_id, handle_existing](int result) {
+        if (safe_owner == nullptr || result == 0)
+          return;
+        const int route_index = result - first_value_id;
+        if (route_index >= 0 && route_index < static_cast<int>(routes.size())) {
+          auto* interface = safe_owner->findParentComponentOfClass<FullInterface>();
+          if (interface != nullptr)
+            interface->promptForModulationValueEntry(routes[route_index].first,
+                                                     routes[route_index].second);
+        }
+        else
+          handle_existing(result);
+      }));
+}
+
+void SynthSlider::promptForModulationValueEntry(const std::string& source,
+                                                std::function<void(double)> apply_value,
+                                                Component* owner) {
+  auto* parent = findParentComponentOfClass<SynthGuiInterface>();
+  if (parent == nullptr)
+    return;
+  mopo::ModulationConnection* connection = nullptr;
+  for (auto* candidate : parent->getSynth()->getDestinationConnections(getName().toStdString())) {
+    if (candidate->source == source) {
+      connection = candidate;
+      break;
+    }
+  }
+  if (connection == nullptr)
+    return;
+
+  auto entry = std::make_shared<SynthSlider>(getName());
+  entry->details_ = details_;
+  entry->setStringLookup(string_lookup_);
+  entry->setRange(getMinimum(), getMaximum(), getInterval());
+  entry->setDoubleClickReturnValue(true, 0.0);
+  entry->setValue(connection->amount.value(), dontSendNotification);
+  entry->promptForDirectValueEntry(
+      [entry, apply_value](double amount) { apply_value(amount); },
+      String(source) + " -> " + getSliderDisplayName(), owner);
+}
+
+void SynthSlider::promptForDirectValueEntry(std::function<void(double)> apply_value,
+                                           String display_name, Component* owner) {
+  String current_text;
+  if (string_lookup_)
+    current_text = String(static_cast<int>(std::round(getValue())));
+  else {
+    current_text = getTextFromValue(getValue()).trim();
+    const String units = getUnits().trim();
+    if (units.isNotEmpty() && current_text.endsWith(units))
+      current_text = current_text.dropLastCharacters(units.length()).trimEnd();
+  }
+
+  const String message = (display_name.isEmpty() ? getSliderDisplayName() : display_name) +
+                         "\n" + getAcceptedRangeText();
+  auto* alert = new AlertWindow("Enter Value", message, AlertWindow::NoIcon,
+                               owner != nullptr ? owner : this);
+  alert->addTextEditor("value", current_text, "Value");
+  alert->addButton("OK", 1, KeyPress(KeyPress::returnKey));
+  alert->addButton("Cancel", 0, KeyPress(KeyPress::escapeKey));
+
+  SafePointer<SynthSlider> safe_this(this);
+  alert->enterModalState(true,
+                         ModalCallbackFunction::create([safe_this, alert, apply_value](int result) {
+                           std::unique_ptr<AlertWindow> alert_cleanup(alert);
+                           if (result == 1 && safe_this != nullptr)
+                             safe_this->applyDirectValueEntry(alert->getTextEditorContents("value"),
+                                                               apply_value);
+                         }),
+                         true);
+}
+
+void SynthSlider::applyDirectValueEntry(const String& input_text,
+                                       const std::function<void(double)>& apply_value) {
+  double parsed_display_value = 0.0;
+  if (!tryParseDisplayValue(input_text, parsed_display_value)) {
+    AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon,
+                                     "Invalid value",
+                                     "Please enter a valid numeric value.");
+    return;
+  }
+
+  double internal_value = 0.0;
+  if (!tryConvertDisplayToInternalValue(parsed_display_value, internal_value)) {
+    AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon,
+                                     "Invalid value",
+                                     "This value cannot be represented for this control.");
+    return;
+  }
+
+  const double safe_value = clampAndSnapToRange(internal_value);
+
+  if (apply_value) {
+    apply_value(safe_value);
+    return;
+  }
+
+  SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+  if (parent != nullptr)
+    parent->getSynth()->beginChangeGesture(getName().toStdString());
+
+  setValue(safe_value);
+
+  if (parent != nullptr)
+    parent->getSynth()->endChangeGesture(getName().toStdString());
+}
+
+bool SynthSlider::tryParseDisplayValue(const String& input_text, double& parsed_value) const {
+  String normalized = input_text.trim().replaceCharacter(',', '.');
+  if (normalized.isEmpty())
+    return false;
+
+  const std::string utf8 = normalized.toStdString();
+  const char* begin = utf8.c_str();
+  char* end = nullptr;
+  const double value = std::strtod(begin, &end);
+  if (end == begin || !std::isfinite(value))
+    return false;
+
+  while (*end != '\0') {
+    const unsigned char current = static_cast<unsigned char>(*end);
+    if (std::isspace(current) || std::isalpha(current) || *end == '%' || *end == '/' ||
+        *end == '-' || *end == '_') {
+      ++end;
+      continue;
+    }
+    return false;
+  }
+
+  parsed_value = value;
+  return true;
+}
+
+bool SynthSlider::tryConvertDisplayToInternalValue(double display_value, double& internal_value) const {
+  if (!std::isfinite(display_value))
+    return false;
+
+  if (string_lookup_) {
+    internal_value = display_value;
+    return true;
+  }
+
+  return mopo::tryDisplayToInternal(details_, display_value, internal_value);
+}
+
+bool SynthSlider::tryConvertInternalToDisplayValue(double internal_value, double& display_value) const {
+  if (!std::isfinite(internal_value))
+    return false;
+
+  if (string_lookup_) {
+    display_value = std::round(internal_value);
+    return true;
+  }
+
+  return mopo::tryInternalToDisplay(details_, internal_value, display_value);
+}
+
+String SynthSlider::getAcceptedRangeText() const {
+  const double minimum = getMinimum();
+  const double maximum = getMaximum();
+
+  if (string_lookup_)
+    return "Accepted range: " + String(static_cast<int>(minimum)) + " to " +
+           String(static_cast<int>(maximum));
+
+  double display_min = 0.0;
+  double display_max = 0.0;
+  if (!tryConvertInternalToDisplayValue(minimum, display_min) ||
+      !tryConvertInternalToDisplayValue(maximum, display_max)) {
+    display_min = minimum;
+    display_max = maximum;
+  }
+
+  if (display_min > display_max)
+    std::swap(display_min, display_max);
+
+  const String units = getUnits().trim();
+  String range = "Accepted range: " + String(display_min, 4) + " to " + String(display_max, 4);
+  if (units.isNotEmpty())
+    range += " " + units;
+
+  return range;
+}
+
+String SynthSlider::getSliderDisplayName() const {
+  const std::string name = getName().toStdString();
+  if (mopo::Parameters::isParameter(name))
+    return String(mopo::Parameters::getDetails(name).display_name);
+  return getName();
+}
+
+double SynthSlider::clampAndSnapToRange(double value) const {
+  if (!std::isfinite(value))
+    value = getDoubleClickReturnValue();
+
+  value = jlimit(getMinimum(), getMaximum(), value);
+
+  const double interval = getInterval();
+  if (interval > 0.0) {
+    value = getMinimum() + std::round((value - getMinimum()) / interval) * interval;
+    value = jlimit(getMinimum(), getMaximum(), value);
+  }
+
+  return value;
 }
 
 void SynthSlider::notifyTooltip() {

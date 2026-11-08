@@ -1,0 +1,17 @@
+<map id="mopo/src/chorus.h" name="mopo/src/chorus.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="211,5,340,32"/>
+<area shape="rect" id="Node000002" href="$processor_8h.html" title="Définition de la classe Processor et des ports d&#39;entrée/sortie." alt="" coords="180,80,270,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="269,31,244,69,241,65,265,34"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="294,80,362,107"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="286,30,313,68,307,67,284,35"/>
+<area shape="rect" id="Node000003" href="$common_8h.html" title="Core definitions and constants for the mopo synthesis library." alt="" coords="5,155,88,181"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="195,110,93,151,91,146,193,105"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="112,155,173,181"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="213,106,170,147,167,142,208,108"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="196,155,254,181"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="227,105,227,140,223,138,223,109"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="278,155,338,181"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="241,105,285,145,280,144,239,110"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="361,155,406,181"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="253,105,349,150,344,150,252,110"/>
+</map>

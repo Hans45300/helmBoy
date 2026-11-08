@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['notes_0',['Implementation Notes',['../midi__2__manager_8cpp.html#implementation_notes',1,'']]]
+  ['key_20features_0',['Key Features',['../classGlobalToolTip.html#tooltip_features',1,'Key Features'],['../classOscilloscope.html#scope_features',1,'Key Features'],['../classSynthSlider.html#synthslider_features',1,'Key Features']]]
 ];

@@ -1,0 +1,40 @@
+{
+  "settings": {
+    "polyphony": 10,
+    "velocity_track": 0.48,
+    "osc_1_waveform": 2.0,
+    "osc_1_volume": 0.56,
+    "osc_2_waveform": 4.0,
+    "osc_2_transpose": 12.0,
+    "osc_2_volume": 0.34,
+    "filter_on": 1,
+    "filter_style": 0,
+    "cutoff": 62.0,
+    "resonance": 0.24,
+    "FM_amount": 0.12,
+    "amp_attack": 0.005,
+    "amp_decay": 0.85,
+    "amp_sustain": 0.6,
+    "amp_release": 0.35,
+    "chorus_on": 1,
+    "chorus_rate": 0.52,
+    "chorus_depth": 0.2,
+    "chorus_mix": 0.24,
+    "modulations": [
+      {
+        "amount": 24.0,
+        "destination": "cutoff",
+        "source": "velocity"
+      },
+      {
+        "amount": 0.2,
+        "destination": "FM_amount",
+        "source": "velocity"
+      }
+    ]
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Velocity Matrix",
+  "folder_name": "Advanced",
+  "synth_version": "1.1.1"
+}

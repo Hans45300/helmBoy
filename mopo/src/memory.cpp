@@ -34,24 +34,23 @@
 
 namespace mopo {
 
-  Memory::Memory(int size) : offset_(0) {
+  Memory::Memory(int size) : offset_(0), valid_samples_(0) {
     size_ = utils::nextPowerOfTwo(size);
     bitmask_ = size_ - 1;
     memory_ = new mopo_float[size_];
     utils::zeroBuffer(std::span<mopo_float>(memory_, size_));
   }
 
-  Memory::Memory(const Memory& other) {
+  Memory::Memory(const Memory& other) : valid_samples_(0) {
     this->memory_ = new mopo_float[other.size_];
     utils::zeroBuffer(std::span<mopo_float>(this->memory_, other.size_));
     this->size_ = other.size_;
     this->bitmask_ = other.bitmask_;
-    // Copie atomique de l'offset
     std::atomic_ref<const unsigned int> other_atomic_offset(other.offset_);
     this->offset_ = other_atomic_offset.load(std::memory_order_acquire);
   }
 
   Memory::~Memory() {
-    delete memory_;
+    delete[] memory_;
   }
 } // namespace mopo

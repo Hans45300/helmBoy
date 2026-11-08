@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['targets_0',['Modulation Targets',['../classDelaySection.html#delay_modulation',1,'']]],
-  ['tempo_20synchronization_1',['Tempo Synchronization',['../classDelaySection.html#delay_sync',1,'']]],
-  ['theme_20support_2',['Theme Support',['../classDefaultLookAndFeel.html#lookfeel_theming',1,'']]],
-  ['thread_20safety_3',['Thread Safety',['../midi__2__phase4_8cpp.html#phase4_threading',1,'Thread Safety'],['../classSynthBase.html#synthbase_threading',1,'Thread Safety']]],
-  ['types_4',['Component Types',['../classSynthSection.html#synthsection_components',1,'']]]
+  ['optimization_0',['Optimization',['../classOscilloscope.html#performance',1,'Performance Optimization'],['../classmopo_1_1HelmBoyOscillators.html#helmosc_performance',1,'Performance Optimization']]],
+  ['optimizations_1',['Compiler Optimizations',['../common_8h.html#optimization',1,'']]],
+  ['optionnels_2',['Tests optionnels',['../development_and_tests.html#autotoc_md12',1,'']]],
+  ['oscillator_20features_3',['Oscillator Features',['../classmopo_1_1HelmBoyOscillators.html#helmosc_features',1,'']]],
+  ['overview_4',['Overview',['../midi__2__manager_8h.html#midi2_overview',1,'']]]
 ];

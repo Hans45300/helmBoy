@@ -1,0 +1,7 @@
+<map id="mopo::cr::MagnitudeScale" name="mopo::cr::MagnitudeScale">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,795,168,949"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Operator.html" title="Base class for simple arithmetic and logic operators." alt="" coords="24,592,149,747"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,759,89,795,84,794,86,764"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1Processor.html" title=" " alt="" coords="11,5,162,544"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="87,556,89,592,84,592,86,562"/>
+</map>

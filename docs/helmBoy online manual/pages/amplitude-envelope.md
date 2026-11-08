@@ -4,20 +4,25 @@
 
 ![Amplitude envelope example](../pictures/Amplitude%20Envelope.png)
 
-The amplitude envelope controls the volume of each note over time, shaping the note's dynamic profile.
+The amplitude envelope controls each note's volume with five stages: Attack, Hold, Decay, Sustain, and Release (AHDSR).
 
 ## Parameters
 
 ### Attack
 
-- **Range**: 0 ms to 10 seconds
+- **Range**: 0 to 4 seconds
 - **Effect**: Time for volume to reach maximum after note is triggered
 - **Fast**: Percussive, immediate sound
 - **Slow**: Soft, gradual fade-in
 
+### Hold
+
+- **Range**: 0 to 4 seconds
+- **Effect**: Time the envelope stays at its peak after Attack and before Decay
+
 ### Decay
 
-- **Range**: 0 ms to 10 seconds
+- **Range**: 0 to 4 seconds
 - **Effect**: Time to fall from peak to sustain level
 - **Fast**: Plucked sound character
 - **Slow**: Sustained sound character
@@ -31,22 +36,12 @@ The amplitude envelope controls the volume of each note over time, shaping the n
 
 ### Release
 
-- **Range**: 0 ms to 10 seconds
+- **Range**: 0 to 4 seconds
 - **Effect**: Time for volume to fade after note is released
 - **Short**: Abrupt ending
 - **Long**: Gradual fade-out
 
-## Envelope Curves
-
-### Attack Curve
-
-- **Linear**: Straight ramp
-- **Exponential**: Slow start, fast finish
-- **Logarithmic**: Fast start, slow finish
-
-### Decay/Release Curve
-
-Usually exponential for natural-sounding decay.
+The envelope shape, including the Hold plateau, is shown in the envelope display. There are no separate attack, decay, or release curve selectors.
 
 ## Common Settings
 

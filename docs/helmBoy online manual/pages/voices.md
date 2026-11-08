@@ -14,27 +14,7 @@ Voice configuration determines how helmBoy handles multiple simultaneous notes.
 - **Monophonic**: 1 voice
 - **Polyphonic**: Multiple voices for chords
 
-### Voice Mode
-
-- **Poly**: Each note triggers a new voice
-- **Mono**: Single voice, legato transitions
-- **Unison**: All voices play same note (stacked)
-
-### Voice Stealing
-
-When polyphony limit is reached:
-
-- **Oldest**: Steal oldest playing note
-- **Quietest**: Steal quietest voice
-- **None**: Ignore new notes when full
-
-## Unison Mode
-
-When in unison mode:
-
-- All voices play the same pitch
-- Slight detuning creates wide stereo image
-- Voice count determines thickness
+The Voice section also provides **Pitch Bend Range** and **Velocity Track**. Legato is controlled separately in the performance section, and Portamento has its own control. Voice stealing is handled internally; there is no selectable voice-stealing mode in this section.
 
 ## See Also
 

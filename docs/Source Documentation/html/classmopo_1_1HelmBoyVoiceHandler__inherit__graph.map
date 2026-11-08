@@ -1,9 +1,14 @@
 <map id="mopo::HelmBoyVoiceHandler" name="mopo::HelmBoyVoiceHandler">
-<area shape="rect" id="Node000001" title=" " alt="" coords="31,773,240,1376"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,389,93,459"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="58,473,98,773,93,774,53,474"/>
-<area shape="rect" id="Node000003" href="$classmopo_1_1HelmBoyModule.html" title=" " alt="" coords="117,123,328,725"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="183,741,179,774,173,773,178,740"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="168,5,277,75"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="225,90,225,123,220,123,220,90"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="128,2000,337,2603"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1VoiceHandler.html" title="Gestionnaire de voix polyphoniques (allocation, �tat, etc.)." alt="" coords="5,1221,209,1952"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="174,1964,183,2001,177,2000,174,1969"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="236,592,397,1173"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="231,1171,212,1244,207,1243,232,1166"/>
+<area shape="rect" id="Node000006" href="$classmopo_1_1HelmBoyModule.html" title=" " alt="" coords="234,1232,485,1941"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="335,1186,341,1232,335,1232,335,1191"/>
+<area shape="rect" id="Node000004" href="$classmopo_1_1Processor.html" title=" " alt="" coords="241,5,392,544"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="317,556,319,593,314,592,316,562"/>
+<area shape="rect" id="Node000005" href="$classmopo_1_1NoteHandler.html" title="Interface for handling MIDI note events in synthesis modules." alt="" coords="46,816,169,949"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="107,961,110,1222,105,1221,107,967"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="295,1953,289,2001,283,2000,293,1958"/>
 </map>

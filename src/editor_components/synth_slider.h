@@ -23,6 +23,7 @@
 
 #include <JuceHeader.h>
 #include "helmBoy_common.h"
+#include <functional>
 
 class FullInterface;
 
@@ -98,6 +99,9 @@ class SynthSlider : public Slider {
     void valueChanged() override;
     String getTextFromValue(double value) override;
 
+    void beginParameterEditHistoryGesture();
+    void endParameterEditHistoryGesture();
+
     virtual double snapValue(double attemptedValue, DragMode dragMode) override;
 
     void drawShadow(Graphics& g);
@@ -131,6 +135,7 @@ class SynthSlider : public Slider {
     void setActive(bool active = true);
 
     void addSliderListener(SliderListener* listener);
+    void removeSliderListener(SliderListener* listener) { std::erase(slider_listeners_, listener); }
 
     bool isBipolar() const { return bipolar_; }
     bool isFlippedColor() const { return flip_coloring_; }
@@ -144,9 +149,31 @@ class SynthSlider : public Slider {
 
     void notifyGuis();
     void handlePopupResult(int result);
+    /** @brief Disconnect one modulation route by source identifier. */
+    void disconnectModulationFromSource(const std::string& source);
+    /** @brief Disconnect every modulation route targeting this slider. */
+    void disconnectAllModulations();
+
+    /** @brief Add value-entry commands for active routes and show the context menu. */
+    static void showModulationPopup(PopupMenu& menu, Component* owner, bool source_menu,
+                                    int first_value_id, std::function<void(int)> handle_existing);
+    /** @brief Enter an existing route's amount using this modulation control's range and units. */
+    void promptForModulationValueEntry(const std::string& source,
+                                       std::function<void(double)> apply_value, Component* owner);
 
   protected:
     void notifyTooltip();
+
+    void promptForDirectValueEntry(std::function<void(double)> apply_value = {},
+                     String display_name = {}, Component* owner = nullptr);
+    void applyDirectValueEntry(const String& input_text,
+                   const std::function<void(double)>& apply_value = {});
+    bool tryParseDisplayValue(const String& input_text, double& parsed_value) const;
+    bool tryConvertDisplayToInternalValue(double display_value, double& internal_value) const;
+    bool tryConvertInternalToDisplayValue(double internal_value, double& display_value) const;
+    String getAcceptedRangeText() const;
+    String getSliderDisplayName() const;
+    double clampAndSnapToRange(double value) const;
 
     bool bipolar_;
     bool flip_coloring_;

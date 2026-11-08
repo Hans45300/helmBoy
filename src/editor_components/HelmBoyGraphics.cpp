@@ -10,6 +10,7 @@
 
 #include "HelmBoyGraphics.h"
 #include "../look_and_feel/colors.h"
+#include <BinaryData.h>
 
 HelmBoyGraphics::HelmBoyGraphics(){
     activeContourColour = Colors::helm_tertiary_accent;
@@ -62,8 +63,41 @@ HelmBoyGraphics::HelmBoyGraphics(){
                                              166, 187, 59, 67, 45, 34, 162, 67, 2, 75, 90, 67, 45, 34, 162, 67, 0, 0, 128, 67, 98, 45, 34, 162, 67, 94, 218, 146, 67, 94, 218, 146, 67, 45, 34, 162, 67, 0, 0, 128, 67, 45, 34, 162, 67, 99, 101, 0, 0};
 
 
-    logoPath.loadPathFromData(logoPathData, sizeof(logoPathData));
+
+    static const juce::String modulationCircleSvgPath(
+        "M 12,0 C 5.367,0 0,5.367 0,12 0,18.633 5.367,24 12,24 "
+        "18.633,24 24,18.633 24,12 24,5.367 18.633,0 12,0");
+    static const juce::String modulationSymbolSvgPath(
+        "M 19.683,16.283 C 18.45,16.217 17.833,14.75 17.533,13.85 "
+        "17.267,13.083 16.867,11.733 16.567,10.917 16.217,9.967 "
+        "16.117,9.9 15.917,9.9 c -0.417,0 -0.734,1.183 -1.05,2.067 "
+        "-0.667,1.833 -1.167,3.85 -2.934,3.85 -1.533,0 -2.216,-1.184 "
+        "-2.7,-1.884 C 8.783,13.267 8.517,13.117 8.1,13.117 "
+        "7.567,13.117 7.317,13.583 6.833,14.4 6.55,14.867 6.233,15.35 "
+        "5.867,15.667 5.767,15.75 4.933,16.4 4.15,16.3 "
+        "3.7,16.233 3.383,15.967 3.383,15.517 c -0.617,0 0.684,-0.734 "
+        "1.067,-0.884 0.333,-0.116 0.733,-0.716 0.933,-1.05 "
+        "0.534,-0.916 1.217,-2.116 2.75,-2.116 1.35,0 2,0.866 2.5,1.55 "
+        "0.45,0.616 0.717,1.116 1.234,1.133 0.433,0.017 1.033,-1.617 "
+        "1.383,-2.75 0.533,-1.733 1.233,-3.333 2.633,-3.333 "
+        "1.884,0 2.434,2.633 3.017,4.65 0.083,0.3 0.283,0.933 0.333,1.016 "
+        "0.267,0.567 0.484,0.934 0.717,1.05 0.267,0.15 0.7,0.434 "
+        "0.567,0.934 -0.084,0.383 -0.434,0.583 -0.834,0.566");
+    static const juce::String ABComparisonSvgPath("M10.55 21H4.5c-0.4 0 -0.75 -0.15 -1.05 -0.45 -0.3 -0.3 -0.45 -0.65 -0.45 -1.05V4.5c0 -0.4 0.15 -0.75 0.45 -1.05C3.75 3.15 4.1 3 4.5 3h6.05V1.75c0 -0.2125 0.07235 -0.390665 0.217 -0.5345 0.1445 -0.143665 0.32365 -0.2155 0.5375 -0.2155 0.21365 0 0.39135 0.071835 0.533 0.2155 0.14165 0.143835 0.2125 0.322 0.2125 0.5345v20.5c0 0.2125 -0.07235 0.3906 -0.217 0.53425 -0.1445 0.14385 -0.32365 0.21575 -0.5375 0.21575 -0.21365 0 -0.39135 -0.0719 -0.533 -0.21575 -0.14165 -0.14365 -0.2125 -0.32175 -0.2125 -0.53425V21ZM4.5 18.45h6.05V11.525L4.5 18.45ZM13.55 21V11.625L19.5 18.45V4.5H13.55V3H19.5c0.4 0 0.75 0.15 1.05 0.45 0.3 0.3 0.45 0.65 0.45 1.05v15c0 0.4 -0.15 0.75 -0.45 1.05 -0.3 0.3 -0.65 0.45 -1.05 0.45H13.55Z");
+    static const juce::String returnToInitSvgPath("m14.5,5c3.87,0 7,3.13 7,7 0,3.87-3.13,7-7,7-3.87,0-7-3.13-7-7H10L6.5,8.5 3,12h2.5c0,4.97 4.03,9 9,9 4.97,0 9-4.03 9-9 0-4.97-4.03-9-9-9z");
+    static const juce::String previousSvgPath("M15.41 16.59L10.83 12L15.41 7.41L14 6L8 12L14 18Z");
+    static const juce::String nextSvgPath("M8.59 16.59L13.17 12L8.59 7.41L10 6L16 12L10 18Z");
+    static const juce::String HelmBoyFaceSvgPath("M4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12V18H16V12H18C18 8.69 15.31 6 12 6C8.69 6 6 8.69 6 12H8V18H4ZM9 8H11V11H13V8H15V16H13V13H11V16H9Z");
+
+    logoPath = juce::Drawable::parseSVGPath(HelmBoyFaceSvgPath);
     cnxPath.loadPathFromData(cnxPathData, sizeof(cnxPathData));
+    modulationCirclePath = juce::Drawable::parseSVGPath(modulationCircleSvgPath);
+    modulationSymbolPath = juce::Drawable::parseSVGPath(modulationSymbolSvgPath);
+    ABComparisonPath = juce::Drawable::parseSVGPath(ABComparisonSvgPath);
+    returnToInitPath = juce::Drawable::parseSVGPath(returnToInitSvgPath);
+    previousPath = juce::Drawable::parseSVGPath(previousSvgPath);
+    nextPath = juce::Drawable::parseSVGPath(nextSvgPath);
+    HelmBoyFacePath = juce::Drawable::parseSVGPath(HelmBoyFaceSvgPath);
 }
 
 void HelmBoyGraphics::paint(juce::Graphics& g)
@@ -97,7 +131,7 @@ void HelmBoyGraphics::paint(juce::Graphics& g)
         g.setColour(currentContourColour);
         g.strokePath(logoPath, juce::PathStrokeType(1.0f));
     }
-    else {
+    else if (identity == Identity::ModulationLegacy) {
         if (active) {
             currentContourColour = Colors::topaze;
         }
@@ -140,7 +174,50 @@ void HelmBoyGraphics::paint(juce::Graphics& g)
             g.strokePath(innerCnxPath, juce::PathStrokeType(1.0f));
         }
     }
+    else {
+        paintModulationControl(g, getLocalBounds().toFloat(), selected, active);
+    }
 
+}
+
+void HelmBoyGraphics::drawModulationControl(Graphics& g,
+                                            Rectangle<float> bounds,
+                                            bool selected, bool active) {
+    static const HelmBoyGraphics pathSource;
+    pathSource.paintModulationControl(g, bounds, selected, active);
+}
+
+void HelmBoyGraphics::paintModulationControl(Graphics& g,
+                                             Rectangle<float> bounds,
+                                             bool selected, bool active) const {
+    const float face_diameter = 0.8f * std::min(bounds.getWidth(), bounds.getHeight());
+    const float face_x = bounds.getX() + (bounds.getWidth() - face_diameter) / 2.0f;
+    const float face_y = bounds.getY() + (bounds.getHeight() - face_diameter) / 2.0f;
+    const auto circle_bounds = modulationCirclePath.getBounds();
+    const float scale_x = face_diameter / circle_bounds.getWidth();
+    const float scale_y = face_diameter / circle_bounds.getHeight();
+    const float centered_x = face_x - circle_bounds.getX() * scale_x;
+    const float centered_y = face_y - circle_bounds.getY() * scale_y;
+    const auto transform = AffineTransform::scale(scale_x, scale_y)
+                               .translated(centered_x, centered_y);
+
+    Path circle = modulationCirclePath;
+    circle.applyTransform(transform);
+    g.setColour(active ? Colour(Colors::Color_ff000000) : Colour(0xff444444));
+    g.fillPath(circle);
+    g.setColour(active ? Colors::topaze : Colour(0xff555555));
+    g.strokePath(circle, PathStrokeType(1.0f));
+
+    Path symbol = modulationSymbolPath;
+    const auto symbol_bounds = symbol.getBounds();
+    const auto circle_centre = circle_bounds.getCentre();
+    const auto symbol_centre = symbol_bounds.getCentre();
+    symbol.applyTransform(AffineTransform::translation(
+        circle_centre.x - symbol_centre.x, circle_centre.y - symbol_centre.y));
+    symbol.applyTransform(transform);
+    g.setColour(selected ? Colors::emerald : inactiveContourColour);
+    g.fillPath(symbol);
+    g.strokePath(symbol, PathStrokeType(1.0f));
 }
 
 // On appelle la fonction par "HelmGraphicObject.setIdentity(HelmBoyGraphics::Identity::Modulation);" par exemple.
@@ -182,6 +259,40 @@ bool HelmBoyGraphics::isActivated() const
     return active;
 }
 
+juce::Path HelmBoyGraphics::getIconPath(Icon icon) const
+{
+    const auto getBundledSvgPath = [](const char* resourceName) {
+        int dataSize = 0;
+        const char* data = BinaryData::getNamedResource(resourceName, dataSize);
+        if (data == nullptr || dataSize <= 0)
+            return juce::Path{};
+
+        auto drawable = juce::Drawable::createFromImageData(data, static_cast<size_t>(dataSize));
+        return drawable != nullptr ? drawable->getOutlineAsPath() : juce::Path{};
+    };
+
+    switch (icon) {
+        case Icon::Previous: return previousPath;
+        case Icon::Next: return nextPath;
+        case Icon::Init: return returnToInitPath;
+        case Icon::ABComparison: return ABComparisonPath;
+        case Icon::PatchSave: return getBundledSvgPath("patch_save_svg");
+        case Icon::PatchSaveAs: return getBundledSvgPath("patch_save_as_svg");
+        case Icon::PatchExport: return getBundledSvgPath("patch_export_svg");
+        case Icon::PatchBrowse: return getBundledSvgPath("patch_browse_svg");
+        case Icon::PatchEdit: return getBundledSvgPath("patch_edit_svg");
+        case Icon::PatchUndo: {
+            juce::Path undoPath = getBundledSvgPath("patch_redo_svg");
+            const auto bounds = undoPath.getBounds();
+            undoPath.applyTransform(juce::AffineTransform::scale(-1.0f, 1.0f)
+                                        .translated(bounds.getX() + bounds.getRight(), 0.0f));
+            return undoPath;
+        }
+        case Icon::PatchRedo: return getBundledSvgPath("patch_redo_svg");
+    }
+    return {};
+}
+
 juce::Colour HelmBoyGraphics::toGrayScale(const juce::Colour& colour)
 {
     int r = colour.getRed();
@@ -203,6 +314,21 @@ juce::Image HelmBoyGraphics::createModulationImage(int size, bool selected, bool
     graphics.setActivated(active);
     graphics.setBounds(0, 0, size, size);
 
+    graphics.paint(g);
+
+    return image;
+}
+
+juce::Image HelmBoyGraphics::createLegacyModulationImage(int size, bool selected, bool active)
+{
+    juce::Image image(juce::Image::ARGB, size, size, true);
+    juce::Graphics g(image);
+
+    HelmBoyGraphics graphics;
+    graphics.setIdentity(Identity::ModulationLegacy);
+    graphics.setSelected(selected);
+    graphics.setActivated(active);
+    graphics.setBounds(0, 0, size, size);
     graphics.paint(g);
 
     return image;

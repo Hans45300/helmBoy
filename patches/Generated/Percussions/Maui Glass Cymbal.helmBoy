@@ -1,0 +1,32 @@
+{
+  "settings": {
+    "polyphony": 8,
+    "osc_1_waveform": 0.0,
+    "osc_1_volume": 0.22,
+    "osc_2_waveform": 5.0,
+    "osc_2_transpose": 24.0,
+    "osc_2_volume": 0.3,
+    "noise_volume": 0.36,
+    "noise_color": 0.9,
+    "ring_modulation": 0.26,
+    "filter_on": 1,
+    "filter_style": 3,
+    "cutoff": 106.0,
+    "resonance": 0.42,
+    "fil_env_depth": 30.0,
+    "fil_decay": 0.7,
+    "fil_sustain": 0.0,
+    "amp_attack": 0.001,
+    "amp_decay": 0.76,
+    "amp_sustain": 0.0,
+    "amp_release": 0.5,
+    "reverb_on": 1,
+    "reverb_dry_wet": 0.2,
+    "arp_on": 0,
+    "modulations": []
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Maui Glass Cymbal",
+  "folder_name": "Percussions",
+  "synth_version": "1.1.1"
+}

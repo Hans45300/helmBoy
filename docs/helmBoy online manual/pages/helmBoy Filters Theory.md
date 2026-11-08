@@ -1,5 +1,7 @@
 # HelmBoy Filters - Technical Documentation
 
+> **Scope:** This supplementary DSP document is not a reference to the current filter controls. Some modes, parameter names, and internal ranges below describe implementation concepts or legacy behavior and are not selectable in the current interface. For user-accessible controls, see [Filter](filter.md) and [Filter Types](filter-types.md).
+
 ## Overview
 
 HelmBoy features a sophisticated multi-mode filter system that shapes the frequency content of synthesized sounds. The filter engine provides both traditional subtractive filtering and advanced formant synthesis capabilities, with extensive modulation options for dynamic timbral control.

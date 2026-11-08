@@ -29,7 +29,7 @@
 namespace mopo {
 
   namespace {
-    const float MIN_VOICE_TIME = 0.01;
+    const mopo_float MIN_VOICE_TIME = 0.01;
   } // namespace
 
   Arpeggiator::Arpeggiator(NoteHandler* note_handler) :
@@ -39,6 +39,10 @@ namespace mopo {
     MOPO_ASSERT(note_handler);
     pressed_notes_.reserve(MIDI_SIZE);
     sustained_notes_.reserve(MIDI_SIZE);
+    active_notes_.reserve(MIDI_SIZE);
+    as_played_.reserve(MIDI_SIZE);
+    ascending_.reserve(MIDI_SIZE);
+    decending_.reserve(MIDI_SIZE);
   }
 
   void Arpeggiator::process() {
@@ -60,7 +64,7 @@ namespace mopo {
     }
 
     // Check if it's time to play the next note.
-    if (getNumNotes() && new_phase >= 1) {
+    if (getNumNotes() && new_phase >= 1.0) {
       int offset = utils::iclamp((1 - phase_) / delta_phase, 0, buffer_size_ - 1);
       std::pair<mopo_float, mopo_float> note = getNextNote();
       note_handler_->noteOn(note.first, note.second, offset);
@@ -118,7 +122,10 @@ namespace mopo {
     }
     mopo_float base_note = pattern->at(note_index_);
     mopo_float note = base_note + mopo::NOTES_PER_OCTAVE * current_octave_;
-    mopo_float velocity = active_notes_[base_note];
+    const auto active = std::find_if(active_notes_.begin(), active_notes_.end(),
+      [base_note](const auto& entry) { return entry.first == base_note; });
+    MOPO_ASSERT(active != active_notes_.end());
+    mopo_float velocity = active != active_notes_.end() ? active->second : 0.0;
     return std::pair<mopo_float, mopo_float>(note, velocity);
   }
 
@@ -164,15 +171,33 @@ namespace mopo {
     note_handler_->allNotesOff();
   }
 
+  void Arpeggiator::resetState() {
+    active_notes_.clear();
+    pressed_notes_.clear();
+    sustained_notes_.clear();
+    ascending_.clear();
+    decending_.clear();
+    as_played_.clear();
+    sustain_ = false;
+    phase_ = 1.0;
+    note_index_ = -1;
+    current_octave_ = 0;
+    octave_up_ = true;
+    last_played_note_ = -1;
+    output()->clearTrigger();
+    output()->clearBuffer();
+  }
+
   void Arpeggiator::noteOn(mopo_float note, mopo_float velocity, int sample, int channel) {
-    if (active_notes_.count(note))
+    if (std::any_of(active_notes_.begin(), active_notes_.end(),
+                   [note](const auto& entry) { return entry.first == note; }))
       return;
     if (pressed_notes_.size() == 0) {
       note_index_ = -1;
       current_octave_ = 0;
       phase_ = 1.0;
     }
-    active_notes_[note] = velocity;
+    active_notes_.emplace_back(note, velocity);
     pressed_notes_.push_back(note);
     addNoteToPatterns(note);
   }
@@ -184,7 +209,7 @@ namespace mopo {
     if (sustain_)
       sustained_notes_.push_back(note);
     else {
-      active_notes_.erase(note);
+      std::erase_if(active_notes_, [note](const auto& entry) { return entry.first == note; });
       removeNoteFromPatterns(note);
     }
 

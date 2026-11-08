@@ -26,7 +26,7 @@
 
 /**
  * @file tempo_selector.h
- * @brief Contrôle de tempo/selector de tempo pour l'interface.
+ * @brief Contrï¿½le de tempo/selector de tempo pour l'interface.
  */
 
 class TempoSelector : public SynthSlider {
@@ -41,10 +41,15 @@ class TempoSelector : public SynthSlider {
 
     void setFreeSlider(Slider* slider);
     void setTempoSlider(Slider* slider);
+    void setModulatedValue(float value);
 
   private:
+    void updateSliderVisibility();
+
     Slider* free_slider_;
     Slider* tempo_slider_;
+    int modulated_value_ = 0;
+    bool modulation_active_ = false;
 
     Path arrow_;
     Path clock_;

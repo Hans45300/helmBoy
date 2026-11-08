@@ -38,6 +38,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <concepts>
+#include <cstdint>
 
 
 namespace mopo {
@@ -209,6 +210,16 @@ namespace mopo {
    */
   class Wave {
     public:
+      [[nodiscard]] static inline mopo_float nextRandomValue(std::uint32_t& state) {
+        if (state == 0)
+          state = 0x9e3779b9U;
+        state ^= state << 13;
+        state ^= state >> 17;
+        state ^= state << 5;
+        return 2.0 * static_cast<mopo_float>(state) /
+            static_cast<mopo_float>(UINT32_MAX) - 1.0;
+      }
+
       /**
        * @brief Types de formes d'onde support�es.
        */
@@ -225,6 +236,8 @@ namespace mopo {
         FivePyramid [[maybe_unused]],
         NinePyramid [[maybe_unused]],
         WhiteNoise [[maybe_unused]],
+        SampleAndGlide [[maybe_unused]],
+        SmoothRandom [[maybe_unused]],
         NumWaveforms [[maybe_unused]]
       };
 
@@ -309,6 +322,29 @@ namespace mopo {
         }
       }
 
+      [[nodiscard]] static inline mopo_float sampleAndGlideValue(
+          mopo_float from, mopo_float to, mopo_float phase) {
+        const mopo_float interpolation = (1.0 - std::cos(PI * phase)) / 2.0;
+        return utils::interpolate(from, to, interpolation);
+      }
+
+      [[nodiscard]] static inline mopo_float sampleAndHoldValue(
+          mopo_float held, mopo_float next, mopo_float phase) {
+        constexpr mopo_float transition_start = 0.9;
+        if (phase < transition_start)
+          return held;
+        const mopo_float transition_phase = (phase - transition_start) /
+            (1.0 - transition_start);
+        return sampleAndGlideValue(held, next, transition_phase);
+      }
+
+      [[nodiscard]] static inline mopo_float smoothRandomValue(
+          const mopo_float* points, mopo_float phase) {
+        const mopo_float position = phase * 4.0;
+        const int index = utils::iclamp(static_cast<int>(position), 0, 3);
+        return sampleAndGlideValue(points[index], points[index + 1], position - index);
+      }
+
       /**
        * @brief Onde nulle (silence).
        */
@@ -357,6 +393,16 @@ namespace mopo {
        */
       [[nodiscard]] static inline mopo_float upsaw(mopo_float t) {
         return t * 2.0 - 1.0;
+      }
+
+      /**
+       * @brief Saw Möbius waveform with fixed M=1 phase modulation.
+       * @details y = sin(2*pi*phase + (2*phase - 1)*sin(4*pi*phase)).
+       */
+      [[nodiscard]] static inline mopo_float sawMobius(mopo_float phase) {
+        constexpr mopo_float max_modulation = 1.0;
+        const mopo_float modulation = max_modulation * (2.0 * phase - 1.0);
+        return std::sin(2.0 * PI * phase + modulation * std::sin(4.0 * PI * phase));
       }
 
       /**

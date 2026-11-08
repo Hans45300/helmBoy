@@ -102,6 +102,7 @@ void MidiManager::removeNextBlockOfMessages(MidiBuffer& buffer, int num_samples)
 void MidiManager::processMidiMessage(const MidiMessage& midi_message, int sample_position) {
   if (midi_message.isProgramChange()) {
     current_patch_ = midi_message.getProgramChangeNumber();
+    synth_->requestEffectResetTransition();
     File patch = LoadSave::loadPatch(current_bank_, current_folder_, current_patch_,
                                      synth_, *gui_state_);
     PatchLoadedCallback* callback = new PatchLoadedCallback(listener_, patch);
@@ -124,24 +125,26 @@ void MidiManager::processMidiMessage(const MidiMessage& midi_message, int sample
     engine_->sustainOff();
   else if (midi_message.isAftertouch()) {
     mopo::mopo_float note = midi_message.getNoteNumber();
-    mopo::mopo_float value = (1.0 * midi_message.getAfterTouchValue()) / mopo::MIDI_SIZE;
-    engine_->setAftertouch(note, value);
+    int channel = midi_message.getChannel() - 1;
+    mopo::mopo_float value = (1.0 * midi_message.getAfterTouchValue()) /
+                             (mopo::MIDI_SIZE - 1.0);
+    engine_->setAftertouch(note, value, sample_position, channel);
   }
   else if (midi_message.isChannelPressure()) {
-    int channel = midi_message.getChannel();
+    int channel = midi_message.getChannel() - 1;
     mopo::mopo_float value = midi_message.getChannelPressureValue() / (mopo::MIDI_SIZE - 1.0f);
-    engine_->setChannelAftertouch(channel, value);
+    engine_->setChannelAftertouch(channel, value, sample_position);
   }
   else if (midi_message.isPitchWheel()) {
     double percent = (1.0 * midi_message.getPitchWheelValue()) / PITCH_WHEEL_RESOLUTION;
     double value = 2 * percent - 1.0;
-    engine_->setPitchWheel(value, midi_message.getChannel());
+    engine_->setPitchWheel(value, midi_message.getChannel() - 1);
   }
   else if (midi_message.isController()) {
     int controller_number = midi_message.getControllerNumber();
     if (controller_number == MOD_WHEEL_CONTROL_NUMBER) {
       double percent = (1.0 * midi_message.getControllerValue()) / MOD_WHEEL_RESOLUTION;
-      engine_->setModWheel(percent, midi_message.getChannel());
+      engine_->setModWheel(percent, midi_message.getChannel() - 1);
     }
     else if (controller_number == BANK_SELECT_NUMBER)
       current_bank_ = midi_message.getControllerValue();

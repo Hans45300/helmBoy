@@ -323,6 +323,6 @@ void SaveSection::rescanFolders() {
 
   Array<File> folder_locations;
   folder_locations.add(bank_dir);
-  folders_model_->rescanFiles(folder_locations);
+  folders_model_->rescanFiles(folder_locations, "*", false, true);
   folders_view_->updateContent();
 }

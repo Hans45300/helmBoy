@@ -35,27 +35,21 @@
   #define PAY_NAG 1
 #endif
 
-FullInterface::FullInterface(mopo::control_map controls, mopo::output_map modulation_sources,
+FullInterface::FullInterface(SynthBase* synth, mopo::control_map controls, mopo::output_map modulation_sources,
                              mopo::output_map mono_modulations,
                              mopo::output_map poly_modulations,
                              MidiKeyboardState* keyboard_state) : SynthSection("full_interface") {
   animate_ = true;
-  open_gl_context.setContinuousRepainting(true);
-  open_gl_context.setRenderer(this);
-  open_gl_context.attachTo(*getTopLevelComponent());
-  open_gl_context.setOpenGLVersionRequired(OpenGLContext::openGL3_2);
-
   addSubSection((synthesis_interface_ = std::make_unique<SynthesisInterface>(controls, keyboard_state)).get());
   addSubSection((arp_section_ = std::make_unique<ArpSection>(TRANS("ARP"))).get());
   addSubSection((bpm_section_ = std::make_unique<BpmSection>(TRANS("BPM"))).get());
-
   addSubSection((patch_selector_ = std::make_unique<PatchSelector>()).get());
   addAndMakeVisible((global_tool_tip_ = std::make_unique<GlobalToolTip>()).get());
   addSubSection((volume_section_ = std::make_unique<VolumeSection>("VOLUME")).get());
-  addOpenGLComponent((oscilloscope_ = std::make_unique<OpenGLOscilloscope>()).get());
-
+  addSubSection((limiter_section_ = std::make_unique<LimiterSection>("LIMITER")).get());
+  addAndMakeVisible((oscilloscope_ = std::make_unique<Oscilloscope>()).get());
   setAllValues(controls);
-  createModulationSliders(modulation_sources, mono_modulations, poly_modulations);
+  createModulationSliders(modulation_sources, mono_modulations, poly_modulations, synth);
 
   logo_graphics_ = std::make_unique<HelmBoyGraphics>();
   logo_graphics_->setIdentity(HelmBoyGraphics::Identity::logo);
@@ -64,23 +58,16 @@ FullInterface::FullInterface(mopo::control_map controls, mopo::output_map modula
     about_section_->setVisible(true);
   };
   addAndMakeVisible(logo_graphics_.get());
-
   addChildComponent((patch_browser_ = std::make_unique<PatchBrowser>()).get());
   patch_selector_->setBrowser(patch_browser_.get());
   // Link the selector back to the browser so the browser can notify it
   patch_browser_->setSelector(patch_selector_.get());
-
   addChildComponent((save_section_ = std::make_unique<SaveSection>("save_section")).get());
   patch_browser_->setSaveSection(save_section_.get());
   patch_selector_->setSaveSection(save_section_.get());
-
   addChildComponent((delete_section_ = std::make_unique<DeleteSection>("delete_section")).get());
   patch_browser_->setDeleteSection(delete_section_.get());
-
   addChildComponent((about_section_ = std::make_unique<AboutSection>("about")).get());
-
-  addChildComponent((update_check_section_ = std::make_unique<UpdateCheckSection>("update_check")).get());
-
   synthesis_interface_->toFront(true);
   modulation_manager_->toFront(false);
   patch_browser_->toFront(false);
@@ -88,7 +75,7 @@ FullInterface::FullInterface(mopo::control_map controls, mopo::output_map modula
   save_section_->toFront(false);
   delete_section_->toFront(false);
 
-  setOpaque(true);
+  setOpaque(false);
 }
 
 /**
@@ -97,22 +84,26 @@ FullInterface::FullInterface(mopo::control_map controls, mopo::output_map modula
  */
 
 FullInterface::~FullInterface() {
-  open_gl_context.detach();
-  open_gl_context.setRenderer(nullptr);
+  modulation_manager_ = nullptr;
   about_section_ = nullptr;
-  update_check_section_ = nullptr;
   arp_section_ = nullptr;
   oscilloscope_ = nullptr;
   synthesis_interface_ = nullptr;
   bpm_section_ = nullptr;
   global_tool_tip_ = nullptr;
+  limiter_section_ = nullptr;
   patch_selector_ = nullptr;
   save_section_ = nullptr;
   delete_section_ = nullptr;
   volume_section_ = nullptr;
 }
 
-void FullInterface::paint(Graphics& g) { }
+void FullInterface::paint(Graphics& g) {
+  if (layout_ready_ && background_image_.isValid())
+    g.drawImage(background_image_, getLocalBounds().toFloat());
+  else
+    g.fillAll(Colors::background);
+}
 
 void FullInterface::paintBackground(Graphics& g) {
   static const DropShadow shadow(Colors::shadow_dark, 3, Point<int>(0, 1));
@@ -121,6 +112,7 @@ void FullInterface::paintBackground(Graphics& g) {
   g.setColour(Colors::background);
   g.fillRect(getLocalBounds());  shadow.drawForRectangle(g, arp_section_->getBounds());
   shadow.drawForRectangle(g, oscilloscope_->getBounds());
+  shadow.drawForRectangle(g, limiter_section_->getBounds());
   shadow.drawForRectangle(g, patch_selector_->getBounds());
 
   int logo_padding = 2 * size_ratio_;
@@ -142,6 +134,10 @@ void FullInterface::paintBackground(Graphics& g) {
 }
 
 void FullInterface::resized() {
+  layout_ready_ = false;
+  if (getWidth() <= 0 || getHeight() <= 0)
+    return;
+
   int left = 0;
   int width = getWidth();
   int height = getHeight();
@@ -170,6 +166,8 @@ void FullInterface::resized() {
   int section_two_width = section_one_width;
   int section_four_width = section_one_width;
   int section_three_width = width - section_one_width - section_two_width - section_four_width - 5 * padding;
+  int section_three_left_width = (section_three_width - padding) / 2;
+  int limiter_width = section_three_width - padding - section_three_left_width;
 
   synthesis_interface_->setPadding(padding);
   synthesis_interface_->setSectionOneWidth(section_one_width);
@@ -192,17 +190,18 @@ void FullInterface::resized() {
 
   int volume_width = (section_two_width - padding) / 2;
   int bpm_width = 40 * ratio;
-  int oscilloscope_width = section_two_width + section_three_width - volume_width;
+  int oscilloscope_width = section_two_width + section_three_width - volume_width - limiter_width - padding;
 
   volume_section_->setBounds(patch_selector_->getRight() + padding, padding,
                              volume_width, top_height);
 
   oscilloscope_->setBounds(volume_section_->getRight() + padding, padding,
                            oscilloscope_width, top_height);
+  limiter_section_->setBounds(oscilloscope_->getRight() + padding, padding,
+                              limiter_width, top_height);
 
   // BPM aligné à gauche de la colonne 5
-  int column_5_x = patch_selector_->getX() + section_one_width + section_two_width + section_three_width + 4 * padding;
-  bpm_section_->setBounds(oscilloscope_->getRight() + padding, padding,
+  bpm_section_->setBounds(limiter_section_->getRight() + padding, padding,
                           bpm_width, top_height);
 
   // Arp juste à droite du BPM
@@ -214,7 +213,6 @@ void FullInterface::resized() {
                                   width, height - top_height - padding);
 
   about_section_->setBounds(getBounds());
-  update_check_section_->setBounds(getBounds());
   save_section_->setBounds(getBounds());
   delete_section_->setBounds(getBounds());
 
@@ -226,34 +224,65 @@ void FullInterface::resized() {
   modulation_manager_->setBounds(getBounds());
 
   checkBackground();
+  layout_ready_ = true;
+}
+
+void FullInterface::moved() {
+  checkBackground();
 }
 
 void FullInterface::setOutputMemory(const float* output_memory) {
   oscilloscope_->setOutputMemory(output_memory);
 }
 
+void FullInterface::setOutputMemorySource(SynthBase* synth) {
+  oscilloscope_->setOutputMemorySource(synth);
+  oscilloscope_->showRealtimeFeedback(animate_.load(std::memory_order_relaxed));
+}
+
 void FullInterface::createModulationSliders(mopo::output_map modulation_sources,
                                             mopo::output_map mono_modulations,
-                                            mopo::output_map poly_modulations) {
+                                            mopo::output_map poly_modulations,
+                                            SynthBase* synth) {
   std::map<std::string, SynthSlider*> all_sliders = getAllSliders();
+  std::map<std::string, Button*> all_buttons = getAllButtons();
   std::map<std::string, SynthSlider*> modulatable_sliders;
+  std::map<std::string, SynthButton*> modulatable_buttons;
 
-  for (auto& destination : mono_modulations) {
-    if (all_sliders.count(destination.first))
-      modulatable_sliders[destination.first] = all_sliders[destination.first];
-  }
+  auto addDestinationIfModulatable = [&](const std::string& destination_name) {
+    if (all_sliders.count(destination_name))
+      modulatable_sliders[destination_name] = all_sliders[destination_name];
 
-  modulation_manager_ = std::make_unique<OpenGLModulationManager>(modulation_sources,
+    if (all_buttons.count(destination_name)) {
+      SynthButton* synth_button = dynamic_cast<SynthButton*>(all_buttons[destination_name]);
+      if (synth_button)
+        modulatable_buttons[destination_name] = synth_button;
+    }
+  };
+
+  for (auto& destination : mono_modulations)
+    addDestinationIfModulatable(destination.first);
+
+  for (auto& destination : poly_modulations)
+    addDestinationIfModulatable(destination.first);
+
+  modulation_manager_ = std::make_unique<ModulationManager>(synth, modulation_sources,
                                                     getAllModulationButtons(),
                                                     modulatable_sliders,
+                                                    modulatable_buttons,
                                                     mono_modulations, poly_modulations);
   modulation_manager_->setOpaque(false);
-  addOpenGLComponent(modulation_manager_.get());
+  addAndMakeVisible(modulation_manager_.get());
 }
 
 void FullInterface::setToolTipText(String parameter, String value) {
   if (global_tool_tip_)
     global_tool_tip_->setText(parameter, value);
+}
+
+void FullInterface::setUndoRedoAvailability(bool can_undo, bool can_redo) {
+  if (patch_selector_ != nullptr)
+    patch_selector_->setUndoRedoAvailability(can_undo, can_redo);
 }
 
 void FullInterface::buttonClicked(Button* clicked_button) {
@@ -263,40 +292,28 @@ void FullInterface::buttonClicked(Button* clicked_button) {
 void FullInterface::animate(bool animate) {
   animate_ = animate;
   SynthSection::animate(animate);
-  open_gl_context.setContinuousRepainting(animate);
+  if (oscilloscope_)
+    oscilloscope_->showRealtimeFeedback(animate);
   repaint();
 }
 
 void FullInterface::checkBackground() {
-  auto *display = Desktop::getInstance().getDisplays().getPrimaryDisplay();
-  jassert(display != nullptr);
+  if (getWidth() <= 0 || getHeight() <= 0)
+    return;
 
-  float scale = display->scale;
+  auto* display = Desktop::getInstance().getDisplays().getDisplayForRect(getScreenBounds());
+  float scale = display != nullptr ? static_cast<float>(display->scale) : 1.0f;
   int width = scale * getWidth();
   int height = scale * getHeight();
 
   if (background_image_.getWidth() != width || background_image_.getHeight() != height) {
     background_image_ = Image(Image::ARGB, width, height, true);
-    Graphics g(background_image_);
-    g.addTransform(AffineTransform::scale(scale, scale));
-    paintBackground(g);
-    background_.updateBackgroundImage(background_image_);
+    {
+      Graphics g(background_image_);
+      g.addTransform(AffineTransform::scale(scale, scale));
+      paintBackground(g);
+    }
   }
-}
-
-void FullInterface::newOpenGLContextCreated() {
-  background_.init(open_gl_context);
-  initOpenGLComponents(open_gl_context);
-}
-
-void FullInterface::renderOpenGL() {
-  background_.render(open_gl_context);
-  renderOpenGLComponents(open_gl_context, animate_);
-}
-
-void FullInterface::openGLContextClosing() {
-  background_.destroy(open_gl_context);
-  destroyOpenGLComponents(open_gl_context);
 }
 
 void FullInterface::notifyFresh() {

@@ -20,18 +20,46 @@
 
 #include "synth_base.h"
 
+#include <cmath>
+#include <algorithm>
+#include <cstdio>
 #include <memory>
 #include <optional>
 #include "load_save.h"
 #include "startup.h"
+#include "startup_trace.h"
 #include "synth_gui_interface.h"
 #include "utils.h"
 
 #define OUTPUT_WINDOW_MIN_NOTE 16.0
 
-SynthBase::SynthBase() {
-  controls_ = engine_.getControls();
+namespace {
+constexpr int kGuiNotificationIntervalMs = 30;
+constexpr int kEffectResetFadeMilliseconds = 10;
 
+#if HELMBOY_DEBUG_AUDIO_LEVELS
+float computeStereoPeak(std::span<const mopo::mopo_float> left,
+                        std::span<const mopo::mopo_float> right) {
+  float peak = 0.0f;
+  int samples = static_cast<int>(left.size());
+  for (int i = 0; i < samples; ++i) {
+    peak = std::max(peak, std::fabs(static_cast<float>(left[i])));
+    peak = std::max(peak, std::fabs(static_cast<float>(right[i])));
+  }
+  return peak;
+}
+#endif
+
+}
+
+#define appendStartupTraceBase(message) HELMBOY_STARTUP_TRACE("startup_trace.log", message)
+
+SynthBase::SynthBase() try {
+  gui_lifetime_->synth = this;
+  controls_ = engine_.getControls();
+  rebuildGuiControlTable();
+  rebuildVisualTelemetryTable();
+  visual_peak_source_ = engine_.getModulationSource("peak_meter");
   keyboard_state_ = std::make_unique<MidiKeyboardState>();
   midi_manager_ = std::make_unique<MidiManager>(this, keyboard_state_.get(), &save_info_, this);
 
@@ -42,38 +70,172 @@ SynthBase::SynthBase() {
   memory_reset_period_ = mopo::MEMORY_RESOLUTION;
   memory_input_offset_ = 0;
   memory_index_ = 0;
+} catch (const std::exception& ex) {
+  Logger::writeToLog("[Startup] SynthBase ctor EXCEPTION (base/member init or body): " + String(ex.what()));
+  throw;
+} catch (...) {
+  Logger::writeToLog("[Startup] SynthBase ctor UNKNOWN EXCEPTION (base/member init or body)");
+  throw;
+}
 
-  Startup::doStartupChecks(midi_manager_.get());
+bool SynthBase::performStartupChecks() {
+  appendStartupTraceBase("SynthBase::performStartupChecks start");
+  const std::lock_guard<std::mutex> startupLock(startup_checks_mutex_);
+
+  if (startup_checks_done_) {
+    appendStartupTraceBase("SynthBase::performStartupChecks already done");
+    return true;
+  }
+
+  if (!ensureGuiPreflight()) {
+    appendStartupTraceBase("SynthBase::performStartupChecks ensureGuiPreflight failed");
+    return false;
+  }
+
+  try {
+    appendStartupTraceBase("SynthBase::performStartupChecks Startup::doStartupChecks start");
+    Startup::doStartupChecks(midi_manager_.get());
+    appendStartupTraceBase("SynthBase::performStartupChecks Startup::doStartupChecks done");
+  }
+  catch (const std::exception& ex) {
+    appendStartupTraceBase("SynthBase::performStartupChecks exception: " + String(ex.what()));
+    return false;
+  }
+  catch (...) {
+    appendStartupTraceBase("SynthBase::performStartupChecks unknown exception");
+    return false;
+  }
+
+  startup_checks_done_ = true;
+  appendStartupTraceBase("SynthBase::performStartupChecks done");
+  return true;
+}
+
+bool SynthBase::ensureGuiPreflight() {
+  if (!JUCEApplicationBase::isStandaloneApp())
+    return true;
+
+  appendStartupTraceBase("SynthBase::ensureGuiPreflight start");
+  const std::lock_guard<std::mutex> preflightLock(gui_preflight_mutex_);
+
+  if (gui_preflight_done_) {
+    appendStartupTraceBase("SynthBase::ensureGuiPreflight already done");
+    return true;
+  }
+
+  try {
+    appendStartupTraceBase("SynthBase::ensureGuiPreflight ensureDeferredModuleInit start");
+    if (!engine_.ensureDeferredModuleInit()) {
+      appendStartupTraceBase("SynthBase::ensureGuiPreflight ensureDeferredModuleInit failed");
+      return false;
+    }
+    appendStartupTraceBase("SynthBase::ensureGuiPreflight ensureDeferredModuleInit done");
+
+    // Standalone runtime can defer submodule initialization until after window creation.
+    // Refresh control cache now that all deferred controls are guaranteed to exist.
+    appendStartupTraceBase("SynthBase::ensureGuiPreflight refresh controls start");
+    controls_ = engine_.getControls();
+    rebuildGuiControlTable();
+    rebuildVisualTelemetryTable();
+    appendStartupTraceBase("SynthBase::ensureGuiPreflight refresh controls done");
+  }
+  catch (const std::exception& ex) {
+    appendStartupTraceBase("SynthBase::ensureGuiPreflight exception: " + String(ex.what()));
+    return false;
+  }
+  catch (...) {
+    appendStartupTraceBase("SynthBase::ensureGuiPreflight unknown exception");
+    return false;
+  }
+
+  gui_preflight_done_ = true;
+  appendStartupTraceBase("SynthBase::ensureGuiPreflight done");
+  return true;
 }
 
 void SynthBase::valueChanged(const std::string& name, mopo::mopo_float value) {
-  value_change_queue_.enqueue(mopo::control_change(controls_[name], value));
+  GuiControlTable* table = gui_control_table_.load(std::memory_order_acquire);
+  if (table == nullptr)
+    return;
+  const auto index = table->indices.find(name);
+  if (index == table->indices.end() || table->notifications[index->second].control == nullptr)
+    return;
+
+  table->values[index->second].store(value, std::memory_order_release);
+  value_change_queue_.enqueue(table->notifications[index->second], value);
 }
 
 void SynthBase::valueChangedInternal(const std::string& name, mopo::mopo_float value) {
+  clearParameterEditHistoryOnMessageThread();
+  recordParameterEditValue(name, value);
   valueChanged(name, value);
   setValueNotifyHost(name, value);
+}
+
+void SynthBase::beginChangeGesture(std::string_view name) {
+  beginParameterEditGesture(name);
+}
+
+void SynthBase::beginParameterEditGesture(std::string_view name) {
+  clearParameterEditHistoryOnMessageThread();
+  if (suppress_history_recording_)
+    return;
+
+  GuiControlTable* table = gui_control_table_.load(std::memory_order_acquire);
+  if (table == nullptr)
+    return;
+
+  const auto index = table->indices.find(std::string(name));
+  if (index == table->indices.end())
+    return;
+
+  const size_t parameter_index = static_cast<size_t>(index->second);
+  if (parameter_index >= active_parameter_edits_.size())
+    return;
+
+  if (active_parameter_edits_[parameter_index].active)
+    return;
+  const mopo::mopo_float start_value = table->values[parameter_index].load(std::memory_order_acquire);
+  active_parameter_edits_[parameter_index] = { true, start_value, start_value };
+}
+
+void SynthBase::endChangeGesture(std::string_view name) {
+  endParameterEditGesture(name);
+}
+
+void SynthBase::endParameterEditGesture(std::string_view name) {
+  finishParameterEdit(std::string(name));
 }
 
 void SynthBase::valueChangedThroughMidi(const std::string& name, mopo::mopo_float value) {
-  controls_[name]->set(value);
-  ValueChangedCallback* callback = new ValueChangedCallback(this, name, value);
+  auto control_it = controls_.find(name);
+  if (control_it == controls_.end() || control_it->second == nullptr)
+    return;
+
+  control_it->second->set(value);
+  rememberControlSnapshotValue(name, value);
   setValueNotifyHost(name, value);
-  callback->post();
+  queueGuiControlChange(name, value);
 }
 
 void SynthBase::patchChangedThroughMidi(File patch) {
-  auto gui_interface = getGuiInterface();
-  if (gui_interface.has_value()) {
-    gui_interface.value()->updateFullGui();
-    gui_interface.value()->notifyFresh();
-  }
+  requestGuiRefresh(true);
 }
 
 void SynthBase::valueChangedExternal(const std::string& name, mopo::mopo_float value) {
-  valueChanged(name, value);
-  ValueChangedCallback* callback = new ValueChangedCallback(this, name, value);
-  callback->post();
+  GuiControlTable* table = gui_control_table_.load(std::memory_order_acquire);
+  if (table == nullptr)
+    return;
+  const auto index = table->indices.find(name);
+  if (index == table->indices.end() || table->notifications[index->second].control == nullptr)
+    return;
+
+  table->values[index->second].store(value, std::memory_order_release);
+  value_change_queue_.enqueueHost(table->notifications[index->second], static_cast<float>(value));
+  if (gui_updates_enabled_.load(std::memory_order_acquire)) {
+    table->dirty[index->second].store(true, std::memory_order_release);
+    gui_changes_pending_.store(true, std::memory_order_release);
+  }
 }
 
 void SynthBase::changeModulationAmount(const std::string& source,
@@ -100,6 +262,53 @@ std::optional<mopo::ModulationConnection*> SynthBase::getConnection(const std::s
 
 void SynthBase::setModulationAmount(mopo::ModulationConnection* connection,
                                     mopo::mopo_float amount) {
+  const ScopedLock state_lock(getCriticalSection());
+  if (connection == nullptr) {
+    Logger::writeToLog("[Preset Load] Ignored modulation with null connection.");
+    return;
+  }
+
+  if (!std::isfinite(static_cast<double>(amount))) {
+    Logger::writeToLog("[Preset Load] Modulation '" + String(connection->source) + " -> " +
+                       String(connection->destination) +
+                       "' has non-finite amount. Replaced by 0.");
+    amount = 0.0;
+  }
+
+  if (amount != 0.0) {
+    if (!mopo::Parameters::isParameter(connection->destination)) {
+      Logger::writeToLog("[Modulation] Ignored route to unknown destination '" +
+                         String(connection->destination) + "'.");
+      if (mod_connections_.count(connection) == 0)
+        modulation_bank_.recycle(connection);
+      return;
+    }
+
+    const mopo::ValueDetails& destination =
+        mopo::Parameters::getDetails(connection->destination);
+    const mopo::mopo_float clamped_amount =
+        mopo::clampModulationAmount(destination, amount);
+    if (clamped_amount != amount) {
+      Logger::writeToLog("[Modulation] Clamped '" + String(connection->source) + " -> " +
+                         String(connection->destination) + "' amount from " +
+                         String(amount) + " to " + String(clamped_amount) + ".");
+      amount = clamped_amount;
+    }
+  }
+
+  {
+    const std::lock_guard<std::mutex> lock(modulation_snapshot_mutex_);
+    const auto key = std::make_pair(connection->source, connection->destination);
+    if (amount == 0.0)
+      requested_modulation_amounts_.erase(key);
+    else
+      requested_modulation_amounts_[key] = amount;
+    std::uint32_t tail_mask = 0;
+    for (const auto& entry : requested_modulation_amounts_)
+      tail_mask |= helmboy::TailLength::modulationBit(entry.first.second);
+    tail_modulation_mask_.store(tail_mask, std::memory_order_release);
+  }
+
   if (amount == 0.0) {
     modulation_bank_.recycle(connection);
     mod_connections_.erase(connection);
@@ -158,23 +367,30 @@ var SynthBase::saveToVar(String author) {
 }
 
 void SynthBase::loadInitPatch() {
-  getCriticalSection().enter();
+  const ScopedLock lock(getCriticalSection());
   LoadSave::initSynth(this, save_info_);
-  getCriticalSection().exit();
+  active_file_ = File();
+  resetParameterEditHistory();
 }
 
 void SynthBase::loadFromVar(juce::var state) {
-  getCriticalSection().enter();
-  LoadSave::varToState(this, save_info_, state);
-  getCriticalSection().exit();
+  LoadSave::PreparedSynthState prepared = LoadSave::prepareState(std::move(state));
+  if (!prepared.valid)
+    return;
+
+  requestEffectResetTransition();
+  const ScopedLock lock(getCriticalSection());
+  LoadSave::applyPreparedState(this, save_info_, prepared);
+  active_file_ = File();
+  resetParameterEditHistory();
 }
 
 bool SynthBase::loadFromFile(File patch) {
   var parsed_json_state;
   if (patch.exists() && JSON::parse(patch.loadFileAsString(), parsed_json_state).wasOk()) {
-    active_file_ = patch;
     File parent = patch.getParentDirectory();
     loadFromVar(parsed_json_state);
+    active_file_ = patch;
     setFolderName(parent.getFileNameWithoutExtension());
     setPatchName(patch.getFileNameWithoutExtension());
 
@@ -190,27 +406,8 @@ bool SynthBase::loadFromFile(File patch) {
 }
 
 bool SynthBase::exportToFile() {
-  File active_file = getActiveFile();
-  auto fileChooser = std::make_shared<FileChooser>("Export Patch", File(), String("*.") + mopo::PATCH_EXTENSION);
-
-  auto chooserFlags = FileBrowserComponent::saveMode | FileBrowserComponent::canSelectFiles;
-
-  fileChooser->launchAsync(chooserFlags, [this, fileChooser](const FileChooser& fc)
-  {
-    auto file = fc.getResult();
-    if (file != File{})
-    {
-      if (saveToFile(file)) {
-        // Notify GUI that external patch was loaded (the exported file)
-        auto gui_interface = getGuiInterface();
-        if (gui_interface.has_value()) {
-          gui_interface.value()->externalPatchLoaded(file);
-        }
-      }
-    }
-  });
-
-  return true;
+  auto gui_interface = getGuiInterface();
+  return gui_interface.has_value() && gui_interface.value()->showExportDialog();
 }
 
 bool SynthBase::saveToFile(File patch) {
@@ -239,6 +436,15 @@ bool SynthBase::saveToActiveFile() {
     return false;
 
   return saveToFile(active_file_);
+}
+
+void SynthBase::clearActiveFile() {
+  active_file_ = File();
+}
+
+void SynthBase::updateActiveFilePath(const File& previous_file, const File& new_file) {
+  if (active_file_ == previous_file)
+    active_file_ = new_file;
 }
 
 void SynthBase::processAudio(AudioSampleBuffer* buffer, int channels, int samples, int offset) {
@@ -281,6 +487,15 @@ void SynthBase::processAudio(AudioSampleBuffer* buffer, int channels, int sample
 void SynthBase::processAudioSafe(AudioSampleBuffer* buffer, int channels, int samples, int offset) {
   mopo::utils::enableDenormalFlushing(true);
 
+  if (effect_reset_requested_.exchange(false, std::memory_order_acq_rel)) {
+    effect_reset_fade_total_samples_ = std::max(
+        1, engine_.getSampleRate() * kEffectResetFadeMilliseconds / 1000);
+    effect_reset_fade_remaining_samples_ = std::max(
+        1, static_cast<int>(std::ceil(effect_reset_output_gain_ *
+                                      effect_reset_fade_total_samples_)));
+    effect_reset_phase_ = EffectResetPhase::FadeOut;
+  }
+
   if (engine_.getBufferSize() != samples)
     engine_.setBufferSize(samples);
 
@@ -292,6 +507,20 @@ void SynthBase::processAudioSafe(AudioSampleBuffer* buffer, int channels, int sa
   // Get engine output with bounds checking
   auto engine_output_left = std::span<const mopo::mopo_float>(engine_.output(0)->buffer, samples);
   auto engine_output_right = std::span<const mopo::mopo_float>(engine_.output(1)->buffer, samples);
+  const EffectResetPhase reset_phase = effect_reset_phase_;
+  const int reset_remaining = effect_reset_fade_remaining_samples_;
+  const int reset_fade_total = effect_reset_fade_total_samples_;
+  const mopo::mopo_float reset_start_gain = effect_reset_output_gain_;
+
+#if HELMBOY_DEBUG_AUDIO_LEVELS
+  static int debug_block_count = 0;
+  if ((++debug_block_count % 512) == 0) {
+    float peak = computeStereoPeak(engine_output_left, engine_output_right);
+    std::fprintf(stderr,
+                 "[HELMBOY_DEBUG_AUDIO_LEVELS] block=%d samples=%d peak=%f voices=%d\n",
+                 debug_block_count, samples, peak, engine_.getNumActiveVoices());
+  }
+#endif
 
   // Process each channel safely using std::span
   #include <xsimd/xsimd.hpp>
@@ -317,12 +546,50 @@ void SynthBase::processAudioSafe(AudioSampleBuffer* buffer, int channels, int sa
   processing_span[i] = synth_output[i];
   MOPO_ASSERT(std::isfinite(synth_output[i]));
     }
+
+    if (reset_phase != EffectResetPhase::Idle) {
+      const mopo::mopo_float denominator = std::max(1, reset_remaining);
+      for (int sample = 0; sample < samples; ++sample) {
+        const int progressed = std::min(sample + 1, reset_remaining);
+        const mopo::mopo_float progress = static_cast<mopo::mopo_float>(progressed) /
+                                          denominator;
+        const mopo::mopo_float gain = reset_phase == EffectResetPhase::FadeOut
+            ? reset_start_gain * (1.0 - progress)
+            : reset_start_gain + (1.0 - reset_start_gain) * progress;
+        processing_span[sample] *= static_cast<float>(gain);
+      }
+    }
+  }
+
+  if (reset_phase == EffectResetPhase::FadeOut) {
+    effect_reset_fade_remaining_samples_ = std::max(0, reset_remaining - samples);
+    effect_reset_output_gain_ = reset_start_gain *
+        static_cast<mopo::mopo_float>(effect_reset_fade_remaining_samples_) /
+        std::max(1, reset_remaining);
+    if (effect_reset_fade_remaining_samples_ == 0) {
+      engine_.resetEffectState();
+      effect_reset_phase_ = EffectResetPhase::FadeIn;
+      effect_reset_fade_remaining_samples_ = reset_fade_total;
+      effect_reset_output_gain_ = 0.0;
+    }
+  }
+  else if (reset_phase == EffectResetPhase::FadeIn) {
+    effect_reset_fade_remaining_samples_ = std::max(0, reset_remaining - samples);
+    effect_reset_output_gain_ = 1.0 - static_cast<mopo::mopo_float>(
+        effect_reset_fade_remaining_samples_) / std::max(1, reset_fade_total);
+    if (effect_reset_fade_remaining_samples_ == 0) {
+      effect_reset_output_gain_ = 1.0;
+      effect_reset_phase_ = EffectResetPhase::Idle;
+    }
   }
 
   updateMemoryOutput(samples, engine_output_left, engine_output_right);
 }
 
 void SynthBase::processMidi(MidiBuffer& midi_messages, int start_sample, int end_sample) {
+  if (midi_manager_ == nullptr)
+    return;
+
   bool process_all = end_sample == 0;
 
   for (auto it = midi_messages.cbegin(); it != midi_messages.cend(); ++it) {
@@ -332,7 +599,24 @@ void SynthBase::processMidi(MidiBuffer& midi_messages, int start_sample, int end
   }
 }
 
+void SynthBase::resetProcessingState() {
+  engine_.resetState();
+  effect_reset_requested_.store(false, std::memory_order_release);
+  effect_reset_phase_ = EffectResetPhase::Idle;
+  effect_reset_fade_total_samples_ = 0;
+  effect_reset_fade_remaining_samples_ = 0;
+  effect_reset_output_gain_ = 1.0;
+  last_played_note_.store(0.0, std::memory_order_release);
+  last_num_pressed_.store(0, std::memory_order_release);
+  visual_peaks_[0].store(0.0f, std::memory_order_relaxed);
+  visual_peaks_[1].store(0.0f, std::memory_order_relaxed);
+  keyboard_reset_requested_.fetch_add(1, std::memory_order_release);
+}
+
 void SynthBase::processKeyboardEvents(MidiBuffer& buffer, int num_samples) {
+  if (keyboard_reset_requested_.load(std::memory_order_acquire) !=
+      keyboard_reset_completed_.load(std::memory_order_acquire))
+    return;
   MidiBuffer keyboard_messages;
   midi_manager_->replaceKeyboardMessages(keyboard_messages, num_samples);
   midi_manager_->replaceKeyboardMessages(buffer, num_samples);
@@ -341,9 +625,15 @@ void SynthBase::processKeyboardEvents(MidiBuffer& buffer, int num_samples) {
 }
 
 void SynthBase::processControlChanges() {
-  mopo::control_change change;
-  while (getNextControlChange(change))
-    change.first->set(change.second);
+  helmboy::ParameterChangeQueue::Change change;
+  while (value_change_queue_.tryDequeue(change))
+    helmboy::ParameterChangeQueue::apply(change);
+  if (value_change_queue_.takeOverflowPending()) {
+    GuiControlTable* table = gui_control_table_.load(std::memory_order_acquire);
+    if (table != nullptr)
+      for (std::size_t index = 0; index < table->names.size(); ++index)
+        helmboy::ParameterChangeQueue::applyOverflow(table->notifications[index]);
+  }
 }
 
 void SynthBase::processModulationChanges() {
@@ -363,6 +653,16 @@ void SynthBase::processModulationChanges() {
 
 void SynthBase::updateMemoryOutput(int samples, std::span<const mopo::mopo_float> left,
                                                 std::span<const mopo::mopo_float> right) {
+  if (samples <= 0)
+    return;
+
+  publishVisualTelemetry();
+
+  if (visual_peak_source_ != nullptr) {
+    visual_peaks_[0].store(static_cast<float>(visual_peak_source_->buffer[0]), std::memory_order_relaxed);
+    visual_peaks_[1].store(static_cast<float>(visual_peak_source_->buffer[1]), std::memory_order_relaxed);
+  }
+
   mopo::mopo_float last_played = std::max(engine_.getLastActiveNote(), OUTPUT_WINDOW_MIN_NOTE);
   int num_pressed = engine_.getPressedNotes().size();
   int output_inc = std::max<int>(1, engine_.getSampleRate() / mopo::MEMORY_SAMPLE_RATE);
@@ -381,10 +681,7 @@ void SynthBase::updateMemoryOutput(int samples, std::span<const mopo::mopo_float
 
     memory_reset_period_ = std::min(memory_reset_period_, 2.0 * window_length);
         memory_index_ = 0;
-        mopo::utils::copyBufferf(
-          std::span<float>(output_memory_, 2 * mopo::MEMORY_RESOLUTION),
-          std::span<const float>(output_memory_write_, 2 * mopo::MEMORY_RESOLUTION)
-        );
+        publishOutputMemory();
   }
   last_num_pressed_.store(num_pressed, std::memory_order_release);
 
@@ -393,7 +690,7 @@ void SynthBase::updateMemoryOutput(int samples, std::span<const mopo::mopo_float
   int local_memory_index = memory_index_.load(std::memory_order_acquire);
 
   for (; local_input_offset < samples; local_input_offset += output_inc) {
-    int input_index = mopo::utils::iclamp(static_cast<int>(local_input_offset), 0, samples);
+    int input_index = mopo::utils::iclamp(static_cast<int>(local_input_offset), 0, samples - 1);
     local_memory_index = mopo::utils::iclamp(local_memory_index, 0, 2 * mopo::MEMORY_RESOLUTION - 1);
     MOPO_ASSERT(input_index >= 0);
     MOPO_ASSERT(input_index < samples);
@@ -404,10 +701,7 @@ void SynthBase::updateMemoryOutput(int samples, std::span<const mopo::mopo_float
     if (local_memory_index * output_inc >= memory_reset_period_) {
       local_input_offset += memory_reset_period_ - local_memory_index * output_inc;
       local_memory_index = 0;
-      mopo::utils::copyBufferf(
-        std::span<float>(output_memory_, 2 * mopo::MEMORY_RESOLUTION),
-        std::span<const float>(output_memory_write_, 2 * mopo::MEMORY_RESOLUTION)
-      );
+      publishOutputMemory();
     }
   }
 
@@ -433,35 +727,455 @@ bool SynthBase::isMidiMapped(const std::string& name) {
 }
 
 void SynthBase::setAuthor(String author) {
+  const ScopedLock lock(getCriticalSection());
   save_info_["author"] = author;
 }
 
 void SynthBase::setPatchName(String patch_name) {
+  const ScopedLock lock(getCriticalSection());
   save_info_["patch_name"] = patch_name;
 }
 
 void SynthBase::setFolderName(String folder_name) {
+  const ScopedLock lock(getCriticalSection());
   save_info_["folder_name"] = folder_name;
 }
 
 String SynthBase::getAuthor() {
+  const ScopedLock lock(getCriticalSection());
   return save_info_["author"];
 }
 
 String SynthBase::getPatchName() {
+  const ScopedLock lock(getCriticalSection());
   return save_info_["patch_name"];
 }
 
 String SynthBase::getFolderName() {
+  const ScopedLock lock(getCriticalSection());
   return save_info_["folder_name"];
 }
 
-void SynthBase::ValueChangedCallback::messageCallback() {
-  if (listener) {
-    auto gui_interface = listener->getGuiInterface();
-    if (gui_interface.has_value()) {
-      gui_interface.value()->updateGuiControl(control_name, value);
-      gui_interface.value()->notifyChange();
+SynthGuiStateSnapshot SynthBase::captureGuiStateSnapshot() {
+  SynthGuiStateSnapshot snapshot;
+  snapshot.controls.reserve(controls_.size());
+  {
+    const ScopedLock lock(getCriticalSection());
+    GuiControlTable* table = gui_control_table_.load(std::memory_order_acquire);
+    for (const auto& [name, control] : controls_) {
+      if (control == nullptr)
+        continue;
+      mopo::mopo_float value = control->value();
+      if (table != nullptr) {
+        const auto index = table->indices.find(name);
+        if (index != table->indices.end())
+          value = table->values[index->second].load(std::memory_order_acquire);
+      }
+      snapshot.controls.emplace_back(name, value);
     }
+    snapshot.modulations.reserve(mod_connections_.size());
+    const std::lock_guard<std::mutex> modulation_lock(modulation_snapshot_mutex_);
+    for (const mopo::ModulationConnection* connection : mod_connections_) {
+      if (connection != nullptr) {
+        const auto requested = requested_modulation_amounts_.find(
+            {connection->source, connection->destination});
+        snapshot.modulations.push_back({connection->source, connection->destination,
+            requested != requested_modulation_amounts_.end()
+                ? requested->second
+                : connection->amount.value()});
+      }
+    }
+  }
+  return snapshot;
+}
+
+SynthGuiStateSnapshot SynthBase::captureInitStateSnapshot() const {
+  SynthGuiStateSnapshot snapshot;
+  snapshot.controls.reserve(controls_.size());
+  for (const auto& [name, control] : controls_) {
+    if (control != nullptr)
+      snapshot.controls.emplace_back(name, mopo::Parameters::getDetails(name).default_value);
+  }
+  return snapshot;
+}
+
+void SynthBase::applyParameterSnapshot(const SynthGuiStateSnapshot& snapshot) {
+  requestEffectResetTransition();
+  const SynthGuiStateSnapshot current = captureGuiStateSnapshot();
+  const bool was_suppressing_history = suppress_history_recording_;
+  suppress_history_recording_ = true;
+  for (const auto& [name, value] : snapshot.controls) {
+    const auto control = controls_.find(name);
+    if (control == controls_.end() || control->second == nullptr ||
+        !std::isfinite(static_cast<double>(value)))
+      continue;
+
+    const auto current_value = std::find_if(
+        current.controls.begin(), current.controls.end(),
+        [&name](const auto& entry) { return entry.first == name; });
+    if (current_value != current.controls.end() && current_value->second == value)
+      continue;
+
+    beginChangeGesture(name);
+    valueChangedInternal(name, value);
+    endChangeGesture(name);
+    queueGuiControlChange(name, value);
+  }
+
+  clearModulations();
+  for (const auto& modulation : snapshot.modulations) {
+    if (!mopo::Parameters::isParameter(modulation.destination))
+      continue;
+    auto* connection = modulation_bank_.get(modulation.source, modulation.destination);
+    setModulationAmount(connection, modulation.amount);
+  }
+  requestGuiRefresh();
+  suppress_history_recording_ = was_suppressing_history;
+  resetParameterEditHistory();
+}
+
+void SynthBase::recordParameterEditValue(const std::string& name, mopo::mopo_float value) {
+  if (suppress_history_recording_)
+    return;
+
+  GuiControlTable* table = gui_control_table_.load(std::memory_order_acquire);
+  if (table == nullptr)
+    return;
+
+  const auto found = table->indices.find(name);
+  if (found == table->indices.end())
+    return;
+
+  const size_t index = static_cast<size_t>(found->second);
+  if (index >= active_parameter_edits_.size())
+    return;
+
+  ActiveParameterEdit& active = active_parameter_edits_[index];
+  if (active.active) {
+    active.end_value = value;
+    return;
+  }
+
+  const mopo::mopo_float previous = table->values[index].load(std::memory_order_acquire);
+  if (edit_history_.append(index, previous, value))
+    updateUndoRedoAvailability();
+}
+
+void SynthBase::finishParameterEdit(const std::string& name) {
+  clearParameterEditHistoryOnMessageThread();
+  if (suppress_history_recording_)
+    return;
+
+  GuiControlTable* table = gui_control_table_.load(std::memory_order_acquire);
+  if (table == nullptr)
+    return;
+
+  const auto found = table->indices.find(name);
+  if (found == table->indices.end())
+    return;
+
+  const size_t index = static_cast<size_t>(found->second);
+  if (index >= active_parameter_edits_.size())
+    return;
+
+  ActiveParameterEdit& active = active_parameter_edits_[index];
+  if (!active.active)
+    return;
+
+  const ActiveParameterEdit completed = active;
+  active = {};
+  if (edit_history_.append(index, completed.start_value, completed.end_value))
+    updateUndoRedoAvailability();
+}
+
+void SynthBase::resetParameterEditHistory() {
+  history_reset_pending_.store(true, std::memory_order_release);
+}
+
+void SynthBase::requestEffectResetTransition() {
+  effect_reset_requested_.store(true, std::memory_order_release);
+}
+
+void SynthBase::clearParameterEditHistoryOnMessageThread() {
+  if (!history_reset_pending_.exchange(false, std::memory_order_acq_rel))
+    return;
+
+  edit_history_.clear();
+  for (auto& edit : active_parameter_edits_)
+    edit = {};
+  updateUndoRedoAvailability();
+}
+
+void SynthBase::applyParameterEditStep(const helmboy::ParameterEditHistory::Step& step,
+                                       mopo::mopo_float value) {
+  GuiControlTable* table = gui_control_table_.load(std::memory_order_acquire);
+  if (table == nullptr || step.parameter_index >= table->names.size())
+    return;
+
+  const std::string& name = table->names[step.parameter_index];
+  const bool was_suppressing_history = suppress_history_recording_;
+  suppress_history_recording_ = true;
+  beginChangeGesture(name);
+
+  auto gui_interface = getGuiInterface();
+  if (gui_interface.has_value())
+    gui_interface.value()->updateGuiControl(name, value);
+
+  valueChangedInternal(name, value);
+  endChangeGesture(name);
+  suppress_history_recording_ = was_suppressing_history;
+
+  if (gui_interface.has_value())
+    gui_interface.value()->notifyChange();
+}
+
+bool SynthBase::undoParameterEdit() {
+  clearParameterEditHistoryOnMessageThread();
+  helmboy::ParameterEditHistory::Step step;
+  if (!edit_history_.undo(step))
+    return false;
+
+  applyParameterEditStep(step, step.start_value);
+  updateUndoRedoAvailability();
+  return true;
+}
+
+bool SynthBase::redoParameterEdit() {
+  clearParameterEditHistoryOnMessageThread();
+  helmboy::ParameterEditHistory::Step step;
+  if (!edit_history_.redo(step))
+    return false;
+
+  applyParameterEditStep(step, step.end_value);
+  updateUndoRedoAvailability();
+  return true;
+}
+
+void SynthBase::updateUndoRedoAvailability() {
+  auto gui_interface = getGuiInterface();
+  if (gui_interface.has_value())
+    gui_interface.value()->updateUndoRedoAvailability(edit_history_.canUndo(),
+                                                       edit_history_.canRedo());
+}
+
+void SynthBase::rememberControlSnapshotValue(const std::string& name,
+                                             mopo::mopo_float value) {
+  GuiControlTable* table = gui_control_table_.load(std::memory_order_acquire);
+  if (table == nullptr)
+    return;
+  const auto index = table->indices.find(name);
+  if (index != table->indices.end())
+    table->values[index->second].store(value, std::memory_order_release);
+}
+
+const std::atomic<mopo::mopo_float>* SynthBase::getControlSnapshot(const std::string& name) const {
+  const GuiControlTable* table = gui_control_table_.load(std::memory_order_acquire);
+  if (table == nullptr)
+    return nullptr;
+  const auto index = table->indices.find(name);
+  return index != table->indices.end() ? &table->values[index->second] : nullptr;
+}
+
+SynthBase::~SynthBase() {
+  stopGuiUpdates();
+}
+
+void SynthBase::stopGuiUpdates() {
+  {
+    const std::lock_guard<std::mutex> lock(gui_lifetime_->mutex);
+    gui_lifetime_->synth = nullptr;
+  }
+  gui_updates_enabled_.store(false, std::memory_order_release);
+  gui_notification_timer_.stopTimer();
+}
+
+void SynthBase::startGuiUpdates() {
+  clearParameterEditHistoryOnMessageThread();
+  if (gui_updates_enabled_.load(std::memory_order_acquire) && !gui_notification_timer_.isTimerRunning())
+    gui_notification_timer_.startTimer(kGuiNotificationIntervalMs);
+}
+
+SynthBase::GuiControlTable::GuiControlTable(const mopo::control_map& controls) {
+  names.reserve(controls.size());
+  for (const auto& control : controls)
+    names.push_back(control.first);
+
+  const size_t count = names.size();
+  values = std::make_unique<std::atomic<mopo::mopo_float>[]>(count);
+  dirty = std::make_unique<std::atomic<bool>[]>(count);
+  notifications = std::make_unique<helmboy::ParameterChangeQueue::Slot[]>(count);
+  indices.reserve(count);
+  for (size_t i = 0; i < count; ++i) {
+    indices.emplace(names[i], static_cast<int>(i));
+    const auto control = controls.find(names[i]);
+    notifications[i].control = control != controls.end() ? control->second : nullptr;
+    values[i].store(control != controls.end() && control->second != nullptr
+                        ? control->second->value()
+                        : 0.0,
+                    std::memory_order_relaxed);
+    dirty[i].store(false, std::memory_order_relaxed);
+  }
+}
+
+void SynthBase::rebuildGuiControlTable() {
+  auto table = std::make_unique<GuiControlTable>(controls_);
+  active_parameter_edits_.assign(table->names.size(), ActiveParameterEdit{});
+  edit_history_.clear();
+  gui_control_table_.store(table.get(), std::memory_order_release);
+  gui_control_tables_.push_back(std::move(table));
+}
+
+void SynthBase::rebuildVisualTelemetryTable() {
+  auto table = std::make_unique<VisualTelemetryTable>();
+  auto addSources = [&table](mopo::output_map& outputs) {
+    for (const auto& entry : outputs) {
+      const mopo::Output* output = entry.second;
+      if (output == nullptr || table->indices.count(output) != 0)
+        continue;
+      int index = static_cast<int>(table->sources.size());
+      table->indices.emplace(output, index);
+      table->sources.push_back(output);
+    }
+  };
+
+  addSources(engine_.getModulationSources());
+  addSources(engine_.getMonoModulations());
+  addSources(engine_.getPolyModulations());
+  addSources(engine_.getVisualTelemetrySources());
+  table->values.resize(table->sources.size(), 0.0f);
+  visual_telemetry_table_.store(table.get(), std::memory_order_release);
+  visual_telemetry_tables_.push_back(std::move(table));
+}
+
+int SynthBase::getVisualTelemetryIndex(const mopo::Output* output) const {
+  VisualTelemetryTable* table = visual_telemetry_table_.load(std::memory_order_acquire);
+  if (table == nullptr || output == nullptr)
+    return -1;
+
+  auto index = table->indices.find(output);
+  return index == table->indices.end() ? -1 : index->second;
+}
+
+bool SynthBase::copyVisualTelemetry(std::span<const int> indices,
+                                    std::span<float> destination) const {
+  if (destination.size() < indices.size())
+    return false;
+
+  VisualTelemetryTable* table = visual_telemetry_table_.load(std::memory_order_acquire);
+  if (table == nullptr || table->busy.test_and_set(std::memory_order_acquire))
+    return false;
+
+  for (size_t i = 0; i < indices.size(); ++i) {
+    if (indices[i] < 0 || static_cast<size_t>(indices[i]) >= table->values.size()) {
+      table->busy.clear(std::memory_order_release);
+      return false;
+    }
+    destination[i] = table->values[indices[i]];
+  }
+  table->busy.clear(std::memory_order_release);
+  return true;
+}
+
+void SynthBase::publishVisualTelemetry() {
+  VisualTelemetryTable* table = visual_telemetry_table_.load(std::memory_order_acquire);
+  if (table == nullptr || table->busy.test_and_set(std::memory_order_acquire))
+    return;
+
+  for (size_t i = 0; i < table->sources.size(); ++i) {
+    const mopo::Output* source = table->sources[i];
+    table->values[i] = source != nullptr && source->buffer_size > 0
+                           ? static_cast<float>(source->buffer[0])
+                           : 0.0f;
+  }
+  table->busy.clear(std::memory_order_release);
+}
+
+// Real-time safe: no allocation, no lock, no message posting.
+void SynthBase::queueGuiControlChange(const std::string& name, mopo::mopo_float value) {
+  if (!gui_updates_enabled_.load(std::memory_order_acquire))
+    return;
+
+  GuiControlTable* table = gui_control_table_.load(std::memory_order_acquire);
+  if (table == nullptr)
+    return;
+
+  auto index_it = table->indices.find(name);
+  if (index_it == table->indices.end())
+    return;
+
+  table->values[index_it->second].store(value, std::memory_order_release);
+  table->dirty[index_it->second].store(true, std::memory_order_release);
+  gui_changes_pending_.store(true, std::memory_order_release);
+}
+
+void SynthBase::requestGuiRefresh(bool fresh) {
+  if (fresh) {
+    resetParameterEditHistory();
+  }
+  if (!gui_updates_enabled_.load(std::memory_order_acquire))
+    return;
+  if (fresh) {
+    gui_fresh_pending_.store(true, std::memory_order_release);
+  }
+  gui_refresh_pending_.store(true, std::memory_order_release);
+}
+
+void SynthBase::deliverGuiNotifications() {
+  if (!gui_updates_enabled_.load(std::memory_order_acquire))
+    return;
+
+  const auto keyboard_reset = keyboard_reset_requested_.load(std::memory_order_acquire);
+  if (keyboard_reset != keyboard_reset_completed_.load(std::memory_order_acquire)) {
+    keyboard_state_->reset();
+    keyboard_reset_completed_.store(keyboard_reset, std::memory_order_release);
+  }
+
+  clearParameterEditHistoryOnMessageThread();
+
+  std::vector<std::pair<const std::string*, mopo::mopo_float>> changes;
+  if (gui_changes_pending_.exchange(false, std::memory_order_acq_rel)) {
+    GuiControlTable* table = gui_control_table_.load(std::memory_order_acquire);
+    if (table != nullptr) {
+      for (size_t i = 0; i < table->names.size(); ++i) {
+        if (table->dirty[i].exchange(false, std::memory_order_acquire))
+          changes.emplace_back(&table->names[i], table->values[i].load(std::memory_order_relaxed));
+      }
+    }
+  }
+
+  const bool refresh = gui_refresh_pending_.exchange(false, std::memory_order_acq_rel);
+  const bool fresh = gui_fresh_pending_.exchange(false, std::memory_order_acq_rel);
+  if (!refresh && !fresh && changes.empty())
+    return;
+
+  auto gui_interface = getGuiInterface();
+  if (!gui_interface.has_value())
+    return;
+
+  if (refresh)
+    gui_interface.value()->updateFullGui();
+  else {
+    for (const auto& [name, value] : changes)
+      gui_interface.value()->updateGuiControl(*name, value);
+  }
+  if (fresh)
+    gui_interface.value()->notifyFresh();
+  else if (!changes.empty())
+    gui_interface.value()->notifyChange();
+}
+
+bool SynthBase::copyOutputMemory(std::span<float> destination) {
+  if (destination.size() < 2 * mopo::MEMORY_RESOLUTION ||
+      output_memory_busy_.test_and_set(std::memory_order_acquire))
+    return false;
+  std::copy_n(output_memory_, 2 * mopo::MEMORY_RESOLUTION, destination.data());
+  output_memory_busy_.clear(std::memory_order_release);
+  return true;
+}
+
+void SynthBase::publishOutputMemory() {
+  if (!output_memory_busy_.test_and_set(std::memory_order_acquire)) {
+    std::copy_n(output_memory_write_, 2 * mopo::MEMORY_RESOLUTION, output_memory_);
+    output_memory_busy_.clear(std::memory_order_release);
   }
 }

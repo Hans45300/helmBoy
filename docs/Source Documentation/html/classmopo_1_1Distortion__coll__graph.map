@@ -1,0 +1,11 @@
+<map id="mopo::Distortion" name="mopo::Distortion">
+<area shape="rect" id="Node000001" title="Processeur de distorsion audio avec plusieurs modes (soft/hard clip, fold, etc.)." alt="" coords="5,744,143,984"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="172,5,323,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,518,158,574,110,745,105,743,153,573,173,513"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="167,573,328,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="243,514,245,525,245,574,239,573,240,525,242,519"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="359,744,459,984"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="313,499,331,548,342,572,366,650,385,728,380,728,361,651,337,574,326,550,312,504"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="245,573,247,521,248,515,250,574"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="409,743,403,637,395,581,382,526,359,458,331,395,331,390,364,456,388,525,400,580,408,636,415,745"/>
+</map>

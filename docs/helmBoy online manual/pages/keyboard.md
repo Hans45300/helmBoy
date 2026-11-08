@@ -16,18 +16,8 @@ The on-screen keyboard provides visual feedback and manual note input when no MI
 
 ### Mouse Input
 
-- **Click**: Trigger note with fixed velocity
-- **Drag Up/Down**: Adjust velocity before release
+- **Click a key**: Trigger a note
 - **Multiple Notes**: Click multiple keys for chords
-
-### Computer Keyboard
-
-Use computer keyboard for note input:
-
-- **White Keys**: QWERTY row (C, D, E, F, G, A, B)
-- **Black Keys**: Number row (C#, D#, F#, G#, A#)
-- **Octave Up/Down**: Z and X keys
-- **Velocity**: Adjust with modifier keys
 
 ## Settings
 
@@ -35,22 +25,14 @@ Use computer keyboard for note input:
 
 Displays current octave and allows shifting up/down.
 
-### Velocity Curve
-
-- **Linear**: Velocity proportional to press position
-- **Fixed**: All notes at same velocity
-- **Logarithmic**: Emphasis on higher velocities
-- **Exponential**: Emphasis on lower velocities
-
-### Computer Keyboard Layout
-
-Configurable keyboard mapping for different keyboard layouts (QWERTY, AZERTY, etc.)
+The standalone edition does not use computer-keyboard typing to trigger notes.
+Use the on-screen keyboard or a connected MIDI controller instead.
 
 ## Usage
 
 ### Manual Performance
 
-- Play using mouse or computer keyboard
+- Play using the mouse or a connected MIDI controller
 
 - Use for quick sound testing
 - Useful for sound design without MIDI controller
@@ -60,7 +42,7 @@ Configurable keyboard mapping for different keyboard layouts (QWERTY, AZERTY, et
 When MIDI controller is connected:
 
 - Keyboard shows incoming MIDI notes
-- Still accepts mouse/keyboard input
+- The on-screen keyboard remains available for mouse input
 - Useful for monitoring note activity
 
 ## See Also

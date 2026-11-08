@@ -1,0 +1,11 @@
+<map id="mopo::cr::SmoothFilter" name="mopo::cr::SmoothFilter">
+<area shape="rect" id="Node000001" title="Version contr�le du filtre lissant (cr = control rate)." alt="" coords="5,808,149,920"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="178,5,329,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,518,95,809,90,808,178,513"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="173,573,334,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="248,514,250,525,250,574,245,573,245,525,247,519"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="364,744,464,984"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="318,499,337,548,348,572,371,650,391,728,385,728,366,651,343,574,332,550,317,504"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="251,573,253,521,254,515,256,574"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="415,743,408,637,400,581,388,526,364,458,336,395,337,390,369,456,393,525,405,580,414,636,420,745"/>
+</map>

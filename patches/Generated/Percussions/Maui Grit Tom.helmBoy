@@ -1,0 +1,33 @@
+{
+  "settings": {
+    "polyphony": 8,
+    "osc_1_waveform": 3.0,
+    "osc_1_volume": 0.5,
+    "osc_2_waveform": 2.0,
+    "osc_2_transpose": -7.0,
+    "osc_2_volume": 0.34,
+    "sub_volume": 0.22,
+    "noise_volume": 0.12,
+    "noise_color": 0.46,
+    "filter_on": 1,
+    "filter_style": 1,
+    "cutoff": 58.0,
+    "resonance": 0.4,
+    "fil_env_depth": 72.0,
+    "fil_decay": 0.42,
+    "fil_sustain": 0.0,
+    "amp_attack": 0.001,
+    "amp_decay": 0.49,
+    "amp_sustain": 0.0,
+    "amp_release": 0.18,
+    "distortion_on": 1,
+    "distortion_drive": 5.0,
+    "distortion_type": 2.0,
+    "arp_on": 0,
+    "modulations": []
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Maui Grit Tom",
+  "folder_name": "Percussions",
+  "synth_version": "1.1.1"
+}

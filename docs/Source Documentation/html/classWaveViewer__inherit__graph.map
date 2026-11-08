@@ -1,9 +1,9 @@
 <map id="WaveViewer" name="WaveViewer">
-<area shape="rect" id="Node000001" title=" " alt="" coords="44,208,216,811"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="40,208,220,1003"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,48,83,117"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="56,132,72,208,67,209,51,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="52,129,67,208,62,208,52,135"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="108,48,151,117"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="132,132,132,208,127,208,127,132"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="130,130,132,208,127,208,129,135"/>
 <area shape="rect" id="Node000004" href="$classSynthSlider_1_1SliderListener.html" title=" " alt="" coords="175,5,340,160"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="233,175,218,224,213,223,228,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="236,171,222,239,217,238,235,177"/>
 </map>

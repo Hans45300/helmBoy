@@ -45,6 +45,8 @@ class ModulationSlider : public SynthSlider, public Slider::Listener {
     /** @brief Callback lorsque le slider lié change. */
     void sliderValueChanged(Slider* moved_slider) override;
 
+    void handlePopupResult(int result);
+
     /** @brief Retourne le slider de destination de la modulation. */
     SynthSlider* getDestinationSlider() { return destination_slider_; }
 

@@ -4,37 +4,49 @@
 
 ![Volume section example](../pictures/Volume.png)
 
-The master volume control sets the overall output level of helmBoy.
+The Volume section controls the final output level and displays left and right output peaks.
 
 ## Parameters
 
 ### Master Volume
 
-- **Range**: -? dB to 0 dB
-- **Default**: -6 dB (to prevent clipping)
-- **Purpose**: Final output level control
+Adjusts the final output level.
 
-### Volume Display
+### Peak Meters and Limiter
 
-- Shows current level in dB
-- Visual meter indicates output level
-- Clip indicator warns of overload
+The Volume section displays left and right peak meters. The Limiter has a
+separate section to the right of the oscilloscope, with an on/off button in its
+title bar.
+
+- **Ceiling** sets the linked stereo output ceiling from -12 dBFS to 0 dBFS.
+  The default is 0 dBFS.
+- **Release** sets how quickly gain reduction recovers, from 5 to 500 ms. The
+  default is 100 ms.
+
+### Pan
+
+The **Pan** rotary control balances the existing stereo signal after the master
+volume. Center (`0`) preserves both channels; moving left attenuates the right
+channel, and moving right attenuates the left. It does not sum them to mono.
+
+The limiter uses a shared peak detector for left and right, so gain reduction
+preserves stereo balance. It adds no lookahead delay. Gain reduction is applied
+immediately for an over-ceiling block; recovery follows the selected release.
 
 ## Usage
 
 ### Setting Output Level
 
-1. Start with volume at -6 dB
-2. Adjust based on mix requirements
-3. Watch for clipping indicator
-4. Leave headroom for mastering
+1. Set a comfortable output level.
+2. Watch the left and right peak meters while playing.
+3. Enable the limiter when you want output limiting.
 
 ### Gain Staging
 
 - **Oscillators**: Individual levels set in mixer
 - **Filter**: Can add or remove gain
 - **Effects**: Can boost or attenuate signal
-- **Master Volume**: Final output adjustment
+- **Master Volume and Limiter**: Final output adjustment and limiting
 
 ## Level Management
 

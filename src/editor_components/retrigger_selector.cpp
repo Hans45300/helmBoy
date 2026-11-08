@@ -57,20 +57,42 @@ void RetriggerSelector::mouseDown(const MouseEvent& e) {
 }
 
 void RetriggerSelector::paint(Graphics& g) {
-  g.setColour(Colour(Colors::Color_ffbbbbbb));
+  g.setColour(isActive() ? Colour(Colors::Color_ffbbbbbb)
+                         : Colour(Colors::Color_ff555555));
   g.fillRect(0, 0, getWidth(), getHeight());
+
+  if (modulation_active_) {
+    g.setColour(Colors::modulation.withAlpha(0.35f));
+    g.fillRect(getLocalBounds());
+  }
 
   g.setColour(Colour(Colors::Color_ff222222));
   g.fillPath(arrow_);
 
   g.setFont(Fonts::instance()->monospace());
-  int value = getValue() + 1;
+  int value = (modulation_active_ ? modulated_value_ : static_cast<int>(getValue())) + 1;
   if (value == kFree)
     g.drawText("F", getLocalBounds(), Justification::centred);
   else if (value == kRetrigger)
     g.drawText("R", getLocalBounds(), Justification::centred);
   else if (value == kSyncToPlayhead)
     g.drawText("S", getLocalBounds(), Justification::centred);
+}
+
+void RetriggerSelector::valueChanged() {
+  SynthSlider::valueChanged();
+  repaint();
+}
+
+void RetriggerSelector::setModulatedValue(float value) {
+  const int new_value = jlimit(0, static_cast<int>(getMaximum()), roundToInt(value));
+  const bool new_modulation_active = new_value != static_cast<int>(getValue());
+  if (modulation_active_ == new_modulation_active && modulated_value_ == new_value)
+    return;
+
+  modulated_value_ = new_value;
+  modulation_active_ = new_modulation_active;
+  repaint();
 }
 
 void RetriggerSelector::resized() {

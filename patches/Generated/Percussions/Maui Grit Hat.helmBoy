@@ -1,0 +1,32 @@
+{
+  "settings": {
+    "polyphony": 8,
+    "osc_1_waveform": 3.0,
+    "osc_1_volume": 0.2,
+    "osc_2_waveform": 5.0,
+    "osc_2_transpose": 24.0,
+    "osc_2_volume": 0.18,
+    "noise_volume": 0.58,
+    "noise_color": 0.76,
+    "filter_on": 1,
+    "filter_style": 1,
+    "cutoff": 97.0,
+    "resonance": 0.36,
+    "fil_env_depth": 38.0,
+    "fil_decay": 0.16,
+    "fil_sustain": 0.0,
+    "amp_attack": 0.001,
+    "amp_decay": 0.17,
+    "amp_sustain": 0.0,
+    "amp_release": 0.08,
+    "distortion_on": 1,
+    "distortion_drive": 4.0,
+    "distortion_type": 1.0,
+    "arp_on": 0,
+    "modulations": []
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Maui Grit Hat",
+  "folder_name": "Percussions",
+  "synth_version": "1.1.1"
+}

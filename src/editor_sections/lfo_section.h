@@ -27,11 +27,10 @@
  * @brief UI section for LFO controls and visualization.
  *
  * Declares LfoSection which hosts amplitude/frequency controls, a wave
- * selector and an OpenGL-based waveform preview used by modulation routing.
+ * selector and a JUCE CPU waveform preview used by modulation routing.
  */
 
 #include <JuceHeader.h>
-#include "open_gl_wave_viewer.h"
 #include "synth_section.h"
 #include "retrigger_selector.h"
 #include "tempo_selector.h"
@@ -63,12 +62,13 @@ class LfoSection : public SynthSection {
 
   private:
     bool can_animate_;
-    std::unique_ptr<OpenGLWaveViewer> wave_viewer_;
+    std::unique_ptr<WaveViewer> wave_viewer_;
     std::unique_ptr<WaveSelector> wave_selector_;
 
     std::unique_ptr<RetriggerSelector> retrigger_;
     std::unique_ptr<SynthSlider> amplitude_;
     std::unique_ptr<SynthSlider> frequency_;
+    std::unique_ptr<SynthSlider> phase_stretch_;
     std::unique_ptr<SynthSlider> phase_offset_;
     std::unique_ptr<SynthSlider> tempo_;
     std::unique_ptr<TempoSelector> sync_;

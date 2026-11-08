@@ -42,8 +42,10 @@ class GraphicalStepSequencer : public Component, public Timer, public Slider::Li
     void timerCallback() override;
     /** @brief Lie le slider qui contrôle le nombre de pas. */
     void setNumStepsSlider(SynthSlider* num_steps_slider);
+    /** @brief Définit le nombre de steps par mesure, ou zéro pour désactiver les repères. */
+    void setStepsPerMeasure(float steps_per_measure);
     /** @brief Définit les sliders représentant les pas. */
-    void setStepSliders(std::vector<Slider*> sliders);
+    void setStepSliders(std::vector<SynthSlider*> sliders);
     /** @brief Callback lorsque l'un des sliders change. */
     void sliderValueChanged(Slider* moved_slider) override;
     void guiChanged(SynthSlider* slider) override;
@@ -58,6 +60,7 @@ class GraphicalStepSequencer : public Component, public Timer, public Slider::Li
     void mouseExit(const MouseEvent& e) override;
     void mouseDown(const MouseEvent& e) override;
     void mouseDrag(const MouseEvent& e) override;
+    void mouseUp(const MouseEvent& e) override;
 
     bool keyPressed(const KeyPress& key) override;
     void focusGained(FocusChangeType cause) override;
@@ -70,12 +73,13 @@ class GraphicalStepSequencer : public Component, public Timer, public Slider::Li
     void ensureMinSize();
 
     int num_steps_;
+    float steps_per_measure_ = 0.0f;
     mopo::Output* step_generator_output_;
     int last_step_;
     SynthSlider* num_steps_slider_;
     int highlighted_step_;
     int selected_step_;
-    std::vector<Slider*> sequence_;
+    std::vector<SynthSlider*> sequence_;
     Point<int> last_edit_position_;
 
     Image background_;

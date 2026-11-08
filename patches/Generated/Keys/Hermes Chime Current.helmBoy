@@ -1,0 +1,43 @@
+{
+  "settings": {
+    "polyphony": 10,
+    "velocity_track": 0.35,
+    "osc_1_waveform": 0.0,
+    "osc_1_volume": 0.6,
+    "osc_2_waveform": 4.0,
+    "osc_2_transpose": 19.0,
+    "osc_2_volume": 0.3,
+    "cross_modulation": 0.17,
+    "filter_on": 1,
+    "filter_style": 0,
+    "cutoff": 86.0,
+    "resonance": 0.29,
+    "fil_env_depth": 17,
+    "fil_decay": 0.72,
+    "fil_sustain": 0.1,
+    "amp_attack": 0.002,
+    "amp_decay": 1.2,
+    "amp_sustain": 0.07,
+    "amp_release": 0.9,
+    "chorus_on": 1,
+    "chorus_rate": 0.58,
+    "chorus_depth": 0.2,
+    "chorus_mix": 0.34,
+    "reverb_on": 1,
+    "reverb_dry_wet": 0.24,
+    "delay_on": 0,
+    "arp_on": 0,
+    "modulations": [
+      {
+        "amount": 10.0,
+        "destination": "cutoff",
+        "source": "velocity"
+      }
+    ],
+    "lfo_tempo_index_version": 2
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Hermes Chime Current",
+  "folder_name": "Keys",
+  "synth_version": "1.1.1"
+}

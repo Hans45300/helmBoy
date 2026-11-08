@@ -35,6 +35,10 @@ Current version number and build date.
 
 Open from the main menu or click the helmBoy logo.
 
+## MIDI 2.0 Option
+
+The About window includes an option for explicit decoding of selected MIDI 2.0 UMP messages. The decoder handles Note On/Off, Control Change, and Pitch Bend packets. Native MIDI 2.0 UMP input from plug-in hosts is not connected, so enabling this option does not enable host UMP input.
+
 ## See Also
 
 - [Main Logo](main-logo.md)

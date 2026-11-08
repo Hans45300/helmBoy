@@ -1,9 +1,9 @@
 <map id="ModulationSlider" name="ModulationSlider">
-<area shape="rect" id="Node000001" title=" " alt="" coords="70,752,219,928"/>
-<area shape="rect" id="Node000002" href="$classSynthSlider.html" title="Custom slider control for synthesis parameters." alt="" coords="5,123,142,704"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,718,133,752,127,753,122,719"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="52,5,96,75"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="76,89,76,123,71,123,71,89"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="166,379,264,448"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="210,463,162,753,156,752,205,462"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="109,976,258,1173"/>
+<area shape="rect" id="Node000002" href="$classSynthSlider.html" title="Custom slider control for synthesis parameters." alt="" coords="5,123,194,928"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,940,172,977,166,976,163,945"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="78,5,122,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="100,87,102,123,97,123,100,92"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="219,491,317,560"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="263,574,209,928,202,977,197,975,204,928,258,576"/>
 </map>

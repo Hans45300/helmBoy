@@ -1,0 +1,60 @@
+{
+  "settings": {
+    "polyphony": 1,
+    "legato": 1,
+    "num_steps": 16,
+    "step_frequency": 0.25,
+    "step_smoothing": 0.01,
+    "step_seq_00": 0.0,
+    "step_seq_01": 0.7,
+    "step_seq_02": -0.35,
+    "step_seq_03": 0.45,
+    "step_seq_04": 0.9,
+    "step_seq_05": -0.1,
+    "step_seq_06": 0.25,
+    "step_seq_07": -0.65,
+    "step_seq_08": 0.5,
+    "step_seq_09": -0.25,
+    "step_seq_10": 0.8,
+    "step_seq_11": 0.15,
+    "step_seq_12": -0.5,
+    "step_seq_13": 0.35,
+    "step_seq_14": 0.6,
+    "step_seq_15": -0.2,
+    "osc_1_waveform": 2.0,
+    "osc_1_phase_stretch": 0.38,
+    "osc_1_volume": 0.6,
+    "osc_2_waveform": 4.0,
+    "osc_2_tune": 0.04,
+    "osc_2_volume": 0.38,
+    "filter_on": 1,
+    "filter_style": 1,
+    "cutoff": 62.0,
+    "resonance": 0.3,
+    "amp_attack": 0.004,
+    "amp_decay": 0.8,
+    "amp_sustain": 0.62,
+    "amp_release": 0.2,
+    "arp_on": 1,
+    "arp_pattern": 1,
+    "arp_sync": 1,
+    "arp_tempo": 9.0,
+    "arp_octaves": 2,
+    "modulations": [
+      {
+        "amount": 0.22,
+        "destination": "osc_2_tune",
+        "source": "step_sequencer"
+      },
+      {
+        "amount": 14.0,
+        "destination": "cutoff",
+        "source": "step_sequencer_step"
+      }
+    ]
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Voltage Etude",
+  "folder_name": "Advanced",
+  "synth_version": "1.1.1"
+}

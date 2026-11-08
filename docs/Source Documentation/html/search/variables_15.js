@@ -1,6 +1,28 @@
 var searchData=
 [
-  ['x_5f_0',['x_',['../classFormantSection.html#ac4890431ea2c21bb9081b9e9c50d6289',1,'FormantSection']]],
-  ['x_5fslider_5f_1',['x_slider_',['../classXYPad.html#a83548d8f630afa0e71d485b8c5c31721',1,'XYPad']]],
-  ['xy_5fpad_5f_2',['xy_pad_',['../classFormantSection.html#ad46f65c4dc74015e0e0f1f84effa6696',1,'FormantSection']]]
+  ['v_5f_0',['v_',['../classmopo_1_1LadderFilter.html#ade79e59d4314e01f1e6f0cf90e25b510',1,'mopo::LadderFilter']]],
+  ['valid_1',['valid',['../structLoadSave_1_1PreparedSynthState.html#acd2f1b088a4e3e2b86f5401152b19912',1,'LoadSave::PreparedSynthState']]],
+  ['value_2',['value',['../structhelmboy_1_1Midi2Manager_1_1UMPEvent.html#aaf355305157478ba39a396d1b9ace160',1,'helmboy::Midi2Manager::UMPEvent']]],
+  ['value_5f_3',['value_',['../classValueBridge.html#a218e7db8a8e81aa44ba8574b7030fbe4',1,'ValueBridge::value_'],['../classmopo_1_1TriggerRandom.html#a1001c5264131e650ca2ce905fc03b6aa',1,'mopo::TriggerRandom::value_'],['../classmopo_1_1TriggerEquals.html#aa909c6030409a3adbf3d5256510a3426',1,'mopo::TriggerEquals::value_'],['../classmopo_1_1Value.html#a2c96d719156050fa2badf13f8a03dbca',1,'mopo::Value::value_']]],
+  ['value_5fchange_5fqueue_5f_4',['value_change_queue_',['../classSynthBase.html#a6559049d9359a1336b5adfe692f0f903',1,'SynthBase']]],
+  ['value_5ftext_5f_5',['value_text_',['../classGlobalToolTip.html#aea4dd7b161dcb1de85ff422ba22109a3',1,'GlobalToolTip']]],
+  ['values_6',['values',['../structSynthBase_1_1GuiControlTable.html#ae40b9a8c7e9e1498b23ef5d742fef486',1,'SynthBase::GuiControlTable::values'],['../structSynthBase_1_1VisualTelemetryTable.html#a8f0f22c8258d0a795d8af56bc9e9842c',1,'SynthBase::VisualTelemetryTable::values']]],
+  ['velocity_7',['velocity',['../structmopo_1_1VoiceState.html#ad843945f129547dcd18bed18a39ecfea',1,'mopo::VoiceState']]],
+  ['velocity_5f_8',['velocity_',['../classmopo_1_1VoiceHandler.html#ab349b86af0d8eddf46d66a62e580783c',1,'mopo::VoiceHandler']]],
+  ['velocity_5fmod_5f_9',['velocity_mod_',['../classExtraModSection.html#a37ae1a079a6268b999f4fd9e2ea2c56f',1,'ExtraModSection']]],
+  ['velocity_5ftrack_5f_10',['velocity_track_',['../classVoiceSection.html#a145483eb2153643d4bf07bdc9b640da0',1,'VoiceSection']]],
+  ['visible_5f_11',['visible_',['../classHelmBoyApplication_1_1MainWindow.html#a7074c20ad2ae8e0282786124d96ee5d2',1,'HelmBoyApplication::MainWindow']]],
+  ['visual_5fpeak_5fsource_5f_12',['visual_peak_source_',['../classSynthBase.html#a6a59fa028e5bed247ead28f06d91d424',1,'SynthBase']]],
+  ['visual_5fpeaks_5f_13',['visual_peaks_',['../classSynthBase.html#a6109100bd51cb0fd3cf75307347c165d',1,'SynthBase']]],
+  ['visual_5ftelemetry_5fsources_5f_14',['visual_telemetry_sources_',['../classmopo_1_1HelmBoyModule.html#ab447dbec0f4530c8a6570dcb6510cc08',1,'mopo::HelmBoyModule']]],
+  ['visual_5ftelemetry_5ftable_5f_15',['visual_telemetry_table_',['../classSynthBase.html#aac071f20983330272e6b1188067e80dd',1,'SynthBase']]],
+  ['visual_5ftelemetry_5ftables_5f_16',['visual_telemetry_tables_',['../classSynthBase.html#a6e33fa063454ca7a1a40634619459e23',1,'SynthBase']]],
+  ['voice_5fevent_5f_17',['voice_event_',['../classmopo_1_1VoiceHandler.html#a4faa9ad8f1e2765fbfa9e5adeee5a42b',1,'mopo::VoiceHandler']]],
+  ['voice_5fhandler_5f_18',['voice_handler_',['../classmopo_1_1HelmBoyEngine.html#a38c5bc09523675fe9831fe4dd33dbbcd',1,'mopo::HelmBoyEngine']]],
+  ['voice_5fkill_5ftime_19',['VOICE_KILL_TIME',['../namespacemopo.html#a8725ce27421f5f0184ba26255fbbd85f',1,'mopo']]],
+  ['voice_5fkiller_5f_20',['voice_killer_',['../classmopo_1_1VoiceHandler.html#a2ffd4feefd880f367743ef8d87e2055f',1,'mopo::VoiceHandler']]],
+  ['voice_5frouter_5f_21',['voice_router_',['../classmopo_1_1VoiceHandler.html#a82d8953143847859b18a5d71478bc799',1,'mopo::VoiceHandler']]],
+  ['voice_5fsection_5f_22',['voice_section_',['../classSynthesisInterface.html#ad9997e21cfd8b9e903feebc79e376418',1,'SynthesisInterface']]],
+  ['volume_5f_23',['volume_',['../classNoiseSection.html#a4f8a5cd6d22992d1fd54b14cb3b59911',1,'NoiseSection::volume_'],['../classVolumeSection.html#a5fd8caca5c13e01a670d1f44c5f7c6a6',1,'VolumeSection::volume_']]],
+  ['volume_5fsection_5f_24',['volume_section_',['../classFullInterface.html#a0297914e5c587471bc635d86c8ef5f46',1,'FullInterface']]]
 ];

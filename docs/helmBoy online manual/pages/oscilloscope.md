@@ -4,20 +4,20 @@
 
 ![Oscilloscope section example](../pictures/Oscilloscope.png)
 
-Real-time visual display of the output waveform.
+The oscilloscope displays a live trace of the synthesizer output waveform.
 
 ## Features
 
-- **Waveform Display**: Shows the actual synthesized waveform
-- **Trigger Mode**: Stable waveform display synchronized to input
-- **Zoom Controls**: Adjust time and amplitude scale
-- **Freeze**: Capture and hold current waveform
+- **Live waveform display**: Shows a sampled snapshot of the current output
+- **Grid**: Provides a visual reference for the trace
 
 ## Usage
 
-The oscilloscope helps visualize:
+Use the display to inspect:
 
 - Oscillator waveforms and their combinations
 - Filter effects on the signal
 - Modulation effects
 - Overall output signal shape
+
+The oscilloscope is a display only; it has no trigger, zoom, or freeze controls.

@@ -1,0 +1,43 @@
+{
+  "settings": {
+    "polyphony": 8,
+    "osc_1_waveform": 2.0,
+    "osc_1_volume": 0.6,
+    "osc_2_waveform": 4.0,
+    "osc_2_tune": 0.04,
+    "osc_2_volume": 0.4,
+    "filter_on": 1,
+    "filter_style": 1,
+    "cutoff": 58.0,
+    "resonance": 0.28,
+    "filter_drive": 4.0,
+    "amp_attack": 0.005,
+    "amp_decay": 0.68,
+    "amp_sustain": 0.52,
+    "amp_release": 0.22,
+    "distortion_on": 1,
+    "distortion_type": 1.0,
+    "distortion_drive": 2.5,
+    "delay_on": 1,
+    "delay_sync": 1,
+    "delay_tempo": 8.0,
+    "delay_feedback": 0.2,
+    "delay_dry_wet": 0.13,
+    "modulations": [
+      {
+        "amount": 28.0,
+        "destination": "cutoff",
+        "source": "peak_meter"
+      },
+      {
+        "amount": 0.12,
+        "destination": "ring_modulation",
+        "source": "peak_meter"
+      }
+    ]
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Peak Reactor",
+  "folder_name": "Advanced",
+  "synth_version": "1.1.1"
+}

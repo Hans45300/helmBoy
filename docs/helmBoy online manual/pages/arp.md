@@ -35,22 +35,10 @@ Direction and order of arpeggiated notes:
 - **Up**: Low to high
 - **Down**: High to low
 - **Up/Down**: Low to high, then high to low
-- **Random**: Random order
 - **As Played**: Order notes were pressed
+- **Random**: Random order
 
-## Arpeggiator Modes
-
-### Hold
-
-Continue arpeggiation when keys are released.
-
-### Latch
-
-Lock the arpeggio pattern until new notes are played.
-
-### One Shot
-
-Play pattern once, then stop.
+The arpeggiator controls are **On**, **Frequency**, **Sync**, **Gate**, **Octaves**, and **Pattern**. It does not have separate Hold, Latch, or One Shot modes.
 
 ## Applications
 

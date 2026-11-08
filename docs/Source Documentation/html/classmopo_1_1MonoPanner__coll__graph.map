@@ -1,0 +1,11 @@
+<map id="mopo::MonoPanner" name="mopo::MonoPanner">
+<area shape="rect" id="Node000001" title="Processeur qui s�pare un signal mono en deux signaux (gauche/droite) selon un panoramique." alt="" coords="5,797,129,931"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="158,5,309,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,518,144,574,86,798,81,797,139,573,159,513"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="153,573,314,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="229,514,231,525,231,574,226,573,226,525,228,519"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="345,744,445,984"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="299,499,317,548,328,572,352,650,371,728,366,728,347,651,323,574,312,550,298,504"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="231,573,233,521,234,515,236,574"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="396,743,389,637,381,581,369,526,345,458,317,395,317,390,350,456,374,525,386,580,394,636,401,745"/>
+</map>

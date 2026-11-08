@@ -1,5 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,5,127,32"/>
-<area shape="rect" id="Node000001" href="$classHelmBoyApplication.html" title=" " alt="" coords="175,5,314,32"/>
-<area shape="poly" id="edge23_Node000000_Node000001" title=" " alt="" coords="142,16,174,16,174,21,142,21"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,31,158,57"/>
+<area shape="rect" id="Node000001" href="$classBrowserLookAndFeel.html" title=" " alt="" coords="206,5,351,32"/>
+<area shape="poly" id="edge105_Node000000_Node000001" title=" " alt="" coords="173,30,208,27,203,29,174,35"/>
+<area shape="rect" id="Node000002" href="$classDefaultLookAndFeel.html" title="Default visual styling for HelmBoy synthesizer interface." alt="" coords="209,56,348,83"/>
+<area shape="poly" id="edge106_Node000000_Node000002" title=" " alt="" coords="173,53,211,60,206,61,173,58"/>
+<area shape="rect" id="Node000003" href="$classTextLookAndFeel.html" title=" " alt="" coords="399,56,521,83"/>
+<area shape="poly" id="edge107_Node000002_Node000003" title=" " alt="" coords="363,67,401,69,396,69,363,72"/>
 </map>

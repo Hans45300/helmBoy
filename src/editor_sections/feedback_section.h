@@ -28,6 +28,7 @@
  */
 
 #include <JuceHeader.h>
+#include <array>
 #include "synth_section.h"
 #include "synth_slider.h"
 
@@ -49,9 +50,7 @@ class FeedbackSection : public SynthSection {
     void resized() override;
 
   private:
-    std::unique_ptr<SynthSlider> transpose_;
-    std::unique_ptr<SynthSlider> tune_;
-    std::unique_ptr<SynthSlider> amount_;
+    std::array<std::array<std::unique_ptr<SynthSlider>, 3>, 3> feedback_controls_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FeedbackSection)
 };

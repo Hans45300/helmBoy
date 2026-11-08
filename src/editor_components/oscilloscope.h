@@ -28,7 +28,10 @@
  */
 
 #include <JuceHeader.h>
-#include "memory.h"
+#include <array>
+#include "helmBoy_common.h"
+
+class SynthBase;
 
 /**
  * @brief Real-time audio waveform visualization component
@@ -60,9 +63,9 @@
  * @section scope_integration System Integration
  *
  * ```cpp
- * // Typical oscilloscope setup
+ * // Legacy raw-buffer hookup; keep the supplied storage alive while in use.
  * Oscilloscope* scope = new Oscilloscope();
- * scope->setOutputMemory(synthEngine->getOutputBuffer());
+ * scope->setOutputMemory(callerOwnedSnapshot);
  * scope->showRealtimeFeedback(true);
  *
  * // The oscilloscope automatically updates from the audio buffer
@@ -75,7 +78,7 @@
  * - **Efficient Path Updates**: Only redraws when necessary
  * - **Background Caching**: Reduces redraw overhead
  * - **Timer-based Updates**: Controlled refresh rate
- * - **Memory Sharing**: Direct access to synthesis engine buffers
+ * - **Memory Ownership**: Caller-owned waveform snapshot (legacy API)
  * - **SIMD-friendly Operations**: Vectorized path generation
  *
  * @section visual_customization Visual Customization
@@ -90,7 +93,6 @@
  * @see Timer
  * @see Component
  * @see HelmBoyEngine
- * @see OpenGLOscilloscope
  */
 class Oscilloscope : public Component, public Timer {
   public:
@@ -101,15 +103,21 @@ class Oscilloscope : public Component, public Timer {
     void paint(Graphics& g) override;
     void paintBackground(Graphics& g);
     void resized() override;
+    void moved() override;
 
     void resetWavePath();
+    void setOutputMemorySource(SynthBase* synth) { synth_ = synth; }
+    [[deprecated("Unsafe raw buffer; provide an owned snapshot")]]
     void setOutputMemory(const float* memory) { output_memory_ = memory; }
     void showRealtimeFeedback(bool show_feedback = true);
 
   private:
     const float* output_memory_;
+    SynthBase* synth_ = nullptr;
+    std::array<float, 2 * mopo::MEMORY_RESOLUTION> output_snapshot_ {};
     Path wave_path_;
     Image background_;
+    float background_scale_ = 0.0f;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Oscilloscope)
 };

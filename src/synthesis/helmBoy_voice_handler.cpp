@@ -30,13 +30,19 @@
 #include "trigger_random.h"
 #include "value_switch.h"
 
+#include <JuceHeader.h>
+#include "startup_trace.h"
+#include <stdexcept>
 #include <sstream>
+#include <string>
 
 #define PITCH_MOD_RANGE 12
 #define MIN_GAIN_DB -24.0
 #define MAX_GAIN_DB 24.0
 
 #define MAX_FEEDBACK_SAMPLES 8000
+
+#define appendStartupTraceVoiceHandler(message) HELMBOY_STARTUP_TRACE("startup_trace.log", message)
 
 namespace mopo {
 
@@ -112,45 +118,81 @@ namespace mopo {
   }
 
   void HelmBoyVoiceHandler::init() {
-    // Create modulation and pitch wheels per channel.
-  choose_pitch_wheel_ = new Gate();
-  // Correction�: Gate::Inputs::Choice n'existe pas, remplacer par l'entr�e appropri�e ou commenter si non utilis�
-  // TODO: Remplacer par l'entr�e correcte si besoin
-
-  Gate* choose_mod_wheel = new Gate();
-  // Correction�: Gate::Inputs::Choice n'existe pas, remplacer par l'entr�e appropri�e ou commenter si non utilis�
-  // TODO: Remplacer par l'entr�e correcte si besoin
-
-    for (auto i = 0; i < mopo::NUM_MIDI_CHANNELS; ++i) {
-      pitch_wheel_amounts_[i] = new cr::Value(0);
-      choose_pitch_wheel_->plugNext(pitch_wheel_amounts_[i]);
-
-      mod_wheel_amounts_[i] = new cr::Value(0);
-      choose_mod_wheel->plugNext(mod_wheel_amounts_[i]);
-
-      addGlobalProcessor(pitch_wheel_amounts_[i]);
-      addGlobalProcessor(mod_wheel_amounts_[i]);
+    const std::lock_guard<std::mutex> initLock(init_mutex_);
+    if (init_done_.load(std::memory_order_acquire)) {
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init already done");
+      return;
     }
 
-    getMonoRouter()->addProcessor(choose_pitch_wheel_);
-    getMonoRouter()->addProcessor(choose_mod_wheel);
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init start");
+
+    try {
+
+    // Create modulation and pitch wheels per channel.
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init wheels start");
+    choose_pitch_wheel_ = new Gate();
+    if (choose_pitch_wheel_ == nullptr)
+      throw std::runtime_error("HelmBoyVoiceHandler::init: choose_pitch_wheel allocation failed");
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init wheels choose_pitch_wheel alloc done");
+    choose_pitch_wheel_->plug(channel(), Gate::kChoice);
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init wheels choose_pitch_wheel choice plug done");
+
+    for (auto i = 0; i < mopo::NUM_MIDI_CHANNELS; ++i) {
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init wheels loop i=" + juce::String(i) + " pitch alloc start");
+      pitch_wheel_amounts_[i] = new cr::Value(0);
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init wheels loop i=" + juce::String(i) + " pitch alloc done");
+      choose_pitch_wheel_->plugNext(pitch_wheel_amounts_[i]);
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init wheels loop i=" + juce::String(i) + " pitch plugNext done");
+
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init wheels loop i=" + juce::String(i) + " mod alloc start");
+      mod_wheel_amounts_[i] = new cr::Value(0);
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init wheels loop i=" + juce::String(i) + " mod alloc done");
+
+      addGlobalProcessor(pitch_wheel_amounts_[i]);
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init wheels loop i=" + juce::String(i) + " addGlobalProcessor pitch done");
+      addGlobalProcessor(mod_wheel_amounts_[i]);
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init wheels loop i=" + juce::String(i) + " addGlobalProcessor mod done");
+    }
+
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init wheels addGlobalProcessor choose_pitch_wheel start");
+    addGlobalProcessor(choose_pitch_wheel_);
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init wheels addGlobalProcessor choose_pitch_wheel done");
 
     mod_sources_["pitch_wheel"] = choose_pitch_wheel_->output();
-    mod_sources_["mod_wheel"] = choose_mod_wheel->output();
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init wheels mod source pitch set");
+    mod_sources_["mod_wheel"] = mod_wheel_amounts_[0]->output();
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init wheels mod source mod set (fallback ch0)");
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init wheels done");
 
     // Create all synthesizer voice components.
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init createArticulation start");
     createArticulation(note(), last_note(), velocity(), voice_event());
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init createArticulation done");
+
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init createOscillators start");
   createOscillators(current_frequency_->output(),
             amplitude_envelope_->output(static_cast<int>(Envelope::Outputs::Finished)));
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init createOscillators done");
+
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init createModulators start");
   createModulators(amplitude_envelope_->output(static_cast<int>(Envelope::Outputs::Finished)));
-  createFilter(osc_feedback_->output(0), note_from_center_->output(),
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init createModulators done");
+
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init createFilter start");
+  createFilter(osc_feedback_sum_->output(0), note_from_center_->output(),
          amplitude_envelope_->output(static_cast<int>(Envelope::Outputs::Finished)));
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init createFilter done");
 
-    Value* aftertouch_value = new cr::Value();
-    aftertouch_value->plug(aftertouch());
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init aftertouch start");
+    Value* channel_aftertouch_value = new cr::Value();
+    channel_aftertouch_value->plug(channel_aftertouch());
+    Value* poly_aftertouch_value = new cr::Value();
+    poly_aftertouch_value->plug(aftertouch());
 
-    addProcessor(aftertouch_value);
-    mod_sources_["aftertouch"] = aftertouch_value->output();
+    addProcessor(channel_aftertouch_value);
+    addProcessor(poly_aftertouch_value);
+    mod_sources_["channel_aftertouch"] = channel_aftertouch_value->output();
+    mod_sources_["poly_aftertouch"] = poly_aftertouch_value->output();
 
     output_->plug(formant_container_, 0);
     output_->plug(amplitude_, 1);
@@ -158,12 +200,31 @@ namespace mopo {
     addProcessor(output_);
 
   setVoiceKiller(amplitude_->output());
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init aftertouch sources/output done");
 
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init submodule init start");
     HelmBoyModule::init();
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init submodule init done");
+
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init setupPolyModulationReadouts start");
     setupPolyModulationReadouts();
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init setupPolyModulationReadouts done");
+    init_done_.store(true, std::memory_order_release);
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init done");
+    }
+    catch (const std::exception& ex) {
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init exception: " + juce::String(ex.what()));
+      throw;
+    }
+    catch (...) {
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::init unknown exception");
+      throw std::runtime_error("HelmBoyVoiceHandler::init unknown exception");
+    }
   }
 
   void HelmBoyVoiceHandler::createOscillators(Output* midi, Output* reset) {
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createOscillators begin");
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createOscillators pitch bend start");
     // Pitch bend.
     Output* pitch_bend_range = createPolyModControl("pitch_bend_range", true);
     cr::Multiply* pitch_bend = new cr::Multiply();
@@ -175,7 +236,9 @@ namespace mopo {
 
     addProcessor(pitch_bend);
     addProcessor(bent_midi);
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createOscillators pitch bend done");
 
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createOscillators oscillator 1 start");
     // Oscillator 1.
     HelmBoyOscillators* oscillators = new HelmBoyOscillators();
     Output* oscillator1_waveform = createPolyModControl("osc_1_waveform", true);
@@ -217,19 +280,44 @@ namespace mopo {
     Output* ring_mod = createPolyModControl("ring_modulation", true);
     oscillators->plug(ring_mod, static_cast<int>(HelmBoyOscillators::Inputs::kRingMod));
 
+    Output* ring_mod_osc1_level = createPolyModControl("ring_mod_osc1_level", true);
+    LinearSmoothBuffer* smooth_ring_mod_osc1_level = new LinearSmoothBuffer();
+    smooth_ring_mod_osc1_level->plug(ring_mod_osc1_level, 0);
+    smooth_ring_mod_osc1_level->plug(reset, 1);
+    oscillators->plug(smooth_ring_mod_osc1_level,
+              static_cast<int>(HelmBoyOscillators::Inputs::kRingModOscillator1Amplitude));
+
+    Output* ring_mod_osc2_level = createPolyModControl("ring_mod_osc2_level", true);
+    LinearSmoothBuffer* smooth_ring_mod_osc2_level = new LinearSmoothBuffer();
+    smooth_ring_mod_osc2_level->plug(ring_mod_osc2_level, 0);
+    smooth_ring_mod_osc2_level->plug(reset, 1);
+    oscillators->plug(smooth_ring_mod_osc2_level,
+              static_cast<int>(HelmBoyOscillators::Inputs::kRingModOscillator2Amplitude));
+
     Output* phase_stretch_1 = createPolyModControl("osc_1_phase_stretch", true);
     oscillators->plug(phase_stretch_1, static_cast<int>(HelmBoyOscillators::Inputs::kPhaseStretch1));
+    oscillators->plug(createPolyModControl("osc_1_phase_offset", true),
+              static_cast<int>(HelmBoyOscillators::Inputs::kOscillator1PhaseOffset));
 
     Output* phase_stretch_2 = createPolyModControl("osc_2_phase_stretch", true);
     oscillators->plug(phase_stretch_2, static_cast<int>(HelmBoyOscillators::Inputs::kPhaseStretch2));
+    oscillators->plug(createPolyModControl("osc_2_phase_offset", true),
+              static_cast<int>(HelmBoyOscillators::Inputs::kOscillator2PhaseOffset));
+
+    Output* hard_sync = createPolyModControl("osc_hard_sync", true);
+    oscillators->plug(hard_sync, static_cast<int>(HelmBoyOscillators::Inputs::kHardSync));
 
     addProcessor(oscillator1_transposed);
     addProcessor(oscillator1_midi);
     addProcessor(oscillator1_frequency);
     addProcessor(oscillator1_phase_inc);
     addProcessor(oscillator1_phase_inc_smooth);
+    addProcessor(smooth_ring_mod_osc1_level);
+    addProcessor(smooth_ring_mod_osc2_level);
     addProcessor(oscillators);
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createOscillators oscillator 1 done");
 
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createOscillators oscillator 2 start");
     // Oscillator 2.
     Output* oscillator2_waveform = createPolyModControl("osc_2_waveform", true);
     Output* oscillator2_transpose = createPolyModControl("osc_2_transpose", true);
@@ -265,8 +353,10 @@ namespace mopo {
     addProcessor(oscillator2_frequency);
     addProcessor(oscillator2_phase_inc);
     addProcessor(oscillator2_phase_inc_smooth);
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createOscillators oscillator 2 done");
 
     // Oscillator mix.
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createOscillators mix start");
     Output* osc_1_amplitude = createPolyModControl("osc_1_volume", true);
     LinearSmoothBuffer* smooth_osc_1_amp = new LinearSmoothBuffer();
   smooth_osc_1_amp->plug(osc_1_amplitude, 0);
@@ -281,8 +371,10 @@ namespace mopo {
 
     addProcessor(smooth_osc_1_amp);
     addProcessor(smooth_osc_2_amp);
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createOscillators mix done");
 
     // Sub Oscillator.
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createOscillators sub start");
     cr::Add* sub_midi = new cr::Add();
     static const cr::Value sub_transpose(-2 * NOTES_PER_OCTAVE);
     Value* sub_octave = createBaseControl("sub_octave");
@@ -312,77 +404,105 @@ namespace mopo {
 
     Output* sub_phase_stretch = createPolyModControl("sub_phase_stretch", true);
     sub_oscillator->plug(sub_phase_stretch, static_cast<int>(FixedPointOscillator::Inputs::kPhaseStretch));
+    sub_oscillator->plug(createPolyModControl("sub_phase_offset", true),
+               static_cast<int>(FixedPointOscillator::Inputs::kPhaseOffset));
 
     addProcessor(sub_midi);
     addProcessor(sub_frequency);
     addProcessor(sub_phase_inc);
     addProcessor(sub_oscillator);
     addProcessor(smooth_sub_volume);
-
-    Add *oscillator_sum = new Add();
-    oscillator_sum->plug(oscillators, 0);
-    oscillator_sum->plug(sub_oscillator, 1);
-
-    addProcessor(oscillator_sum);
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createOscillators sub done");
 
     // Noise Oscillator.
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createOscillators noise start");
     Output* noise_volume = createPolyModControl("noise_volume", true);
+    Output* noise_color = createPolyModControl("noise_color", true);
     NoiseOscillator* noise_oscillator = new NoiseOscillator();
   noise_oscillator->plug(reset, static_cast<int>(NoiseOscillator::Inputs::kReset));
   noise_oscillator->plug(noise_volume, static_cast<int>(NoiseOscillator::Inputs::kAmplitude));
+  noise_oscillator->plug(noise_color, static_cast<int>(NoiseOscillator::Inputs::kColor));
 
     addProcessor(noise_oscillator);
 
-    Add *oscillator_noise_sum = new Add();
-    oscillator_noise_sum->plug(oscillator_sum, 0);
-    oscillator_noise_sum->plug(noise_oscillator, 1);
+    Add* sub_noise_sum = new Add();
+    sub_noise_sum->plug(sub_oscillator, 0);
+    sub_noise_sum->plug(noise_oscillator, 1);
+    addProcessor(sub_noise_sum);
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createOscillators noise done");
 
-    addProcessor(oscillator_noise_sum);
+    // Keep the three feedback loops independent until they reach the filter.
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createOscillators feedback start");
+    const auto createFeedbackDelay = [this, bent_midi, reset](
+        Output* audio, const char* transpose_name, const char* tune_name,
+        const char* amount_name) {
+      Output* transpose = createPolyModControl(transpose_name, true);
+      Output* tune = createPolyModControl(tune_name, true);
+      Output* amount = createPolyModControl(amount_name, true);
 
-    // Oscillator feedback.
-    Output* osc_feedback_transpose = createPolyModControl("osc_feedback_transpose", true);
-    Output* osc_feedback_amount = createPolyModControl("osc_feedback_amount", true);
-    Output* osc_feedback_tune = createPolyModControl("osc_feedback_tune", true);
+      cr::Add* transposed = new cr::Add();
+      transposed->plug(bent_midi, 0);
+      transposed->plug(transpose, 1);
 
-    cr::Add* osc_feedback_transposed = new cr::Add();
-    osc_feedback_transposed->plug(bent_midi, 0);
-    osc_feedback_transposed->plug(osc_feedback_transpose, 1);
+      cr::Add* feedback_midi = new cr::Add();
+      feedback_midi->plug(transposed, 0);
+      feedback_midi->plug(tune, 1);
 
-    cr::Add* osc_feedback_midi = new cr::Add();
-    osc_feedback_midi->plug(osc_feedback_transposed, 0);
-    osc_feedback_midi->plug(osc_feedback_tune, 1);
+      cr::MidiScale* feedback_frequency = new cr::MidiScale();
+      feedback_frequency->plug(feedback_midi);
 
-    cr::MidiScale* osc_feedback_frequency = new cr::MidiScale();
-    osc_feedback_frequency->plug(osc_feedback_midi);
+      cr::FrequencyToSamples* feedback_samples = new cr::FrequencyToSamples();
+      feedback_samples->plug(feedback_frequency);
 
-    cr::FrequencyToSamples* osc_feedback_samples = new cr::FrequencyToSamples();
-    osc_feedback_samples->plug(osc_feedback_frequency);
+      LinearSmoothBuffer* feedback_samples_audio = new LinearSmoothBuffer();
+      feedback_samples_audio->plug(feedback_samples, 0);
+      feedback_samples_audio->plug(reset, 1);
 
-    LinearSmoothBuffer* osc_feedback_samples_audio = new LinearSmoothBuffer();
-  osc_feedback_samples_audio->plug(osc_feedback_samples, 0);
-  osc_feedback_samples_audio->plug(reset, 1);
-    addProcessor(osc_feedback_transposed);
-    addProcessor(osc_feedback_midi);
-    addProcessor(osc_feedback_frequency);
-    addProcessor(osc_feedback_samples);
-    addProcessor(osc_feedback_samples_audio);
+      cr::Clamp* feedback_amount_clamped = new cr::Clamp();
+      feedback_amount_clamped->plug(amount);
 
-    cr::Clamp* osc_feedback_amount_clamped = new cr::Clamp();
-    osc_feedback_amount_clamped->plug(osc_feedback_amount);
+      LinearSmoothBuffer* feedback_amount_audio = new LinearSmoothBuffer();
+      feedback_amount_audio->plug(feedback_amount_clamped, 0);
+      feedback_amount_audio->plug(reset, 1);
 
-    LinearSmoothBuffer* osc_feedback_amount_audio = new LinearSmoothBuffer();
-  osc_feedback_amount_audio->plug(osc_feedback_amount_clamped, 0);
-  osc_feedback_amount_audio->plug(reset, 1);
+      SimpleDelay* feedback = new SimpleDelay(MAX_FEEDBACK_SAMPLES);
+      feedback->plug(audio, static_cast<int>(SimpleDelay::Inputs::Audio));
+      feedback->plug(feedback_samples_audio,
+                     static_cast<int>(SimpleDelay::Inputs::SampleDelay));
+      feedback->plug(feedback_amount_audio,
+                     static_cast<int>(SimpleDelay::Inputs::Feedback));
+      feedback->plug(reset, static_cast<int>(SimpleDelay::Inputs::Reset));
 
-    osc_feedback_ = new SimpleDelay(MAX_FEEDBACK_SAMPLES);
-  osc_feedback_->plug(oscillator_noise_sum, static_cast<int>(SimpleDelay::Inputs::Audio));
-  osc_feedback_->plug(osc_feedback_samples_audio, static_cast<int>(SimpleDelay::Inputs::SampleDelay));
-  osc_feedback_->plug(osc_feedback_amount_audio, static_cast<int>(SimpleDelay::Inputs::Feedback));
-  osc_feedback_->plug(reset, static_cast<int>(SimpleDelay::Inputs::Reset));
+      addProcessor(transposed);
+      addProcessor(feedback_midi);
+      addProcessor(feedback_frequency);
+      addProcessor(feedback_samples);
+      addProcessor(feedback_samples_audio);
+      addProcessor(feedback_amount_clamped);
+      addProcessor(feedback_amount_audio);
+      addProcessor(feedback);
+      return feedback;
+    };
 
-    addProcessor(osc_feedback_);
-    addProcessor(osc_feedback_amount_clamped);
-    addProcessor(osc_feedback_amount_audio);
+    osc_feedback_ = createFeedbackDelay(oscillators->getOscillator1Output(),
+        "osc_feedback_transpose", "osc_feedback_tune", "osc_feedback_amount");
+    osc_2_feedback_ = createFeedbackDelay(oscillators->getOscillator2Output(),
+        "osc_2_feedback_transpose", "osc_2_feedback_tune", "osc_2_feedback_amount");
+    sub_noise_feedback_ = createFeedbackDelay(sub_noise_sum->output(),
+        "sub_noise_feedback_transpose", "sub_noise_feedback_tune",
+        "sub_noise_feedback_amount");
+
+    Add* feedback_sum = new Add();
+    feedback_sum->plug(osc_feedback_, 0);
+    feedback_sum->plug(osc_2_feedback_, 1);
+    Add* complete_feedback_sum = new Add();
+    complete_feedback_sum->plug(feedback_sum, 0);
+    complete_feedback_sum->plug(sub_noise_feedback_, 1);
+    osc_feedback_sum_ = complete_feedback_sum;
+    addProcessor(feedback_sum);
+    addProcessor(complete_feedback_sum);
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createOscillators feedback done");
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createOscillators end");
   }
 
   void HelmBoyVoiceHandler::createModulators(Output* reset) {
@@ -392,10 +512,12 @@ namespace mopo {
     Output* lfo_free_amplitude_1 = createPolyModControl("poly_lfo_1_amplitude", true);
     Output* lfo_frequency_1 = createTempoSyncSwitch("poly_lfo_1", lfo_free_frequency_1->owner,
                                                   beats_per_second_, true);
-    poly_lfo_1_ = new HelmBoyLfo();
+    poly_lfo_1_ = new HelmBoyLfo(0xd1b54a35U);
     poly_lfo_1_->plug(reset, static_cast<int>(HelmBoyLfo::Inputs::kReset));
     poly_lfo_1_->plug(lfo_waveform_1, static_cast<int>(HelmBoyLfo::Inputs::kWaveform));
     poly_lfo_1_->plug(lfo_frequency_1, static_cast<int>(HelmBoyLfo::Inputs::kFrequency));
+    poly_lfo_1_->plug(createPolyModControl("poly_lfo_1_phase_offset", true),
+              static_cast<int>(HelmBoyLfo::Inputs::kPhase));
     Output* lfo_phase_stretch_1 = createPolyModControl("poly_lfo_1_phase_stretch", true);
     poly_lfo_1_->plug(lfo_phase_stretch_1, static_cast<int>(HelmBoyLfo::Inputs::kPhaseStretch));
 
@@ -408,6 +530,11 @@ namespace mopo {
     mod_sources_["poly_lfo_1"] = scaled_lfo_1->output();
     mod_sources_["poly_lfo_1_amp"] = registerOutput(scaled_lfo_1->output());
     mod_sources_["poly_lfo_1_phase"] = registerOutput(poly_lfo_1_->output(static_cast<int>(Oscillator::Outputs::OscPhase)));
+    visual_telemetry_sources_["poly_lfo_1_display_phase"] =
+      registerOutput(poly_lfo_1_->output(HelmBoyLfo::Outputs::kVisualPhase));
+    for (int index = 0; index < 5; ++index)
+      visual_telemetry_sources_["poly_lfo_1_random_point_" + std::to_string(index)] =
+          registerOutput(poly_lfo_1_->output(HelmBoyLfo::Outputs::kRandomPoint0 + index));
 
     // Poly LFO 2.
     Output *lfo_waveform_2 = createPolyModControl("poly_lfo_2_waveform", true);
@@ -415,10 +542,12 @@ namespace mopo {
     Output *lfo_free_amplitude_2 = createPolyModControl("poly_lfo_2_amplitude", true);
     Output *lfo_frequency_2 = createTempoSyncSwitch("poly_lfo_2", lfo_free_frequency_2->owner,
                                                     beats_per_second_, true);
-    poly_lfo_2_ = new HelmBoyLfo();
+    poly_lfo_2_ = new HelmBoyLfo(0x94d049bbU);
     poly_lfo_2_->plug(reset, static_cast<int>(HelmBoyLfo::Inputs::kReset));
     poly_lfo_2_->plug(lfo_waveform_2, static_cast<int>(HelmBoyLfo::Inputs::kWaveform));
     poly_lfo_2_->plug(lfo_frequency_2, static_cast<int>(HelmBoyLfo::Inputs::kFrequency));
+    poly_lfo_2_->plug(createPolyModControl("poly_lfo_2_phase_offset", true),
+              static_cast<int>(HelmBoyLfo::Inputs::kPhase));
     Output* lfo_phase_stretch_2 = createPolyModControl("poly_lfo_2_phase_stretch", true);
     poly_lfo_2_->plug(lfo_phase_stretch_2, static_cast<int>(HelmBoyLfo::Inputs::kPhaseStretch));
 
@@ -432,24 +561,48 @@ namespace mopo {
     mod_sources_["poly_lfo_2"] = scaled_lfo_2->output();
     mod_sources_["poly_lfo_2_amp"] = registerOutput(scaled_lfo_2->output());
     mod_sources_["poly_lfo_2_phase"] = registerOutput(poly_lfo_2_->output(static_cast<int>(Oscillator::Outputs::OscPhase)));
+    visual_telemetry_sources_["poly_lfo_2_display_phase"] =
+      registerOutput(poly_lfo_2_->output(HelmBoyLfo::Outputs::kVisualPhase));
+    for (int index = 0; index < 5; ++index)
+      visual_telemetry_sources_["poly_lfo_2_random_point_" + std::to_string(index)] =
+          registerOutput(poly_lfo_2_->output(HelmBoyLfo::Outputs::kRandomPoint0 + index));
 
-    // Extra Envelope.
-    Output* mod_attack = createPolyModControl("mod_attack", true);
-    Output* mod_decay = createPolyModControl("mod_decay", true);
-    Output* mod_sustain = createPolyModControl("mod_sustain", true);
-    Output* mod_release = createPolyModControl("mod_release", true);
+    const char* envelope_stages[] = {"attack", "delay", "hold", "decay", "sustain", "release"};
+    const int envelope_inputs[] = {
+        static_cast<int>(Envelope::Inputs::Attack),
+        static_cast<int>(Envelope::Inputs::Delay),
+        static_cast<int>(Envelope::Inputs::Hold),
+        static_cast<int>(Envelope::Inputs::Decay),
+        static_cast<int>(Envelope::Inputs::Sustain),
+        static_cast<int>(Envelope::Inputs::Release)};
+    for (int envelope_number = 1; envelope_number <= 4; ++envelope_number) {
+      const std::string parameter_prefix = envelope_number == 1
+          ? std::string("mod")
+          : "mod_" + std::to_string(envelope_number);
+      const std::string source_name = parameter_prefix + "_envelope";
 
-    extra_envelope_ = new Envelope();
-  extra_envelope_->plug(mod_attack, static_cast<int>(Envelope::Inputs::Attack));
-  extra_envelope_->plug(mod_decay, static_cast<int>(Envelope::Inputs::Decay));
-  extra_envelope_->plug(mod_sustain, static_cast<int>(Envelope::Inputs::Sustain));
-  extra_envelope_->plug(mod_release, static_cast<int>(Envelope::Inputs::Release));
-  extra_envelope_->plug(env_trigger_, static_cast<int>(Envelope::Inputs::Trigger));
+      Envelope* envelope = new Envelope();
+      for (int stage = 0; stage < 6; ++stage) {
+        Output* control = createPolyModControl(
+            parameter_prefix + "_" + envelope_stages[stage], true);
+        envelope->plug(control, envelope_inputs[stage]);
+      }
+      envelope->plug(env_trigger_, static_cast<int>(Envelope::Inputs::Trigger));
+      addProcessor(envelope);
 
-    addProcessor(extra_envelope_);
-    mod_sources_["mod_envelope"] = extra_envelope_->output();
-  mod_sources_["mod_envelope_amp"] = registerOutput(extra_envelope_->output(static_cast<int>(Envelope::Outputs::Value)));
-  mod_sources_["mod_envelope_phase"] = registerOutput(extra_envelope_->output(static_cast<int>(Envelope::Outputs::Phase)));
+      if (envelope_number == 1)
+        extra_envelope_ = envelope;
+      else
+        additional_mod_envelopes_[envelope_number - 2] = envelope;
+
+      mod_sources_[source_name] = envelope->output();
+      mod_sources_[source_name + "_amp"] = registerOutput(
+          envelope->output(static_cast<int>(Envelope::Outputs::Value)));
+      mod_sources_[source_name + "_phase"] = registerOutput(
+          envelope->output(static_cast<int>(Envelope::Outputs::Phase)));
+      mod_sources_[source_name + "_progress"] = registerOutput(
+          envelope->output(static_cast<int>(Envelope::Outputs::Progress)));
+    }
 
     // Random Modulation
     TriggerRandom* random_mod = new TriggerRandom();
@@ -462,12 +615,14 @@ namespace mopo {
       Output* audio, Output* keytrack, Output* reset) {
     // Filter envelope.
     Output* filter_attack = createPolyModControl("fil_attack", true);
+    Output* filter_hold = createPolyModControl("fil_hold", true);
     Output* filter_decay = createPolyModControl("fil_decay", true);
     Output* filter_sustain = createPolyModControl("fil_sustain", true);
     Output* filter_release = createPolyModControl("fil_release", true);
 
     filter_envelope_ = new Envelope();
   filter_envelope_->plug(filter_attack, static_cast<int>(Envelope::Inputs::Attack));
+  filter_envelope_->plug(filter_hold, static_cast<int>(Envelope::Inputs::Hold));
   filter_envelope_->plug(filter_decay, static_cast<int>(Envelope::Inputs::Decay));
   filter_envelope_->plug(filter_sustain, static_cast<int>(Envelope::Inputs::Sustain));
   filter_envelope_->plug(filter_release, static_cast<int>(Envelope::Inputs::Release));
@@ -514,7 +669,7 @@ namespace mopo {
 
     Value* filter_style = createBaseControl("filter_style");
     Value* filter_shelf = createBaseControl("filter_shelf");
-    Value* filter_on = createBaseControl("filter_on");
+    Output* filter_on = createPolyModSwitchControl("filter_on");
     Output* filter_drive = createPolyModControl("filter_drive", true);
     Output* filter_blend = createPolyModControl("filter_blend", true);
     cr::MagnitudeScale* drive_magnitude = new cr::MagnitudeScale();
@@ -531,6 +686,32 @@ namespace mopo {
      */
 
     StateVariableFilter* filter = new StateVariableFilter();
+    FrequencyToSamples* comb_period = new FrequencyToSamples();
+    comb_period->plug(frequency_cutoff);
+    cr::Clamp* comb_period_clamped = new cr::Clamp(1.0, MAX_SAMPLE_RATE / 10.0);
+    comb_period_clamped->plug(comb_period);
+    LinearSmoothBuffer* comb_period_audio = new LinearSmoothBuffer();
+    comb_period_audio->plug(comb_period_clamped, 0);
+    comb_period_audio->plug(reset, 1);
+
+    static const cr::Value comb_feedback_scale(0.95);
+    cr::Multiply* comb_feedback = new cr::Multiply();
+    comb_feedback->plug(resonance, 0);
+    comb_feedback->plug(&comb_feedback_scale, 1);
+    cr::Clamp* comb_feedback_clamped = new cr::Clamp(0.0, 0.95);
+    comb_feedback_clamped->plug(comb_feedback);
+    LinearSmoothBuffer* comb_feedback_audio = new LinearSmoothBuffer();
+    comb_feedback_audio->plug(comb_feedback_clamped, 0);
+    comb_feedback_audio->plug(reset, 1);
+
+    SimpleDelay* comb_filter = new SimpleDelay(MAX_SAMPLE_RATE / 10 + 1);
+    comb_filter->plug(audio, static_cast<int>(SimpleDelay::Inputs::Audio));
+    comb_filter->plug(comb_period_audio,
+                      static_cast<int>(SimpleDelay::Inputs::SampleDelay));
+    comb_filter->plug(comb_feedback_audio,
+                      static_cast<int>(SimpleDelay::Inputs::Feedback));
+    comb_filter->plug(reset, static_cast<int>(SimpleDelay::Inputs::Reset));
+
   filter->plug(filter_on, static_cast<int>(StateVariableFilter::Inputs::On));
   filter->plug(filter_style, static_cast<int>(StateVariableFilter::Inputs::Style));
   filter->plug(filter_shelf, static_cast<int>(StateVariableFilter::Inputs::ShelfChoice));
@@ -541,6 +722,7 @@ namespace mopo {
   filter->plug(scaled_resonance, static_cast<int>(StateVariableFilter::Inputs::Resonance));
   filter->plug(final_gain, static_cast<int>(StateVariableFilter::Inputs::Gain));
   filter->plug(drive_magnitude, static_cast<int>(StateVariableFilter::Inputs::Drive));
+  filter->plug(comb_filter, static_cast<int>(StateVariableFilter::Inputs::CombAudio));
 
     addProcessor(current_keytrack);
     addProcessor(keytracked_cutoff);
@@ -549,6 +731,13 @@ namespace mopo {
     addProcessor(decibels);
     addProcessor(final_gain);
     addProcessor(frequency_cutoff);
+    addProcessor(comb_period);
+    addProcessor(comb_period_clamped);
+    addProcessor(comb_period_audio);
+    addProcessor(comb_feedback);
+    addProcessor(comb_feedback_clamped);
+    addProcessor(comb_feedback_audio);
+    addProcessor(comb_filter);
     addProcessor(filter);
 
     addProcessor(drive_magnitude);
@@ -556,23 +745,23 @@ namespace mopo {
     mod_sources_["fil_envelope"] = filter_envelope_->output();
   mod_sources_["fil_envelope_amp"] = registerOutput(filter_envelope_->output(static_cast<int>(Envelope::Outputs::Value)));
   mod_sources_["fil_envelope_phase"] = registerOutput(filter_envelope_->output(static_cast<int>(Envelope::Outputs::Phase)));
+  mod_sources_["fil_envelope_progress"] = registerOutput(filter_envelope_->output(static_cast<int>(Envelope::Outputs::Progress)));
 
     // Stutter.
     BypassRouter* stutter_container = new BypassRouter();
     addProcessor(stutter_container);
 
-    ValueSwitch* stutter_on = createBaseSwitchControl("stutter_on");
+    Output* stutter_on = createPolyModSwitchControl("stutter_on");
   stutter_container->plug(stutter_on, static_cast<int>(BypassRouter::Inputs::On));
   stutter_container->plug(filter, static_cast<int>(BypassRouter::Inputs::Audio));
 
     Stutter* stutter = new Stutter(STUTTER_MAX_SAMPLES);
     Output* stutter_free_frequency = createPolyModControl("stutter_frequency", true);
     Output* stutter_frequency = createTempoSyncSwitch("stutter", stutter_free_frequency->owner,
-                                                      beats_per_second_, true, stutter_on);
+                                                      beats_per_second_, true);
     Output* resample_free_frequency = createPolyModControl("stutter_resample_frequency", true);
-    Output* resample_frequency = createTempoSyncSwitch("stutter_resample",
-                                                       resample_free_frequency->owner,
-                                                       beats_per_second_, true, stutter_on);
+    Output* resample_frequency = createTempoSyncSwitch("stutter_resample", resample_free_frequency->owner,
+                                                       beats_per_second_, true);
 
     Output* stutter_softness = createPolyModControl("stutter_softness", true);
 
@@ -589,8 +778,8 @@ namespace mopo {
     formant_container_ = new BypassRouter();
     addProcessor(formant_container_);
 
-    ValueSwitch* formant_on = createBaseSwitchControl("formant_on");
-  formant_container_->plug(formant_on->output(static_cast<int>(ValueSwitch::kValue)), static_cast<int>(BypassRouter::Inputs::On));
+    Output* formant_on = createPolyModSwitchControl("formant_on");
+  formant_container_->plug(formant_on, static_cast<int>(BypassRouter::Inputs::On));
   formant_container_->plug(stutter_container, static_cast<int>(BypassRouter::Inputs::Audio));
 
     formant_filter_ = new FormantManager(NUM_FORMANTS);
@@ -648,11 +837,6 @@ namespace mopo {
       addProcessor(formant_midi);
       addProcessor(formant_frequency);
 
-      formant_on->addProcessor(formant_gain);
-      formant_on->addProcessor(formant_magnitude);
-      formant_on->addProcessor(formant_q);
-      formant_on->addProcessor(formant_midi);
-      formant_on->addProcessor(formant_frequency);
     }
 
     BilinearInterpolate* formant_decibels = new BilinearInterpolate();
@@ -680,35 +864,52 @@ namespace mopo {
     formant_container_->addProcessor(formant_filter_);
     formant_container_->addProcessor(formant_output);
     formant_container_->registerOutput(formant_output->output());
-    formant_on->set(formant_on->value());
   }
 
   void HelmBoyVoiceHandler::createArticulation(
       Output* note, Output* last_note, Output* velocity, Output* trigger) {
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation begin");
+
     // Legato.
-    legato_ = createBaseControl("legato");
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation legato start");
+    legato_ = createPolyModSwitchControl("legato");
     LegatoFilter* legato_filter = new LegatoFilter();
   legato_filter->plug(legato_, static_cast<int>(LegatoFilter::Inputs::Legato));
   legato_filter->plug(trigger, static_cast<int>(LegatoFilter::Inputs::Trigger));
 
     addProcessor(legato_filter);
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation legato done");
 
     // Amplitude envelope.
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation amp envelope start");
     Output* amplitude_attack = createPolyModControl("amp_attack", true);
+    Output* amplitude_hold = createPolyModControl("amp_hold", true);
     Output* amplitude_decay = createPolyModControl("amp_decay", true);
     Output* amplitude_sustain = createPolyModControl("amp_sustain", true);
     Output* amplitude_release = createPolyModControl("amp_release", true);
 
+    if (amplitude_attack == nullptr || amplitude_decay == nullptr ||
+        amplitude_sustain == nullptr || amplitude_release == nullptr) {
+      throw std::runtime_error("HelmBoyVoiceHandler::createArticulation amp envelope controls null");
+    }
+
     amplitude_envelope_ = new Envelope();
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation amp envelope plugs start");
     amplitude_envelope_->plug(legato_filter->output(static_cast<int>(LegatoFilter::Outputs::Retrigger)),
                 static_cast<int>(Envelope::Inputs::Trigger));
     amplitude_envelope_->plug(amplitude_attack, static_cast<int>(Envelope::Inputs::Attack));
+    amplitude_envelope_->plug(amplitude_hold, static_cast<int>(Envelope::Inputs::Hold));
     amplitude_envelope_->plug(amplitude_decay, static_cast<int>(Envelope::Inputs::Decay));
     amplitude_envelope_->plug(amplitude_sustain, static_cast<int>(Envelope::Inputs::Sustain));
     amplitude_envelope_->plug(amplitude_release, static_cast<int>(Envelope::Inputs::Release));
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation amp envelope plugs done");
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation amp envelope addProcessor start");
     addProcessor(amplitude_envelope_);
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation amp envelope addProcessor done");
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation amp envelope done");
 
     // Voice and frequency resetting logic.
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation note/frequency reset start");
     TriggerCombiner* note_change_trigger = new TriggerCombiner();
   note_change_trigger->plug(legato_filter->output(static_cast<int>(LegatoFilter::Outputs::Remain)), 0);
   note_change_trigger->plug(amplitude_envelope_->output(static_cast<int>(Envelope::Outputs::Finished)), 1);
@@ -727,8 +928,10 @@ namespace mopo {
     addProcessor(note_change_trigger);
     addProcessor(note_wait);
     addProcessor(current_note);
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation note/frequency reset done");
 
     // Key tracking.
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation key tracking start");
     static const Value center_adjust(-MIDI_SIZE / 2);
     note_from_center_ = new cr::Add();
     note_from_center_->plug(&center_adjust, 0);
@@ -736,8 +939,10 @@ namespace mopo {
 
     addProcessor(note_from_center_);
     addProcessor(note_percentage);
+  appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation key tracking done");
 
     // Velocity tracking.
+  appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation velocity tracking start");
     TriggerWait* velocity_wait = new TriggerWait();
     cr::Value* current_velocity = new cr::Value();
     velocity_wait->plug(velocity, static_cast<int>(TriggerWait::Inputs::Wait));
@@ -748,13 +953,22 @@ namespace mopo {
     addProcessor(current_velocity);
 
     Output* velocity_track_amount = createPolyModControl("velocity_track", true);
-    cr::Interpolate* velocity_track_mult = new cr::Interpolate();
-  velocity_track_mult->plug(&utils::value_one, static_cast<int>(Interpolate::Inputs::From));
-  velocity_track_mult->plug(current_velocity, static_cast<int>(Interpolate::Inputs::To));
-  velocity_track_mult->plug(velocity_track_amount, static_cast<int>(Interpolate::Inputs::Fractional));
-    addProcessor(velocity_track_mult);
+    cr::Interpolate* velocity_track_interpolate = new cr::Interpolate();
+    velocity_track_interpolate->plug(&utils::value_one, static_cast<int>(Interpolate::Inputs::From));
+    velocity_track_interpolate->plug(current_velocity, static_cast<int>(Interpolate::Inputs::To));
+    velocity_track_interpolate->plug(velocity_track_amount, static_cast<int>(Interpolate::Inputs::Fractional));
+    addProcessor(velocity_track_interpolate);
+
+    Output* current_velocity_output = current_velocity->output();
+    Output* velocity_track_mult = velocity_track_interpolate->output();
+
+    if (current_velocity_output == nullptr || velocity_track_mult == nullptr)
+      throw std::runtime_error("HelmBoyVoiceHandler::createArticulation velocity tracking null");
+
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation velocity tracking done");
 
     // Current amplitude using envelope and velocity.
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation amplitude smoothing start");
     Processor* control_amplitude = new cr::Multiply();
     control_amplitude->plug(amplitude_envelope_->output(static_cast<int>(Envelope::Outputs::Value)), 0);
     control_amplitude->plug(velocity_track_mult, 1);
@@ -766,30 +980,71 @@ namespace mopo {
 
     addProcessor(control_amplitude);
     addProcessor(amplitude_);
+  appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation amplitude smoothing done");
 
     // Portamento.
+  appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento start");
     Output* portamento = createPolyModControl("portamento", true);
     Value* portamento_type = createBaseControl("portamento_type");
+    Output* pressed_note = note_pressed();
 
-    current_frequency_ = new PortamentoSlope();
-    current_frequency_->plug(current_note, static_cast<int>(PortamentoSlope::Inputs::Target));
-    current_frequency_->plug(portamento_type, static_cast<int>(PortamentoSlope::Inputs::PortamentoType));
-    current_frequency_->plug(note_pressed(), static_cast<int>(PortamentoSlope::Inputs::NoteNumber));
-    current_frequency_->plug(portamento, static_cast<int>(PortamentoSlope::Inputs::RunSeconds));
-    current_frequency_->plug(note_pressed(), static_cast<int>(PortamentoSlope::Inputs::TriggerJump));
-    current_frequency_->plug(last_note, static_cast<int>(PortamentoSlope::Inputs::TriggerStart));
+    current_frequency_ = current_note;
 
-    addProcessor(current_frequency_);
+    if (portamento != nullptr && portamento_type != nullptr &&
+        pressed_note != nullptr && last_note != nullptr) {
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento slope alloc start");
+      current_frequency_ = new PortamentoSlope();
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento slope alloc done");
 
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento plug target start");
+      current_frequency_->plug(current_note, static_cast<int>(PortamentoSlope::Inputs::Target));
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento plug target done");
+
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento plug type start");
+      current_frequency_->plug(portamento_type, static_cast<int>(PortamentoSlope::Inputs::PortamentoType));
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento plug type done");
+
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento plug note start");
+      current_frequency_->plug(pressed_note, static_cast<int>(PortamentoSlope::Inputs::NoteNumber));
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento plug note done");
+
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento plug runseconds start");
+      current_frequency_->plug(portamento, static_cast<int>(PortamentoSlope::Inputs::RunSeconds));
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento plug runseconds done");
+
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento plug triggerjump start");
+      current_frequency_->plug(pressed_note, static_cast<int>(PortamentoSlope::Inputs::TriggerJump));
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento plug triggerjump done");
+
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento plug triggerstart start");
+      current_frequency_->plug(last_note, static_cast<int>(PortamentoSlope::Inputs::TriggerStart));
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento plug triggerstart done");
+
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento addProcessor start");
+      addProcessor(current_frequency_);
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento addProcessor done");
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento slope wired");
+    }
+    else {
+      appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento fallback to current_note");
+    }
+
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation portamento done");
+
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation mod_sources start");
     mod_sources_["amp_envelope"] = amplitude_envelope_->output();
     mod_sources_["amp_envelope_amp"] =
       registerOutput(amplitude_envelope_->output(static_cast<int>(Envelope::Outputs::Value)));
     mod_sources_["amp_envelope_phase"] =
       registerOutput(amplitude_envelope_->output(static_cast<int>(Envelope::Outputs::Phase)));
+    mod_sources_["amp_envelope_progress"] =
+      registerOutput(amplitude_envelope_->output(static_cast<int>(Envelope::Outputs::Progress)));
     mod_sources_["note"] = note_percentage->output();
-    mod_sources_["velocity"] = current_velocity->output();
+    mod_sources_["velocity"] = current_velocity_output;
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation mod_sources done");
 
     // Envelope Trigger.
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation env trigger start");
     TriggerFilter* note_off = new TriggerFilter(kVoiceOff);
     note_off->plug(trigger);
     env_trigger_ = new TriggerCombiner();
@@ -798,10 +1053,21 @@ namespace mopo {
 
     addProcessor(note_off);
     addProcessor(env_trigger_);
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation env trigger done");
+    appendStartupTraceVoiceHandler("HelmBoyVoiceHandler::createArticulation end");
+  }
+
+  void HelmBoyVoiceHandler::resetState() {
+    VoiceHandler::resetState();
+    note_retriggered_.clearTrigger();
+    note_retriggered_.clearBuffer();
   }
 
   void HelmBoyVoiceHandler::process() {
-    setLegato(legato_->output()->buffer[0]);
+    if (!init_done_.load(std::memory_order_acquire) || legato_ == nullptr)
+      return;
+
+    setLegato(legato_->buffer[0]);
     VoiceHandler::process();
     note_retriggered_.clearTrigger();
 
@@ -812,15 +1078,21 @@ namespace mopo {
   }
 
   void HelmBoyVoiceHandler::noteOn(mopo_float note, mopo_float velocity, int sample, int channel) {
-    if (getPressedNotes().size() < polyphony() || legato_->value() == 0.0)
+    if (!init_done_.load(std::memory_order_acquire) || legato_ == nullptr)
+      return;
+
+    if (getPressedNotes().size() < polyphony() || legato_->buffer[0] == 0.0)
       note_retriggered_.trigger(note, sample);
     VoiceHandler::noteOn(note, velocity, sample, channel);
   }
 
   VoiceEvent HelmBoyVoiceHandler::noteOff(mopo_float note, int sample) {
+    if (!init_done_.load(std::memory_order_acquire) || legato_ == nullptr)
+      return VoiceHandler::noteOff(note, sample);
+
     if (getPressedNotes().size() > polyphony() &&
         isNotePlaying(note) &&
-        legato_->value() == 0.0)
+        legato_->buffer[0] == 0.0)
       note_retriggered_.trigger(note, sample);
     return VoiceHandler::noteOff(note, sample);
   }
@@ -829,6 +1101,10 @@ namespace mopo {
     if (output->owner == poly_lfo_1_ || output->owner == poly_lfo_2_ || output->owner == amplitude_envelope_ ||
         output->owner == filter_envelope_ || output->owner == extra_envelope_) {
       return false;
+    }
+    for (Envelope* envelope : additional_mod_envelopes_) {
+      if (output->owner == envelope)
+        return false;
     }
     return VoiceHandler::shouldAccumulate(output);
   }
@@ -841,13 +1117,37 @@ namespace mopo {
   }
 
   void HelmBoyVoiceHandler::setModWheel(mopo_float value, int channel) {
-    MOPO_ASSERT(channel >= 1 && channel <= mopo::NUM_MIDI_CHANNELS);
-    mod_wheel_amounts_[channel - 1]->set(value);
+    if (!init_done_.load(std::memory_order_acquire))
+      return;
+
+    int channel_index = channel;
+    if (channel >= 1 && channel <= mopo::NUM_MIDI_CHANNELS)
+      channel_index = channel - 1;
+
+    if (channel_index < 0 || channel_index >= mopo::NUM_MIDI_CHANNELS) {
+      MOPO_ASSERT(false);
+      return;
+    }
+
+    if (mod_wheel_amounts_[channel_index] != nullptr)
+      mod_wheel_amounts_[channel_index]->set(value);
   }
 
   void HelmBoyVoiceHandler::setPitchWheel(mopo_float value, int channel) {
-    MOPO_ASSERT(channel >= 1 && channel <= mopo::NUM_MIDI_CHANNELS);
-    pitch_wheel_amounts_[channel - 1]->set(value);
+    if (!init_done_.load(std::memory_order_acquire))
+      return;
+
+    int channel_index = channel;
+    if (channel >= 1 && channel <= mopo::NUM_MIDI_CHANNELS)
+      channel_index = channel - 1;
+
+    if (channel_index < 0 || channel_index >= mopo::NUM_MIDI_CHANNELS) {
+      MOPO_ASSERT(false);
+      return;
+    }
+
+    if (pitch_wheel_amounts_[channel_index] != nullptr)
+      pitch_wheel_amounts_[channel_index]->set(value);
   }
 
   output_map& HelmBoyVoiceHandler::getPolyModulations() {

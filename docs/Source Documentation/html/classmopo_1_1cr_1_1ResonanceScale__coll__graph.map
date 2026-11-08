@@ -1,0 +1,13 @@
+<map id="mopo::cr::ResonanceScale" name="mopo::cr::ResonanceScale">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,1204,174,1359"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Operator.html" title="Base class for simple arithmetic and logic operators." alt="" coords="27,787,152,941"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,955,92,1204,87,1204,87,957"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1Processor.html" title=" " alt="" coords="181,5,332,501"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="180,518,167,574,111,788,106,786,162,573,181,513"/>
+<area shape="rect" id="Node000004" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="176,573,337,1155"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="251,514,254,525,253,574,248,573,248,525,251,519"/>
+<area shape="rect" id="Node000005" href="$structmopo_1_1Output.html" title=" " alt="" coords="368,744,468,984"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="321,499,340,548,351,572,375,650,394,728,388,728,369,651,346,574,335,550,321,504"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="254,573,256,521,257,515,259,574"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="418,744,411,637,403,581,391,526,367,458,340,395,340,390,372,456,396,525,409,580,417,636,423,745"/>
+</map>

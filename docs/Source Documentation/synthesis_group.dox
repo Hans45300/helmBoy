@@ -1,6 +1,0 @@
-/**
- * @defgroup Synthesis Synthesis Engine
- * @brief Core synthesis modules and DSP components.
- *
- * This group documents oscillators, filters, envelopes and voice handling.
- */

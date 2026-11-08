@@ -21,7 +21,7 @@
 #pragma once
 /**
  * @file envelope.h
- * @brief Enveloppe ADSR (Attack/Decay/Sustain/Release) pour le moteur audio.
+ * @brief Enveloppes DAHDSR/ADHSR pour le moteur audio.
  */
 #ifndef ENVELOPE_H
 #define ENVELOPE_H
@@ -31,7 +31,7 @@
 
 namespace mopo {
 
-  // An ADSR (Attack, Decay, Sustain, Release) Envelope.
+  // A delay/attack/hold/decay/sustain/release envelope.
   // The attack is a linear scale and completes in the exact amount of time.
   // The decay and release are exponential and get down to the _CLOSE_ENOUGH_
   // level in the specified amount of time.
@@ -53,6 +53,8 @@ namespace mopo {
         Sustain,
         Release,
         Trigger,
+        Delay,
+        Hold,
         NumInputs
       };
 
@@ -61,6 +63,7 @@ namespace mopo {
         Value,
         Phase,
         Finished,
+        Progress,
         NumOutputs
       };
 
@@ -69,7 +72,9 @@ namespace mopo {
         Attacking,
         Decaying,
         Releasing,
-        Killing
+        Killing,
+        Delaying,
+        Holding
       };
 
       /**
@@ -91,13 +96,15 @@ namespace mopo {
 
       /**
        * @brief Déclenche un événement d'enveloppe (note on/off/reset/kill).
-        * @param event Valeur de l'événement (ex: note-on=1, note-off=0).
        */
       void trigger(mopo_float event);
 
     protected:
       State state_;
       mopo_float current_value_;
+      int stage_samples_remaining_;
+      int stage_duration_samples_;
+      mopo_float stage_progress_;
   };
 } // namespace mopo
 

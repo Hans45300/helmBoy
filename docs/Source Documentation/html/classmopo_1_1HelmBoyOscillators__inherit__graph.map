@@ -1,5 +1,5 @@
 <map id="mopo::HelmBoyOscillators" name="mopo::HelmBoyOscillators">
-<area shape="rect" id="Node000001" title="Dual oscillator engine with advanced unison capabilities." alt="" coords="5,123,173,917"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="54,5,124,75"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,90,92,123,87,123,87,90"/>
+<area shape="rect" id="Node000001" title="Dual oscillator engine with advanced unison capabilities." alt="" coords="5,592,180,1323"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="17,5,168,544"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,556,95,592,90,592,93,561"/>
 </map>

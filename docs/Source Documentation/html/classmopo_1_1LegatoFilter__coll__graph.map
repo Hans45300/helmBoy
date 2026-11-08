@@ -1,0 +1,11 @@
+<map id="mopo::LegatoFilter" name="mopo::LegatoFilter">
+<area shape="rect" id="Node000001" title="Filtre legato pour le d�clenchement de notes." alt="" coords="5,808,124,920"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="153,5,304,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,518,139,574,80,809,75,807,134,573,153,513"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="148,573,309,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="224,514,226,525,226,574,220,573,221,525,223,519"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="340,744,440,984"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="293,499,312,548,323,572,347,650,366,728,361,728,342,651,318,574,307,550,293,504"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="226,573,228,521,229,515,231,574"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="390,743,384,637,376,581,363,526,340,458,312,395,312,390,345,456,369,525,381,580,389,636,396,745"/>
+</map>

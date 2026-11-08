@@ -1,4 +1,4 @@
 /**
- * @defgroup MopoModules mopo Modules
+ * @defgroup mopo_modules mopo Modules
  * @brief DSP modules used in the mopo engine (filters, lookups, processors).
  */

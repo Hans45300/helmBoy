@@ -1,7 +1,24 @@
 var searchData=
 [
-  ['rand_5fdecay_0',['RAND_DECAY',['../helmBoy__oscillators_8cpp.html#aae0d67e3998b1697ae3cb90d796ccda9',1,'helmBoy_oscillators.cpp']]],
-  ['resolution_1',['RESOLUTION',['../open__gl__oscilloscope_8cpp.html#a95d55ebfa2f2f1bd14867ad6a6cc9bfb',1,'open_gl_oscilloscope.cpp']]],
-  ['resonance_5fcancel_5fh_2',['RESONANCE_CANCEL_H',['../resonance__cancel_8h.html#a1312b2c0f9e87c5e4f3f5767f0f94afe',1,'resonance_cancel.h']]],
-  ['reverb_5fsection_5fh_3',['REVERB_SECTION_H',['../reverb__section_8h.html#ac10915ce952878c36debd183521cdaed',1,'reverb_section.h']]]
+  ['padding_0',['PADDING',['../wave__viewer_8cpp.html#a3eebd09a9a94c914de17855816e6ac45',1,'wave_viewer.cpp']]],
+  ['padding_5fx_1',['PADDING_X',['../about__section_8cpp.html#a8d9afb11f00089d9a34fbb5d9c3835af',1,'PADDING_X:&#160;about_section.cpp'],['../delete__section_8cpp.html#a8d9afb11f00089d9a34fbb5d9c3835af',1,'PADDING_X:&#160;delete_section.cpp'],['../save__section_8cpp.html#a8d9afb11f00089d9a34fbb5d9c3835af',1,'PADDING_X:&#160;save_section.cpp']]],
+  ['padding_5fy_2',['PADDING_Y',['../about__section_8cpp.html#a99ce9ae96e15e1b5d046ff2837d6b46e',1,'PADDING_Y:&#160;about_section.cpp'],['../delete__section_8cpp.html#a99ce9ae96e15e1b5d046ff2837d6b46e',1,'PADDING_Y:&#160;delete_section.cpp'],['../save__section_8cpp.html#a99ce9ae96e15e1b5d046ff2837d6b46e',1,'PADDING_Y:&#160;save_section.cpp']]],
+  ['patch_5fbank_5farchive_5fh_3',['PATCH_BANK_ARCHIVE_H',['../patch__bank__archive_8h.html#a462e57d64977072d17bfd65af752c1ef',1,'patch_bank_archive.h']]],
+  ['patch_5fbrowser_5fh_4',['PATCH_BROWSER_H',['../patch__browser_8h.html#a4c3efef23a14f7124362b8bf2ddda56e',1,'patch_browser.h']]],
+  ['patch_5finfo_5fwidth_5fpercent_5',['PATCH_INFO_WIDTH_PERCENT',['../patch__browser_8cpp.html#a4312dfc3f55808d470604b4e20ef4cb2',1,'patch_browser.cpp']]],
+  ['patch_5fselector_5fh_6',['PATCH_SELECTOR_H',['../patch__selector_8h.html#a8999565f95f5cfa13f123acbdb484fbf',1,'patch_selector.h']]],
+  ['patches_5fwidth_5fpercent_7',['PATCHES_WIDTH_PERCENT',['../patch__browser_8cpp.html#a6cb5e844cba76354eca1a4a752e3fdd5',1,'patch_browser.cpp']]],
+  ['pay_5fnag_8',['PAY_NAG',['../full__interface_8cpp.html#aefa0fa1be24f6c145fe8f926f3e02384',1,'full_interface.cpp']]],
+  ['pay_5fwait_5fdays_9',['PAY_WAIT_DAYS',['../load__save_8cpp.html#adc244fac300b6b187193745f683b8110',1,'load_save.cpp']]],
+  ['peak_5fdecay_10',['PEAK_DECAY',['../peak__meter_8cpp.html#a2ed2b4c307d62a7028a692a6ee5291f4',1,'peak_meter.cpp']]],
+  ['peak_5fmeter_5fh_11',['PEAK_METER_H',['../peak__meter_8h.html#a3be73eb6ccc31c5be4d2a2e1e64f82c1',1,'peak_meter.h']]],
+  ['phase_5fslider_5fheight_12',['PHASE_SLIDER_HEIGHT',['../oscillator__section_8cpp.html#a68093d5c354637fff56b81a1ad77b62d',1,'PHASE_SLIDER_HEIGHT:&#160;oscillator_section.cpp'],['../sub__section_8cpp.html#a68093d5c354637fff56b81a1ad77b62d',1,'PHASE_SLIDER_HEIGHT:&#160;sub_section.cpp']]],
+  ['pitch_5fmod_5frange_13',['PITCH_MOD_RANGE',['../helmBoy__voice__handler_8cpp.html#abe0bf5c19105aea34581fdcc637ce19c',1,'helmBoy_voice_handler.cpp']]],
+  ['pitch_5fwheel_5fresolution_14',['PITCH_WHEEL_RESOLUTION',['../midi__manager_8cpp.html#ae05ba804daf66b1aaf52fb380409a923',1,'PITCH_WHEEL_RESOLUTION:&#160;midi_manager.cpp'],['../helmBoy__plugin_8cpp.html#ae05ba804daf66b1aaf52fb380409a923',1,'PITCH_WHEEL_RESOLUTION:&#160;helmBoy_plugin.cpp']]],
+  ['plugin_5finfo_5fheight_15',['PLUGIN_INFO_HEIGHT',['../about__section_8cpp.html#a81890c551f98d81f344e65f2d48891e5',1,'about_section.cpp']]],
+  ['portamento_5fslope_5fh_16',['PORTAMENTO_SLOPE_H',['../portamento__slope_8h.html#a8bc598ec563597045e6679f8e1d65687',1,'portamento_slope.h']]],
+  ['power_5farc_5fangle_17',['POWER_ARC_ANGLE',['../default__look__and__feel_8cpp.html#a82625177f50b69ebc1174fd34a716036',1,'default_look_and_feel.cpp']]],
+  ['process_5ftick_5ffunction_18',['PROCESS_TICK_FUNCTION',['../operators_8h.html#a5c142416ea876e1082e9237b8b176427',1,'operators.h']]],
+  ['processor_5fh_19',['PROCESSOR_H',['../processor_8h.html#af416ff826bbfcec2daea0ccb4e7e0e67',1,'processor.h']]],
+  ['processor_5frouter_5fh_20',['PROCESSOR_ROUTER_H',['../processor__router_8h.html#af6e2f24698f1221a7e6518b6174c311e',1,'processor_router.h']]]
 ];

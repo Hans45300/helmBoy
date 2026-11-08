@@ -1,0 +1,33 @@
+{
+  "settings": {
+    "polyphony": 8,
+    "osc_1_waveform": 2.0,
+    "osc_1_volume": 0.22,
+    "osc_2_waveform": 4.0,
+    "osc_2_transpose": 19.0,
+    "osc_2_volume": 0.15,
+    "noise_volume": 0.5,
+    "noise_color": 0.78,
+    "filter_on": 1,
+    "filter_style": 0,
+    "cutoff": 103.0,
+    "resonance": 0.3,
+    "fil_env_depth": 32.0,
+    "fil_decay": 0.09,
+    "fil_sustain": 0.0,
+    "amp_attack": 0.001,
+    "amp_decay": 0.1,
+    "amp_sustain": 0.0,
+    "amp_release": 0.05,
+    "distortion_on": 1,
+    "distortion_drive": 1.0,
+    "distortion_type": 0.0,
+    "reverb_on": 0,
+    "arp_on": 0,
+    "modulations": []
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Maui Tight Closed",
+  "folder_name": "Percussions",
+  "synth_version": "1.1.1"
+}

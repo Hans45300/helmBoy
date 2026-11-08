@@ -1,0 +1,7 @@
+<map id="mopo::cr::Feedback" name="mopo::cr::Feedback">
+<area shape="rect" id="Node000001" title=" " alt="" coords="28,859,154,928"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Feedback.html" title="Processeur sp�cial pour la gestion des boucles de feedback dans le flux audio." alt="" coords="5,592,176,811"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,823,93,860,88,858,89,828"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1Processor.html" title=" " alt="" coords="15,5,166,544"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="91,556,93,593,88,592,90,562"/>
+</map>

@@ -1,0 +1,48 @@
+{
+  "settings": {
+    "polyphony": 10,
+    "osc_1_waveform": 4.0,
+    "osc_1_unison_voices": 3,
+    "osc_1_unison_detune": 9.0,
+    "osc_1_volume": 0.58,
+    "osc_2_waveform": 0.0,
+    "osc_2_transpose": 12.0,
+    "osc_2_volume": 0.34,
+    "filter_on": 1,
+    "filter_style": 0,
+    "cutoff": 74.0,
+    "resonance": 0.2,
+    "amp_attack": 0.004,
+    "amp_decay": 0.8,
+    "amp_sustain": 0.42,
+    "amp_release": 0.24,
+    "arp_on": 1,
+    "arp_pattern": 3,
+    "arp_sync": 1,
+    "arp_tempo": 8.0,
+    "arp_octaves": 3,
+    "arp_gate": 0.7,
+    "delay_on": 1,
+    "delay_ping_pong": 1,
+    "delay_sync": 1,
+    "delay_tempo": 7.0,
+    "delay_feedback": 0.3,
+    "delay_dry_wet": 0.2,
+    "reverb_on": 1,
+    "reverb_dry_wet": 0.15,
+    "modulations": [
+      {
+        "amount": 8.0,
+        "destination": "cutoff",
+        "source": "mono_lfo_1"
+      }
+    ],
+    "mono_lfo_1_sync": 0,
+    "mono_lfo_1_frequency": -0.5,
+    "mono_lfo_1_waveform": 1.0
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Fractal Arpeggio",
+  "folder_name": "Advanced",
+  "synth_version": "1.1.1"
+}

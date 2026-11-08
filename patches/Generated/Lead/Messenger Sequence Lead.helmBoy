@@ -1,0 +1,52 @@
+{
+  "settings": {
+    "polyphony": 1,
+    "legato": 1,
+    "portamento": -4.5,
+    "portamento_type": 1,
+    "osc_1_waveform": 4.0,
+    "osc_1_volume": 0.68,
+    "osc_2_waveform": 2.0,
+    "osc_2_transpose": 12.0,
+    "osc_2_volume": 0.42,
+    "cross_modulation": 0.15,
+    "sub_waveform": 2.0,
+    "sub_octave": 0,
+    "sub_volume": 0.2,
+    "filter_on": 1,
+    "filter_style": 1,
+    "cutoff": 65.0,
+    "resonance": 0.25,
+    "fil_env_depth": 28,
+    "fil_decay": 0.55,
+    "fil_sustain": 0.48,
+    "amp_attack": 0.004,
+    "amp_decay": 0.68,
+    "amp_sustain": 0.82,
+    "amp_release": 0.2,
+    "mono_lfo_1_sync": 0,
+    "mono_lfo_1_frequency": 1.7,
+    "mono_lfo_1_waveform": 1.0,
+    "chorus_on": 0,
+    "reverb_on": 1,
+    "reverb_dry_wet": 0.12,
+    "delay_on": 1,
+    "delay_sync": 1,
+    "delay_tempo": 8.0,
+    "delay_feedback": 0.22,
+    "delay_dry_wet": 0.14,
+    "arp_on": 0,
+    "modulations": [
+      {
+        "amount": 0.07,
+        "destination": "cross_modulation",
+        "source": "mono_lfo_1"
+      }
+    ],
+    "lfo_tempo_index_version": 2
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Messenger Sequence Lead",
+  "folder_name": "Lead",
+  "synth_version": "1.1.1"
+}

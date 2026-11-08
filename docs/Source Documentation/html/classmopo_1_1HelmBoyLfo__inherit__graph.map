@@ -1,5 +1,5 @@
 <map id="mopo::HelmBoyLfo" name="mopo::HelmBoyLfo">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,123,164,320"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="50,5,120,75"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,90,88,123,82,123,82,90"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,592,174,896"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="14,5,165,544"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,556,92,592,87,592,89,561"/>
 </map>

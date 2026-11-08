@@ -48,6 +48,8 @@ class Colors {
     static const Colour topaze;
     static const Colour orange;
     static const Colour ruby;
+    /** @brief Return the shared linear-slider gradient colour at position 0..1. */
+    static Colour getSliderGradientColour(float position);
 
   // === Couleurs de base de l'interface ===
     static const Colour background;

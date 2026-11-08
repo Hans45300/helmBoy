@@ -62,11 +62,14 @@ class OscillatorSection : public SynthSection {
     std::unique_ptr<SynthSlider> unison_detune_2_;
     std::unique_ptr<ToggleButton> unison_harmonize_1_;
     std::unique_ptr<ToggleButton> unison_harmonize_2_;
+    std::unique_ptr<ToggleButton> hard_sync_;
     std::unique_ptr<SynthSlider> cross_modulation_;
     std::unique_ptr<SynthSlider> fm_amount_;
     std::unique_ptr<SynthSlider> ring_mod_;
     std::unique_ptr<SynthSlider> phase_stretch_1_;
     std::unique_ptr<SynthSlider> phase_stretch_2_;
+    std::unique_ptr<SynthSlider> phase_offset_1_;
+    std::unique_ptr<SynthSlider> phase_offset_2_;
 
     Path top_left_cross_path_;
     Path top_right_cross_path_;

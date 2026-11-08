@@ -22,24 +22,24 @@
 
 #include "default_look_and_feel.h"
 #include "mopo.h"
+#include "synth_gui_interface.h"
 
 namespace {
   enum MenuIds {
     kCancel = 0,
     kClearModulation,
+    kEnterValue,
+    kDisconnectRoute,
   };
 
-  static void sliderPopupCallback(int result, ModulationSlider* slider) {
-    if (slider != nullptr && result == kClearModulation)
-      slider->setValue(0.0);
-  }
 } // namespace
 
 
 ModulationSlider::ModulationSlider(SynthSlider* destination) : SynthSlider(destination->getName()) {
   destination_slider_ = destination;
 
-  float destination_range = destination->getMaximum() - destination->getMinimum();
+  float destination_range =
+      mopo::modulationAmountLimit(destination->getMinimum(), destination->getMaximum());
   setName(destination->getName());
   if (details_.steps)
     setRange(-destination_range, destination_range,
@@ -59,11 +59,12 @@ ModulationSlider::ModulationSlider(SynthSlider* destination) : SynthSlider(desti
   if (destination->isRotary())
     setMouseDragSensitivity(2.0f * getMouseDragSensitivity());
   else
-    setVelocityBasedMode(true);
+    setVelocityBasedMode(false);
   setOpaque(false);
 }
 
 ModulationSlider::~ModulationSlider() {
+  destination_slider_->removeListener(this);
 }
 
 void ModulationSlider::sliderValueChanged(Slider* moved_slider) {
@@ -73,13 +74,42 @@ void ModulationSlider::sliderValueChanged(Slider* moved_slider) {
 
 void ModulationSlider::mouseDown(const juce::MouseEvent &e) {
   if (e.mods.isPopupMenu()) {
-    if (getValue() != 0.0) {
-      PopupMenu m;
-      m.setLookAndFeel(DefaultLookAndFeel::instance());
+    PopupMenu m;
+    m.setLookAndFeel(DefaultLookAndFeel::instance());
+    if (getValue() != 0.0)
       m.addItem(kClearModulation, "Clear Modulation");
-      m.showMenuAsync(PopupMenu::Options(),
-                      ModalCallbackFunction::forComponent(sliderPopupCallback, this));
+    m.addItem(kEnterValue, "Enter Value...");
+
+    auto* parent = findParentComponentOfClass<SynthGuiInterface>();
+    if (parent == nullptr)
+      return;
+
+    const auto connections =
+        parent->getSynth()->getDestinationConnections(getName().toStdString());
+    std::vector<std::string> sources;
+    sources.reserve(connections.size());
+    for (auto* connection : connections) {
+      sources.push_back(connection->source);
+      m.addItem(kDisconnectRoute + static_cast<int>(sources.size()) - 1,
+                "Disconnect from " + String(connection->source));
     }
+
+    const int clear_all_id = kDisconnectRoute + static_cast<int>(sources.size());
+    if (sources.size() > 1)
+      m.addItem(clear_all_id, "Disconnect all modulations");
+
+    const int first_value_id = clear_all_id + (sources.size() > 1 ? 1 : 0);
+    showModulationPopup(m, this, false, first_value_id,
+        [this, sources, clear_all_id](int result) {
+          if (result >= kDisconnectRoute &&
+              result < kDisconnectRoute + static_cast<int>(sources.size()))
+            destination_slider_->disconnectModulationFromSource(
+                sources[result - kDisconnectRoute]);
+          else if (sources.size() > 1 && result == clear_all_id)
+            destination_slider_->disconnectAllModulations();
+          else
+            handlePopupResult(result);
+        });
   }
   else
     SynthSlider::mouseDown(e);
@@ -90,92 +120,9 @@ void ModulationSlider::mouseUp(const juce::MouseEvent &e) {
     SynthSlider::mouseUp(e);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void ModulationSlider::handlePopupResult(int result) {
+  if (result == kClearModulation)
+    setValue(0.0);
+  else if (result == kEnterValue)
+    promptForDirectValueEntry();
+}

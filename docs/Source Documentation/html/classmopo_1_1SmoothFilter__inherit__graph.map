@@ -1,0 +1,5 @@
+<map id="mopo::SmoothFilter" name="mopo::SmoothFilter">
+<area shape="rect" id="Node000001" title="Filtre lissant (exponentiel) pour signaux audio ou de contr�le." alt="" coords="18,592,143,704"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="5,5,156,544"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,556,83,593,78,592,80,561"/>
+</map>

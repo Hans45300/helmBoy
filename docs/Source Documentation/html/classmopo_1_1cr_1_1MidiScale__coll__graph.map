@@ -1,0 +1,13 @@
+<map id="mopo::cr::MidiScale" name="mopo::cr::MidiScale">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,1204,132,1359"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Operator.html" title="Base class for simple arithmetic and logic operators." alt="" coords="6,787,131,941"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,955,71,1204,66,1204,66,957"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1Processor.html" title=" " alt="" coords="160,5,311,501"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="159,518,146,574,90,788,85,786,141,573,160,513"/>
+<area shape="rect" id="Node000004" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="155,573,316,1155"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="230,514,233,525,232,574,227,573,227,525,230,519"/>
+<area shape="rect" id="Node000005" href="$structmopo_1_1Output.html" title=" " alt="" coords="347,744,447,984"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="300,499,319,548,330,572,354,650,373,728,367,728,348,651,325,574,314,550,300,504"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="233,573,235,521,236,515,238,574"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="397,744,390,637,382,581,370,526,346,458,319,395,319,390,351,456,375,525,388,580,396,636,402,745"/>
+</map>

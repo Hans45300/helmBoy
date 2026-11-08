@@ -8,56 +8,29 @@ The reverb effect simulates acoustic spaces, adding depth and ambience to sounds
 
 ## Parameters
 
-### Room Size
+### Feedback
 
-- **Range**: Small to Large
-- **Effect**: Simulated space size
-- **Small**: Tight, room-like reverb
-- **Large**: Hall or cathedral-like reverb
-
-### Decay Time
-
-Time for the reverb to fade to silence.
+- Controls the amount of reverb feedback and affects the decay of the reverb tail.
 
 ### Damping
 
-- **Low values**: Bright, reflective surfaces
-- **High values**: Dark, absorptive surfaces
+- Adjusts the damping of the reverb tail.
 
-### Dry/Wet Mix
+### Mix and Width
 
-Balance between original signal and reverb.
+- **Mix**: Balances the dry and reverberated signal.
+- **Width**: Adjusts the stereo width of the reverb.
 
-### Pre-Delay
+### Freeze and On/Off
 
-Time before reverb begins after the initial signal.
+- **On/Off**: Enables or bypasses the reverb section from the title bar.
+- **Freeze**: Activates the reverb freeze mode with a toggle at the left of the
+ control area.
 
-- Creates separation between direct sound and reverb
-- Useful for maintaining clarity
+The feedback, damping, mix, and width knobs are arranged in a compact row at
+the bottom of the section.
 
-### Feedback
-
-Amount of reverb signal fed back into itself.
-
-- Creates longer, more complex reverb tails
-
-## Reverb Types
-
-### Room
-
-Small space simulation, early reflections dominant.
-
-### Hall
-
-Large space simulation, smooth reverb tail.
-
-### Plate
-
-Metallic plate reverb, bright character.
-
-### Spring
-
-Mechanical spring reverb, vintage character.
+The current interface does not provide room-size, pre-delay, or reverb-type selectors.
 
 ## Applications
 

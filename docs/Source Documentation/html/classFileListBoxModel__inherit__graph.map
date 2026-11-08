@@ -1,5 +1,5 @@
 <map id="FileListBoxModel" name="FileListBoxModel">
-<area shape="rect" id="Node000001" title="Model powering the file browser list used in the patch browser UI." alt="" coords="5,123,172,469"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="44,5,134,75"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,89,92,123,86,123,86,89"/>
+<area shape="rect" id="Node000001" title="Model powering the file browser list used in the patch browser UI." alt="" coords="5,123,188,587"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="52,5,142,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,86,99,123,94,123,97,92"/>
 </map>

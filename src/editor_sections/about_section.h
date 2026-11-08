@@ -65,7 +65,6 @@ class AboutSection : public Overlay, public Button::Listener {
     std::unique_ptr<HyperlinkButton> developer_link_;
     std::unique_ptr<HyperlinkButton> free_software_link_;
     std::unique_ptr<AudioDeviceSelectorComponent> device_selector_;
-    std::unique_ptr<Button> check_for_updates_;
     std::unique_ptr<Button> animate_;
 
     std::unique_ptr<Button> size_button_small_;
@@ -74,6 +73,8 @@ class AboutSection : public Overlay, public Button::Listener {
     std::unique_ptr<Button> size_button_extra_large_;
     std::unique_ptr<Button> size_button_over_large_;
     std::unique_ptr<Button> enable_midi_2_;
+    std::unique_ptr<Button> save_midi_profile_;
+    std::unique_ptr<Button> load_midi_profile_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AboutSection)
 };

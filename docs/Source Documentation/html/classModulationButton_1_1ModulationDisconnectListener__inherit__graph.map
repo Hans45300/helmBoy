@@ -1,7 +1,5 @@
 <map id="ModulationButton::ModulationDisconnectListener" name="ModulationButton::ModulationDisconnectListener">
-<area shape="rect" id="Node000001" title=" " alt="" coords="94,5,308,112"/>
-<area shape="rect" id="Node000002" href="$classModulationManager.html" title=" " alt="" coords="5,160,183,699"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,127,175,161,169,159,179,126"/>
-<area shape="rect" id="Node000003" href="$classOpenGLModulationManager.html" title=" " alt="" coords="207,160,408,699"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="223,126,233,159,227,161,218,127"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,220,112"/>
+<area shape="rect" id="Node000002" href="$classModulationManager.html" title=" " alt="" coords="16,160,209,779"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,124,115,160,110,160,113,129"/>
 </map>

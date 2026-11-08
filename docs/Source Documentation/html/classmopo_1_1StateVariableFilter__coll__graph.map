@@ -1,0 +1,11 @@
+<map id="mopo::StateVariableFilter" name="mopo::StateVariableFilter">
+<area shape="rect" id="Node000001" title="Filtre � variables d&#39;�tat (SVF) multi&#45;mode, 12/24dB/oct et shelf." alt="" coords="5,573,206,1213"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="236,5,387,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="230,506,209,581,204,580,232,501"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="231,603,392,1184"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="306,514,308,525,308,603,303,602,303,525,305,519"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="422,773,522,1013"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="376,499,395,548,406,572,432,665,452,757,447,756,427,666,401,574,390,550,375,504"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="309,602,310,521,312,516,314,603"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="474,773,468,653,460,588,446,526,422,458,394,395,395,389,427,456,451,525,465,588,473,652,479,774"/>
+</map>

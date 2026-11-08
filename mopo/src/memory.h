@@ -62,12 +62,16 @@ namespace mopo {
        * @brief Ajoute un échantillon au buffer (thread-safe).
        * @param sample Échantillon à pousser.
        */
-      void push(mopo_float sample) {
-        std::atomic_ref<unsigned int> atomic_offset(offset_);
-        unsigned int new_offset = (atomic_offset.load(std::memory_order_acquire) + 1) & bitmask_;
-        memory_[new_offset] = sample;
-        atomic_offset.store(new_offset, std::memory_order_release);
-      }
+       void push(mopo_float sample) {
+         std::atomic_ref<unsigned int> atomic_offset(offset_);
+         unsigned int new_offset = (atomic_offset.load(std::memory_order_acquire) + 1) & bitmask_;
+         memory_[new_offset] = sample;
+         atomic_offset.store(new_offset, std::memory_order_release);
+         std::atomic_ref<unsigned int> atomic_valid_samples(valid_samples_);
+         const unsigned int valid_samples = atomic_valid_samples.load(std::memory_order_relaxed);
+         if (valid_samples < size_)
+           atomic_valid_samples.store(valid_samples + 1, std::memory_order_release);
+       }
 
       /// Ajoute un bloc d'�chantillons au buffer (thread-safe)
       /**
@@ -75,10 +79,10 @@ namespace mopo {
        * @param samples Pointeur sur les échantillons.
        * @param num Nombre d'échantillons à pousser.
        */
-      void pushBlock(const mopo_float* samples, int num) {
-        std::atomic_ref<unsigned int> atomic_offset(offset_);
-        unsigned int current_offset = atomic_offset.load(std::memory_order_acquire);
-        unsigned int next_offset = (current_offset + num) & bitmask_;
+       void pushBlock(const mopo_float* samples, int num) {
+         std::atomic_ref<unsigned int> atomic_offset(offset_);
+         unsigned int current_offset = atomic_offset.load(std::memory_order_acquire);
+         unsigned int next_offset = (current_offset + num) & bitmask_;
 
         if (next_offset < current_offset) [[unlikely]] {
           int block1 = num - next_offset - 1;
@@ -89,6 +93,16 @@ namespace mopo {
         }
 
         atomic_offset.store(next_offset, std::memory_order_release);
+        std::atomic_ref<unsigned int> atomic_valid_samples(valid_samples_);
+        const unsigned int valid_samples = atomic_valid_samples.load(std::memory_order_relaxed);
+        atomic_valid_samples.store(std::min<unsigned int>(size_, valid_samples + num),
+                                   std::memory_order_release);
+      }
+
+      /** Invalidates buffered history in O(1) without clearing the backing array. */
+      void reset() {
+        std::atomic_ref<unsigned int>(offset_).store(0, std::memory_order_release);
+        std::atomic_ref<unsigned int>(valid_samples_).store(0, std::memory_order_release);
       }
 
       /// Ajoute des z�ros au buffer (thread-safe)
@@ -96,10 +110,10 @@ namespace mopo {
        * @brief Ajoute des zéros au buffer (thread-safe).
        * @param num Nombre de zéros à insérer.
        */
-      void pushZero(int num) {
-        std::atomic_ref<unsigned int> atomic_offset(offset_);
-        unsigned int current_offset = atomic_offset.load(std::memory_order_acquire);
-        unsigned int next_offset = (current_offset + num) & bitmask_;
+       void pushZero(int num) {
+         std::atomic_ref<unsigned int> atomic_offset(offset_);
+         unsigned int current_offset = atomic_offset.load(std::memory_order_acquire);
+         unsigned int next_offset = (current_offset + num) & bitmask_;
 
         if (next_offset < current_offset) [[unlikely]] {
           int block1 = num - next_offset - 1;
@@ -110,6 +124,10 @@ namespace mopo {
         }
 
         atomic_offset.store(next_offset, std::memory_order_release);
+        std::atomic_ref<unsigned int> atomic_valid_samples(valid_samples_);
+        const unsigned int valid_samples = atomic_valid_samples.load(std::memory_order_relaxed);
+        atomic_valid_samples.store(std::min<unsigned int>(size_, valid_samples + num),
+                                   std::memory_order_release);
       }
 
       /// Acc�s � un �chantillon pass� (thread-safe)
@@ -119,6 +137,10 @@ namespace mopo {
        * @return Valeur de l'échantillon.
        */
       [[nodiscard]] inline mopo_float getIndex(int index) const {
+        const unsigned int valid_samples =
+            std::atomic_ref<const unsigned int>(valid_samples_).load(std::memory_order_acquire);
+        if (index < 0 || static_cast<unsigned int>(index) >= valid_samples)
+          return 0.0;
         std::atomic_ref<const unsigned int> atomic_offset(offset_);
         unsigned int current_offset = atomic_offset.load(std::memory_order_acquire);
         int spot = (current_offset - index) & bitmask_;
@@ -147,9 +169,9 @@ namespace mopo {
        * @brief Récupère l'offset courant dans le buffer (thread-safe).
        * @return Offset courant.
        */
-      [[nodiscard]] unsigned int getOffset() const {
-        std::atomic_ref<const unsigned int> atomic_offset(offset_);
-        return atomic_offset.load(std::memory_order_acquire);
+       [[nodiscard]] unsigned int getOffset() const {
+         std::atomic_ref<const unsigned int> atomic_offset(offset_);
+         return atomic_offset.load(std::memory_order_acquire);
       }
 
       /// Modifie l'offset courant (thread-safe)
@@ -157,9 +179,9 @@ namespace mopo {
        * @brief Modifie l'offset courant (thread-safe).
        * @param offset Nouvelle valeur d'offset.
        */
-      void setOffset(int offset) {
-        std::atomic_ref<unsigned int> atomic_offset(offset_);
-        atomic_offset.store(static_cast<unsigned int>(offset), std::memory_order_release);
+       void setOffset(int offset) {
+         std::atomic_ref<unsigned int> atomic_offset(offset_);
+         atomic_offset.store(static_cast<unsigned int>(offset), std::memory_order_release);
       }
 
       /// Pointeur direct sur un �chantillon pass� (thread-safe)
@@ -168,10 +190,10 @@ namespace mopo {
        * @param past Nombre d'échantillons dans le passé.
        * @return Pointeur vers l'échantillon demandé.
        */
-      [[nodiscard]] const mopo_float* getPointer(int past) const {
-        std::atomic_ref<const unsigned int> atomic_offset(offset_);
-        unsigned int current_offset = atomic_offset.load(std::memory_order_acquire);
-        return memory_ + ((current_offset - past) & bitmask_);
+       [[nodiscard]] const mopo_float* getPointer(int past) const {
+         std::atomic_ref<const unsigned int> atomic_offset(offset_);
+         unsigned int current_offset = atomic_offset.load(std::memory_order_acquire);
+         return memory_ + ((current_offset - past) & bitmask_);
       }
 
       /// Pointeur sur le buffer brut
@@ -189,6 +211,7 @@ namespace mopo {
       unsigned int size_;
       unsigned int bitmask_;
       unsigned int offset_;
+      unsigned int valid_samples_ = 0;
   };
 } // namespace mopo
 

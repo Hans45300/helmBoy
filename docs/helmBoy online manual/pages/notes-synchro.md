@@ -4,17 +4,20 @@
 
 ![Notes Synchro block example](../pictures/Notes%20Synchro.png)
 
-Synchronization options for timing-based modules with musical note values.
+Frequency and timing controls can run freely or follow the selected tempo. In a plug-in, tempo-synchronized controls can use host timing; in standalone mode, they use the BPM control.
 
 ## Sync Modes
 
-- **Free**: Independent timing, not synced to host tempo
-- **Tempo Sync**: Locked to host DAW tempo
-- **Note Values**: Sync to musical divisions (1/4, 1/8, 1/16, etc.)
+- **Seconds**: Free-running time
+- **Tempo**: Straight musical divisions
+- **Tempo Dotted**: Dotted divisions
+- **Tempo Triplets**: Triplet divisions
 
 ## Applications
 
 - LFO rate synchronization
 - Delay time synchronization
-- Sequencer step timing
+- Step-sequencer and stutter timing
 - Arpeggiator rate
+
+LFO and step-sequencer retrigger modes are separate from this rate selector. See [Sync Options](synch-option.md).

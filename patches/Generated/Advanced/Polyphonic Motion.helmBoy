@@ -1,0 +1,49 @@
+{
+  "settings": {
+    "polyphony": 16,
+    "velocity_track": 0.42,
+    "osc_1_waveform": 4.0,
+    "osc_1_unison_voices": 5,
+    "osc_1_unison_detune": 14.0,
+    "osc_1_volume": 0.55,
+    "osc_2_waveform": 0.0,
+    "osc_2_transpose": 12.0,
+    "osc_2_volume": 0.36,
+    "filter_on": 1,
+    "filter_style": 0,
+    "cutoff": 72.0,
+    "resonance": 0.2,
+    "amp_attack": 0.18,
+    "amp_decay": 1.3,
+    "amp_sustain": 0.72,
+    "amp_release": 1.0,
+    "mono_lfo_1_sync": 0,
+    "mono_lfo_1_frequency": -1.4,
+    "mono_lfo_1_waveform": 1.0,
+    "mono_lfo_2_sync": 0,
+    "mono_lfo_2_frequency": -0.8,
+    "mono_lfo_2_waveform": 13.0,
+    "chorus_on": 1,
+    "chorus_rate": 0.42,
+    "chorus_depth": 0.4,
+    "chorus_mix": 0.42,
+    "reverb_on": 1,
+    "reverb_dry_wet": 0.28,
+    "modulations": [
+      {
+        "amount": 10.0,
+        "destination": "cutoff",
+        "source": "mono_lfo_1"
+      },
+      {
+        "amount": 0.08,
+        "destination": "osc_2_tune",
+        "source": "mono_lfo_2"
+      }
+    ]
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Polyphonic Motion",
+  "folder_name": "Advanced",
+  "synth_version": "1.1.1"
+}

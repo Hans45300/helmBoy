@@ -1,9 +1,11 @@
 <map id="mopo::HelmBoyEngine" name="mopo::HelmBoyEngine">
-<area shape="rect" id="Node000001" title="The main synthesis engine for HelmBoy synthesizer." alt="" coords="103,773,289,1269"/>
-<area shape="rect" id="Node000002" href="$classmopo_1_1HelmBoyModule.html" title=" " alt="" coords="5,123,216,725"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,740,163,773,158,774,153,741"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="56,5,165,75"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="114,90,114,123,108,123,108,90"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="241,389,325,459"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="278,474,235,774,229,773,273,473"/>
+<area shape="rect" id="Node000001" title="The main synthesis engine for HelmBoy synthesizer." alt="" coords="143,1979,329,2475"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1HelmBoyModule.html" title=" " alt="" coords="5,1221,256,1931"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="191,1942,199,1979,193,1979,190,1948"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="50,592,211,1173"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="131,1185,133,1222,128,1221,131,1191"/>
+<area shape="rect" id="Node000004" href="$classmopo_1_1Processor.html" title=" " alt="" coords="55,5,206,544"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="131,556,133,592,128,592,131,562"/>
+<area shape="rect" id="Node000005" href="$classmopo_1_1NoteHandler.html" title="Interface for handling MIDI note events in synthesis modules." alt="" coords="281,1509,405,1643"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="331,1655,279,1980,274,1978,328,1660"/>
 </map>

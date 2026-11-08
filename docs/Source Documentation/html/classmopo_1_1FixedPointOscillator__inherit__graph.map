@@ -1,5 +1,5 @@
 <map id="mopo::FixedPointOscillator" name="mopo::FixedPointOscillator">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,123,173,256"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="54,5,124,75"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,90,92,123,86,123,86,90"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,592,173,725"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="14,5,165,544"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,557,92,593,87,592,88,562"/>
 </map>

@@ -81,6 +81,7 @@ namespace {
       }
     }
   }
+
 } // namespace
 
 PatchBrowser::PatchBrowser() : Overlay("patch_browser") {
@@ -90,13 +91,9 @@ PatchBrowser::PatchBrowser() : Overlay("patch_browser") {
 
   banks_model_ = std::make_unique<FileListBoxModel>();
   banks_model_->setListener(this);
-  Array<File> bank_locations;
-  File bank_dir = LoadSave::getBankDirectory();
-  bank_locations.add(bank_dir);
-  banks_model_->rescanFiles(bank_locations);
 
   banks_view_ = std::make_unique<ListBox>("banks", banks_model_.get());
-  banks_view_->setMultipleSelectionEnabled(false);
+  banks_view_->setMultipleSelectionEnabled(true);
   banks_view_->setClickingTogglesRowSelection(true);
   banks_view_->updateContent();
   addAndMakeVisible(banks_view_.get());
@@ -114,6 +111,7 @@ PatchBrowser::PatchBrowser() : Overlay("patch_browser") {
   patches_model_->setListener(this);
 
   patches_view_ = std::make_unique<ListBox>("patches", patches_model_.get());
+  patches_view_->setMultipleSelectionEnabled(true);
   patches_view_->updateContent();
   addAndMakeVisible(patches_view_.get());
 
@@ -144,8 +142,9 @@ PatchBrowser::PatchBrowser() : Overlay("patch_browser") {
   addAndMakeVisible(export_bank_button_.get());
   export_bank_button_->setEnabled(false);
 
-  selectedFilesChanged(banks_model_.get());
-  selectedFilesChanged(folders_model_.get());
+  preset_root_button_ = std::make_unique<TextButton>(TRANS("Preset Root..."));
+  preset_root_button_->addListener(this);
+  addAndMakeVisible(preset_root_button_.get());
 
   cc_license_link_ = std::make_unique<HyperlinkButton>("CC-BY",
                                          URL("https://creativecommons.org/licenses/by/4.0/"));
@@ -165,6 +164,10 @@ PatchBrowser::PatchBrowser() : Overlay("patch_browser") {
   save_as_button_->addListener(this);
   addAndMakeVisible(save_as_button_.get());
 
+  move_rename_patch_button_ = std::make_unique<TextButton>(TRANS("Move / Rename Patch"));
+  move_rename_patch_button_->addListener(this);
+  addAndMakeVisible(move_rename_patch_button_.get());
+
   delete_patch_button_ = std::make_unique<TextButton>(TRANS("Delete Patch"));
   delete_patch_button_->addListener(this);
   addAndMakeVisible(delete_patch_button_.get());
@@ -181,6 +184,7 @@ PatchBrowser::PatchBrowser() : Overlay("patch_browser") {
 }
 
 PatchBrowser::~PatchBrowser() {
+  file_chooser_.reset();
 }
 
 void PatchBrowser::paint(Graphics& g) {
@@ -246,7 +250,7 @@ void PatchBrowser::resized() {
   int patches_width = getPatchesWidth();
   int patch_info_width = getPatchInfoWidth();
   float height = size_ratio_ * BROWSING_HEIGHT - 2.0f * BROWSE_PADDING;
-  float height_with_buttons = height - BUTTON_HEIGHT - button_padding;
+  float height_with_buttons = height - 2 * BUTTON_HEIGHT - 2 * button_padding;
   float search_box_height = 28.0f;
 
   int import_export_width = (banks_width - button_padding) / 2.0f;
@@ -256,6 +260,9 @@ void PatchBrowser::resized() {
   export_bank_button_->setBounds(start_x + banks_width - import_export_width,
                                  banks_view_->getBottom() + button_padding,
                                  import_export_width, BUTTON_HEIGHT);
+  preset_root_button_->setBounds(start_x,
+                                 import_bank_button_->getBottom() + button_padding,
+                                 banks_width, BUTTON_HEIGHT);
   folders_view_->setBounds(banks_view_->getRight() + BROWSE_PADDING,
                            BROWSE_PADDING, folders_width, height);
 
@@ -270,6 +277,10 @@ void PatchBrowser::resized() {
   delete_patch_button_->setBounds(patches_view_->getRight() - button_width,
                                   patches_view_->getBottom() + button_padding,
                                   button_width, BUTTON_HEIGHT);
+  move_rename_patch_button_->setBounds(patches_view_->getX(),
+                                       save_as_button_->getBottom() + button_padding,
+                                       patches_width, BUTTON_HEIGHT);
+  move_rename_patch_button_->setEnabled(false);
   delete_patch_button_->setEnabled(false);
 
   float data_x = patches_view_->getRight() + BROWSE_PADDING;
@@ -293,30 +304,35 @@ void PatchBrowser::resized() {
 void PatchBrowser::visibilityChanged() {
   Overlay::visibilityChanged();
   if (isVisible()) {
+    ensureInitialScan();
     search_box_->setText("");
     search_box_->grabKeyboardFocus();
 
     bool is_cc = license_.contains("creativecommons");
     cc_license_link_->setVisible(isPatchSelected() && is_cc);
     gpl_license_link_->setVisible(isPatchSelected() && !is_cc);
+
   }
 }
 
 void PatchBrowser::selectedFilesChanged(FileListBoxModel* model) {
+  if (suppress_model_notifications_)
+    return;
+
   if (model == banks_model_.get()) {
     scanFolders();
-    export_bank_button_->setEnabled(banks_view_->getSelectedRows().size() == 1);
   }
   if (model == banks_model_.get() || model == folders_model_.get())
     scanPatches();
   else if (model == patches_model_.get()) {
     SparseSet<int> selected_rows = patches_view_->getSelectedRows();
-    delete_patch_button_->setEnabled(selected_rows.size());
+    delete_patch_button_->setEnabled(selected_rows.size() == 1);
+    move_rename_patch_button_->setEnabled(selected_rows.size() == 1);
 
     if (selected_rows.size()) {
       external_patch_ = File();
       File patch = patches_model_->getFileAtRow(selected_rows[0]);
-      loadFromFile(patch);
+      setPatchInfo(patch);
 
       if (listener_)
         listener_->newPatchSelected(patch);
@@ -327,6 +343,16 @@ void PatchBrowser::selectedFilesChanged(FileListBoxModel* model) {
     }
     repaint();
   }
+  updateExportButtonState();
+}
+
+void PatchBrowser::fileDoubleClicked(FileListBoxModel* model, int row_number) {
+  if (model != patches_model_.get() || row_number < 0 ||
+      row_number >= patches_model_->getNumRows())
+    return;
+
+  patches_view_->selectRow(row_number);
+  loadSelectedPatch();
 }
 
 void PatchBrowser::textEditorTextChanged(TextEditor& editor) {
@@ -348,6 +374,11 @@ void PatchBrowser::fileSaved(File saved_file) {
 }
 
 void PatchBrowser::fileDeleted(File saved_file) {
+  if (auto* parent = findParentComponentOfClass<SynthGuiInterface>()) {
+    SynthBase* synth = parent->getSynth();
+    if (synth->getActiveFile() == saved_file)
+      synth->clearActiveFile();
+  }
   scanAll();
 }
 
@@ -361,21 +392,122 @@ void PatchBrowser::buttonClicked(Button* clicked_button) {
       delete_section_->setVisible(true);
     }
   }
-  else if (clicked_button == hide_button_.get() || clicked_button == done_button_.get())
+  else if (clicked_button == move_rename_patch_button_.get()) {
+    File selected_patch = getSelectedPatch();
+    if (!selected_patch.existsAsFile())
+      return;
+
+    String source_extension = selected_patch.getFileExtension();
+    String destination_extension = source_extension;
+    if (source_extension.equalsIgnoreCase(".helm"))
+      destination_extension = ".helmboy";
+
+    file_chooser_ = std::make_unique<FileChooser>(TRANS("Move / Rename Patch"),
+                                                selected_patch,
+                                                "*" + destination_extension);
+
+    file_chooser_->launchAsync(FileBrowserComponent::saveMode |
+                         FileBrowserComponent::canSelectFiles |
+                         FileBrowserComponent::warnAboutOverwriting,
+                         [safe_browser = Component::SafePointer<PatchBrowser>(this), selected_patch, destination_extension](const FileChooser& fc) {
+                           auto* browser = safe_browser.getComponent();
+                           if (browser == nullptr)
+                             return;
+                           File target = fc.getResult();
+                           if (target == File())
+                             return;
+
+                           if (target.getFileExtension().isEmpty())
+                             target = target.withFileExtension(destination_extension);
+
+                           if (target == selected_patch)
+                             return;
+
+                           if (!selected_patch.moveFileTo(target)) {
+                             AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon,
+                                                              TRANS("Move / Rename Failed"),
+                                                              TRANS("Unable to move or rename the selected patch."));
+                             return;
+                           }
+
+                             if (auto* parent = browser->findParentComponentOfClass<SynthGuiInterface>())
+                               parent->getSynth()->updateActiveFilePath(selected_patch, target);
+
+                           if (browser->external_patch_ == selected_patch)
+                             browser->external_patch_ = target;
+
+                           browser->banks_view_->deselectAllRows();
+                           browser->folders_view_->deselectAllRows();
+                           browser->patches_view_->deselectAllRows();
+                           browser->scanAll();
+
+                           int target_index = browser->patches_model_->getIndexOfFile(target);
+                           if (target_index >= 0)
+                             browser->patches_view_->selectRow(target_index);
+                         });
+  }
+  else if (clicked_button == done_button_.get())
+    loadSelectedPatch();
+  else if (clicked_button == hide_button_.get())
   {
     setVisible(false);
-    // If a selector is linked, ensure its browse button returns to BROWSE when browser hides
     if (selector_)
       selector_->ensureBrowseButtonIsBrowse();
   }
   else if (clicked_button == import_bank_button_.get()) {
-    LoadSave::importBank();
-    scanAll();
+    LoadSave::importBank([safe_browser = Component::SafePointer<PatchBrowser>(this)]() {
+      if (auto* browser = safe_browser.getComponent()) {
+        browser->scanAll();
+        browser->updateExportButtonState();
+      }
+    });
   }
   else if (clicked_button == export_bank_button_.get()) {
-    Array<File> banks = getFoldersToScan(banks_view_.get(), banks_model_.get());
-    if (banks.size())
-      LoadSave::exportBank(banks[0].getFileName());
+    Array<File> selected_items = getSelectedFolders(folders_view_.get(), folders_model_.get());
+    selected_items.addArray(getSelectedFolders(patches_view_.get(), patches_model_.get()));
+
+    if (selected_items.isEmpty())
+      selected_items = getSelectedFolders(banks_view_.get(), banks_model_.get());
+    if (!selected_items.isEmpty())
+      LoadSave::exportBank(std::move(selected_items));
+  }
+  else if (clicked_button == preset_root_button_.get()) {
+    file_chooser_ = std::make_unique<FileChooser>(TRANS("Choose Preset Root Folder"),
+                                                LoadSave::getBankDirectory());
+    file_chooser_->launchAsync(FileBrowserComponent::openMode | FileBrowserComponent::canSelectDirectories,
+                         [safe_browser = Component::SafePointer<PatchBrowser>(this)](const FileChooser& fc) {
+                           auto* browser = safe_browser.getComponent();
+                           if (browser == nullptr)
+                             return;
+                           File selected = fc.getResult();
+                           if (selected == File())
+                             return;
+
+                           ScopedValueSetter<bool> lock_notifications(browser->suppress_model_notifications_, true);
+                           LoadSave::saveCustomPatchRootDirectory(selected);
+                           browser->search_box_->setText("", false);
+                           browser->folders_model_->setShowRelativeDirectoryPaths(true, LoadSave::getBankDirectory());
+                           browser->banks_view_->deselectAllRows();
+                           browser->folders_view_->deselectAllRows();
+                           browser->patches_view_->deselectAllRows();
+                           browser->scanAll();
+                         });
+  }
+}
+
+void PatchBrowser::loadSelectedPatch() {
+  File patch_to_load;
+  SparseSet<int> selected_rows = patches_view_->getSelectedRows();
+  if (selected_rows.size())
+    patch_to_load = patches_model_->getFileAtRow(selected_rows[0]);
+
+  setVisible(false);
+  if (selector_)
+    selector_->ensureBrowseButtonIsBrowse();
+
+  if (patch_to_load.exists()) {
+    if (loadFromFile(patch_to_load))
+      external_patch_ = patch_to_load;
   }
 }
 
@@ -413,13 +545,16 @@ File PatchBrowser::getSelectedPatch() {
 }
 
 void PatchBrowser::jumpToPatch(int indices) {
+  ensureInitialScan();
   static const FileSorterAscending file_sorter;
 
   File parent = external_patch_.getParentDirectory();
   if (parent.exists()) {
     Array<File> patches;
-    parent.findChildFiles(patches, File::findFiles, false, String("*.") + mopo::PATCH_EXTENSION);
+    LoadSave::findPatchFiles(parent, patches, false);
     patches.sort(file_sorter);
+    if (patches.isEmpty())
+      return;
     int index = patches.indexOf(external_patch_);
     index = (index + indices + patches.size()) % patches.size();
 
@@ -431,6 +566,8 @@ void PatchBrowser::jumpToPatch(int indices) {
     SparseSet<int> selected_rows = patches_view_->getSelectedRows();
     if (selected_rows.size()) {
       int num_rows = patches_model_->getNumRows();
+      if (num_rows == 0)
+        return;
       int row = (selected_rows[0] + indices + num_rows) % num_rows;
       patches_view_->selectRow(row);
     }
@@ -496,9 +633,12 @@ void PatchBrowser::setDeleteSection(DeleteSection* delete_section) {
 
 void PatchBrowser::scanBanks() {
   Array<File> top_level;
-  top_level.add(LoadSave::getBankDirectory());
+  const auto root = LoadSave::getBankDirectory();
+  top_level.add(root);
+  folders_model_->setShowRelativeDirectoryPaths(true, root);
   Array<File> banks_selected = getSelectedFolders(banks_view_.get(), banks_model_.get());
 
+  ScopedValueSetter<bool> lock_notifications(suppress_model_notifications_, true);
   banks_model_->rescanFiles(top_level);
   banks_view_->updateContent();
   setSelectedRows(banks_view_.get(), banks_model_.get(), banks_selected);
@@ -506,19 +646,33 @@ void PatchBrowser::scanBanks() {
 
 void PatchBrowser::scanFolders() {
   Array<File> banks = getFoldersToScan(banks_view_.get(), banks_model_.get());
+  if (banks_view_->getSelectedRows().size() == 0) {
+    banks.clear();
+    banks.add(LoadSave::getBankDirectory());
+  }
   Array<File> folders_selected = getSelectedFolders(folders_view_.get(), folders_model_.get());
 
-  folders_model_->rescanFiles(banks);
+  ScopedValueSetter<bool> lock_notifications(suppress_model_notifications_, true);
+  folders_model_->rescanFiles(banks, "*", false, true);
   folders_view_->updateContent();
   setSelectedRows(folders_view_.get(), folders_model_.get(), folders_selected);
 }
 
 void PatchBrowser::scanPatches() {
-  Array<File> folders = getFoldersToScan(folders_view_.get(), folders_model_.get());
+  SparseSet<int> selected_folder_rows = folders_view_->getSelectedRows();
+  Array<File> folders;
+  if (selected_folder_rows.size())
+    folders = getSelectedFolders(folders_view_.get(), folders_model_.get());
+  else if (banks_view_->getSelectedRows().size() == 0)
+    folders.add(LoadSave::getBankDirectory());
+  else
+    folders = getFoldersToScan(banks_view_.get(), banks_model_.get());
+
   Array<File> patches_selected = getSelectedFolders(patches_view_.get(), patches_model_.get());
 
-  String search = "*" + search_box_->getText() + "*." + mopo::PATCH_EXTENSION;
-  patches_model_->rescanFiles(folders, search, true);
+  String search = search_box_->getText().trim();
+  ScopedValueSetter<bool> lock_notifications(suppress_model_notifications_, true);
+  patches_model_->rescanFiles(folders, search, true, true);
   patches_view_->updateContent();
   setSelectedRows(patches_view_.get(), patches_model_.get(), patches_selected);
 }
@@ -527,6 +681,19 @@ void PatchBrowser::scanAll() {
   scanBanks();
   scanFolders();
   scanPatches();
+  initial_scan_done_ = true;
+}
+
+void PatchBrowser::updateExportButtonState() {
+  const bool has_selection = banks_view_->getSelectedRows().size() > 0 ||
+      folders_view_->getSelectedRows().size() > 0 ||
+      patches_view_->getSelectedRows().size() > 0;
+  export_bank_button_->setEnabled(has_selection);
+}
+
+void PatchBrowser::ensureInitialScan() {
+  if (!initial_scan_done_)
+    scanAll();
 }
 
 float PatchBrowser::getBanksWidth() {

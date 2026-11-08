@@ -48,10 +48,12 @@ namespace mopo {
 
     mopo_float shuffle = utils::clamp(1.0 - input(kShuffle)->source->buffer[0], 0.0, 1.0);
     mopo_float stretch = input(kPhaseStretch)->source->buffer[0];
+    const unsigned int phase_offset =
+      utils::phaseToFixedPoint(input(kPhaseOffset)->at(0));
     unsigned int shuffle_index = INT_MAX * shuffle;
 
-    int waveform = static_cast<int>(input(kWaveform)->source->buffer[0] + 0.5);
-    waveform = mopo::utils::iclamp(waveform, 0, FixedPointWaveLookup::kWhiteNoise - 1);
+    int waveform = utils::roundAndClampWaveformIndex(
+      input(kWaveform)->source->buffer[0], 0, FixedPointWaveLookup::kWhiteNoise - 1);
     mopo_float* wave_buffer = FixedPointWave::getBuffer(waveform, 2.0 * phase_inc);
 
     mopo_float first_adjust = bool(shuffle) * 2.0 / shuffle;
@@ -70,6 +72,7 @@ namespace mopo {
         std::ranges::for_each(std::views::iota(static_cast<unsigned int>(i), static_cast<unsigned int>(samples)), [&](unsigned int idx) {
           phase_ += phase_inc;
           current_phase = phase_ * first_adjust;
+          current_phase += phase_offset;
           unsigned int warped_phase = remapPhase(current_phase, stretch);
           mopo_float wave_read = FixedPointWave::interpretWave(wave_buffer, warped_phase);
           dest[idx] = amplitude[idx] * wave_read;
@@ -82,6 +85,7 @@ namespace mopo {
       std::ranges::for_each(std::views::iota(static_cast<unsigned int>(i), static_cast<unsigned int>(samples)), [&](unsigned int idx) {
         phase_ += phase_inc;
         current_phase = (phase_ - shuffle_index) * second_adjust;
+        current_phase += phase_offset;
         unsigned int warped_phase = remapPhase(current_phase, stretch);
         mopo_float wave_read = FixedPointWave::interpretWave(wave_buffer, warped_phase);
         dest[idx] = amplitude[idx] * wave_read;

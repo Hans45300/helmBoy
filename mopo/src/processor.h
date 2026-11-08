@@ -30,6 +30,8 @@
 
 #include <cstring>
 #include <vector>
+#include <cstdlib>
+#include <new>
 
 namespace mopo {
 
@@ -39,16 +41,37 @@ namespace mopo {
   // An output port from the Processor.
   struct Output {
     Output(int size = MAX_BUFFER_SIZE) {
+      if (size <= 0)
+        size = 1;
+
       owner = 0;
+    #if MOPO_SIMD_AVAILABLE && defined(_MSC_VER)
+      // AVX2 requires 32-byte alignment; new[] only guarantees 16-byte on MSVC x64.
+      // Misaligned vmovdqa causes a #GP exception (silent __fastfail) during init.
+      buffer = static_cast<mopo_float*>(_aligned_malloc(size * sizeof(mopo_float), 32));
+    #elif MOPO_SIMD_AVAILABLE
+      buffer = static_cast<mopo_float*>(std::aligned_alloc(32, size * sizeof(mopo_float)));
+    #else
       buffer = new mopo_float[size];
+    #endif
+
+      if (buffer == nullptr)
+        throw std::bad_alloc();
+
       buffer_size = size;
       clearBuffer();
       clearTrigger();
     }
 
     virtual ~Output() {
+    #if MOPO_SIMD_AVAILABLE && defined(_MSC_VER)
+      _aligned_free(buffer);
+    #elif MOPO_SIMD_AVAILABLE
+      std::free(buffer);
+    #else
       delete[] buffer;
-    }
+    #endif
+        }
 
     void trigger(mopo_float value, int offset = 0) {
       triggered = true;
@@ -123,6 +146,12 @@ namespace mopo {
        * @brief Méthode de traitement à surcharger par les sous-classes.
        */
       virtual void process() = 0;
+  /** Reset persistent processing state at an audio-block boundary. */
+  /**
+   * @brief Reset persistent DSP state at an audio-block boundary.
+   * Implementations must not allocate, lock, block or access the GUI.
+   */
+  virtual void resetState() { }
 
       // Subclasses should override this if they need to adjust for change in
       // sample rate.

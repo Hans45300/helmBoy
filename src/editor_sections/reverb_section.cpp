@@ -23,6 +23,7 @@
 #include "colors.h"
 #include "fonts.h"
 #include "synth_button.h"
+#include "text_look_and_feel.h"
 
 /**
  * @file reverb_section.cpp
@@ -40,39 +41,64 @@ ReverbSection::ReverbSection(String name) : SynthSection(name) {
   addSlider((dry_wet_ = std::make_unique<SynthSlider>("reverb_dry_wet")).get());
   dry_wet_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
+  addSlider((stereo_width_ = std::make_unique<SynthSlider>("reverb_stereo_width")).get());
+  stereo_width_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+
   addButton((on_ = std::make_unique<SynthButton>("reverb_on")).get());
   setActivator(on_.get());
+
+  addButton((freeze_ = std::make_unique<SynthButton>("reverb_freeze_mode")).get());
+  freeze_->setLookAndFeel(TextLookAndFeel::instance());
+  freeze_->setButtonText("");
+  freeze_->setTooltip(TRANS("Freeze reverb tail"));
 }
 
 ReverbSection::~ReverbSection() {
   on_ = nullptr;
+  freeze_ = nullptr;
   feedback_ = nullptr;
   damping_ = nullptr;
   dry_wet_ = nullptr;
+  stereo_width_ = nullptr;
 }
 
 void ReverbSection::paintBackground(Graphics& g) {
   SynthSection::paintBackground(g);
 
   g.setColour(Colors::control_label_text);
-  g.setFont(Fonts::instance()->proportional_regular().withPointHeight(size_ratio_ * 10.0f));
+  const int label_height = size_ratio_ * 10.0f;
+  const int slot_width = getWidth() / 4;
 
-  drawTextForComponent(g, TRANS("FEEDB"), feedback_.get());
-  drawTextForComponent(g, TRANS("DAMP"), damping_.get());
-  drawTextForComponent(g, TRANS("MIX"), dry_wet_.get());
+  g.setColour(Colors::control_label_text);
+  g.setFont(Fonts::instance()->proportional_regular().withPointHeight(size_ratio_ * 8.0f));
+
+  const auto freeze_bounds = freeze_->getBounds();
+  g.drawFittedText(TRANS("FREEZE"), freeze_bounds.getRight() + size_ratio_ * 3.0f,
+                   freeze_bounds.getY(), getWidth() - freeze_bounds.getRight() - size_ratio_ * 3.0f,
+                   freeze_bounds.getHeight(), Justification::centredLeft, 1, 0.65f);
+
+  const SynthSlider* controls[] = {feedback_.get(), damping_.get(), dry_wet_.get(), stereo_width_.get()};
+  const String labels[] = {TRANS("FEEDB"), TRANS("DAMP"), TRANS("MIX"), TRANS("WIDTH")};
+  for (int index = 0; index < 4; ++index) {
+    g.drawFittedText(labels[index], index * slot_width, controls[index]->getBottom() + size_ratio_ * 2.0f,
+                     slot_width, label_height, Justification::centred, 1, 0.65f);
+  }
 }
 
 void ReverbSection::resized() {
   int title_width = getTitleWidth();
   on_->setBounds(size_ratio_ * 2.0f, 0, title_width, title_width);
+  int knob_width = getSmallKnobSize();
+  int freeze_y = title_width + size_ratio_ * 2.0f;
+  freeze_->setBounds(size_ratio_ * 2.0f, freeze_y, title_width, title_width);
 
-  int knob_width = getStandardKnobSize();
-  float space = (getWidth() - (3.0f * knob_width)) / 4.0f;
-  int y = size_ratio_ * 30;
-
-  feedback_->setBounds(space, y, knob_width, knob_width);
-  damping_->setBounds((knob_width + space) + space, y, knob_width, knob_width);
-  dry_wet_->setBounds(2 * (knob_width + space) + space, y, knob_width, knob_width);
+  int label_height = size_ratio_ * 10.0f;
+  int knob_y = getHeight() - knob_width - label_height - size_ratio_ * 3.0f;
+  int slot_width = getWidth() / 4;
+  feedback_->setBounds((slot_width - knob_width) / 2, knob_y, knob_width, knob_width);
+  damping_->setBounds(slot_width + (slot_width - knob_width) / 2, knob_y, knob_width, knob_width);
+  dry_wet_->setBounds(2 * slot_width + (slot_width - knob_width) / 2, knob_y, knob_width, knob_width);
+  stereo_width_->setBounds(3 * slot_width + (slot_width - knob_width) / 2, knob_y, knob_width, knob_width);
 
   SynthSection::resized();
 }

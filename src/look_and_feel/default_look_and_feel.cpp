@@ -20,46 +20,13 @@
 
 #include "default_look_and_feel.h"
 #include "colors.h"
+#include "modulation_look_and_feel.h"
+#include "synth_button.h"
 #include "fonts.h"
 #include "synth_slider.h"
 #include "utils.h"
 
 #define POWER_ARC_ANGLE 2.5
-
-namespace {
-  // Gradient colors: 0% saphir, 25% émeraude, 50% jaune citron, 75% orange, 100% rubis
-  Colour getGradientColour(float position) {
-    // Clamp position entre 0 et 1
-    position = jlimit(0.0f, 1.0f, position);
-
-
-    if (position <= 0.20f) {
-      // Interpolation entre améthyste et saphir
-      float t = position / 0.20f;
-      return Colors::amethyst.interpolatedWith(Colors::sapphire, t);
-    }
-    else if (position <= 0.40f) {
-      // Interpolation entre saphir et émeraude
-      float t = (position - 0.20f) / 0.20f;
-      return Colors::sapphire.interpolatedWith(Colors::emerald, t);
-    }
-    else if (position <= 0.60f) {
-      // Interpolation entre émeraude et jaune citron
-      float t = (position - 0.40f) / 0.20f;
-      return Colors::emerald.interpolatedWith(Colors::topaze, t);
-    }
-    else if (position <= 0.80f) {
-      // Interpolation entre jaune citron et orange
-      float t = (position - 0.60f) / 0.20f;
-      return Colors::topaze.interpolatedWith(Colors::orange, t);
-    }
-    else {
-      // Interpolation entre orange et rubis
-      float t = (position - 0.80f) / 0.20f;
-      return Colors::orange.interpolatedWith(Colors::ruby, t);
-    }
-  }
-}
 
 DefaultLookAndFeel::DefaultLookAndFeel() {
   setColour(PopupMenu::backgroundColourId, Colors::popup_background);
@@ -148,7 +115,7 @@ void DefaultLookAndFeel::drawLinearSlider(Graphics& g, int x, int y, int width, 
           gradient_pos = x1 / w;
         }
 
-        g.setColour(getGradientColour(gradient_pos));
+        g.setColour(Colors::getSliderGradientColour(gradient_pos));
         g.fillRect(x1, 0.0f, x2 - x1, h);
       }
     }
@@ -218,7 +185,7 @@ void DefaultLookAndFeel::drawLinearSlider(Graphics& g, int x, int y, int width, 
           gradient_pos = 1.0f - (segment_center / h);
         }
 
-        g.setColour(getGradientColour(gradient_pos));
+        g.setColour(Colors::getSliderGradientColour(gradient_pos));
         g.fillRect(0.0f, rect_y, w, rect_height);
       }
     }
@@ -325,7 +292,7 @@ void DefaultLookAndFeel::drawRotarySlider(Graphics& g, int x, int y, int width, 
         segment.addCentredArc(full_radius, full_radius, small_outer_radius, small_outer_radius,
                              0.0f, angle1, angle2, true);
 
-        g.setColour(getGradientColour(gradient_pos));
+        g.setColour(Colors::getSliderGradientColour(gradient_pos));
         g.strokePath(segment, outer_stroke);
       }
     }
@@ -348,7 +315,7 @@ void DefaultLookAndFeel::drawRotarySlider(Graphics& g, int x, int y, int width, 
         segment.addCentredArc(full_radius, full_radius, small_outer_radius, small_outer_radius,
                              0.0f, angle1, angle2, true);
 
-        g.setColour(getGradientColour(gradient_pos));
+        g.setColour(Colors::getSliderGradientColour(gradient_pos));
         g.strokePath(segment, outer_stroke);
       }
     }
@@ -414,10 +381,19 @@ void DefaultLookAndFeel::drawToggleButton(Graphics& g, ToggleButton& button,
   Rectangle<int> bar_shadow_rect(full_radius - 1.0f, padding, 2.0f, full_radius - padding);
   shadow.drawForRectangle(g, bar_shadow_rect);
 
-  if (button.getToggleState())
-    g.setColour(Colours::white);
-  else
-    g.setColour(Colours::grey);
+  SynthButton* synth_button = dynamic_cast<SynthButton*>(&button);
+  if (button.getToggleState()) {
+    if (synth_button && synth_button->isModulated())
+      g.setColour(Colors::modulation.withAlpha(0.85f));
+    else
+      g.setColour(Colours::white);
+  }
+  else {
+    if (synth_button && synth_button->isModulated())
+      g.setColour(Colors::modulation.withAlpha(0.425f));
+    else
+      g.setColour(Colours::grey);
+  }
 
   g.strokePath(outer, stroke_type);
   g.fillRoundedRectangle(full_radius - 1.0f, padding, 2.0f, full_radius - padding, 1.0f);
@@ -431,6 +407,13 @@ void DefaultLookAndFeel::drawToggleButton(Graphics& g, ToggleButton& button,
     g.setColour(Colour(0x11ffffff));
     g.fillEllipse(hover_padding, hover_padding,
                   button.getWidth() - 2 * hover_padding, button.getHeight() - 2 * hover_padding);  }
+
+  if (synth_button && synth_button->isModulationEditActive()) {
+    Rectangle<float> bounds = button.getLocalBounds().toFloat().reduced(1.5f);
+    g.setColour(Colors::modulation.withAlpha(0.85f));
+    g.drawRoundedRectangle(bounds, 4.0f, 2.0f);
+
+  }
 }
 
 void DefaultLookAndFeel::drawButtonBackground(Graphics& g, Button& button,

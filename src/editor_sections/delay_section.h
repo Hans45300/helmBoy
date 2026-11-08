@@ -46,15 +46,18 @@
  * - **Free-running Mode**: Manual delay time control in Hz/seconds
  * - **Feedback Control**: Variable feedback amount for echo trails
  * - **Dry/Wet Mix**: Blend control between original and delayed signal
- * - **Filter Integration**: Optional filtering of delay feedback
+ * - **Ping-Pong**: Cross-feed feedback between the stereo delay lines
+ * - **LP Cutoff**: 24 dB/octave filtering of wet delay taps and feedback
  *
  * @section delay_controls Available Controls
  * - **On/Off**: Effect bypass toggle
+ * - **Ping-Pong**: Alternates wet echoes between left and right
  * - **Frequency**: Delay time in free-running mode (0.1 Hz - 20 kHz)
  * - **Tempo**: Musical note values for tempo sync (1/32 - 1/1)
  * - **Sync**: Toggle between free-running and tempo sync modes
  * - **Feedback**: Delay feedback amount (0% - 95%)
  * - **Dry/Wet**: Effect mix level (0% - 100%)
+ * - **LP Cutoff**: Delay low-pass cutoff (20 Hz - 20 kHz)
  *
  * @section delay_sync Tempo Synchronization
  * When tempo sync is enabled, delay times are quantized to musical
@@ -68,6 +71,7 @@
  * - **Time Modulation**: LFO or envelope control of delay time
  * - **Feedback Modulation**: Dynamic feedback control
  * - **Mix Modulation**: Automated dry/wet crossfading
+ * - **LP Cutoff Modulation**: Dynamic tonal shaping of delay repeats
  *
  * The delay effect is processed after the main synthesis chain and
  * can add significant depth and space to the synthesized sound.
@@ -95,11 +99,13 @@ class DelaySection : public SynthSection {
 
   private:
     std::unique_ptr<SynthButton> on_;
+    std::unique_ptr<SynthButton> ping_pong_;
     std::unique_ptr<SynthSlider> frequency_;
     std::unique_ptr<SynthSlider> tempo_;
     std::unique_ptr<TempoSelector> sync_;
     std::unique_ptr<SynthSlider> feedback_;
     std::unique_ptr<SynthSlider> dry_wet_;
+    std::unique_ptr<SynthSlider> lp_cutoff_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DelaySection)
 };

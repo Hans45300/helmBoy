@@ -10,26 +10,23 @@ The step sequencer is a modulation source that steps through a pattern of values
 
 ### Number of Steps
 
-- **Range**: 1 to 32 steps
+- **Range**: 1 to 64 steps
 - **Effect**: Length of the sequence pattern
 
 ### Step Values
 
 Each step has an adjustable value that defines the modulation amount at that step.
 
-### Frequency/Rate
+### Frequency, Sync, and Retrigger
 
-- **Tempo Sync**: Locks to musical divisions (1/4, 1/8, 1/16, etc.)
-- **Free**: Independent timing
+- Choose free-running time or tempo divisions, including straight, dotted, and triplet values.
+- The retrigger selector offers **Free**, **Retrigger**, and **Sync to Playhead**.
 
-### Smoothing
+### Slide
 
-- **Off**: Steps change instantly (stepped)
-- **On**: Steps interpolate smoothly (glide)
+- The Slide control smooths transitions between step values.
 
-### Gate
-
-Each step can be on or off, creating rhythmic patterns.
+Each of the 64 step controls sets that step's modulation value. The **Steps** control selects how many are used in the pattern.
 
 ## Applications
 
@@ -51,10 +48,19 @@ Route to LFO rate or other modulators for complex patterns.
 
 ## Editing
 
-- Click steps to adjust values
-- Drag to draw patterns
-- Right-click for step options
-- Copy/paste patterns
+Edit the graphical step controls directly. The sequencer displays its current position and values during playback.
+
+## Keyboard Shortcuts
+
+Click a step in the graph to select it and give the sequencer keyboard focus.
+
+- **Left / Right Arrow**: Select the previous or next step. Selection wraps at the ends; if no step is selected, either key selects the first step.
+- **Up / Down Arrow**: Increase or decrease the selected step by `0.01`.
+- **Ctrl + Up / Down Arrow**: Change the selected step by `0.1`.
+- **Shift + Up / Down Arrow**: Change the selected step by one semitone (`1/48`).
+- **Ctrl + Shift + Up / Down Arrow**: Change the selected step by six semitones (`6/48`).
+
+Step values are limited to `-1` through `+1`.
 
 ## See Also
 

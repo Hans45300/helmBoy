@@ -1,0 +1,7 @@
+<map id="mopo::cr::ResonanceScale" name="mopo::cr::ResonanceScale">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,795,174,949"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Operator.html" title="Base class for simple arithmetic and logic operators." alt="" coords="27,592,152,747"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,759,92,795,87,794,89,764"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1Processor.html" title=" " alt="" coords="14,5,165,544"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="90,556,92,592,87,592,89,562"/>
+</map>

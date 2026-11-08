@@ -19,20 +19,23 @@
  */
 
 #pragma once
-#/**
+/**
  * @file reverb.h
- * @brief Processeur de réverbération stéréo (comb + all-pass filters).
+ * @brief Processeur de réverbération stéréo JUCE.
  */
 #ifndef REVERB_H
 #define REVERB_H
 
-#include <xsimd/xsimd.hpp>
+#include <vector>
+#include <memory>
 #include "processor_router.h"
+
+#include <juce_audio_basics/juce_audio_basics.h>
 
 namespace mopo {
 
   /**
-   * @brief Processeur de r�verb�ration st�r�o avec filtrage comb et all-pass.
+  * @brief Stereo reverb processor using the JUCE engine exclusively.
    */
   class Reverb : public ProcessorRouter {
     public:
@@ -45,6 +48,8 @@ namespace mopo {
         Damping,
         StereoWidth,
         Wet,
+        FreezeMode,  ///< 0 = normal mode, >=0.5 = infinite decay (freeze).
+        AudioRight,
         NumInputs
       };
 
@@ -52,6 +57,12 @@ namespace mopo {
        * @brief Constructeur.
        */
       Reverb();
+
+      /**
+       * @brief Constructeur de copie.
+       * Copies all state except juce_reverb_ (which is re-initialized lazily on first use).
+       */
+      Reverb(const Reverb& other);
 
       /**
        * @brief Destructeur.
@@ -62,6 +73,8 @@ namespace mopo {
        * @brief Traite le buffer d'entr�e et applique la r�verb�ration.
        */
       void process() override;
+        /** Reset child processors and the prepared JUCE reverb state. */
+        void resetState() override;
 
       /**
        * @brief Clone le processeur.
@@ -70,11 +83,16 @@ namespace mopo {
       [[nodiscard]] Processor* clone() const override { return new Reverb(*this); }
 
     protected:
-      Processor* reverb_wet_left_ = nullptr;
-      Processor* reverb_wet_right_ = nullptr;
+      void processJucePath(const mopo_float* audio,
+                           const mopo_float* audio_right,
+                           mopo_float* dest_left,
+                           mopo_float* dest_right,
+                           mopo_float wet_in);
 
-      mopo_float current_dry_ = 0.0f;
-      mopo_float current_wet_ = 0.0f;
+      std::unique_ptr<juce::Reverb> juce_reverb_;  ///< JUCE Freeverb engine.
+      mopo_float juce_last_sample_rate_ = 0.0;    ///< Last sample rate passed to juce_reverb_->setSampleRate().
+      std::vector<float> juce_left_buf_;           ///< double→float conversion buffer, left channel.
+      std::vector<float> juce_right_buf_;          ///< double→float conversion buffer, right channel.
   };
 } // namespace mopo
 

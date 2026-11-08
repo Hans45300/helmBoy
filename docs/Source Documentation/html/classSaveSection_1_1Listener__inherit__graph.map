@@ -1,5 +1,5 @@
 <map id="SaveSection::Listener" name="SaveSection::Listener">
-<area shape="rect" id="Node000001" title=" " alt="" coords="18,5,157,96"/>
-<area shape="rect" id="Node000002" href="$classPatchBrowser.html" title=" " alt="" coords="5,144,170,853"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,111,90,144,85,144,85,111"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="25,5,164,96"/>
+<area shape="rect" id="Node000002" href="$classPatchBrowser.html" title=" " alt="" coords="5,144,183,917"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,108,97,145,92,144,94,113"/>
 </map>

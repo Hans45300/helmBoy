@@ -1,0 +1,30 @@
+{
+  "settings": {
+    "polyphony": 8,
+    "osc_1_waveform": 0.0,
+    "osc_1_volume": 0.58,
+    "osc_2_waveform": 4.0,
+    "osc_2_transpose": 7.0,
+    "osc_2_volume": 0.24,
+    "sub_volume": 0.12,
+    "filter_on": 1,
+    "filter_style": 1,
+    "cutoff": 83.0,
+    "resonance": 0.34,
+    "fil_env_depth": 78.0,
+    "fil_decay": 0.27,
+    "fil_sustain": 0.0,
+    "amp_attack": 0.001,
+    "amp_decay": 0.32,
+    "amp_sustain": 0.0,
+    "amp_release": 0.12,
+    "reverb_on": 1,
+    "reverb_dry_wet": 0.08,
+    "arp_on": 0,
+    "modulations": []
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Maui High Tom Drop",
+  "folder_name": "Percussions",
+  "synth_version": "1.1.1"
+}

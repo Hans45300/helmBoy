@@ -1,0 +1,50 @@
+{
+  "settings": {
+    "polyphony": 12,
+    "velocity_track": 0.08,
+    "osc_1_waveform": 2.0,
+    "osc_1_volume": 0.58,
+    "osc_2_waveform": 2.0,
+    "osc_2_transpose": 12.0,
+    "osc_2_volume": 0.38,
+    "sub_waveform": 2.0,
+    "sub_octave": 0,
+    "sub_volume": 0.16,
+    "filter_on": 1,
+    "filter_style": 0,
+    "cutoff": 88.0,
+    "resonance": 0.12,
+    "amp_attack": 0.004,
+    "amp_decay": 0.55,
+    "amp_sustain": 0.96,
+    "amp_release": 0.12,
+    "mono_lfo_1_sync": 0,
+    "mono_lfo_1_frequency": 2.1,
+    "mono_lfo_1_waveform": 1.0,
+    "chorus_on": 1,
+    "chorus_rate": 0.78,
+    "chorus_depth": 0.34,
+    "chorus_mix": 0.4,
+    "reverb_on": 1,
+    "reverb_dry_wet": 0.14,
+    "delay_on": 0,
+    "arp_on": 0,
+    "modulations": [
+      {
+        "amount": 1.0,
+        "destination": "mono_lfo_1_amplitude",
+        "source": "mod_wheel"
+      },
+      {
+        "amount": 0.07,
+        "destination": "osc_2_tune",
+        "source": "mono_lfo_1"
+      }
+    ],
+    "lfo_tempo_index_version": 2
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Hades Hollow Organ",
+  "folder_name": "Keys",
+  "synth_version": "1.1.1"
+}

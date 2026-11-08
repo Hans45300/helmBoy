@@ -1,0 +1,30 @@
+{
+  "settings": {
+    "polyphony": 8,
+    "osc_1_waveform": 0.0,
+    "osc_1_volume": 0.55,
+    "osc_2_waveform": 1.0,
+    "osc_2_transpose": -12.0,
+    "osc_2_volume": 0.2,
+    "sub_volume": 0.76,
+    "sub_octave": 1,
+    "filter_on": 1,
+    "filter_style": 1,
+    "cutoff": 36.0,
+    "resonance": 0.1,
+    "fil_env_depth": 38.0,
+    "fil_decay": 0.4,
+    "fil_sustain": 0.0,
+    "amp_attack": 0.003,
+    "amp_decay": 0.48,
+    "amp_sustain": 0.0,
+    "amp_release": 0.18,
+    "reverb_on": 0,
+    "arp_on": 0,
+    "modulations": []
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Maui Soft Sub",
+  "folder_name": "Percussions",
+  "synth_version": "1.1.1"
+}

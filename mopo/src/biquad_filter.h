@@ -36,6 +36,14 @@ namespace mopo {
   // Implements RBJ biquad filters of different types.
   class BiquadFilter : public Processor {
     public:
+      struct Coefficients {
+        mopo_float in_0 = 1.0;
+        mopo_float in_1 = 0.0;
+        mopo_float in_2 = 0.0;
+        mopo_float out_1 = 0.0;
+        mopo_float out_2 = 0.0;
+      };
+
       /// Entr�es du filtre biquad
       enum class Inputs {
         Audio,
@@ -60,6 +68,26 @@ namespace mopo {
         GainedBandPass,
         NumTypes,
       };
+
+      /**
+       * @brief Returns true when a mopo biquad type has a direct JUCE IIR equivalent.
+       *
+       * This helper is used by Lot B migration to route only compatible modes
+       * through JUCE IIR while keeping explicit fallback for the others.
+       */
+      [[nodiscard]] static bool hasDirectJuceIirEquivalent(Type type);
+
+      /**
+       * @brief Human-readable filter type name for diagnostics and logs.
+       */
+      [[nodiscard]] static const char* getTypeName(Type type);
+
+      /**
+       * @brief Compute RBJ low-pass coefficients for a cutoff, Q and sample rate.
+       */
+      [[nodiscard]] static Coefficients lowPassCoefficients(mopo_float cutoff,
+                                                              mopo_float resonance,
+                                                              mopo_float sample_rate);
 
       /** @brief Construct a Biquad filter processor. */
       BiquadFilter();
@@ -105,18 +133,6 @@ namespace mopo {
   /**
    * @brief Traite un échantillon individuel du filtre.
    * @param i Indice de l'échantillon dans le buffer.
-   * @param dest Vue vers le buffer de sortie.
-   * @param audio_buffer Vue vers le buffer d'entrée.
-   */
-  /**
-   * @brief Tick processing for a single sample.
-   * @param i Sample index within the buffer.
-   * @param dest Destination span to write to.
-   * @param audio_buffer Source input span.
-   */
-  /**
-   * @brief Traite un échantillon individuel du filtre.
-   * @param i Indice de l'échantillon dans le buffer.
    * @param dest Span destination dans lequel écrire la valeur filtrée.
    * @param audio_buffer Span source contenant l'échantillon d'entrée.
    */
@@ -124,6 +140,11 @@ namespace mopo {
 
     private:
       void reset();
+      [[nodiscard]] bool shouldUseJucePath(Type type) const;
+      void computeCoefficientsJucePath(Type type,
+               mopo_float cutoff,
+               mopo_float resonance,
+               mopo_float gain);
 
       Type current_type_;
       mopo_float current_cutoff_, current_resonance_;

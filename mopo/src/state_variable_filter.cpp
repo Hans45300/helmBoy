@@ -27,12 +27,48 @@
  */
 
 #include <cmath>
+#include <cstdio>
+#include <algorithm>
+
+namespace {
+  inline bool isFiniteValue(mopo::mopo_float value) {
+    return std::isfinite(static_cast<double>(value));
+  }
+}
 
 #define MIN_RESONANCE 0.1
 #define MAX_RESONANCE 16.0
 #define MIN_CUTTOFF 1.0
 
 namespace mopo {
+
+  bool StateVariableFilter::hasValidProcessingSpec() const {
+    return sample_rate_ > 0.0 && buffer_size_ > 0;
+  }
+
+  bool StateVariableFilter::shouldUseJucePath(Styles style, Shelves shelf) const {
+#if defined(HELMBOY_ENABLE_SVF_JUCE_PATH)
+    // Stage C4: route only pass styles through the optional JUCE path.
+    (void) shelf;
+    return style == Styles::dB12 || style == Styles::dB24;
+#else
+    (void) style;
+    (void) shelf;
+    return false;
+#endif
+  }
+
+  void StateVariableFilter::processJucePath(const mopo_float* audio_buffer,
+                                            mopo_float* dest,
+                                            Styles style,
+                                            Shelves shelf) {
+    // Stage C4: explicit fallback keeps audio behavior stable while wiring the route.
+    (void) shelf;
+    if (style == Styles::dB24)
+      process24db(audio_buffer, dest);
+    else
+      process12db(audio_buffer, dest);
+  }
 
   StateVariableFilter::StateVariableFilter()
     : Processor(static_cast<int>(Inputs::NumInputs), 1),
@@ -55,6 +91,25 @@ namespace mopo {
     using enum Shelves;
     MOPO_ASSERT(inputMatchesBufferSize(static_cast<int>(Audio)));
 
+#if HELMBOY_DEBUG_DSP_PREP
+    static bool warned_invalid_spec = false;
+    if (!hasValidProcessingSpec() && !warned_invalid_spec) {
+      std::fprintf(stderr,
+                   "[HELMBOY_DEBUG_DSP_PREP] StateVariableFilter invalid spec: sr=%f bs=%d\n",
+                   static_cast<double>(sample_rate_), buffer_size_);
+      warned_invalid_spec = true;
+    }
+#endif
+
+    // Hard runtime guard: keep signal passing instead of processing with invalid spec.
+    if (!hasValidProcessingSpec()) {
+      auto invalid_src = input(static_cast<int>(Audio))->source;
+      if (invalid_src != nullptr) {
+        processAllPass(invalid_src->buffer, output()->buffer);
+      }
+      return;
+    }
+
   auto audio_buffer = std::span<const mopo_float>(input(static_cast<int>(Audio))->source->buffer, buffer_size_);
   auto dest = std::span<mopo_float>(output()->buffer, buffer_size_);
 
@@ -63,28 +118,123 @@ namespace mopo {
   return;
     }
 
-  Styles style = static_cast<Styles>(static_cast<int>(input(static_cast<int>(Style))->at(0)));
-  bool db24 = (style == Styles::dB24);
+    const int style_raw = static_cast<int>(input(static_cast<int>(Style))->at(0));
+    const int style_index = std::clamp(style_raw, 0, static_cast<int>(Styles::NumStyles) - 1);
+  #if defined(HELMBOY_DEBUG_SVF_TRANSITIONS)
+    if (style_raw != style_index) {
+      std::fprintf(stderr,
+             "[HelmBoy][SVF] style clamp raw=%d clamped=%d\n",
+             style_raw,
+             style_index);
+    }
+  #endif
+    Styles style = static_cast<Styles>(style_index);
+    bool db24 = (style == Styles::dB24);
 
-    mopo_float cutoff = utils::clamp(input(static_cast<int>(Cutoff))->at(0), MIN_CUTTOFF, sample_rate_);
-    mopo_float resonance = utils::clamp(input(static_cast<int>(Resonance))->at(0), MIN_RESONANCE, MAX_RESONANCE);
-    target_drive_ = input(static_cast<int>(Drive))->at(0);
+    mopo_float cutoff_in = input(static_cast<int>(Cutoff))->at(0);
+    mopo_float resonance_in = input(static_cast<int>(Resonance))->at(0);
+    mopo_float drive_in = input(static_cast<int>(Drive))->at(0);
 
-    if (style == Styles::Shelf) {
-      Shelves shelf_choice = static_cast<Shelves>(static_cast<int>(input(static_cast<int>(ShelfChoice))->at(0)));
-      computeShelfCoefficients(shelf_choice, cutoff, input(static_cast<int>(Gain))->at(0));
+    if (!isFiniteValue(cutoff_in))
+      cutoff_in = MIN_CUTTOFF;
+    if (!isFiniteValue(resonance_in))
+      resonance_in = MIN_RESONANCE;
+    if (!isFiniteValue(drive_in))
+      drive_in = 1.0;
+
+    mopo_float cutoff = utils::clamp(cutoff_in, MIN_CUTTOFF, sample_rate_);
+    mopo_float resonance = utils::clamp(resonance_in, MIN_RESONANCE, MAX_RESONANCE);
+    target_drive_ = drive_in;
+
+    if (style == Styles::Comb) {
+      if (style != last_style_) {
+        reset();
+        last_style_ = style;
+      }
+
+      const Output* comb_audio = input(static_cast<int>(CombAudio))->source;
+      if (comb_audio == nullptr) {
+        processAllPass(audio_buffer.data(), dest.data());
+        return;
+      }
+
+      if (input(static_cast<int>(On))->at(0) == 0.0) {
+        processAllPass(audio_buffer.data(), dest.data());
+        return;
+      }
+
+      mopo_float delta_drive = (target_drive_ - drive_) / buffer_size_;
+      for (int sample = 0; sample < buffer_size_; ++sample) {
+        drive_ += delta_drive;
+        dest[sample] = utils::quickTanh(drive_ * comb_audio->buffer[sample]);
+      }
+      return;
+    }
+
+        Shelves shelf_choice = Shelves::LowShelf;
+        const bool use_juce_path = shouldUseJucePath(style, shelf_choice);
+
+        if (style == Styles::Shelf) {
+      const int shelf_raw = static_cast<int>(input(static_cast<int>(ShelfChoice))->at(0));
+      const int shelf_index = std::clamp(shelf_raw, 0, static_cast<int>(Shelves::NumShelves) - 1);
+#if defined(HELMBOY_DEBUG_SVF_TRANSITIONS)
+      if (shelf_raw != shelf_index) {
+        std::fprintf(stderr,
+                     "[HelmBoy][SVF] shelf clamp raw=%d clamped=%d\n",
+                     shelf_raw,
+                     shelf_index);
+      }
+#endif
+      shelf_choice = static_cast<Shelves>(shelf_index);
+
+      mopo_float gain_in = input(static_cast<int>(Gain))->at(0);
+      if (!isFiniteValue(gain_in))
+        gain_in = 1.0;
+
+      computeShelfCoefficients(shelf_choice, cutoff, gain_in);
+    }
+    else if (style == Styles::Notch) {
+      computeNotchCoefficients(cutoff, resonance);
     }
     else {
       mopo_float blend = input(static_cast<int>(PassBlend))->at(0);
-      computePassCoefficients(blend, cutoff, resonance, db24);
+      if (!isFiniteValue(blend))
+        blend = 1.0;
+      if (use_juce_path)
+        computePassCoefficientsJucePath(blend, cutoff, resonance, db24);
+      else
+        computePassCoefficients(blend, cutoff, resonance, db24);
     }
 
     if (style != last_style_) {
+#if defined(HELMBOY_DEBUG_SVF_TRANSITIONS)
+      std::fprintf(stderr,
+                   "[HelmBoy][SVF] style transition old=%d new=%d (sr=%d bs=%d)\n",
+                   static_cast<int>(last_style_),
+                   static_cast<int>(style),
+                   sample_rate_,
+                   buffer_size_);
+#endif
       reset();
       last_style_ = style;
     }
 
-    if (db24)
+#if defined(HELMBOY_DEBUG_SVF_TRANSITIONS)
+    static Styles last_route_style = Styles::NumStyles;
+    static bool last_route_juce = false;
+    if (style != last_route_style || use_juce_path != last_route_juce) {
+      std::fprintf(stderr,
+                   "[HelmBoy][SVF] route style=%d mode=%s\n",
+                   static_cast<int>(style),
+                   use_juce_path ? "juce-path" : "legacy-path");
+      last_route_style = style;
+      last_route_juce = use_juce_path;
+    }
+#endif
+
+    if (use_juce_path)
+      processJucePath(audio_buffer.data(), dest.data(), style, shelf_choice);
+    else if (db24)
       process24db(audio_buffer.data(), dest.data());
     else
       process12db(audio_buffer.data(), dest.data());
@@ -99,7 +249,17 @@ namespace mopo {
 
     if (input(static_cast<int>(Reset))->source->triggered &&
         input(static_cast<int>(Reset))->source->trigger_value == static_cast<mopo_float>(kVoiceReset)) {
-      int trigger_offset = input(static_cast<int>(Reset))->source->trigger_offset;
+      const int trigger_offset_raw = input(static_cast<int>(Reset))->source->trigger_offset;
+      int trigger_offset = std::clamp(trigger_offset_raw, 0, buffer_size_);
+    #if defined(HELMBOY_DEBUG_SVF_TRANSITIONS)
+      if (trigger_offset_raw != trigger_offset) {
+        std::fprintf(stderr,
+             "[HelmBoy][SVF] reset offset clamp raw=%d clamped=%d bs=%d\n",
+             trigger_offset_raw,
+             trigger_offset,
+             buffer_size_);
+      }
+    #endif
       int i = 0;
       for (; i < trigger_offset; ++i) {
         m0_ += delta_m0;
@@ -135,7 +295,17 @@ namespace mopo {
 
     if (inputs_->at(static_cast<int>(Reset))->source->triggered &&
         inputs_->at(static_cast<int>(Reset))->source->trigger_value == static_cast<mopo_float>(kVoiceReset)) {
-      int trigger_offset = inputs_->at(static_cast<int>(Reset))->source->trigger_offset;
+      const int trigger_offset_raw = inputs_->at(static_cast<int>(Reset))->source->trigger_offset;
+      int trigger_offset = std::clamp(trigger_offset_raw, 0, buffer_size_);
+    #if defined(HELMBOY_DEBUG_SVF_TRANSITIONS)
+      if (trigger_offset_raw != trigger_offset) {
+        std::fprintf(stderr,
+             "[HelmBoy][SVF] reset24 offset clamp raw=%d clamped=%d bs=%d\n",
+             trigger_offset_raw,
+             trigger_offset,
+             buffer_size_);
+      }
+    #endif
       int i = 0;
       for (; i < trigger_offset; ++i) {
         m0_ += delta_m0;
@@ -195,6 +365,50 @@ namespace mopo {
     target_m0_ += high_pass_amount;
     target_m1_ += -k * high_pass_amount;
     target_m2_ += -high_pass_amount;
+
+    a1_ = 1.0 / (1.0 + g * (g + k));
+    a2_ = g * a1_;
+    a3_ = g * a2_;
+  }
+
+  void StateVariableFilter::computeNotchCoefficients(mopo_float cutoff,
+                                                      mopo_float resonance) {
+    MOPO_ASSERT(resonance > 0.0);
+    MOPO_ASSERT(cutoff > 0.0);
+
+    mopo_float g = tan(PI * utils::min(cutoff / sample_rate_, 0.5));
+    mopo_float k = 1.0 / resonance;
+    target_m0_ = 1.0;
+    target_m1_ = -k;
+    target_m2_ = 0.0;
+
+    a1_ = 1.0 / (1.0 + g * (g + k));
+    a2_ = g * a1_;
+    a3_ = g * a2_;
+  }
+
+  void StateVariableFilter::computePassCoefficientsJucePath(mopo_float blend,
+                                                            mopo_float cutoff,
+                                                            mopo_float resonance,
+                                                            bool db24) {
+    // Dedicated coefficient path for optional JUCE-style routing.
+    // This keeps processing topology identical while isolating parameter handling.
+    const mopo_float safe_cutoff = utils::clamp(cutoff, MIN_CUTTOFF, sample_rate_);
+    mopo_float safe_resonance = utils::clamp(resonance, MIN_RESONANCE, MAX_RESONANCE);
+    if (db24)
+      safe_resonance = std::sqrt(safe_resonance);
+
+    const mopo_float normalized_cutoff = utils::min(safe_cutoff / sample_rate_, 0.5);
+    const mopo_float g = std::tan(PI * normalized_cutoff);
+    const mopo_float k = 1.0 / safe_resonance;
+
+    const mopo_float low_pass_amount = std::sqrt(utils::clamp(1.0 - blend, 0.0, 1.0));
+    const mopo_float band_pass_amount = std::sqrt(utils::clamp(1.0 - std::fabs(blend - 1.0), 0.0, 1.0));
+    const mopo_float high_pass_amount = std::sqrt(utils::clamp(blend - 1.0, 0.0, 1.0));
+
+    target_m0_ = high_pass_amount;
+    target_m1_ = band_pass_amount - k * high_pass_amount;
+    target_m2_ = low_pass_amount - high_pass_amount;
 
     a1_ = 1.0 / (1.0 + g * (g + k));
     a2_ = g * a1_;

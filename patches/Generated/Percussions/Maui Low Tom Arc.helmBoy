@@ -1,0 +1,31 @@
+{
+  "settings": {
+    "polyphony": 8,
+    "osc_1_waveform": 0.0,
+    "osc_1_volume": 0.64,
+    "osc_2_waveform": 1.0,
+    "osc_2_transpose": -12.0,
+    "osc_2_volume": 0.32,
+    "sub_volume": 0.34,
+    "filter_on": 1,
+    "filter_style": 1,
+    "cutoff": 55.0,
+    "resonance": 0.2,
+    "fil_env_depth": 52.0,
+    "fil_decay": 0.48,
+    "fil_sustain": 0.0,
+    "amp_attack": 0.001,
+    "amp_decay": 0.54,
+    "amp_sustain": 0.0,
+    "amp_release": 0.18,
+    "distortion_on": 0,
+    "reverb_on": 1,
+    "reverb_dry_wet": 0.1,
+    "arp_on": 0,
+    "modulations": []
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Maui Low Tom Arc",
+  "folder_name": "Percussions",
+  "synth_version": "1.1.1"
+}

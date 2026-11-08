@@ -42,6 +42,7 @@ namespace mopo {
       enum class Inputs {
         Audio,
         On,
+        AudioRight,
         NumInputs
       };
 

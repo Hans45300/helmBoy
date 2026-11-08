@@ -240,12 +240,6 @@ namespace mopo {
        * updated value with release semantics to ensure correct ordering of
        * writes to `data_` with respect to the index update.
        */
-      /**
-       * @brief Push an element to the back (tail) of the queue.
-       * @param entry Value to insert (copied into the buffer).
-       *
-       * Note: does not check for overflow; caller must ensure capacity.
-       */
       void push_back(T entry) {
         int current_end = end_.load(std::memory_order_acquire);
         data_[current_end] = entry;
@@ -291,10 +285,6 @@ namespace mopo {
        * @note Thread-safety: intended for the single-producer thread.
        * Moves the `start_` index backward and writes the entry at the new
        * start position. No overflow detection is performed.
-       */
-      /**
-       * @brief Push an element to the front (head) of the queue.
-       * @param entry Value to insert (copied into the buffer).
        */
       void push_front(T entry) {
         int current_start = start_.load(std::memory_order_acquire);

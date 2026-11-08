@@ -26,7 +26,6 @@ TextSlider::TextSlider(String name) : SynthSlider(name), short_lookup_(nullptr) 
 
 void TextSlider::paint(Graphics& g) {
   static const PathStrokeType stroke(1.000f, PathStrokeType::curved, PathStrokeType::rounded);
-  static const float text_percentage = 0.7f;
 
   int num_types = getMaximum() - getMinimum() + 1;
   float cell_width = float(getWidth()) / num_types;
@@ -37,7 +36,7 @@ void TextSlider::paint(Graphics& g) {
   g.setColour(Colour(Colors::Color_ff323232));
   g.fillRect(selected * cell_width, 0.0f, cell_width, height);
 
-  g.setFont(Fonts::instance()->proportional_regular().withPointHeight(height * text_percentage));
+  g.setFont(Fonts::instance()->proportional_regular().withPointHeight(height * text_size_scale_));
 
   const std::string* lookup = short_lookup_;
   if (lookup == nullptr)
@@ -66,7 +65,10 @@ void TextSlider::mouseEvent(const juce::MouseEvent &e) {
 }
 
 void TextSlider::mouseDown(const juce::MouseEvent &e) {
-  mouseEvent(e);
+  if (e.mods.isPopupMenu())
+    SynthSlider::mouseDown(e);
+  else
+    mouseEvent(e);
 }
 
 void TextSlider::mouseDrag(const juce::MouseEvent &e) {

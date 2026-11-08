@@ -29,14 +29,19 @@
 
 #include <JuceHeader.h>
 
+#include <array>
+
 #include "helmBoy_common.h"
 #include "modulation_button.h"
+#include "synth_button.h"
 #include "synth_section.h"
 #include "synth_slider.h"
 #include <set>
 
 class ModulationHighlight;
 class ModulationMeter;
+class SynthBase;
+struct SynthGuiStateSnapshot;
 
 class ModulationManager : public SynthSection, public Timer,
                           public ModulationButton::ModulationDisconnectListener,
@@ -45,9 +50,11 @@ class ModulationManager : public SynthSection, public Timer,
     /**
      * @brief Construct the modulation manager with mappings to UI controls.
      */
-    ModulationManager (mopo::output_map modulation_sources,
+    ModulationManager (SynthBase* synth,
+           mopo::output_map modulation_sources,
                std::map<std::string, ModulationButton*> modulation_buttons,
                std::map<std::string, SynthSlider*> sliders,
+               std::map<std::string, SynthButton*> buttons,
                mopo::output_map mono_modulations,
                mopo::output_map poly_modulations);
 
@@ -66,8 +73,14 @@ class ModulationManager : public SynthSection, public Timer,
     /** @brief Get the current modulator identifier. */
     std::string getCurrentModulator() { return current_modulator_; }
 
+    bool isDestinationModulated(const std::string& name) const;
+    bool copyModulatedValue(const std::string& name, float& value) const;
+    void promptForModulationValueEntry(const std::string& source,
+                       const std::string& destination);
+
     /** @brief Reset manager state and overlays. */
     void reset() override;
+    void reset(const SynthGuiStateSnapshot& snapshot);
 
     /** @brief Timer callback for periodic updates. */
     void timerCallback() override;
@@ -94,20 +107,32 @@ class ModulationManager : public SynthSection, public Timer,
     void hoverStarted(const std::string& name) override;
     void hoverEnded(const std::string& name) override;
     void modulationsChanged(const std::string& name) override;
+    void modulationsChanged(SynthButton* button) override;
+    bool modulationGesture(SynthButton* button, const ModifierKeys& mods) override;
 
   private:
+    struct ButtonModulationTelemetry {
+      std::array<int, 2> indices { -1, -1 };
+      int count = 0;
+    };
+
     void makeModulationsVisible(std::string destination, bool visible);
+    void updateButtonModulationStates();
     void setSliderValues();
+    void setDestinationSliderBounds(const std::string& name, Slider* slider);
 
     std::unique_ptr<Component> polyphonic_destinations_;
     std::unique_ptr<Component> monophonic_destinations_;
 
+    SynthBase* synth_ = nullptr;
     std::string current_modulator_;
     double last_value_;
     std::map<std::string, ModulationButton*> modulation_buttons_;
 
     std::map<std::string, Slider*> slider_lookup_;
     std::map<std::string, SynthSlider*> slider_model_lookup_;
+    std::map<std::string, SynthButton*> button_model_lookup_;
+    std::map<std::string, ButtonModulationTelemetry> button_modulation_telemetry_;
     std::vector<Slider*> owned_sliders_;
 
     std::map<std::string, ModulationMeter*> meter_lookup_;

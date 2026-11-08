@@ -28,7 +28,6 @@
 #include "synth_button.h"
 #include <map>
 
-class OpenGLComponent;
 class SynthSlider;
 
 /**
@@ -50,7 +49,7 @@ class SynthSlider;
  * - **SynthButton**: Toggle and momentary buttons
  * - **ModulationButton**: Modulation source/destination controls
  * - **Text Components**: Labels and value displays
- * - **OpenGL Components**: Hardware-accelerated visualizations
+ * - **CPU Visualizations**: JUCE-rendered meters, waveforms and envelopes
  *
  * @section synthsection_inheritance Inheritance Chain
  * SynthSection serves as base for specialized sections:
@@ -130,10 +129,6 @@ class SynthSection : public Component, public Slider::Listener,
 
     void paintChildrenBackgrounds(Graphics& g);
     void paintChildBackground(Graphics& g, SynthSection* child);
-    void paintOpenGLBackground(Graphics& g, OpenGLComponent* child);
-    void initOpenGLComponents(OpenGLContext& open_gl_context);
-    void renderOpenGLComponents(OpenGLContext& open_gl_context, bool animate);
-    void destroyOpenGLComponents(OpenGLContext& open_gl_context);
 
     // Widget Listeners.
     /**
@@ -188,6 +183,7 @@ class SynthSection : public Component, public Slider::Listener,
      * @param controls Map of control name -> value
      */
     virtual void setAllValues(mopo::control_map& controls);
+    void setAllValues(const std::vector<std::pair<std::string, mopo::mopo_float>>& values);
 
     /**
      * @brief Set a single parameter value by name.
@@ -203,7 +199,6 @@ class SynthSection : public Component, public Slider::Listener,
     void addModulationButton(ModulationButton* button, bool show = true);
     void addSlider(SynthSlider* slider, bool show = true);
     void addSubSection(SynthSection* section, bool show = true);
-    void addOpenGLComponent(OpenGLComponent* open_gl_component);
     void setActivator(SynthButton* activator);
     float getTitleWidth();
     float getStandardKnobSize();
@@ -211,8 +206,6 @@ class SynthSection : public Component, public Slider::Listener,
     float getModButtonWidth();
 
     std::map<std::string, SynthSection*> sub_sections_;
-    std::set<OpenGLComponent*> open_gl_components_;
-
     std::map<std::string, SynthSlider*> slider_lookup_;
     std::map<std::string, Button*> button_lookup_;
     std::map<std::string, ModulationButton*> modulation_buttons_;

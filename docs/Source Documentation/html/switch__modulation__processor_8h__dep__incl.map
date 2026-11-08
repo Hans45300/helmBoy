@@ -1,0 +1,7 @@
+<map id="src/synthesis/switch_modulation_processor.h" name="src/synthesis/switch_modulation_processor.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="95,5,262,48"/>
+<area shape="rect" id="Node000002" href="$helmBoy__module_8cpp.html" title="Implementation of HelmBoyModule helpers (control creation, modulation maps)." alt="" coords="5,96,160,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="147,58,106,98,103,94,143,60"/>
+<area shape="rect" id="Node000003" href="$switch__modulation__processor_8cpp.html" title=" " alt="" coords="184,96,365,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="213,56,255,96,250,96,211,61"/>
+</map>

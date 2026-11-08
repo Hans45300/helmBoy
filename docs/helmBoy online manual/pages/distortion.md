@@ -6,7 +6,7 @@
 
 The distortion effect adds harmonic content and saturation to the signal.
 
-## Parameters
+## Controls
 
 ### Drive
 
@@ -17,22 +17,18 @@ The distortion effect adds harmonic content and saturation to the signal.
 
 ### Type
 
-Different distortion algorithms:
+Choose one of the four available algorithms:
 
 - **Soft Clip**: Smooth, tube-like saturation
 - **Hard Clip**: Digital clipping, aggressive sound
-- **Foldback**: Wave folding for complex harmonics
-- **Bit Crush**: Reduces bit depth for lo-fi sound
-- **Downsample**: Reduces sample rate for aliasing effects
+- **Linear Fold**: Linear wave folding
+- **Sine Fold**: Sine-based wave folding
 
 ### Mix
 
 Blend between clean and distorted signal.
 
-### Tone
-
-- **Low values**: Emphasize low frequencies
-- **High values**: Emphasize high frequencies
+The section provides **Type**, **Drive**, **Mix**, and an on/off switch. There is no separate tone control.
 
 ## Applications
 

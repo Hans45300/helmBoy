@@ -4,59 +4,32 @@
 
 ![Filter Types example](../pictures/Filter%20types.png)
 
-helmBoy offers multiple filter types, each with unique frequency response characteristics.
+The Type selector chooses the filter family. For the 12 dB and 24 dB families, Blend continuously morphs the response from low-pass through band-pass to high-pass. Blend does not select the family.
 
-## Available Types
+## Filter Families
 
-### Low Pass (LP)
+### 12 dB and 24 dB
 
-Allows frequencies below the cutoff to pass through.
+- **12 dB**: A gentler filter slope
+- **24 dB**: A steeper filter slope
 
-- **12 dB/oct**: Gentle slope, smooth sound
-- **24 dB/oct**: Steep slope, more pronounced filtering
+Use **Blend** to move between low-pass, band-pass, and high-pass responses. The Blend range and preset values are unchanged.
 
-### High Pass (HP)
+### Shelf (SH)
 
-Allows frequencies above the cutoff to pass through.
+Select a low, band, or high shelf response with the shelf selector. Blend is not used in this family.
 
-- **12 dB/oct**: Gentle high-pass filtering
-- **24 dB/oct**: Steep high-pass filtering
+### Notch (N)
 
-### Band Pass (BP)
+Attenuates frequencies around the cutoff while retaining frequencies above and below the notch.
 
-Allows frequencies around the cutoff to pass through.
+### Comb (C)
 
-- **12 dB/oct**: Wide band
-- **24 dB/oct**: Narrow band
+Uses a cutoff-related delay with feedback to create a series of regularly spaced resonances. Resonance controls the feedback amount; the delay period is limited to 100 ms.
 
-### Notch
+## Response Display
 
-Removes frequencies around the cutoff.
-
-- Creates phaser-like effects
-- Useful for removing specific frequency ranges
-
-### Comb
-
-Creates peaks at harmonic intervals.
-
-- Metallic, resonant character
-- Physical modeling applications
-
-### Low Shelf
-
-Boosts or cuts frequencies below the cutoff.
-
-### High Shelf
-
-Boosts or cuts frequencies above the cutoff.
-
-### All Pass
-
-Affects phase without changing amplitude.
-
-- Creates phase effects
-- Useful for sound design
+The response display follows the selected family and its relevant controls. Drag it to adjust cutoff and resonance.
 
 ## See Also
 

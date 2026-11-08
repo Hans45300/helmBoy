@@ -1,0 +1,21 @@
+# Sources
+*.cpp text
+*.h   text
+*.hpp text
+*.cmake text
+CMakeLists.txt text
+
+# Scripts Unix
+*.sh text eol=lf
+
+# Scripts Windows
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binaires
+*.png binary
+*.jpg binary
+*.wav binary
+*.vst3 binary
+*.dll binary
+*.exe binary

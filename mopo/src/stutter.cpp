@@ -71,6 +71,15 @@ namespace mopo {
 
   void Stutter::process() {
     using enum Inputs;
+    const Input* audio_input = input(static_cast<int>(Inputs::Audio));
+    if (audio_input == nullptr || audio_input->source == nullptr ||
+        audio_input->source->buffer == nullptr ||
+        audio_input->source->buffer_size < buffer_size_) {
+      utils::zeroBuffer(std::span<mopo_float>(output()->buffer, buffer_size_));
+      output()->clearTrigger();
+      return;
+    }
+
     MOPO_ASSERT(inputMatchesBufferSize(static_cast<int>(Inputs::Audio)));
 
     // A hack to save memory until stutter is used.
@@ -78,11 +87,23 @@ namespace mopo {
       memory_ = new Memory(size_);
 
   mopo_float max_memory_write = memory_->getSize();
-  auto audio = std::span<const mopo_float>(input(static_cast<int>(Inputs::Audio))->source->buffer, buffer_size_);
+  auto audio = std::span<const mopo_float>(audio_input->source->buffer, buffer_size_);
   auto dest = std::span<mopo_float>(output()->buffer, buffer_size_);
 
-    mopo_float sample_period = sample_rate_ / input(static_cast<int>(Inputs::ResampleFrequency))->at(0);
-    mopo_float end_stutter_period = sample_rate_ / input(static_cast<int>(Inputs::StutterFrequency))->at(0);
+    constexpr mopo_float kMinFrequency = 1.0e-4f;
+    mopo_float resample_frequency = input(static_cast<int>(Inputs::ResampleFrequency))->at(0);
+    mopo_float stutter_frequency = input(static_cast<int>(Inputs::StutterFrequency))->at(0);
+    if (!std::isfinite(resample_frequency) || resample_frequency < kMinFrequency)
+      resample_frequency = kMinFrequency;
+    if (!std::isfinite(stutter_frequency) || stutter_frequency < kMinFrequency)
+      stutter_frequency = kMinFrequency;
+
+    mopo_float sample_period = sample_rate_ / resample_frequency;
+    mopo_float end_stutter_period = sample_rate_ / stutter_frequency;
+    if (!std::isfinite(sample_period) || sample_period < 1.0f)
+      sample_period = 1.0f;
+    if (!std::isfinite(end_stutter_period) || end_stutter_period < 1.0f)
+      end_stutter_period = 1.0f;
     end_stutter_period = utils::min(sample_period, end_stutter_period);
     end_stutter_period = utils::min(max_memory_write, end_stutter_period);
     mopo_float stutter_period = end_stutter_period;
@@ -118,6 +139,13 @@ namespace mopo {
 
       MOPO_ASSERT(samples >= 0);
       MOPO_ASSERT(num_samples >= 0);
+
+      if (num_samples <= 0) {
+        startResampling(sample_period);
+        stutter_period = end_stutter_period;
+        stutter_period_diff = 0.0f;
+        continue;
+      }
 
       if (memory_offset_ < max_memory_write) {
         int mem_samples = std::min<int>(max_memory_write - memory_offset_, num_samples);

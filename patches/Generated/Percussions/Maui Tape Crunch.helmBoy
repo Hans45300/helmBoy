@@ -1,0 +1,33 @@
+{
+  "settings": {
+    "polyphony": 8,
+    "osc_1_waveform": 4.0,
+    "osc_1_volume": 0.58,
+    "osc_2_waveform": 2.0,
+    "osc_2_transpose": -24.0,
+    "osc_2_volume": 0.3,
+    "sub_volume": 0.4,
+    "noise_volume": 0.1,
+    "noise_color": 0.45,
+    "filter_on": 1,
+    "filter_style": 0,
+    "cutoff": 47.0,
+    "resonance": 0.2,
+    "fil_env_depth": 68.0,
+    "fil_decay": 0.2,
+    "fil_sustain": 0.0,
+    "amp_attack": 0.001,
+    "amp_decay": 0.3,
+    "amp_sustain": 0.0,
+    "amp_release": 0.09,
+    "distortion_on": 1,
+    "distortion_drive": 8.0,
+    "distortion_type": 3.0,
+    "arp_on": 0,
+    "modulations": []
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Maui Tape Crunch",
+  "folder_name": "Percussions",
+  "synth_version": "1.1.1"
+}

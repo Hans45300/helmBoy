@@ -1,0 +1,7 @@
+<map id="mopo::FormantManager" name="mopo::FormantManager">
+<area shape="rect" id="Node000001" title="G�re un ensemble de formants (filtres biquad) pour la synth�se vocale." alt="" coords="5,1221,172,1419"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="8,592,169,1173"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,1186,91,1222,86,1221,88,1191"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1Processor.html" title=" " alt="" coords="13,5,164,544"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="89,556,91,592,86,592,89,562"/>
+</map>

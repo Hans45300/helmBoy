@@ -1,18 +1,16 @@
 var searchData=
 [
-  ['capabilities_0',['Modulation Capabilities',['../classmopo_1_1HelmBoyOscillators.html#helmosc_modulation',1,'']]],
-  ['chain_1',['Inheritance Chain',['../classSynthSection.html#synthsection_inheritance',1,'']]],
-  ['characteristics_2',['Display Characteristics',['../classOscilloscope.html#scope_display',1,'']]],
-  ['color_20system_3',['Color System',['../classDefaultLookAndFeel.html#lookfeel_colors',1,'']]],
-  ['compatibility_4',['Compatibility',['../midi__2__manager_8h.html#midi2_compat',1,'']]],
-  ['component_20lifecycle_5',['Component Lifecycle',['../classSynthSection.html#synthsection_lifecycle',1,'']]],
-  ['component_20types_6',['Component Types',['../classSynthSection.html#synthsection_components',1,'']]],
-  ['concrete_20implementations_7',['Concrete Implementations',['../classOpenGLComponent.html#opengl_implementations',1,'']]],
-  ['considerations_8',['Considerations',['../classOpenGLComponent.html#opengl_performance',1,'Performance Considerations'],['../classXYPad.html#xypad_performance',1,'Performance Considerations']]],
-  ['controller_20mapping_9',['Controller Mapping',['../classMidiManager.html#midi_mapping',1,'']]],
-  ['controls_10',['Controls',['../classDelaySection.html#delay_controls',1,'Available Controls'],['../classDefaultLookAndFeel.html#lookfeel_controls',1,'Styled Controls']]],
-  ['core_20features_11',['Core Features',['../classMidiManager.html#midi_features',1,'Core Features'],['../classPatchSelector.html#selector_features',1,'Core Features'],['../classXYPad.html#xypad_features',1,'Core Features'],['../classSynthSection.html#synthsection_features',1,'Core Features']]],
-  ['core_20functionality_12',['Core Functionality',['../classSynthBase.html#synthbase_core',1,'']]],
-  ['custom_20drawing_13',['Custom Drawing',['../classDefaultLookAndFeel.html#lookfeel_drawing',1,'']]],
-  ['customization_14',['Customization',['../classOscilloscope.html#visual_customization',1,'Visual Customization'],['../classSynthSlider.html#synthslider_customization',1,'Visual Customization']]]
+  ['a_20b_20comparison_20and_20init_0',['A/B comparison and Init',['../ab_comparison.html',1,'']]],
+  ['adaptateur_20de_20callbacks_20et_20ump_1',['Adaptateur de callbacks et UMP',['../midi_input.html#autotoc_md23',1,'']]],
+  ['and_20export_2',['Bank import and export',['../bank_import_export.html',1,'']]],
+  ['and_20init_3',['A/B comparison and Init',['../ab_comparison.html',1,'']]],
+  ['api_4',['Documentation API',['../development_and_tests.html#autotoc_md13',1,'']]],
+  ['api_20expérimentales_20séparées_5',['API expérimentales séparées',['../midi_input.html#autotoc_md24',1,'']]],
+  ['application_20autonome_6',['Application autonome',['../architecture.html#autotoc_md5',1,'']]],
+  ['architecture_7',['Architecture',['../classSynthBase.html#synthbase_architecture',1,'Architecture'],['../classmopo_1_1TickRouter.html#tick_architecture',1,'Architecture']]],
+  ['architecture_20du_20logiciel_8',['Architecture du logiciel',['../architecture.html',1,'']]],
+  ['audio_9',['Cycle audio',['../architecture.html#autotoc_md3',1,'']]],
+  ['autonome_10',['Application autonome',['../architecture.html#autotoc_md5',1,'']]],
+  ['aux_20hôtes_11',['Verrous propres aux hôtes',['../gui_and_threads.html#autotoc_md20',1,'']]],
+  ['available_20controls_12',['Available Controls',['../classDelaySection.html#delay_controls',1,'']]]
 ];

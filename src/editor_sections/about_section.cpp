@@ -29,20 +29,15 @@
 #include "synth_section.h"
 #include "text_look_and_feel.h"
 
-// Includes nécessaires pour dynamic_cast
-#ifdef JUCE_AUDIO_PLUGIN_CLIENT
-  #include "../plugin/helmBoy_plugin.h"
-#else
-  #include "../standalone/helmBoy_editor.h"
-#endif
-
 #define LOGO_WIDTH 128
 #define INFO_WIDTH 470
 #define STANDALONE_INFO_HEIGHT 650
-#define PLUGIN_INFO_HEIGHT 227
+#define PLUGIN_INFO_HEIGHT 280
 #define PADDING_X 25
 #define PADDING_Y 15
 #define BUTTON_WIDTH 16
+#define MIDI_PROFILE_BUTTON_WIDTH 50
+#define MIDI_PROFILE_BUTTON_HEIGHT 24
 
 #define MULT_SMALL 0.75f
 #define MULT_LARGE 1.35f
@@ -62,15 +57,9 @@ AboutSection::AboutSection(String name) : Overlay(name) {
                                false, Justification::right);
   free_software_link_->setColour(HyperlinkButton::textColourId, Colour(Colors::Color_ffffd740));
   addAndMakeVisible(free_software_link_.get());
-/*
-  check_for_updates_ = std::make_unique<ToggleButton>();
-  check_for_updates_->setToggleState(LoadSave::shouldCheckForUpdates(),
-                                     NotificationType::dontSendNotification);
-  check_for_updates_->setLookAndFeel(TextLookAndFeel::instance());
-  check_for_updates_->addListener(this);
-  addAndMakeVisible(check_for_updates_.get());
-*/
+
   enable_midi_2_ = std::make_unique<ToggleButton>();
+  enable_midi_2_->setTooltip(TRANS("Enables explicit MIDI 2.0 UMP decoding; native host UMP input is not connected yet."));
   enable_midi_2_->setToggleState(LoadSave::shouldEnableMidi2(),
                                      NotificationType::dontSendNotification);
   enable_midi_2_->setLookAndFeel(TextLookAndFeel::instance());
@@ -104,6 +93,14 @@ AboutSection::AboutSection(String name) : Overlay(name) {
   addAndMakeVisible(size_button_over_large_.get());
   size_button_over_large_->addListener(this);
 
+  save_midi_profile_ = std::make_unique<TextButton>(TRANS("Save"));
+  addAndMakeVisible(save_midi_profile_.get());
+  save_midi_profile_->addListener(this);
+
+  load_midi_profile_ = std::make_unique<TextButton>(TRANS("Load"));
+  addAndMakeVisible(load_midi_profile_.get());
+  load_midi_profile_->addListener(this);
+
   size_button_over_large_->setLookAndFeel(DefaultLookAndFeel::instance());
 }
 
@@ -112,7 +109,7 @@ AboutSection::AboutSection(String name) : Overlay(name) {
  * @brief Implementation of the AboutSection overlay UI.
  *
  * Paints and lays out the info overlay containing project links,
- * update checks, device selector and UI scaling controls.
+ * device selector and UI scaling controls.
  */
 
 void AboutSection::paint(Graphics& g) {
@@ -164,15 +161,8 @@ void AboutSection::paint(Graphics& g) {
              0.0f, 76.0f,
              info_rect.getWidth() - 2 * PADDING_X, 20.0f, Justification::topRight);
 
-  /*
-    g.setFont(Fonts::instance()->proportional_light().withPointHeight(12.0));
-    g.drawText(TRANS("Check for updates"),
-               0.0f, 141.0f,
-               info_rect.getWidth() - 2 * PADDING_X - 1.5 * BUTTON_WIDTH,
-               20.0f, Justification::topRight);
-  */
   g.setFont(Fonts::instance()->proportional_light().withPointHeight(12.0));
-  g.drawText(TRANS("Enable MIDI 2.0"),
+  g.drawText(TRANS("MIDI 2.0"),
              0.0f, 141.0f,
              info_rect.getWidth() - 2 * PADDING_X - 1.5 * BUTTON_WIDTH,
              20.0f, Justification::topRight);
@@ -182,6 +172,10 @@ void AboutSection::paint(Graphics& g) {
              20.0f, Justification::topRight);
   g.drawText(TRANS("Window size"),
              0.0f, 180.0f,
+             155.0f,
+             20.0f, Justification::topRight);
+  g.drawText(TRANS("MIDI profile"),
+             0.0f, 215.0f,
              155.0f,
              20.0f, Justification::topRight);
 
@@ -199,10 +193,6 @@ void AboutSection::resized() {
   free_software_link_->setBounds(info_rect.getRight() - PADDING_X - software_link_width,
                                  info_rect.getY() + PADDING_Y + 105.0f, software_link_width, 20.0f);
 
-/*
-  check_for_updates_->setBounds(info_rect.getRight() - PADDING_X - BUTTON_WIDTH,
-                                info_rect.getY() + PADDING_Y + 140.0f, BUTTON_WIDTH, BUTTON_WIDTH);
-*/
   enable_midi_2_->setBounds(info_rect.getRight() - PADDING_X - BUTTON_WIDTH,
                                 info_rect.getY() + PADDING_Y + 140.0f, BUTTON_WIDTH, BUTTON_WIDTH);
 
@@ -224,8 +214,18 @@ void AboutSection::resized() {
   size_button_small_->setBounds(size_button_normal_->getX() - size_padding - size_width, size_y,
                                 size_width, size_height);
 
+  int midi_profile_y = size_button_over_large_->getBottom() + PADDING_Y;
+  save_midi_profile_->setBounds(info_rect.getRight() - PADDING_X - (2 * MIDI_PROFILE_BUTTON_WIDTH) - size_padding,
+                                midi_profile_y,
+                                MIDI_PROFILE_BUTTON_WIDTH,
+                                MIDI_PROFILE_BUTTON_HEIGHT);
+  load_midi_profile_->setBounds(save_midi_profile_->getRight() + size_padding,
+                                midi_profile_y,
+                                MIDI_PROFILE_BUTTON_WIDTH,
+                                MIDI_PROFILE_BUTTON_HEIGHT);
+
   if (device_selector_) {
-    int y = size_button_extra_large_->getBottom() + PADDING_Y;
+    int y = load_midi_profile_->getBottom() + PADDING_Y;
     device_selector_->setBounds(info_rect.getX(), y,
                                 info_rect.getWidth(), info_rect.getBottom() - y);
   }
@@ -258,36 +258,15 @@ void AboutSection::setVisible(bool should_be_visible) {
 }
 
 void AboutSection::buttonClicked(Button* clicked_button) {
-/*
-  if (clicked_button == check_for_updates_.get())
-    LoadSave::saveUpdateCheckConfig(check_for_updates_->getToggleState());
-*/
   if (clicked_button == enable_midi_2_.get())
   {
-    // Récupérer l'instance via SynthGuiInterface
     SynthGuiInterface* gui_interface = findParentComponentOfClass<SynthGuiInterface>();
     if (gui_interface) {
-      SynthBase* synth = gui_interface->getSynth();
       bool enable = enable_midi_2_->getToggleState();
 
-      // Sauvegarder la préférence
       LoadSave::saveMidi2Config(enable);
 
-      helmboy::Midi2Manager* midi2 = nullptr;
-
-      #ifdef JUCE_AUDIO_PLUGIN_CLIENT
-      // Dans un plugin (VST3/LV2)
-      if (auto* plugin = dynamic_cast<HelmPlugin*>(synth)) {
-        midi2 = plugin->getMidi2Manager();
-      }
-      #else
-      // Dans le standalone
-      if (auto* editor = dynamic_cast<HelmBoyEditor*>(synth)) {
-        midi2 = editor->getMidi2Manager();
-      }
-      #endif
-
-      if (midi2) {
+      if (auto* midi2 = gui_interface->getMidi2Manager()) {
         midi2->setMidiVersion(
           enable ? helmboy::Midi2Manager::MidiVersion::MIDI_2_0
                  : helmboy::Midi2Manager::MidiVersion::MIDI_1_0
@@ -316,6 +295,57 @@ void AboutSection::buttonClicked(Button* clicked_button) {
     setGuiSize(MULT_EXTRA_LARGE);
   else if (clicked_button == size_button_over_large_.get())
     setGuiSize(MULT_OVER_LARGE);
+  else if (clicked_button == save_midi_profile_.get() || clicked_button == load_midi_profile_.get())
+  {
+    SynthGuiInterface* gui_interface = findParentComponentOfClass<SynthGuiInterface>();
+    SynthBase* synth = gui_interface ? gui_interface->getSynth() : nullptr;
+    MidiManager* midi_manager = synth ? synth->getMidiManager() : nullptr;
+    if (midi_manager == nullptr) {
+      AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon,
+                                       TRANS("MIDI profile"),
+                                       TRANS("Unable to access MIDI mappings."));
+      return;
+    }
+
+    if (clicked_button == save_midi_profile_.get()) {
+      AudioDeviceManager* device_manager = gui_interface ? gui_interface->getAudioDeviceManager() : nullptr;
+      auto chooser = std::make_shared<FileChooser>(TRANS("Save MIDI Profile"), File(), "*.hbMidiProfile");
+      auto chooser_flags = FileBrowserComponent::saveMode |
+                           FileBrowserComponent::canSelectFiles |
+                           FileBrowserComponent::warnAboutOverwriting;
+      chooser->launchAsync(chooser_flags, [chooser, midi_manager, device_manager](const FileChooser& file_chooser) {
+        File selected = file_chooser.getResult();
+        if (selected == File())
+          return;
+
+        File output_file = selected.withFileExtension(".hbMidiProfile");
+        bool success = LoadSave::saveMidiProfileToFile(output_file, midi_manager, device_manager);
+        AlertWindow::showMessageBoxAsync(success ? AlertWindow::InfoIcon : AlertWindow::WarningIcon,
+                                         TRANS("MIDI profile"),
+                                         success ? TRANS("MIDI profile saved.")
+                                                 : TRANS("Failed to save MIDI profile."));
+      });
+    }
+    else {
+      AudioDeviceManager* device_manager = gui_interface ? gui_interface->getAudioDeviceManager() : nullptr;
+      auto chooser = std::make_shared<FileChooser>(TRANS("Load MIDI Profile"), File(), "*.hbMidiProfile");
+      auto chooser_flags = FileBrowserComponent::openMode | FileBrowserComponent::canSelectFiles;
+      chooser->launchAsync(chooser_flags, [gui_interface, chooser, midi_manager, device_manager](const FileChooser& file_chooser) {
+        File selected = file_chooser.getResult();
+        if (selected == File())
+          return;
+
+        bool success = LoadSave::loadMidiProfileFromFile(selected, midi_manager, device_manager);
+        if (success && gui_interface)
+          gui_interface->updateFullGui();
+
+        AlertWindow::showMessageBoxAsync(success ? AlertWindow::InfoIcon : AlertWindow::WarningIcon,
+                                         TRANS("MIDI profile"),
+                                         success ? TRANS("MIDI profile loaded.")
+                                                 : TRANS("Failed to load MIDI profile."));
+      });
+    }
+  }
 }
 
 Rectangle<int> AboutSection::getInfoRect() {

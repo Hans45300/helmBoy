@@ -66,10 +66,30 @@ void TempoSelector::mouseUp(const MouseEvent& e) {
 }
 
 void TempoSelector::valueChanged() {
-  bool free_slider = getValue() == (kSeconds - 1);
+  updateSliderVisibility();
+  repaint();
+}
 
-  free_slider_->setVisible(free_slider);
-  tempo_slider_->setVisible(!free_slider);
+void TempoSelector::setModulatedValue(float value) {
+  const int new_value = static_cast<int>(
+      jlimit(0, static_cast<int>(getMaximum()), roundToInt(value)));
+  const bool new_modulation_active = new_value != static_cast<int>(getValue());
+  if (modulation_active_ == new_modulation_active && modulated_value_ == new_value)
+    return;
+
+  modulated_value_ = new_value;
+  modulation_active_ = new_modulation_active;
+  updateSliderVisibility();
+  repaint();
+}
+
+void TempoSelector::updateSliderVisibility() {
+  const int value = modulation_active_ ? modulated_value_ : static_cast<int>(getValue());
+  const bool free_slider = value == (kSeconds - 1);
+  if (free_slider_)
+    free_slider_->setVisible(free_slider);
+  if (tempo_slider_)
+    tempo_slider_->setVisible(!free_slider);
 }
 
 void TempoSelector::paint(Graphics& g) {
@@ -79,10 +99,15 @@ void TempoSelector::paint(Graphics& g) {
     g.setColour(Colour(Colors::Color_ff555555));
   g.fillRect(0, 0, getWidth(), getHeight());
 
+  if (modulation_active_) {
+    g.setColour(Colors::modulation.withAlpha(0.35f));
+    g.fillRect(getLocalBounds());
+  }
+
   g.setColour(Colour(Colors::Color_ff222222));
   g.fillPath(arrow_);
 
-  int value = getValue() + 1;
+  int value = (modulation_active_ ? modulated_value_ : static_cast<int>(getValue())) + 1;
   if (value == kSeconds)
     g.fillPath(clock_);
   else if (value == kTempo || value == kTempoDotted) {
@@ -131,15 +156,11 @@ void TempoSelector::resized() {
 }
 
 void TempoSelector::setFreeSlider(Slider* slider) {
-  bool free_slider = getValue() == (kSeconds - 1);
-
   free_slider_ = slider;
-  free_slider_->setVisible(free_slider);
+  updateSliderVisibility();
 }
 
 void TempoSelector::setTempoSlider(Slider* slider) {
-  bool free_slider = getValue() == (kSeconds - 1);
-
   tempo_slider_ = slider;
-  tempo_slider_->setVisible(!free_slider);
+  updateSliderVisibility();
 }

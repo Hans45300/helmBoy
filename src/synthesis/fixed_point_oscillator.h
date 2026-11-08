@@ -43,6 +43,7 @@ namespace mopo {
         kAmplitude,
         kLowOctave,
         kPhaseStretch,
+        kPhaseOffset,
         kNumInputs
       };
 
@@ -54,16 +55,7 @@ namespace mopo {
     protected:
       inline unsigned int remapPhase(unsigned int phase, mopo_float stretch) {
         constexpr mopo_float mult = 1.0 / UINT_MAX;
-        mopo_float norm_phase = phase * mult;
-
-        mopo_float remapped;
-        if (norm_phase < stretch) {
-          remapped = (norm_phase / stretch) * 0.5;
-        } else {
-          remapped = 0.5 + ((norm_phase - stretch) / (1.0 - stretch)) * 0.5;
-        }
-
-        return static_cast<unsigned int>(remapped * UINT_MAX);
+        return static_cast<unsigned int>(utils::remapPhase(phase * mult, stretch) * UINT_MAX);
       }
 
       unsigned int phase_;

@@ -28,7 +28,9 @@
  */
 
 #include <JuceHeader.h>
+#include <vector>
 #include "retrigger_selector.h"
+#include "synth_slider.h"
 #include "synth_section.h"
 #include "tempo_selector.h"
 #include "graphical_step_sequencer.h"
@@ -51,6 +53,9 @@ class StepSequencerSection : public SynthSection {
      */
     void resized() override;
 
+    /** @brief Recalcule les repères de mesure lorsque sync ou division change. */
+    void sliderValueChanged(Slider* moved_slider) override;
+
     /**
      * @brief Reset sequencer state and visuals.
      */
@@ -64,8 +69,9 @@ class StepSequencerSection : public SynthSection {
 
   private:
     void createStepSequencerSliders();
+    void updateMeasureMarkers();
 
-    std::vector<Slider*> sequencer_sliders_;
+    std::vector<SynthSlider*> sequencer_sliders_;
     std::unique_ptr<GraphicalStepSequencer> step_sequencer_;
     std::unique_ptr<RetriggerSelector> retrigger_;
     std::unique_ptr<SynthSlider> num_steps_;

@@ -1,5 +1,11 @@
 <map id="mopo::ResonanceCancel" name="mopo::ResonanceCancel">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,123,163,235"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="49,5,119,75"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,90,87,123,82,123,82,90"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,808,163,920"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="193,5,344,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,518,103,809,98,808,190,513"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="188,573,349,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="263,514,265,525,265,574,260,573,260,525,262,519"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="380,744,480,984"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="333,499,352,548,363,572,386,650,406,728,400,727,381,651,358,574,347,550,332,504"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="266,573,268,521,269,515,271,574"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="430,743,423,637,415,581,403,526,379,458,351,395,352,390,384,456,408,525,420,580,429,636,435,745"/>
 </map>

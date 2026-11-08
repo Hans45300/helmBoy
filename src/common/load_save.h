@@ -27,6 +27,10 @@
 #define LOAD_SAVE_H
 
 #include <JuceHeader.h>
+#include <string>
+#include <utility>
+#include <vector>
+#include <functional>
 
 #include "helmBoy_engine.h"
 
@@ -100,6 +104,19 @@ public:
  */
 class LoadSave {
   public:
+    struct PreparedSynthState {
+      struct Modulation {
+        std::string source;
+        std::string destination;
+        mopo::mopo_float amount = 0.0;
+      };
+
+      std::vector<std::pair<std::string, mopo::mopo_float>> controls;
+      std::vector<Modulation> modulations;
+      std::vector<std::pair<std::string, String>> metadata;
+      bool valid = false;
+    };
+
     /**
      * @brief Serialize synth state into a Doxygen-friendly var representation.
      * @param synth Pointer to the synth instance to serialize.
@@ -131,6 +148,11 @@ class LoadSave {
                            std::map<std::string, String>& save_info,
                            var state);
 
+    [[nodiscard]] static PreparedSynthState prepareState(var state);
+    static bool applyPreparedState(SynthBase* synth,
+                     std::map<std::string, String>& save_info,
+                     const PreparedSynthState& prepared);
+
     [[nodiscard]] static String getAuthor(var state);
     [[nodiscard]] static String getLicense(var state);
 
@@ -139,34 +161,44 @@ class LoadSave {
     [[nodiscard]] static var getConfigVar();
     [[nodiscard]] static bool isInstalled();
     [[nodiscard]] static bool wasUpgraded();
-    [[nodiscard]] static bool shouldCheckForUpdates();
     [[nodiscard]] static bool shouldAnimateWidgets();
     [[nodiscard]] static bool shouldEnableMidi2();
     [[nodiscard]] static float loadWindowSize();
     [[nodiscard]] static String loadVersion();
     [[nodiscard]] static bool shouldAskForPayment();
     static void saveVarToConfig(var config_state);
-    static void saveLayoutConfig(mopo::StringLayout* layout);
     static void saveVersionConfig();
     static void saveMidi2Config(bool enable_midi2);
     static void saveLastAskedForMoney();
     static void saveShouldAskForMoney(bool should_ask);
     static void savePaid();
-    static void saveUpdateCheckConfig(bool check_for_updates);
-    static void saveAnimateWidgets(bool check_for_updates);
+    static void saveAnimateWidgets(bool animate_widgets);
     static void saveWindowSize(float window_size);
     static void saveMidiMapConfig(MidiManager* midi_manager);
-    static void loadConfig(MidiManager* midi_manager, mopo::StringLayout* layout = nullptr);
-
-    [[nodiscard]] static std::wstring getComputerKeyboardLayout();
-    [[nodiscard]] static std::pair<wchar_t, wchar_t> getComputerKeyboardOctaveControls();
+    static bool saveAudioDeviceState(const AudioDeviceManager& device_manager);
+    [[nodiscard]] static std::unique_ptr<XmlElement> loadAudioDeviceState();
+    static void saveEnabledMidiInputs(const StringArray& midi_input_identifiers);
+    [[nodiscard]] static StringArray loadEnabledMidiInputs();
+    static bool saveMidiProfileToFile(const File& file, MidiManager* midi_manager,
+                                         AudioDeviceManager* device_manager = nullptr);
+    static bool loadMidiProfileFromFile(const File& file, MidiManager* midi_manager,
+                                          AudioDeviceManager* device_manager = nullptr);
+    static void loadConfig(MidiManager* midi_manager);
 
     [[nodiscard]] static File getFactoryBankDirectory();
     [[nodiscard]] static File getBankDirectory();
+    static void saveCustomPatchRootDirectory(File directory);
+    static void clearCustomPatchRootDirectory();
+    [[nodiscard]] static File getCustomPatchRootDirectory();
     [[nodiscard]] static File getUserBankDirectory();
     [[nodiscard]] static File getDidPayInitiallyFile();
+    [[nodiscard]] static String getSupportedPatchFileWildcard();
+    [[nodiscard]] static bool isSupportedPatchFile(const File& file);
+    static void findPatchFiles(const File& directory, Array<File>& results,
+                   bool recursive, String name_filter = {});
     static void exportBank(String bank_name);
-    static void importBank();
+    static void exportBank(Array<File> selected_items);
+    static void importBank(std::function<void()> completion = {});
     [[nodiscard]] static int compareVersionStrings(String a, String b);
 
     /** @brief Return the total number of patches available (factory + user). */

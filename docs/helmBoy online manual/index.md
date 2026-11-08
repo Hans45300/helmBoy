@@ -1,5 +1,7 @@
 # HELMBoy manual
 
+[User Manual Table of Contents](./user-manual-toc.md)
+
 ![helmBoy Interface](pictures/whole%20interface.png)
 
 ## First words

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['value_5fswitch_5fh_0',['VALUE_SWITCH_H',['../value__switch_8h.html#aa4c80a18cbe5590fcf0d0f57f541e34a',1,'value_switch.h']]],
-  ['voice_5fsection_5fh_1',['VOICE_SECTION_H',['../voice__section_8h.html#a80458e62e33bcf62c32b2dbaf4c5f95e',1,'voice_section.h']]],
-  ['volume_5fsection_5fh_2',['VOLUME_SECTION_H',['../volume__section_8h.html#a0c8b56998a1b54006df5c8b46d2eaf3c',1,'volume_section.h']]]
+  ['unused_0',['UNUSED',['../common_8h.html#a86d500a34c624c2cae56bc25a31b12f3',1,'common.h']]],
+  ['user_5fbank_5fname_1',['USER_BANK_NAME',['../load__save_8cpp.html#aa3320399d178cec2470414bfb62c5267',1,'load_save.cpp']]],
+  ['utils_5fh_2',['UTILS_H',['../utils_8h.html#a4f4a6641716bd0f4b9fe38c4f18e6550',1,'utils.h']]]
 ];

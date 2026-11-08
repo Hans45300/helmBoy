@@ -29,10 +29,10 @@
 
 /**
  * @file sub_section.h
- * @brief Header for the sub-oscillator UI subsection.
+ * @brief Header for the sub-oscillator and noise UI subsection.
  *
  * Declares `SubSection` which provides controls and a waveform preview
- * for the sub oscillator (wave selection, shuffle and octave toggle).
+ * for the sub oscillator, plus the shared noise-colour control.
  */
 
 class SubSection : public SynthSection {
@@ -63,7 +63,9 @@ class SubSection : public SynthSection {
     std::unique_ptr<WaveSelector> wave_selector_;
     std::unique_ptr<SynthSlider> shuffle_;
     std::unique_ptr<ToggleButton> sub_octave_;
+    std::unique_ptr<SynthSlider> phase_stretch_;
     std::unique_ptr<SynthSlider> phase_offset_;
+    std::unique_ptr<SynthSlider> noise_color_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SubSection)
 };

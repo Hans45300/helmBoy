@@ -1,0 +1,13 @@
+<map id="mopo::Voice" name="mopo::Voice">
+<area shape="rect" id="Node000001" title="Gestionnaire d&#39;une voix individuelle (�tat, aftertouch, etc.)." alt="" coords="5,651,186,1077"/>
+<area shape="rect" id="Node000002" href="$structmopo_1_1VoiceState.html" title=" " alt="" coords="27,165,141,341"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,338,88,549,90,634,85,633,83,549,83,344"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1Processor.html" title=" " alt="" coords="227,5,378,501"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="226,479,176,635,171,634,228,474"/>
+<area shape="rect" id="Node000004" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="215,573,376,1155"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="295,514,297,525,297,574,291,573,292,525,294,519"/>
+<area shape="rect" id="Node000005" href="$structmopo_1_1Output.html" title=" " alt="" coords="410,744,510,984"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="370,499,390,573,430,728,424,728,385,574,368,504"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="296,573,299,521,300,515,302,574"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="462,743,457,637,449,581,437,526,414,458,386,395,386,389,419,456,442,525,454,580,462,636,467,745"/>
+</map>

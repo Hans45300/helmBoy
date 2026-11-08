@@ -2,7 +2,34 @@
 
 ## Overview
 
-**HelmBoy** is a powerful polyphonic subtractive synthesizer featuring advanced oscillator modulation, flexible filtering, comprehensive modulation routing, and professional effects processing. Built on a robust synthesis engine with real-time performance optimization, HelmBoy offers both classic analog-style sounds and modern digital synthesis capabilities.
+**HelmBoy** is a polyphonic synthesizer for building sounds from two oscillators, a filter, envelopes, modulation sources, and effects. It is available as a standalone application and as a VST3 plug-in.
+
+### Host Parameter Text
+
+In the host's generic parameter editor, numeric values use the parameter's
+display scale and declared units; choices use the existing selector labels.
+Numeric entry accepts a decimal point or a single decimal comma, optionally
+followed by the matching unit. Choice labels are case-insensitive. Invalid
+text returns the parameter's default value; valid out-of-range numbers are
+clamped. Automation remains normalized as before. Short host text fields may
+truncate labels or numeric precision.
+
+### Host Reset
+
+A host reset stops playing voices, arpeggiator notes and effect tails without
+loading Init or changing the patch, parameters or modulation assignments.
+Unlike a patch transition, it is an immediate cut rather than a musical fade.
+New host MIDI notes can start normally afterward. Pending on-screen keyboard
+events are discarded; its visual state is cleared on the message thread.
+
+### Effect Tails in Host Exports
+
+The plug-in reports a conservative release/effect-tail estimate to the host,
+separate from processing latency. This may extend automatic exports beyond the
+audible tail, especially with delay feedback. Freeze and non-decaying feedback
+can sustain sound indefinitely. Use an explicit export length for these settings;
+formats without a verified infinite-tail convention use a finite reporting
+ceiling, not a guarantee that a frozen tail will end within that time.
 
 ---
 
@@ -15,9 +42,9 @@ HelmBoy features a **dual oscillator architecture** with extensive sound design 
 #### Dual Oscillators
 
 - **Two independent oscillators** with individual waveform selection
-- **Multiple waveform types**: Sine, Triangle, Sawtooth, Square, and wavetables
+- **11 selectable waveforms**, including sine, triangle, square, saw, stepped, and pyramid shapes
 - **Independent transpose and fine-tune controls** for each oscillator
-- **Polyphonic unison** up to **15 voices per oscillator** with detuning and stereo spread
+- **Unison** up to **15 voices per oscillator**, with detune and harmonize controls
 - **Sub-oscillator** for additional low-frequency content
 
 #### Advanced Modulation
@@ -25,6 +52,7 @@ HelmBoy features a **dual oscillator architecture** with extensive sound design 
 - **Cross-Modulation**: Bidirectional phase modulation between OSC1 ? OSC2
 - **Frequency Modulation (FM)**: Unidirectional FM where OSC1 modulates OSC2
 - **Ring Modulation**: Multiplies OSC1 × OSC2 for metallic, bell-like timbres
+- **Hard Sync**: Resets OSC2's phase at each OSC1 cycle; OSC1 is the master and OSC2 the slave
 - **Phase Stretching**: Variable waveform symmetry control (1%-99%) - works like PWM but applies to all waveform types, not just square waves
 
 #### Oscillator Mixing
@@ -39,9 +67,9 @@ HelmBoy features a **dual oscillator architecture** with extensive sound design 
 
 Sophisticated filtering with multiple topologies:
 
-- **Filter Types**: Low-pass, high-pass, band-pass, notch, and more
-- **Filter Styles**: Choose between different filter characteristics
-- **Resonance Control**: From subtle emphasis to self-oscillation
+- **Filter Responses**: Low-pass, high-pass, and shelf responses
+- **Filter Styles**: 12 dB, 24 dB, and shelf
+- **Resonance Control**: Emphasizes the area around the cutoff
 - **Filter Drive**: Adds saturation and harmonic richness
 - **Key Tracking**: Makes filter cutoff follow note pitch
 - **Filter Envelope**: Dedicated ADSR envelope for dynamic filter movement
@@ -55,13 +83,13 @@ Flexible and powerful modulation routing:
 
 #### Envelopes
 
-- **Amplitude Envelope**: Standard ADSR for volume shaping
-- **Filter Envelope**: Dedicated ADSR for filter cutoff modulation
-- **Modulation Envelope**: Additional ADSR for general modulation purposes
+- **Amplitude Envelope**: AHDSR for volume shaping
+- **Filter Envelope**: AHDSR for filter cutoff modulation
+- **Modulation Envelope**: DAHDSR for general modulation purposes
 
 #### LFOs (Low Frequency Oscillators)
 
-- **3 Mono LFOs**: Global modulation sources
+- **4 Mono LFOs**: Shared modulation sources
 - **2 Poly LFOs**: Per-voice modulation for evolving textures
 - **Multiple waveforms**: Sine, triangle, saw, square, random, and more
 - **Tempo Sync**: Lock LFO rates to host tempo
@@ -70,10 +98,10 @@ Flexible and powerful modulation routing:
 #### Step Sequencer
 
 - **Graphical step sequencer** with real-time visual feedback
-- **Up to 32 steps** per sequence
+- **Up to 64 steps** per sequence
 - **Adjustable step frequency** with tempo sync
 - **Smooth interpolation** between steps
-- **Keyboard navigation** support for precise value editing
+- **Step smoothing** for transitions between values
 
 ---
 
@@ -83,14 +111,13 @@ Professional-grade effects processing:
 
 #### Distortion
 
-- **Multiple distortion types**: Soft clip, hard clip, bit reduction, and more
+- **Four distortion types**: Soft Clip, Hard Clip, Linear Fold, and Sine Fold
 - **Drive control**: From subtle warmth to aggressive saturation
 - **Mix control**: Blend dry and distorted signals
 
 #### Delay
 
-- **Stereo delay** with independent left/right timing
-- **Tempo sync**: Lock delay times to host tempo
+- **Tempo-synchronized delay time** with free-time and musical-division options
 - **Feedback control**: From single repeats to infinite loops
 - **Dry/Wet mix**: Precise balance of delayed signal
 
@@ -115,7 +142,7 @@ Professional-grade effects processing:
 
 - **Up to 32 voices** of polyphony
 - **Intelligent voice stealing** for smooth performance
-- **Voice allocation** optimized for real-time playing
+- **Voice allocation** for playing chords and layered notes
 
 #### Playability
 
@@ -123,7 +150,7 @@ Professional-grade effects processing:
 - **Portamento/Glide**: Smooth pitch transitions between notes
 - **Pitch Bend**: Configurable range up to ±2 octaves
 - **Velocity sensitivity**: Dynamic response to playing intensity
-- **Aftertouch support**: Per-note and channel aftertouch
+- **Aftertouch modulation sources**: Independent channel pressure and per-note polyphonic key pressure
 
 #### Arpeggiator
 
@@ -138,16 +165,12 @@ Professional-grade effects processing:
 
 ### Signal Flow
 
-```cpp
-Oscillators ? Cross-Mod/FM/Ring Mod ? Mixer ? Filter ? Amplitude Envelope ? Effects ? Output
-     ?                                            ?
-     ??????? Modulation Sources (LFOs, Envelopes, Step Seq) ?????
-```
+Oscillators and additional sources feed the filter and amplifier; effects process the resulting sound before it reaches the output. Modulation sources can control supported parameters throughout the synth.
 
 ### Modulation Routing
 
-- **Drag-and-drop modulation connections** in the interface
-- **Bipolar and unipolar modulation** sources
+- **Source selection** reveals modulation amount controls on supported destinations
+- **Positive and negative modulation amounts**
 - **Modulation depth control** for each connection
 - **Visual feedback** of active modulations
 
@@ -158,15 +181,21 @@ Oscillators ? Cross-Mod/FM/Ring Mod ? Mixer ? Filter ? Amplitude Envelope ? Effe
 - **Import/Export** functionality for sharing presets
 - **Preset browser** with category filtering
 
+The patch selector provides icon buttons for saving, Save As, exporting and
+browsing patches. Save asks for confirmation before overwriting the currently
+loaded patch; Save As opens the existing patch-saving dialog to choose a name
+and destination. The Browse button changes to Edit while the browser is open.
+Undo and Redo step through completed parameter-edit gestures. Undo restores the
+starting value of the previous edit; Redo reapplies its final value. A new edit
+after Undo discards the redo branch. The history is limited to 256 steps and is
+cleared when another patch is loaded or the Init state is restored.
+
 ---
 
 ## Technical Specifications
 
-- **Sample Rate**: Up to 192 kHz
-- **Bit Depth**: 32-bit floating-point processing
-- **Latency**: Optimized for real-time performance
-- **CPU Usage**: Efficient SIMD-optimized DSP code
-- **Platform Support**: VST3 and standalone application
+- **Formats**: Standalone application and VST3 plug-in
+- **Audio configuration**: The host or selected audio device determines the sample rate and buffer size
 
 ---
 
@@ -185,7 +214,7 @@ Oscillators ? Cross-Mod/FM/Ring Mod ? Mixer ? Filter ? Amplitude Envelope ? Effe
 ## Getting Started
 
 1. **Select a preset** from the browser to explore HelmBoy's capabilities
-2. **Experiment with oscillator modulation** (cross-mod, FM, ring mod)
+2. **Experiment with oscillator controls**, including Hard Sync, cross modulation, FM, and ring modulation
 3. **Try the phase stretching** for unique waveform variations
 4. **Add movement** with LFOs and envelopes
 5. **Shape the tone** with the filter section

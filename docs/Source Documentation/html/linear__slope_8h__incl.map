@@ -1,0 +1,19 @@
+<map id="mopo/src/linear_slope.h" name="mopo/src/linear_slope.h">
+<area shape="rect" id="Node000001" title="Rampe linéaire (smoothing/portamento) pour valeurs de contrôle." alt="" coords="87,5,246,32"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="49,80,169,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="155,35,131,69,126,66,158,30"/>
+<area shape="rect" id="Node000003" href="$value_8h.html" title="Processeurs Value : constantes ou control&#45;rate values." alt="" coords="194,80,257,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="177,30,208,68,203,68,176,35"/>
+<area shape="rect" id="Node000004" href="$processor_8h.html" title="Définition de la classe Processor et des ports d&#39;entrée/sortie." alt="" coords="180,155,270,181"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="227,105,228,140,223,138,224,109"/>
+<area shape="rect" id="Node000005" href="$common_8h.html" title="Core definitions and constants for the mopo synthesis library." alt="" coords="5,229,88,256"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="195,184,93,226,91,221,193,179"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="112,229,173,256"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="213,181,170,221,167,217,208,183"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="196,229,254,256"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="227,180,227,215,223,212,223,184"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="278,229,338,256"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="241,179,285,219,280,219,239,184"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="361,229,406,256"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="253,179,349,224,344,225,252,184"/>
+</map>

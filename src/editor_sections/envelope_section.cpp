@@ -35,30 +35,50 @@
  * @brief Implementation of EnvelopeSection UI (ADSR + visualization).
  */
 
-EnvelopeSection::EnvelopeSection(String name, std::string value_prepend) : SynthSection(name) {
+EnvelopeSection::EnvelopeSection(String name, std::string value_prepend, bool has_delay) :
+    SynthSection(name), has_delay_(has_delay) {
+
+  if (has_delay_) {
+    addSlider((delay_ = std::make_unique<SynthSlider>(value_prepend + "_delay")).get());
+    delay_->setSliderStyle(Slider::LinearBar);
+    delay_->setPopupPlacement(BubbleComponent::below);
+    ordered_controls_[control_count_++] = delay_.get();
+  }
 
   addSlider((attack_ = std::make_unique<SynthSlider>(value_prepend + "_attack")).get());
   attack_->setSliderStyle(Slider::LinearBar);
   attack_->setPopupPlacement(BubbleComponent::below);
+  ordered_controls_[control_count_++] = attack_.get();
+
+  addSlider((hold_ = std::make_unique<SynthSlider>(value_prepend + "_hold")).get());
+  hold_->setSliderStyle(Slider::LinearBar);
+  hold_->setPopupPlacement(BubbleComponent::below);
+  ordered_controls_[control_count_++] = hold_.get();
 
   addSlider((decay_ = std::make_unique<SynthSlider>(value_prepend + "_decay")).get());
   decay_->setSliderStyle(Slider::LinearBar);
   decay_->setPopupPlacement(BubbleComponent::below);
-
-  addSlider((release_ = std::make_unique<SynthSlider>(value_prepend + "_release")).get());
-  release_->setSliderStyle(Slider::LinearBar);
-  release_->setPopupPlacement(BubbleComponent::below);
+  ordered_controls_[control_count_++] = decay_.get();
 
   addSlider((sustain_ = std::make_unique<SynthSlider>(value_prepend + "_sustain")).get());
   sustain_->setSliderStyle(Slider::LinearBar);
   sustain_->setPopupPlacement(BubbleComponent::below);
+  ordered_controls_[control_count_++] = sustain_.get();
 
-  addOpenGLComponent((envelope_ = std::make_unique<OpenGLEnvelope>()).get());
+  addSlider((release_ = std::make_unique<SynthSlider>(value_prepend + "_release")).get());
+  release_->setSliderStyle(Slider::LinearBar);
+  release_->setPopupPlacement(BubbleComponent::below);
+  ordered_controls_[control_count_++] = release_.get();
+
+  addAndMakeVisible((envelope_ = std::make_unique<GraphicalEnvelope>()).get());
   envelope_->setName(value_prepend + "_envelope");
+  envelope_->setDelaySlider(delay_.get());
   envelope_->setAttackSlider(attack_.get());
+  envelope_->setHoldSlider(hold_.get());
   envelope_->setDecaySlider(decay_.get());
   envelope_->setSustainSlider(sustain_.get());
   envelope_->setReleaseSlider(release_.get());
+  envelope_->showRealtimeFeedback(true);
 
   addModulationButton((modulation_button_ = std::make_unique<ModulationButton>(value_prepend + "_envelope")).get());
   modulation_button_->setLookAndFeel(ModulationLookAndFeel::instance());
@@ -66,7 +86,9 @@ EnvelopeSection::EnvelopeSection(String name, std::string value_prepend) : Synth
 
 EnvelopeSection::~EnvelopeSection() {
   envelope_ = nullptr;
+  delay_ = nullptr;
   attack_ = nullptr;
+  hold_ = nullptr;
   decay_ = nullptr;
   sustain_ = nullptr;
   release_ = nullptr;
@@ -89,18 +111,15 @@ void EnvelopeSection::paintBackground(Graphics& g) {
   g.setColour(Colors::control_label_text);
   g.setFont(Fonts::instance()->proportional_regular().withPointHeight(size_ratio_ * 10.0f));
 
-  g.drawText(TRANS("A"), attack_->getX() - text_width, attack_->getY(),
-             text_width, attack_->getHeight(),
-             Justification::centred, true);
-  g.drawText(TRANS("D"), decay_->getX() - text_width, decay_->getY(),
-             text_width, decay_->getHeight(),
-             Justification::centred, true);
-  g.drawText(TRANS("S"), sustain_->getX() - text_width, sustain_->getY(),
-             text_width, sustain_->getHeight(),
-             Justification::centred, true);
-  g.drawText(TRANS("R"), release_->getX() - text_width, release_->getY(),
-             text_width, release_->getHeight(),
-             Justification::centred, true);
+  const String labels[] = {TRANS("D"), TRANS("A"), TRANS("H"),
+                           TRANS("D"), TRANS("S"), TRANS("R")};
+  int label_offset = has_delay_ ? 0 : 1;
+  for (int control = 0; control < control_count_; ++control) {
+    SynthSlider* slider = ordered_controls_[control];
+    g.drawText(labels[control + label_offset], slider->getX() - text_width,
+               slider->getY(), text_width, slider->getHeight(),
+               Justification::centred, true);
+  }
 }
 
 void EnvelopeSection::resized() {
@@ -114,18 +133,16 @@ void EnvelopeSection::resized() {
   int envelope_width = getWidth() - slider_section_width - text_width - mod_section_width;
   envelope_->setBounds(mod_section_width, title_width, envelope_width, getHeight() - title_width);
 
-  float space = (getHeight() - (4.0f * slider_width) - title_width) / 3.0f;
   int x = getWidth() - slider_section_width;
+  float space = (getHeight() - (control_count_ * slider_width) - title_width) /
+                static_cast<float>(control_count_ - 1);
 
   float mod_button_x = (mod_section_width - mod_button_width) / 2.0f;
   float mod_button_y = (getHeight() - mod_button_width + title_width) / 2.0f;
   modulation_button_->setBounds(mod_button_x, mod_button_y, mod_button_width, mod_button_width);
-  attack_->setBounds(x, title_width, slider_section_width, slider_width);
-  decay_->setBounds(x, title_width + space + slider_width, slider_section_width, slider_width);
-  sustain_->setBounds(x, title_width + 2 * (space + slider_width),
-                      slider_section_width, slider_width);
-  release_->setBounds(x, title_width + 3 * (space + slider_width),
-                      slider_section_width, slider_width);
+  for (int control = 0; control < control_count_; ++control)
+    ordered_controls_[control]->setBounds(x, title_width + control * (space + slider_width),
+                                         slider_section_width, slider_width);
 
   SynthSection::resized();
 }

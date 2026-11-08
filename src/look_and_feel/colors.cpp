@@ -27,6 +27,21 @@ const Colour Colors::emerald(0xff50c878);  // 40% - Émeraude
 const Colour Colors::topaze(0xffffc87c);   // 60% - Topaze
 const Colour Colors::orange(0xffff8c00);   // 80% - Orange chaleureux
 const Colour Colors::ruby(0xffe0115f);     // 100% - Rubis
+
+Colour Colors::getSliderGradientColour(float position) {
+	position = jlimit(0.0f, 1.0f, position);
+
+	if (position <= 0.20f)
+		return amethyst.interpolatedWith(sapphire, position / 0.20f);
+	if (position <= 0.40f)
+		return sapphire.interpolatedWith(emerald, (position - 0.20f) / 0.20f);
+	if (position <= 0.60f)
+		return emerald.interpolatedWith(topaze, (position - 0.40f) / 0.20f);
+	if (position <= 0.80f)
+		return topaze.interpolatedWith(orange, (position - 0.60f) / 0.20f);
+	return orange.interpolatedWith(ruby, (position - 0.80f) / 0.20f);
+}
+
 // === Couleurs de base de l'interface ===
 // Couleur de référence pour les gris : arrière-plan principal RGB(24, 24, 24)
 const Colour Colors::background = Colour::fromRGB(24, 24, 24);     // Gris très foncé

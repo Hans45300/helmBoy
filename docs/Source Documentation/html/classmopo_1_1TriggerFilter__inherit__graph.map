@@ -1,0 +1,5 @@
+<map id="mopo::TriggerFilter" name="mopo::TriggerFilter">
+<area shape="rect" id="Node000001" title="Filtre les triggers selon une valeur donn�e." alt="" coords="21,592,141,725"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="5,5,156,544"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,557,83,593,78,592,80,562"/>
+</map>

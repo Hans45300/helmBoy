@@ -4,22 +4,23 @@
 
 ![Mono LFO section example](../pictures/Mono%20LFO.png)
 
-Mono LFOs (Low-Frequency Oscillators) provide modulation that is shared across all voices, creating synchronized movement.
+HelmBoy has six Mono LFOs. Each provides a modulation signal shared across the playing voices.
 
 ## Parameters
 
 ### Frequency/Rate
 
-- **Range**: 0.01 Hz to 20 Hz (or tempo-synced)
-- **Sync**: Can lock to tempo for rhythmic modulation
+- Choose a free-running rate or a tempo-synchronized division from 64/1
+  through 1/128.
+- Tempo modes include straight, dotted, and triplet divisions.
 
 ### Waveform
 
-- Sine: Smooth, cyclical modulation
-- Triangle: Linear ramps
-- Square: On/off switching
-- Sawtooth: Ramp up or down
-- Random: Sample-and-hold random values
+- Sine, triangle, and square
+- Up and down sawtooth
+- 3-, 4-, and 8-step shapes
+- 3-, 5-, and 9-level pyramid shapes
+- Sample and hold, sample and glide, and Smooth Random
 
 ### Amplitude
 
@@ -27,13 +28,19 @@ Modulation depth from the LFO.
 
 ### Phase
 
-Starting position of the LFO cycle.
+**PH** offsets the waveform cycle from -180° to +180°. At 0°, the LFO retains
+its default phase. The waveform viewer previews the offset.
+
+### Phase Stretch
+
+The **PS** control changes the LFO waveform's phase shape independently of PH.
+The waveform viewer previews both controls.
 
 ### Retrigger
 
 - **Free**: LFO runs continuously
-- **Trigger**: Resets phase on each new note
-- **Sync**: Resets to tempo grid
+- **Retrigger**: Restarts with a new note
+- **Sync to Playhead**: Follows the host playhead
 
 ## Mono vs Poly
 

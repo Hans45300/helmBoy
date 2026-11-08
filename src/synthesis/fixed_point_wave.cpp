@@ -39,11 +39,12 @@ namespace mopo {
     preprocessPyramid<3>(three_pyramid_);
     preprocessPyramid<5>(five_pyramid_);
     preprocessPyramid<9>(nine_pyramid_);
+    preprocessSawMobius();
 
     wave_type waves[kNumFixedPointWaveforms] =
         { sin_, triangle_, square_, down_saw_, up_saw_,
           three_step_, four_step_, eight_step_,
-          three_pyramid_, five_pyramid_, nine_pyramid_ };
+          three_pyramid_, five_pyramid_, nine_pyramid_, saw_mobius_, nullptr };
 
     memcpy(waves_, waves, kNumFixedPointWaveforms * sizeof(wave_type));
   }
@@ -130,6 +131,60 @@ namespace mopo {
     }
 
     preprocessDiffs(up_saw_);
+  }
+
+  void FixedPointWaveLookup::preprocessSawMobius() {
+    constexpr int sample_count = FIXED_LOOKUP_SIZE;
+    constexpr int maximum_harmonic = HARMONICS + 1;
+    mopo_float cosine_coefficients[maximum_harmonic + 1] {};
+    mopo_float sine_coefficients[maximum_harmonic + 1] {};
+    mopo_float dc_component = 0.0;
+
+    for (int sample = 0; sample < sample_count; ++sample) {
+      const mopo_float phase = static_cast<mopo_float>(sample) / sample_count;
+      dc_component += Wave::sawMobius(phase);
+    }
+    dc_component /= sample_count;
+
+    // Build Fourier partial sums so each lookup row is band-limited by harmonic count.
+    for (int harmonic = 1; harmonic <= maximum_harmonic; ++harmonic) {
+      mopo_float cosine_sum = 0.0;
+      mopo_float sine_sum = 0.0;
+      for (int sample = 0; sample < sample_count; ++sample) {
+        const mopo_float phase = static_cast<mopo_float>(sample) / sample_count;
+        const mopo_float value = Wave::sawMobius(phase);
+        const mopo_float angle = 2.0 * PI * harmonic * phase;
+        cosine_sum += value * std::cos(angle);
+        sine_sum += value * std::sin(angle);
+      }
+      cosine_coefficients[harmonic] = 2.0 * cosine_sum / sample_count;
+      sine_coefficients[harmonic] = 2.0 * sine_sum / sample_count;
+    }
+
+    for (int sample = 0; sample < sample_count; ++sample) {
+      const mopo_float phase = static_cast<mopo_float>(sample) / sample_count;
+      const mopo_float angle = 2.0 * PI * phase;
+      const mopo_float cosine_step = std::cos(angle);
+      const mopo_float sine_step = std::sin(angle);
+      mopo_float cosine_harmonic = cosine_step;
+      mopo_float sine_harmonic = sine_step;
+      mopo_float value = dc_component;
+
+      for (int harmonic = 1; harmonic <= maximum_harmonic; ++harmonic) {
+        value += cosine_coefficients[harmonic] * cosine_harmonic +
+                 sine_coefficients[harmonic] * sine_harmonic;
+        const int row = HARMONICS + 1 - harmonic;
+        saw_mobius_[row][sample] = value;
+
+        const mopo_float next_cosine = cosine_harmonic * cosine_step -
+                                       sine_harmonic * sine_step;
+        sine_harmonic = sine_harmonic * cosine_step +
+                        cosine_harmonic * sine_step;
+        cosine_harmonic = next_cosine;
+      }
+    }
+
+    preprocessDiffs(saw_mobius_);
   }
 
   template<size_t steps> requires (steps > 1)

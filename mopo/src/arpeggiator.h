@@ -32,7 +32,7 @@
 #include "value.h"
 
 #include <list>
-#include <map>
+#include <utility>
 #include <set>
 #include <vector>
 
@@ -60,10 +60,6 @@ namespace mopo {
         NumInputs
       };
 
-      /**
-       * @brief Construct an Arpeggiator bound to a NoteHandler.
-       * @param note_handler Pointer to the NoteHandler used to emit notes.
-       */
       /**
        * @brief Constructeur.
        * @param note_handler Pointeur vers le `NoteHandler` utilisé pour émettre les notes.
@@ -110,6 +106,9 @@ namespace mopo {
       void removeNoteFromPatterns(mopo_float note);
 
       void allNotesOff(int sample = 0) override;
+        /** Clear scheduling/held-note state immediately; does not release the note handler.
+          Caller owns processing and must reset its voice handler separately. */
+        void resetState() override;
       void noteOn(mopo_float note, mopo_float velocity = 1,
                   int sample = 0, int channel = 0) override;
       VoiceEvent noteOff(mopo_float note, int sample = 0) override;
@@ -132,7 +131,7 @@ namespace mopo {
       std::vector<mopo_float> ascending_;
       std::vector<mopo_float> decending_;
 
-      std::map<mopo_float, mopo_float> active_notes_;
+      std::vector<std::pair<mopo_float, mopo_float>> active_notes_;
       CircularQueue<mopo_float> pressed_notes_;
       CircularQueue<mopo_float> sustained_notes_;
   };

@@ -1,11 +1,20 @@
 var searchData=
 [
-  ['border_5fbounds_5fconstrainer_2ecpp_0',['border_bounds_constrainer.cpp',['../border__bounds__constrainer_8cpp.html',1,'']]],
-  ['border_5fbounds_5fconstrainer_2eh_1',['border_bounds_constrainer.h',['../border__bounds__constrainer_8h.html',1,'']]],
-  ['bpm_5fsection_2ecpp_2',['bpm_section.cpp',['../bpm__section_8cpp.html',1,'']]],
-  ['bpm_5fsection_2eh_3',['bpm_section.h',['../bpm__section_8h.html',1,'']]],
-  ['bpm_5fslider_2ecpp_4',['bpm_slider.cpp',['../bpm__slider_8cpp.html',1,'']]],
-  ['bpm_5fslider_2eh_5',['bpm_slider.h',['../bpm__slider_8h.html',1,'']]],
-  ['browser_5flook_5fand_5ffeel_2ecpp_6',['browser_look_and_feel.cpp',['../browser__look__and__feel_8cpp.html',1,'']]],
-  ['browser_5flook_5fand_5ffeel_2eh_7',['browser_look_and_feel.h',['../browser__look__and__feel_8h.html',1,'']]]
+  ['bank_2dimport_2dexport_2emd_0',['bank-import-export.md',['../bank-import-export_8md.html',1,'']]],
+  ['biquad_5ffilter_2ecpp_1',['biquad_filter.cpp',['../biquad__filter_8cpp.html',1,'']]],
+  ['biquad_5ffilter_2eh_2',['biquad_filter.h',['../biquad__filter_8h.html',1,'']]],
+  ['bit_5fcrush_2ecpp_3',['bit_crush.cpp',['../bit__crush_8cpp.html',1,'']]],
+  ['bit_5fcrush_2eh_4',['bit_crush.h',['../bit__crush_8h.html',1,'']]],
+  ['border_5fbounds_5fconstrainer_2ecpp_5',['border_bounds_constrainer.cpp',['../border__bounds__constrainer_8cpp.html',1,'']]],
+  ['border_5fbounds_5fconstrainer_2eh_6',['border_bounds_constrainer.h',['../border__bounds__constrainer_8h.html',1,'']]],
+  ['bpm_5fsection_2ecpp_7',['bpm_section.cpp',['../bpm__section_8cpp.html',1,'']]],
+  ['bpm_5fsection_2eh_8',['bpm_section.h',['../bpm__section_8h.html',1,'']]],
+  ['bpm_5fslider_2ecpp_9',['bpm_slider.cpp',['../bpm__slider_8cpp.html',1,'']]],
+  ['bpm_5fslider_2eh_10',['bpm_slider.h',['../bpm__slider_8h.html',1,'']]],
+  ['browser_5flook_5fand_5ffeel_2ecpp_11',['browser_look_and_feel.cpp',['../browser__look__and__feel_8cpp.html',1,'']]],
+  ['browser_5flook_5fand_5ffeel_2eh_12',['browser_look_and_feel.h',['../browser__look__and__feel_8h.html',1,'']]],
+  ['button_5fmodulation_5fslider_2ecpp_13',['button_modulation_slider.cpp',['../button__modulation__slider_8cpp.html',1,'']]],
+  ['button_5fmodulation_5fslider_2eh_14',['button_modulation_slider.h',['../button__modulation__slider_8h.html',1,'']]],
+  ['bypass_5frouter_2ecpp_15',['bypass_router.cpp',['../bypass__router_8cpp.html',1,'']]],
+  ['bypass_5frouter_2eh_16',['bypass_router.h',['../bypass__router_8h.html',1,'']]]
 ];

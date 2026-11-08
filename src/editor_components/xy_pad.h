@@ -107,12 +107,16 @@ class XYPad : public Component, public SynthSlider::SliderListener {
     void mouseUp(const MouseEvent& e) override;
 
     void setActive(bool active = true);
+    /** @brief Display the effective modulated position without changing either slider. */
+    void setEffectivePosition(Point<float> position, bool visible);
 
   private:
     SynthSlider* x_slider_;
     SynthSlider* y_slider_;
     bool mouse_down_;
     bool active_;
+    Point<float> effective_position_ { 0.5f, 0.5f };
+    bool effective_position_visible_ = false;
 
     Image background_;
 

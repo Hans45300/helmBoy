@@ -1,5 +1,5 @@
 <map id="ModulationMeter" name="ModulationMeter">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,123,141,640"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="34,5,112,75"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="76,90,76,123,71,123,71,90"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,123,157,747"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="42,5,120,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,87,84,123,79,123,81,92"/>
 </map>

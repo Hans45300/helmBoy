@@ -26,23 +26,23 @@ Keyboard modulation uses note number and velocity as modulation sources for dyna
   - Volume dynamics (harder hits = louder)
   - Envelope amount (harder hits = more envelope)
 
-### Aftertouch (Channel Pressure)
+### Channel Aftertouch (Channel Pressure)
 
 - **Range**: 0 to 127
-- **Usage**: Pressure after note is pressed
+- **Usage**: Pressure applied after notes are pressed; the value is shared by active voices on that MIDI channel
 - **Applications**:
   - Vibrato depth
   - Filter modulation
   - Volume swells
 
-### Polyphonic Aftertouch
+### Poly Aftertouch (Polyphonic Key Pressure)
 
-Individual pressure per note (if controller supports it).
+Individual pressure per note (if the controller supports polyphonic key pressure). HelmBoy applies it to the matching active note on the matching MIDI channel.
 
 ## Setting Up Keyboard Modulation
 
 1. Open modulation matrix
-2. Select "Note" or "Velocity" as source
+2. Select a source such as "Note", "Velocity", "Channel Aftertouch", or "Poly Aftertouch"
 3. Choose destination parameter
 4. Adjust modulation amount
 5. Positive or negative polarity
@@ -67,11 +67,17 @@ Individual pressure per note (if controller supports it).
 - Destination: Filter Cutoff
 - Amount: +40% to +70%
 
-### Aftertouch Vibrato
+### Channel Aftertouch Vibrato
 
-- Source: Aftertouch
+- Source: Channel Aftertouch
 - Destination: LFO ? Pitch Amount
 - Amount: +50% to +100%
+
+### Poly Aftertouch Filter
+
+- Source: Poly Aftertouch
+- Destination: Filter Cutoff
+- Amount: Adjust to taste for per-note timbre control
 
 ## See Also
 

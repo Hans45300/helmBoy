@@ -1,5 +1,12 @@
 var searchData=
 [
-  ['set_5fproperty_0',['SET_PROPERTY',['../classhelmboy_1_1Midi2Manager.html#a6aa186d8282f1a52af973b3feb4cc728a617cc4b4cdfd2ff18f460955ded836d2',1,'helmboy::Midi2Manager']]],
-  ['subscribe_1',['SUBSCRIBE',['../classhelmboy_1_1Midi2Manager.html#a6aa186d8282f1a52af973b3feb4cc728a45b73ef479821e71be9f69a190f2bb86',1,'helmboy::Midi2Manager']]]
+  ['feedback_0',['Feedback',['../classmopo_1_1Chorus.html#a428d8c17ead9dbcf4a083b6c00efbb4aabea4c2c8eb82d05891ddd71584881b56',1,'mopo::Chorus::Feedback'],['../classmopo_1_1Delay.html#aa8cc796ea87c40a8f297366beccfbab3abea4c2c8eb82d05891ddd71584881b56',1,'mopo::Delay::Feedback'],['../classmopo_1_1Reverb.html#aa890ffb3ed505f66e78aa7b8e2da72a9abea4c2c8eb82d05891ddd71584881b56',1,'mopo::Reverb::Feedback'],['../classmopo_1_1ReverbAllPass.html#ae9541ab274c77e220820797415292c98abea4c2c8eb82d05891ddd71584881b56',1,'mopo::ReverbAllPass::Feedback'],['../classmopo_1_1ReverbComb.html#af2c9e7c0e9b5d5eace3bf60907f057e5abea4c2c8eb82d05891ddd71584881b56',1,'mopo::ReverbComb::Feedback'],['../classmopo_1_1SimpleDelay.html#a6f18546f48e32d9e2da0f20772c0d1daabea4c2c8eb82d05891ddd71584881b56',1,'mopo::SimpleDelay::Feedback']]],
+  ['finished_1',['Finished',['../classmopo_1_1Envelope.html#a0c0a1c778588eb977146e01b64d36a62a8f3d10eb21bd36347c258679eba9e92b',1,'mopo::Envelope']]],
+  ['fivepyramid_2',['FivePyramid',['../classmopo_1_1Wave.html#ac19a87b06db2840c42e55a43fb1f4483a3bbe44031f6b20845c5cd5868a10156f',1,'mopo::Wave']]],
+  ['fourstep_3',['FourStep',['../classmopo_1_1Wave.html#ac19a87b06db2840c42e55a43fb1f4483ac7126369380acc7a421363d9bb61c2ad',1,'mopo::Wave']]],
+  ['fractional_4',['Fractional',['../classmopo_1_1Interpolate.html#aebff4646e3dc7c39470bffcc481a1958a8dd30ad8c51448885a3519bab847fdc2',1,'mopo::Interpolate']]],
+  ['freezemode_5',['FreezeMode',['../classmopo_1_1Reverb.html#aa890ffb3ed505f66e78aa7b8e2da72a9acbf1726897d2aa8ba2093b68cba5e144',1,'mopo::Reverb']]],
+  ['frequency_6',['Frequency',['../classmopo_1_1Alias.html#a1dbe39c190f5bc48392ff70c2faa4803a7cf395303ce3665a9834721d4b748e4b',1,'mopo::Alias::Frequency'],['../classmopo_1_1Arpeggiator.html#a44907c5c701c98ebf7b5a88c3b83e5daa7cf395303ce3665a9834721d4b748e4b',1,'mopo::Arpeggiator::Frequency'],['../classmopo_1_1Oscillator.html#ac9b48460dd215648bef02ec054093c86a7cf395303ce3665a9834721d4b748e4b',1,'mopo::Oscillator::Frequency'],['../classmopo_1_1StepGenerator.html#ade54e9bdce0f677ca8e9a68409571ec1a7cf395303ce3665a9834721d4b748e4b',1,'mopo::StepGenerator::Frequency']]],
+  ['frequencytrigger_7',['FrequencyTrigger',['../classmopo_1_1PortamentoFilter.html#a24bc8285dfbfa01cdb5a73de4d050d50a3eb422c54fca67ec1213854744381c29',1,'mopo::PortamentoFilter']]],
+  ['from_8',['From',['../classmopo_1_1Interpolate.html#aebff4646e3dc7c39470bffcc481a1958a5da618e8e4b89c66fe86e32cdafde142',1,'mopo::Interpolate']]]
 ];

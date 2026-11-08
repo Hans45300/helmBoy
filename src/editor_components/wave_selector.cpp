@@ -20,6 +20,10 @@
 
 #include "wave_selector.h"
 #include "colors.h"
+#include "fixed_point_wave.h"
+#include "utils.h"
+#include "wave_selector_geometry.h"
+#include "wave.h"
 
 #define TYPE_PADDING_X 1.0f
 #define TYPE_PADDING_Y 4.0f
@@ -73,141 +77,145 @@ namespace {
   }
 } // namespace
 
-WaveSelector::WaveSelector(String name) : SynthSlider(name) { }
+WaveSelector::WaveSelector(String name, WaveSelectorKind kind)
+  : SynthSlider(name), kind_(kind) { }
 
 void WaveSelector::paint(Graphics& g) {
   static const PathStrokeType stroke(1.000f, PathStrokeType::curved, PathStrokeType::rounded);
 
-  //Définition du nombre de types de formes d'ondes des oscillateurs
-  oscillator_wf_types = 11;
-
   int selected = getValue();
-  float cell_width = float(getWidth()) / getNumberOfTypesPerLine(getMinimum(), getMaximum());
-
   g.setColour(Colour(Colors::Color_ff000000));
-  g.fillRect(getCellOffsetFromTypeNumber(selected) * cell_width, getHeightFromTypeNumber(selected) - TYPE_PADDING_Y, cell_width, float(getHeight() / 2));
+  g.fillRect(getCellBounds(selected));
 
-  g.setColour(selected == 0 ? Colour(Colors::emerald) : Colors::Color_ffaaaaaa);
-  g.strokePath(sine_, stroke);
-
-  g.setColour(selected == 1 ? Colour(Colors::emerald) : Colors::Color_ffaaaaaa);
-  g.strokePath(triangle_, stroke);
-
-  g.setColour(selected == 2 ? Colour(Colors::emerald) : Colors::Color_ffaaaaaa);
-  g.strokePath(square_, stroke);
-
-  g.setColour(selected == 3 ? Colour(Colors::emerald) : Colors::Color_ffaaaaaa);
-  g.strokePath(down_saw_, stroke);
-
-  g.setColour(selected == 4 ? Colour(Colors::emerald) : Colors::Color_ffaaaaaa);
-  g.strokePath(up_saw_, stroke);
-
-  g.setColour(selected == 5 ? Colour(Colors::emerald) : Colors::Color_ffaaaaaa);
-  g.strokePath(three_step_, stroke);
-
-  g.setColour(selected == 6 ? Colour(Colors::emerald) : Colors::Color_ffaaaaaa);
-  g.strokePath(four_step_, stroke);
-
-  g.setColour(selected == 7 ? Colour(Colors::emerald) : Colors::Color_ffaaaaaa);
-  g.strokePath(eight_step_, stroke);
-
-  g.setColour(selected == 8 ? Colour(Colors::emerald) : Colors::Color_ffaaaaaa);
-  g.strokePath(three_pyramid_, stroke);
-
-  g.setColour(selected == 9 ? Colour(Colors::emerald) : Colors::Color_ffaaaaaa);
-  g.strokePath(five_pyramid_, stroke);
-
-  g.setColour(selected == 10 ? Colour(Colors::emerald) : Colors::Color_ffaaaaaa);
-  g.strokePath(nine_pyramid_, stroke);
-
-  if (getMaximum() >= oscillator_wf_types)
-  {
-    g.setColour(selected == 11 ? Colour(Colors::emerald) : Colors::Color_ffaaaaaa);
-    g.strokePath(sample_and_hold_, stroke);
-    g.setColour(selected == 12 ? Colour(Colors::emerald) : Colors::Color_ffaaaaaa);
-    g.strokePath(noise_, stroke);
-  }
+  paintCommonWaveforms(g, selected, stroke);
+  if (kind_ == WaveSelectorKind::Oscillator)
+    paintOscillatorWaveforms(g, selected, stroke);
+  else
+    paintLfoWaveforms(g, selected, stroke);
 }
 
 void WaveSelector::resized() {
   SynthSlider::resized();
-   cell_width = float(getWidth()) / getNumberOfTypesPerLine(getMinimum(), getMaximum());
-   type_width = cell_width - 2 * TYPE_PADDING_X;
-   type_height = getHeight() / 2 - 2 * TYPE_PADDING_Y;
-   int actual_type_number = 0;
-   resizeSin(getCellOffsetFromTypeNumber(actual_type_number) * cell_width + TYPE_PADDING_X, getHeightFromTypeNumber(actual_type_number), type_width, type_height);
-   actual_type_number++;
-   resizeTriangle(getCellOffsetFromTypeNumber(actual_type_number) * cell_width + TYPE_PADDING_X, getHeightFromTypeNumber(actual_type_number), type_width, type_height);
-   actual_type_number++;
-   resizeSquare(getCellOffsetFromTypeNumber(actual_type_number) * cell_width + TYPE_PADDING_X, getHeightFromTypeNumber(actual_type_number), type_width, type_height);
-   actual_type_number++;
-   resizeDownSaw(getCellOffsetFromTypeNumber(actual_type_number) * cell_width + TYPE_PADDING_X, getHeightFromTypeNumber(actual_type_number), type_width, type_height);
-   actual_type_number++;
-   resizeUpSaw(getCellOffsetFromTypeNumber(actual_type_number) * cell_width + TYPE_PADDING_X, getHeightFromTypeNumber(actual_type_number), type_width, type_height);
-   actual_type_number++;
-   resizeSteps<3>(three_step_, getCellOffsetFromTypeNumber(actual_type_number) * cell_width + TYPE_PADDING_X, getHeightFromTypeNumber(actual_type_number),
-                  type_width, type_height);
-   actual_type_number++;
-   resizeSteps<4>(four_step_, getCellOffsetFromTypeNumber(actual_type_number) * cell_width + TYPE_PADDING_X, getHeightFromTypeNumber(actual_type_number),
-                  type_width, type_height);
-   actual_type_number++;
-   resizeSteps<8>(eight_step_, getCellOffsetFromTypeNumber(actual_type_number) * cell_width + TYPE_PADDING_X, getHeightFromTypeNumber(actual_type_number),
-                  type_width, type_height);
-   actual_type_number++;
-   resizePyramid<3>(three_pyramid_, getCellOffsetFromTypeNumber(actual_type_number) * cell_width + TYPE_PADDING_X, getHeightFromTypeNumber(actual_type_number),
-                    type_width, type_height);
-   actual_type_number++;
-   resizePyramid<5>(five_pyramid_, getCellOffsetFromTypeNumber(actual_type_number) * cell_width + TYPE_PADDING_X, getHeightFromTypeNumber(actual_type_number),
-                    type_width, type_height);
-   actual_type_number++;
-   resizePyramid<9>(nine_pyramid_, getCellOffsetFromTypeNumber(actual_type_number) * cell_width + TYPE_PADDING_X, getHeightFromTypeNumber(actual_type_number),
-                    type_width, type_height);
-   if (getMaximum() >= oscillator_wf_types)
-   {
-     actual_type_number++;
-     resizeSampleAndHold(getCellOffsetFromTypeNumber(actual_type_number) * cell_width + TYPE_PADDING_X, getHeightFromTypeNumber(actual_type_number), type_width, type_height);
-     actual_type_number++;
-     resizeNoise(getCellOffsetFromTypeNumber(actual_type_number) * cell_width + TYPE_PADDING_X, getHeightFromTypeNumber(actual_type_number), type_width, type_height);
-   }
+  const int types_per_line = getNumberOfTypesPerLine(getMinimum(), getMaximum());
+  if (types_per_line <= 0)
+    return;
+
+  cell_width = float(getWidth()) / types_per_line;
+  type_width = cell_width - 2 * TYPE_PADDING_X;
+  type_height = getHeight() / 2 - 2 * TYPE_PADDING_Y;
+  resizeCommonWaveforms();
+  if (kind_ == WaveSelectorKind::Oscillator)
+    resizeOscillatorWaveforms();
+  else
+    resizeLfoWaveforms();
+}
+
+void WaveSelector::paintCommonWaveforms(Graphics& g, int selected,
+                                         const PathStrokeType& stroke) {
+  Path* paths[] = { &sine_, &triangle_, &square_, &down_saw_, &up_saw_,
+                    &three_step_, &four_step_, &eight_step_, &three_pyramid_,
+                    &five_pyramid_, &nine_pyramid_ };
+  for (int index = 0; index < static_cast<int>(std::size(paths)); ++index) {
+    g.setColour(selected == index ? Colour(Colors::emerald) : Colors::Color_ffaaaaaa);
+    g.strokePath(*paths[index], stroke);
+  }
+}
+
+void WaveSelector::paintOscillatorWaveforms(Graphics& g, int selected,
+                                             const PathStrokeType& stroke) {
+  const int index = mopo::FixedPointWaveLookup::kSawMobius;
+  g.setColour(selected == index ? Colour(Colors::emerald) : Colors::Color_ffaaaaaa);
+  g.strokePath(saw_mobius_, stroke);
+}
+
+void WaveSelector::paintLfoWaveforms(Graphics& g, int selected,
+                                      const PathStrokeType& stroke) {
+  const int sample_and_hold_index = static_cast<int>(mopo::Wave::Type::WhiteNoise);
+  const int sample_and_glide_index = static_cast<int>(mopo::Wave::Type::SampleAndGlide);
+  const int smooth_random_index = static_cast<int>(mopo::Wave::Type::SmoothRandom);
+  g.setColour(selected == sample_and_hold_index ? Colour(Colors::emerald)
+                                                 : Colors::Color_ffaaaaaa);
+  g.strokePath(sample_and_hold_, stroke);
+  g.setColour(selected == sample_and_glide_index ? Colour(Colors::emerald)
+                                                  : Colors::Color_ffaaaaaa);
+  g.strokePath(noise_, stroke);
+  g.setColour(selected == smooth_random_index ? Colour(Colors::emerald)
+                                              : Colors::Color_ffaaaaaa);
+  g.strokePath(smooth_random_, stroke);
+}
+
+void WaveSelector::resizeCommonWaveforms() {
+  for (int index = 0; index <= 10; ++index) {
+    const float x = getCellOffsetFromTypeNumber(index) * cell_width + TYPE_PADDING_X;
+    const float y = getHeightFromTypeNumber(index);
+    switch (index) {
+      case 0: resizeSin(x, y, type_width, type_height); break;
+      case 1: resizeTriangle(x, y, type_width, type_height); break;
+      case 2: resizeSquare(x, y, type_width, type_height); break;
+      case 3: resizeDownSaw(x, y, type_width, type_height); break;
+      case 4: resizeUpSaw(x, y, type_width, type_height); break;
+      case 5: resizeSteps<3>(three_step_, x, y, type_width, type_height); break;
+      case 6: resizeSteps<4>(four_step_, x, y, type_width, type_height); break;
+      case 7: resizeSteps<8>(eight_step_, x, y, type_width, type_height); break;
+      case 8: resizePyramid<3>(three_pyramid_, x, y, type_width, type_height); break;
+      case 9: resizePyramid<5>(five_pyramid_, x, y, type_width, type_height); break;
+      case 10: resizePyramid<9>(nine_pyramid_, x, y, type_width, type_height); break;
+    }
+  }
+}
+
+void WaveSelector::resizeOscillatorWaveforms() {
+  const int index = mopo::FixedPointWaveLookup::kSawMobius;
+  resizeSawMobius(getCellOffsetFromTypeNumber(index) * cell_width + TYPE_PADDING_X,
+                  getHeightFromTypeNumber(index), type_width, type_height);
+}
+
+void WaveSelector::resizeLfoWaveforms() {
+  const int sample_and_hold_index = static_cast<int>(mopo::Wave::Type::WhiteNoise);
+  const int sample_and_glide_index = static_cast<int>(mopo::Wave::Type::SampleAndGlide);
+  const int smooth_random_index = static_cast<int>(mopo::Wave::Type::SmoothRandom);
+  resizeSampleAndHold(getCellOffsetFromTypeNumber(sample_and_hold_index) * cell_width + TYPE_PADDING_X,
+                      getHeightFromTypeNumber(sample_and_hold_index), type_width, type_height);
+  resizeNoise(getCellOffsetFromTypeNumber(sample_and_glide_index) * cell_width + TYPE_PADDING_X,
+              getHeightFromTypeNumber(sample_and_glide_index), type_width, type_height);
+  resizeSmoothRandom(getCellOffsetFromTypeNumber(smooth_random_index) * cell_width + TYPE_PADDING_X,
+                     getHeightFromTypeNumber(smooth_random_index), type_width, type_height);
 }
 
   float WaveSelector::getCellOffsetFromTypeNumber(int type_number) {
-    int num_types = getMaximum() - getMinimum() + 1;
-    int types_per_line;
-    float xOffset;
-    // Si le nombre de waveforms est pair, le nombre de types par ligne est la moitié du nombre total
-    // Sinon, c'est la moitié arrondie vers le haut
-
-    types_per_line = (num_types % 2 == 0) ? (num_types / 2) : (num_types / 2 + 1);
-    xOffset = (type_number >= types_per_line) ? (type_number - types_per_line) : type_number;
-    return xOffset;
+    const float width = float(getWidth()) /
+        getNumberOfTypesPerLine(getMinimum(), getMaximum());
+    return width > 0.0f ? getCellBounds(type_number).getX() / width : 0.0f;
   }
 
   int WaveSelector::getNumberOfTypesPerLine(int minimum, int maximum)
   {
-    int num_types = maximum - minimum + 1;
-    // Si le nombre de waveforms est pair, le nombre de types par ligne est la moitié du nombre total
-    // Sinon, c'est la moitié arrondie vers le haut
-    return (num_types % 2 == 0) ? (num_types / 2) : (num_types / 2 + 1);
+    return helmBoy::ui::getWaveSelectorTypesPerLine(minimum, maximum);
   }
 
   float WaveSelector::getHeightFromTypeNumber(int type_number)
   {
-    int num_types = getMaximum() - getMinimum() + 1;
-    int types_per_line;
-    float yOffset;
-    // Si le nombre de waveforms est pair, le nombre de types par ligne est la moitié du nombre total
-    // Sinon, c'est la moitié arrondie vers le haut
-    types_per_line = (num_types % 2 == 0) ? (num_types / 2) : (num_types / 2 + 1);
-    float type_height = getHeight() / 2 - 2 * TYPE_PADDING_Y;
+    return getCellBounds(type_number).getY() + TYPE_PADDING_Y;
+  }
 
-    if (type_number < types_per_line) {
-      yOffset = TYPE_PADDING_Y;
-    }
-    else {
-      yOffset = type_height + TYPE_PADDING_Y * 2;
-    }
-    return yOffset;
+  Rectangle<float> WaveSelector::getCellBounds(int waveform_index) const {
+    const auto bounds = helmBoy::ui::getWaveSelectorCellBounds(
+        waveform_index, getMinimum(), getMaximum(), float(getWidth()),
+        float(getHeight()), TYPE_PADDING_Y);
+    return { bounds.x, bounds.y, bounds.width, bounds.height };
+  }
+
+  int WaveSelector::getWaveformIndex(float value) const {
+    const auto rounding = kind_ == WaveSelectorKind::Lfo
+        ? mopo::utils::WaveformIndexRounding::Truncate
+        : mopo::utils::WaveformIndexRounding::Nearest;
+    return mopo::utils::waveformIndex(value, static_cast<int>(getMinimum()),
+        static_cast<int>(getMaximum()), rounding);
+  }
+
+  bool WaveSelector::isSawMobiusWaveform(int waveform_index) const {
+    return kind_ == WaveSelectorKind::Oscillator &&
+        waveform_index == mopo::FixedPointWaveLookup::kSawMobius;
   }
 
 void WaveSelector::mouseEvent(const juce::MouseEvent &e)
@@ -216,7 +224,8 @@ void WaveSelector::mouseEvent(const juce::MouseEvent &e)
   float x = e.getPosition().getX();
   float y = e.getPosition().getY();
   int index;
-  index = (y > getHeight() / 2) ? getNumberOfTypesPerLine(getMinimum(), getMaximum()) : 0;
+  index = static_cast<int>(getMinimum()) +
+      ((y > getHeight() / 2) ? getNumberOfTypesPerLine(getMinimum(), getMaximum()) : 0);
   index += int(x / cell_width);
   if(index > getMaximum()) { return;}
   setValue(index);
@@ -313,4 +322,27 @@ void WaveSelector::resizeSampleAndHold(float x, float y, float width, float heig
     sample_and_hold_.lineTo(x + (i + 1) * inc_x, sample_value);
   }
   sample_and_hold_.lineTo(x + width, y + height / 2.0f);
+}
+
+void WaveSelector::resizeSmoothRandom(float x, float y, float width, float height) {
+  static const float points[] = {0.5f, 0.2f, 0.8f, 0.35f, 0.65f, 0.5f};
+  smooth_random_.clear();
+  smooth_random_.startNewSubPath(x, y + height * points[0]);
+  for (int i = 1; i < 6; ++i)
+    smooth_random_.lineTo(x + width * i / 5.0f, y + height * points[i]);
+}
+
+void WaveSelector::resizeSawMobius(float x, float y, float width, float height) {
+  constexpr int preview_points = 64;
+  saw_mobius_.clear();
+  for (int point = 0; point <= preview_points; ++point) {
+    const float phase = static_cast<float>(point) / preview_points;
+    const float value = static_cast<float>(mopo::Wave::sawMobius(phase));
+    const float position_y = y + height * (1.0f - value) / 2.0f;
+    const float position_x = x + width * phase;
+    if (point == 0)
+      saw_mobius_.startNewSubPath(position_x, position_y);
+    else
+      saw_mobius_.lineTo(position_x, position_y);
+  }
 }

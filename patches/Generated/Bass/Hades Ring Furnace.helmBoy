@@ -1,0 +1,44 @@
+{
+  "settings": {
+    "polyphony": 1,
+    "legato": 1,
+    "portamento": -6.1,
+    "portamento_type": 1,
+    "osc_1_waveform": 4.0,
+    "osc_1_volume": 0.64,
+    "osc_2_waveform": 2.0,
+    "osc_2_transpose": 12.0,
+    "osc_2_volume": 0.36,
+    "ring_modulation": 0.4,
+    "filter_on": 1,
+    "filter_style": 0,
+    "cutoff": 50.0,
+    "resonance": 0.28,
+    "fil_env_depth": 38,
+    "fil_decay": 0.58,
+    "fil_sustain": 0.2,
+    "amp_attack": 0.003,
+    "amp_decay": 0.6,
+    "amp_sustain": 0.4,
+    "amp_release": 0.14,
+    "chorus_on": 0,
+    "reverb_on": 0,
+    "delay_on": 0,
+    "arp_on": 0,
+    "modulations": [
+      {
+        "amount": 0.18,
+        "destination": "ring_modulation",
+        "source": "mono_lfo_1"
+      }
+    ],
+    "mono_lfo_1_sync": 0,
+    "mono_lfo_1_frequency": -0.5,
+    "mono_lfo_1_waveform": 1.0,
+    "lfo_tempo_index_version": 2
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Hades Ring Furnace",
+  "folder_name": "Bass",
+  "synth_version": "1.1.1"
+}

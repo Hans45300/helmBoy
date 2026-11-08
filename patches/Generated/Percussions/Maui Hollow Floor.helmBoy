@@ -1,0 +1,30 @@
+{
+  "settings": {
+    "polyphony": 8,
+    "osc_1_waveform": 1.0,
+    "osc_1_volume": 0.58,
+    "osc_2_waveform": 0.0,
+    "osc_2_transpose": -12.0,
+    "osc_2_volume": 0.34,
+    "sub_volume": 0.56,
+    "filter_on": 1,
+    "filter_style": 1,
+    "cutoff": 40.0,
+    "resonance": 0.32,
+    "fil_env_depth": 50.0,
+    "fil_decay": 0.26,
+    "fil_sustain": 0.0,
+    "amp_attack": 0.002,
+    "amp_decay": 0.4,
+    "amp_sustain": 0.0,
+    "amp_release": 0.14,
+    "reverb_on": 1,
+    "reverb_dry_wet": 0.08,
+    "arp_on": 0,
+    "modulations": []
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Maui Hollow Floor",
+  "folder_name": "Percussions",
+  "synth_version": "1.1.1"
+}

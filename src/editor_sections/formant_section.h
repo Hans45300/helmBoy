@@ -27,7 +27,7 @@
 #include "synth_section.h"
 #include "xy_pad.h"
 
-class FormantSection : public SynthSection {
+class FormantSection : public SynthSection, private juce::Timer {
   public:
     /** @brief Construct the formant section. */
     FormantSection(String name);
@@ -45,10 +45,16 @@ class FormantSection : public SynthSection {
     void setActive(bool active = true) override;
 
   private:
+    void timerCallback() override;
+
     std::unique_ptr<SynthButton> on_;
     std::unique_ptr<SynthSlider> x_;
     std::unique_ptr<SynthSlider> y_;
     std::unique_ptr<XYPad> xy_pad_;
+    float effective_x_ = 0.5f;
+    float effective_y_ = 0.5f;
+    bool effective_x_valid_ = false;
+    bool effective_y_valid_ = false;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FormantSection)
 };

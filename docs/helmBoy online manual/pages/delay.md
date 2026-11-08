@@ -6,12 +6,17 @@
 
 The delay effect creates echoes by repeating the input signal at specified intervals.
 
-## Parameters
+## Controls
 
-### Delay Time
+### Frequency and Sync
 
-- **Range**: 0 to 2 seconds (or tempo-synced values)
-- **Sync**: Can be synchronized to tempo for rhythmic delays
+- Choose free-running time or synchronize the delay to the current tempo.
+- Tempo divisions include straight, dotted, and triplet values.
+
+### Ping-Pong
+
+The **PP** switch cross-feeds the stereo delay lines. Wet echoes alternate
+between left and right; when disabled, each channel feeds back into itself.
 
 ### Feedback
 
@@ -23,24 +28,20 @@ The delay effect creates echoes by repeating the input signal at specified inter
 
 Balance between original signal and delayed signal.
 
-### Filter
+### Delay LP Cutoff
 
-- **Low Pass**: Darkens each delay repeat
-- **High Pass**: Thins out delay repeats
+The **LP** control applies a 24 dB/octave low-pass filter to the delayed taps,
+including the signal sent back into the feedback loop. It does not affect the
+dry signal. The maximum setting bypasses the filter so existing patches retain
+their original delay sound. The cutoff can be automated and modulated.
+The filter is a pair of cascaded Butterworth biquads per channel; cutoff changes
+are smoothed over 10 ms, and ping-pong routing remains after the per-channel
+filtering.
 
-## Delay Types
-
-### Mono Delay
-
-Single delay line, centered in stereo field.
-
-### Stereo Delay
-
-Independent delay times for left and right channels.
-
-### Ping Pong Delay
-
-Delays alternate between left and right speakers.
+The delay-time control is shared by both stereo channels. The section also
+provides feedback, dry/wet mix, sync, ping-pong, and an on/off switch; it does
+not provide separate left/right delay times or separate filter controls for
+the stereo channels.
 
 ## Applications
 

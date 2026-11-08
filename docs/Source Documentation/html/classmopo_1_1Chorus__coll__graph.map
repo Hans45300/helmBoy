@@ -1,0 +1,11 @@
+<map id="mopo::Chorus" name="mopo::Chorus">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,755,127,973"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="156,5,307,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="155,518,142,574,95,756,90,754,137,573,156,513"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="151,573,312,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="227,514,229,525,229,574,223,573,224,525,226,519"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="343,744,443,984"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="296,499,315,548,326,572,350,650,369,728,364,728,345,651,321,574,310,550,296,504"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="229,573,231,521,232,515,234,574"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="393,743,387,637,379,581,366,526,343,458,315,395,315,390,348,456,372,525,384,580,392,636,399,745"/>
+</map>

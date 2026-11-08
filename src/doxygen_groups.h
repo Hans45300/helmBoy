@@ -50,8 +50,9 @@
  * @defgroup midi MIDI Processing
  * @brief MIDI input/output and message handling
  *
- * Contains MIDI 1.0 and MIDI 2.0 processing, including UMP parsing,
- * profile configuration, and bidirectional feedback.
+ * Contains the active MIDI 1.0 input path and the explicit, limited UMP
+ * decoder. Profile/property output helpers are experimental and are not
+ * connected to host input or voice processing.
  */
 
 /**

@@ -60,6 +60,7 @@ namespace mopo {
         Gain,
         Drive,
         Reset,
+        CombAudio,
         NumInputs
       };
 
@@ -70,6 +71,8 @@ namespace mopo {
         dB12,
         dB24,
         Shelf,
+        Notch,
+        Comb,
         NumStyles
       };
 
@@ -130,6 +133,14 @@ namespace mopo {
                                    mopo_float cutoff,
                                    mopo_float resonance,
                                    bool db24);
+      void computeNotchCoefficients(mopo_float cutoff,
+                mopo_float resonance);
+
+      /// Calcule les coefficients dédiés au chemin SVF JUCE-compatible (dB12/dB24).
+      void computePassCoefficientsJucePath(mopo_float blend,
+                   mopo_float cutoff,
+                   mopo_float resonance,
+                   bool db24);
 
       /// Calcule les coefficients pour le mode shelf.
       void computeShelfCoefficients(Shelves choice,
@@ -156,6 +167,12 @@ namespace mopo {
     private:
       /// R�initialise l'�tat interne du filtre.
       void reset();
+      [[nodiscard]] bool hasValidProcessingSpec() const;
+      [[nodiscard]] bool shouldUseJucePath(Styles style, Shelves shelf) const;
+      void processJucePath(const mopo_float* audio_buffer,
+                           mopo_float* dest,
+                           Styles style,
+                           Shelves shelf);
 
       mopo_float a1_ = 0.0f, a2_ = 0.0f, a3_ = 0.0f;
       mopo_float m0_ = 0.0f, m1_ = 0.0f, m2_ = 0.0f;

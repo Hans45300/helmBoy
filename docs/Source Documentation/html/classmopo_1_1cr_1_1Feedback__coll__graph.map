@@ -1,0 +1,13 @@
+<map id="mopo::cr::Feedback" name="mopo::cr::Feedback">
+<area shape="rect" id="Node000001" title=" " alt="" coords="28,1204,154,1273"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Feedback.html" title="Processeur sp�cial pour la gestion des boucles de feedback dans le flux audio." alt="" coords="5,755,176,973"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,987,93,1204,88,1204,88,989"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1Processor.html" title=" " alt="" coords="206,5,357,501"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="201,512,127,756,122,754,202,507"/>
+<area shape="rect" id="Node000004" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="201,573,362,1155"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="277,514,279,525,279,574,273,573,274,525,276,519"/>
+<area shape="rect" id="Node000005" href="$structmopo_1_1Output.html" title=" " alt="" coords="393,744,493,984"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="346,499,365,548,376,572,400,650,419,728,414,728,395,651,371,574,360,550,346,504"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="279,573,281,521,282,515,284,574"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="443,743,437,637,429,581,416,526,393,458,365,395,365,390,398,456,421,525,434,580,442,636,448,745"/>
+</map>

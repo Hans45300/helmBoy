@@ -1,9 +1,9 @@
 <map id="BpmSlider" name="BpmSlider">
-<area shape="rect" id="Node000001" title=" " alt="" coords="75,752,187,843"/>
-<area shape="rect" id="Node000002" href="$classSynthSlider.html" title="Custom slider control for synthesis parameters." alt="" coords="5,123,142,704"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,718,127,752,122,752,117,719"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="52,5,96,75"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="76,89,76,123,71,123,71,89"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="167,379,210,448"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="187,463,176,574,156,704,146,753,141,752,151,704,170,573,182,463"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="113,976,225,1067"/>
+<area shape="rect" id="Node000002" href="$classSynthSlider.html" title="Custom slider control for synthesis parameters." alt="" coords="5,123,194,928"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,940,166,977,160,975,157,945"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="78,5,122,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="100,87,102,123,97,123,100,92"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="218,491,262,560"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="242,573,237,733,227,831,209,929,192,978,188,975,204,927,222,831,232,733,239,577"/>
 </map>

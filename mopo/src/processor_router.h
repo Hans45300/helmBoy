@@ -66,6 +66,8 @@ namespace mopo {
        * @brief Exécute le traitement des processeurs dans l'ordre approprié.
        */
       virtual void process() override;
+      /** Reset child processors and feedback buffers at the current block boundary. */
+      void resetState() override;
       /**
        * @brief Définit la fréquence d'échantillonnage pour tous les processeurs.
         * @param sample_rate Fréquence d'échantillonnage en Hz.

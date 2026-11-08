@@ -1,7 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,43,131,69"/>
-<area shape="rect" id="Node000001" href="$structMidiManager_1_1PatchLoadedCallback.html" title=" " alt="" coords="203,5,382,48"/>
-<area shape="poly" id="edge14_Node000000_Node000001" title=" " alt="" coords="146,43,202,36,203,41,146,49"/>
-<area shape="rect" id="Node000002" href="$structSynthBase_1_1ValueChangedCallback.html" title=" " alt="" coords="179,72,407,99"/>
-<area shape="poly" id="edge15_Node000000_Node000002" title=" " alt="" coords="147,64,186,69,185,74,146,69"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,13,131,40"/>
+<area shape="rect" id="Node000001" href="$structMidiManager_1_1PatchLoadedCallback.html" title=" " alt="" coords="179,5,358,48"/>
+<area shape="poly" id="edge102_Node000000_Node000001" title=" " alt="" coords="146,24,181,26,175,27,146,29"/>
 </map>

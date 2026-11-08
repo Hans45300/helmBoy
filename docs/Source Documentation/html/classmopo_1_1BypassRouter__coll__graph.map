@@ -1,0 +1,11 @@
+<map id="mopo::BypassRouter" name="mopo::BypassRouter">
+<area shape="rect" id="Node000001" title="Routeur avec bypass, permettant de passer ou non le signal selon l&#39;entr�e &quot;On&quot;." alt="" coords="5,851,139,963"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="84,5,245,587"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,604,83,851,78,851,118,599"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1Processor.html" title=" " alt="" coords="163,659,314,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="155,584,162,634,164,642,158,642,157,635,154,589"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="221,643,218,611,217,589,217,584,223,610,226,644"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="188,1227,288,1467"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="190,1152,196,1202,197,1211,192,1210,191,1203,189,1157"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="246,1226,247,1203,249,1174,251,1169,252,1203,251,1228"/>
+</map>

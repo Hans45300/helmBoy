@@ -18,7 +18,6 @@
  * along with helmBoy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- #include "colors.h"
 #include "modulation_highlight.h"
 
 ModulationHighlight::ModulationHighlight() {
@@ -28,9 +27,7 @@ ModulationHighlight::ModulationHighlight() {
 ModulationHighlight::~ModulationHighlight() {
 }
 
-void ModulationHighlight::paint(Graphics& g) {
-  g.setColour(Colour(Colors::Color_44ffffff));
-  g.fillEllipse(1, 2, getWidth() - 2, getHeight() - 2);
+void ModulationHighlight::paint(Graphics&) {
 }
 
 void ModulationHighlight::resized() {

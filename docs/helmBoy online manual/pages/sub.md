@@ -4,23 +4,22 @@
 
 ![Sub section example](../pictures/Sub.png)
 
-The sub oscillator generates low-frequency content, typically one or two octaves below the main oscillators.
+The sub oscillator adds a waveform two octaves below the played note. Its **-OCT** button lowers it by one additional octave.
 
 ## Parameters
 
-### Waveform
+### Waveform and Phase
 
-- **Sine**: Pure low-end
-- **Square**: Adds harmonic content
+Choose a waveform, use **PH** to offset its cycle from -180° to +180°, and use
+**PS** to change its phase shape. The waveform display previews both controls.
 
-### Octave
+### Shuffle
 
-- **-1 Octave**: One octave below
-- **-2 Octaves**: Two octaves below
+Adjusts the timing relationship within the sub waveform cycle.
 
-### Volume
+### Level
 
-Controls the level of the sub oscillator in the mix.
+Set the sub level in the [Mixer](mixer.md); the Sub panel itself has no volume control.
 
 ## Usage Tips
 

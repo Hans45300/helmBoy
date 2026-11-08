@@ -19,10 +19,10 @@
  */
 
 #include "synth_section.h"
+#include <algorithm>
 
 #include "colors.h"
 #include "fonts.h"
-#include "open_gl_component.h"
 #include "synth_gui_interface.h"
 #include "synth_slider.h"
 
@@ -86,16 +86,19 @@ void SynthSection::setSizeRatio(float ratio) {
 }
 
 void SynthSection::paintKnobShadows(Graphics& g) {
-  for (auto& [name, slider] : slider_lookup_)
+  for (auto& [name, slider] : slider_lookup_) {
+    if (slider == nullptr)
+      continue;
+    if (!slider->isVisible() || slider->getWidth() <= 0 || slider->getHeight() <= 0)
+      continue;
     slider->drawShadow(g);
+  }
 }
 
 void SynthSection::paintChildrenBackgrounds(Graphics& g) {
   for (auto& [name, sub_section] : sub_sections_)
     paintChildBackground(g, sub_section);
 
-  for (auto& open_gl_component : open_gl_components_)
-    paintOpenGLBackground(g, open_gl_component);
 }
 
 void SynthSection::paintChildBackground(Graphics& g, SynthSection* child) {
@@ -104,38 +107,6 @@ void SynthSection::paintChildBackground(Graphics& g, SynthSection* child) {
   g.setOrigin(child->getPosition());
   child->paintBackground(g);
   g.restoreState();
-}
-
-void SynthSection::paintOpenGLBackground(Graphics &g, OpenGLComponent* open_gl_component) {
-  g.saveState();
-  g.reduceClipRegion(open_gl_component->getBounds());
-  g.setOrigin(open_gl_component->getPosition());
-  open_gl_component->paintBackground(g);
-  g.restoreState();
-}
-
-void SynthSection::initOpenGLComponents(OpenGLContext& open_gl_context) {
-  for (auto& open_gl_component : open_gl_components_)
-    open_gl_component->init(open_gl_context);
-
-  for (auto& [name, sub_section] : sub_sections_)
-    sub_section->initOpenGLComponents(open_gl_context);
-}
-
-void SynthSection::renderOpenGLComponents(OpenGLContext& open_gl_context, bool animate) {
-  for (auto& open_gl_component : open_gl_components_)
-    open_gl_component->render(open_gl_context, animate);
-
-  for (auto& [name, sub_section] : sub_sections_)
-    sub_section->renderOpenGLComponents(open_gl_context, animate);
-}
-
-void SynthSection::destroyOpenGLComponents(OpenGLContext& open_gl_context) {
-  for (auto& open_gl_component : open_gl_components_)
-    open_gl_component->destroy(open_gl_context);
-
-  for (auto& [name, sub_section] : sub_sections_)
-    sub_section->destroyOpenGLComponents(open_gl_context);
 }
 
 void SynthSection::sliderValueChanged(Slider* moved_slider) {
@@ -196,11 +167,6 @@ void SynthSection::addSubSection(SynthSection* sub_section, bool show) {
     addAndMakeVisible(sub_section);
 }
 
-void SynthSection::addOpenGLComponent(OpenGLComponent* open_gl_component) {
-  open_gl_components_.insert(open_gl_component);
-  addAndMakeVisible(open_gl_component);
-}
-
 void SynthSection::setActivator(SynthButton* activator) {
   activator_ = activator;
   setActive(activator_->getToggleStateValue().getValue());
@@ -256,8 +222,31 @@ void SynthSection::setAllValues(mopo::control_map& controls) {
   for (auto& button : all_buttons_) {
     if (controls.count(button.first)) {
       bool toggle = controls[button.first]->value();
-      button.second->setToggleState(toggle, NotificationType::sendNotificationSync);
+      button.second->setToggleState(toggle, NotificationType::dontSendNotification);
     }
+  }
+
+  repaint();
+}
+
+void SynthSection::setAllValues(
+    const std::vector<std::pair<std::string, mopo::mopo_float>>& values) {
+  auto findValue = [&values](const std::string& name) -> const mopo::mopo_float* {
+    auto value = std::lower_bound(values.begin(), values.end(), name,
+        [](const auto& entry, const std::string& key) { return entry.first < key; });
+    return value != values.end() && value->first == name ? &value->second : nullptr;
+  };
+
+  for (auto& [name, slider] : all_sliders_) {
+    if (const auto* value = findValue(name)) {
+      slider->setValue(*value, NotificationType::dontSendNotification);
+      slider->valueChanged();
+    }
+  }
+
+  for (auto& [name, button] : all_buttons_) {
+    if (const auto* value = findValue(name))
+      button->setToggleState(*value, NotificationType::dontSendNotification);
   }
 
   repaint();

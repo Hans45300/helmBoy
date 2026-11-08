@@ -19,40 +19,12 @@
 
 /**
  * @file midi_2_phase4.cpp
- * @brief MIDI 2.0 Phase 4 Implementation - Advanced Features
+ * @brief Legacy experimental MIDI output helpers.
  *
- * @details
- * Implements the advanced MIDI 2.0 features:
- * - **Profile Configuration**: Standard configurations for different instrument types
- * - **Property Exchange**: JSON-based metadata communication
- * - **Bidirectional Feedback**: Parameter updates sent back to controller
- *
- * @section phase4_features Features
- *
- * **Profile Configuration:**
- * - Enable/disable profiles per channel or globally
- * - Standard profiles: GM2, MPE, Drawbar Organ, Piano, etc.
- * - Automatic capability negotiation with controllers
- * - Profile Enabled/Disabled messages via UMP Stream
- *
- * **Property Exchange:**
- * - Send/request properties using JSON encoding
- * - Subscribe to property change notifications
- * - Support for simple values and complex objects
- * - Multiple 128-bit UMP packets for large data
- *
- * **Bidirectional Feedback:**
- * - Send parameter changes to controller for visual display
- * - Update LEDs, motorized faders, displays
- * - Support global CC and per-note parameters
- * - Auto-feedback mode for automatic updates
- * - 32-bit resolution feedback messages
- *
- * @section phase4_threading Thread Safety
- * - profiles_lock_: Protects profile management
- * - properties_lock_: Protects property storage
- * - output_lock_: Protects MIDI output device access
- * - All public methods are thread-safe
+ * These helpers maintain local profile/property state and can construct/send
+ * output packets when explicitly called. They are not connected to host input,
+ * the UMP decoder, automatic parameter changes, or a complete MIDI-CI flow.
+ * Their presence does not imply MIDI 2.0 conformance.
  *
  * @author Marc Scheffer
  * @date 2025
@@ -64,9 +36,7 @@
 
 namespace helmboy {
 
-// =============================================================================
-// Profile Configuration Implementation
-// =============================================================================
+// Experimental local profile registry and output packet helpers.
 
 /**
  * @brief Enable a MIDI 2.0 Profile on specified channel(s)

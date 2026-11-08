@@ -1,0 +1,39 @@
+<map id="mopo/src/circular_queue.h" name="mopo/src/circular_queue.h">
+<area shape="rect" id="Node000001" title="Implémentation d&#39;une file circulaire lock&#45;free adaptée au code audio temps réel." alt="" coords="347,5,521,32"/>
+<area shape="rect" id="Node000002" href="$processor_8h.html" title="Définition de la classe Processor et des ports d&#39;entrée/sortie." alt="" coords="156,229,245,256"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="344,21,264,31,218,40,172,53,127,70,85,93,48,121,16,156,9,172,11,186,22,197,39,208,87,223,142,234,138,237,86,228,37,212,18,201,6,188,3,172,11,153,44,117,82,88,125,65,170,48,217,35,263,26,348,18"/>
+<area shape="rect" id="Node000008" href="$utils_8h.html" title=" " alt="" coords="340,80,397,107"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="424,31,391,71,388,67,420,34"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="705,155,779,181"/>
+<area shape="poly" id="edge19_Node000001_Node000013" title=" " alt="" coords="435,30,441,68,448,88,461,105,488,125,513,138,538,144,563,146,620,146,692,154,686,154,620,151,563,152,537,150,511,143,485,130,457,109,444,91,436,70,432,34"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="471,80,535,107"/>
+<area shape="poly" id="edge18_Node000001_Node000016" title=" " alt="" coords="446,30,483,69,478,68,445,35"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="560,80,620,107"/>
+<area shape="poly" id="edge20_Node000001_Node000017" title=" " alt="" coords="461,30,551,73,546,73,461,35"/>
+<area shape="rect" id="Node000003" href="$common_8h.html" title="Core definitions and constants for the mopo synthesis library." alt="" coords="255,304,338,331"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="218,254,270,294,265,294,216,259"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="170,304,231,331"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="202,255,203,290,198,287,199,258"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="18,304,76,331"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="175,258,89,299,87,294,172,255"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="361,304,421,331"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="234,254,349,299,344,300,233,259"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="100,304,146,331"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="189,256,149,295,146,291,184,258"/>
+<area shape="poly" id="edge8_Node000008_Node000003" title=" " alt="" coords="367,106,307,291,303,288,362,108"/>
+<area shape="poly" id="edge14_Node000008_Node000006" title=" " alt="" coords="372,106,391,290,386,288,368,109"/>
+<area shape="rect" id="Node000009" href="$value_8h.html" title="Processeurs Value : constantes ou control&#45;rate values." alt="" coords="217,155,280,181"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="345,109,284,149,281,144,350,106"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="406,155,526,181"/>
+<area shape="poly" id="edge11_Node000008_Node000010" title=" " alt="" coords="386,105,440,145,434,145,385,110"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="550,155,608,181"/>
+<area shape="poly" id="edge12_Node000008_Node000011" title=" " alt="" coords="397,102,538,151,533,152,397,107"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="632,155,681,181"/>
+<area shape="poly" id="edge13_Node000008_Node000012" title=" " alt="" coords="397,99,416,104,516,126,620,154,614,154,514,132,414,109,397,105"/>
+<area shape="poly" id="edge15_Node000008_Node000013" title=" " alt="" coords="397,100,416,104,551,128,692,153,687,154,551,133,414,109,397,105"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="26,155,108,181"/>
+<area shape="poly" id="edge16_Node000008_Node000014" title=" " alt="" coords="339,104,124,156,122,151,341,99"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="133,155,193,181"/>
+<area shape="poly" id="edge17_Node000008_Node000015" title=" " alt="" coords="338,106,209,153,207,148,342,103"/>
+<area shape="poly" id="edge10_Node000009_Node000002" title=" " alt="" coords="242,180,219,218,215,215,238,184"/>
+</map>

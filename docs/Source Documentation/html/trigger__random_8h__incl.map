@@ -1,5 +1,15 @@
 <map id="src/synthesis/trigger_random.h" name="src/synthesis/trigger_random.h">
-<area shape="rect" id="Node000001" title="Header for TriggerRandom processor which outputs a random value on trigger." alt="" coords="5,5,145,48"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="30,96,120,123"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="78,49,78,80,72,80,72,49"/>
+<area shape="rect" id="Node000001" title="Header for TriggerRandom processor which outputs a random value on trigger." alt="" coords="156,5,295,48"/>
+<area shape="rect" id="Node000002" href="$processor_8h.html" title="Définition de la classe Processor et des ports d&#39;entrée/sortie." alt="" coords="180,96,270,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="227,46,228,81,223,79,224,51"/>
+<area shape="rect" id="Node000003" href="$common_8h.html" title="Core definitions and constants for the mopo synthesis library." alt="" coords="5,171,88,197"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="195,126,93,167,91,162,193,121"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="112,171,173,197"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="213,122,170,163,167,158,208,124"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="196,171,254,197"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="227,121,227,156,223,154,223,125"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="278,171,338,197"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="241,121,285,161,280,160,239,126"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="361,171,406,197"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="253,121,349,166,344,166,252,126"/>
 </map>

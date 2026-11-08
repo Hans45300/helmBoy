@@ -1,0 +1,46 @@
+{
+  "settings": {
+    "polyphony": 1,
+    "legato": 1,
+    "portamento": -5.2,
+    "portamento_type": 1,
+    "osc_hard_sync": 1,
+    "osc_1_waveform": 4.0,
+    "osc_1_volume": 0.64,
+    "osc_2_waveform": 2.0,
+    "osc_2_transpose": 12.0,
+    "osc_2_volume": 0.38,
+    "filter_on": 1,
+    "filter_style": 0,
+    "cutoff": 70.0,
+    "resonance": 0.36,
+    "fil_env_depth": 32.0,
+    "amp_attack": 0.004,
+    "amp_decay": 0.72,
+    "amp_sustain": 0.74,
+    "amp_release": 0.25,
+    "mono_lfo_1_sync": 0,
+    "mono_lfo_1_frequency": 1.3,
+    "mono_lfo_1_waveform": 1.0,
+    "chorus_on": 1,
+    "chorus_rate": 0.56,
+    "chorus_depth": 0.22,
+    "chorus_mix": 0.28,
+    "modulations": [
+      {
+        "amount": 0.22,
+        "destination": "osc_2_tune",
+        "source": "mono_lfo_1"
+      },
+      {
+        "amount": 14.0,
+        "destination": "cutoff",
+        "source": "fil_envelope"
+      }
+    ]
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Hard Sync Flight",
+  "folder_name": "Advanced",
+  "synth_version": "1.1.1"
+}

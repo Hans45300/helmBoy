@@ -1,0 +1,7 @@
+<map id="mopo::Reverb" name="mopo::Reverb">
+<area shape="rect" id="Node000001" title="Processeur de r�verb�ration st�r�o avec filtrage comb et all&#45;pass." alt="" coords="11,1221,160,1504"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="5,592,166,1173"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="86,1186,88,1222,83,1221,85,1191"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1Processor.html" title=" " alt="" coords="10,5,161,544"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="86,556,88,592,83,592,86,562"/>
+</map>

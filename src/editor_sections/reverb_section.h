@@ -49,9 +49,11 @@ class ReverbSection : public SynthSection {
 
   private:
     std::unique_ptr<SynthButton> on_;
+    std::unique_ptr<SynthButton> freeze_;
     std::unique_ptr<SynthSlider> feedback_;
     std::unique_ptr<SynthSlider> damping_;
     std::unique_ptr<SynthSlider> dry_wet_;
+    std::unique_ptr<SynthSlider> stereo_width_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ReverbSection)
 };

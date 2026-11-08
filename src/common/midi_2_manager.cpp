@@ -19,21 +19,10 @@
 
 /**
  * @file midi_2_manager.cpp
- * @brief MIDI 2.0 manager implementation - Phases 1, 2, and 3
+ * @brief MIDI callback adapter and explicit MIDI 2.0 UMP decoder
  *
  * @details
- * This file implements the core MIDI 2.0 message processing including:
- * - Phase 1: Version switching and infrastructure
- * - Phase 2: High-resolution basic messages (Note, CC, Pitch Bend)
- * - Phase 3: Native UMP parsing and Per-Note features
- *
- * Phase 4 (Profiles, Property Exchange, Feedback) is in midi_2_phase4.cpp
- *
- * @section implementation_notes Implementation Notes
- * - Zero-copy UMP parsing using 32-bit word arrays
- * - Thread-safe with atomic version switching
- * - Automatic MIDI 1.0 to MIDI 2.0 upscaling when enabled
- * - Callback-based event system for integration flexibility
+ * UMP input is explicit and limited to selected MIDI 2.0 Channel Voice packets.
  *
  * @author Marc Scheffer
  * @date 2025
@@ -65,12 +54,7 @@ Midi2Manager::~Midi2Manager() = default;
 /**
  * @brief Main MIDI message processing entry point
  *
- * Routes incoming MIDI messages to appropriate handlers:
- * 1. MIDI 1.0 messages: Always supported, processed with standard resolution
- * 2. MIDI 2.0 UMP: Detected and parsed when MIDI 2.0 mode is enabled
- *
- * MIDI 1.0 messages are automatically upscaled to high-resolution when
- * MIDI 2.0 mode is active, providing seamless backward compatibility.
+ * Processes MIDI 1.0 messages only. UMP packets use the explicit processUMP API.
  */
 void Midi2Manager::processMidiMessage(const juce::MidiMessage& msg) {
   try {
@@ -90,159 +74,101 @@ void Midi2Manager::processMidiMessage(const juce::MidiMessage& msg) {
     else if (msg.isAftertouch() || msg.isChannelPressure()) {
       processMidi1Aftertouch(msg);
     }
-    else if (isMidi2Enabled() && msg.getRawDataSize() >= 4) {
-      // Check for MIDI 2.0 UMP format (detected via message type nibble)
-      const uint8_t* raw_data = msg.getRawData();
-
-      // UMP detection: Message type in upper 4 bits of first byte
-      // Types 0x2-0x5 indicate UMP packets (32/64/128-bit)
-      uint8_t message_type = (raw_data[0] >> 4) & 0x0F;
-
-      if (message_type >= 0x2 && message_type <= 0x5) {
-        // Reinterpret as 32-bit words for zero-copy UMP processing
-        const uint32_t* ump_data = reinterpret_cast<const uint32_t*>(raw_data);
-        int num_words = msg.getRawDataSize() / 4;
-        processUMP(ump_data, num_words);
-      }
-    }
   }
   catch (const std::exception& e) {
     DBG("MIDI2: Error processing message: " << e.what());
   }
 }
 
-/**
- * @brief Process native MIDI 2.0 UMP packets
- *
- * Parses Universal MIDI Packet format messages:
- * - Type 0x2 (32-bit): MIDI 1.0 Channel Voice
- * - Type 0x4 (64-bit): MIDI 2.0 Channel Voice (high-res)
- * - Type 0x5 (128-bit): Data messages (Per-Note features)
- *
- * UMP structure (first word):
- * [MessageType:4][Group:4][Status:4][Channel:4][Data:16]
- */
-void Midi2Manager::processUMP(const uint32_t* ump_data, int num_words) {
-  if (num_words < 1)
-    return;
-
-  try {
-    // Extract message type from first word (bits 28-31)
-    uint8_t message_type = (ump_data[0] >> 28) & 0x0F;
-
-    switch (message_type) {
-      case 0x2: // MIDI 1.0 Channel Voice (32-bit) - skip, handled by processMidiMessage
-        break;
-
-      case 0x4: // MIDI 2.0 Channel Voice (64-bit) - high-resolution
-        if (num_words >= 2) {
-          parseUMP_ChannelVoice64(ump_data);
-        }
-        break;
-
-      case 0x5: // Data Messages (128-bit) - Per-Note features
-        if (num_words >= 4) {
-          parseUMP_Data128(ump_data);
-        }
-        break;
-
-      default:
-        DBG("MIDI2: Unsupported UMP message type: " << (int)message_type);
-        break;
-    }
-  }
-  catch (const std::exception& e) {
-    DBG("MIDI2: Error parsing UMP: " << e.what());
-  }
+namespace {
+uint32_t readUmpWord(const uint8_t* bytes) noexcept {
+  return (static_cast<uint32_t>(bytes[0]) << 24)
+       | (static_cast<uint32_t>(bytes[1]) << 16)
+       | (static_cast<uint32_t>(bytes[2]) << 8)
+       | static_cast<uint32_t>(bytes[3]);
+}
 }
 
-void Midi2Manager::parseUMP_ChannelVoice64(const uint32_t* ump) {
-  // Word 1: [MT:4][Group:4][Status:4][Channel:4][Index:8][Data1:8]
-  // Word 2: [Data2:32]
+Midi2Manager::UMPDecodeResult Midi2Manager::decodeUMP(
+    std::span<const uint8_t> packet, int sample_offset, UMPEvent& event) noexcept {
+  if (sample_offset < 0)
+    return UMPDecodeResult::invalidArgument;
+  if (packet.size() != 8)
+    return UMPDecodeResult::invalidLength;
+  if ((packet[0] >> 4) != 0x4)
+    return UMPDecodeResult::unsupportedMessageType;
 
-  uint8_t status = (ump[0] >> 20) & 0x0F;
-  uint8_t channel = (ump[0] >> 16) & 0x0F;
-  uint8_t index = (ump[0] >> 8) & 0xFF;  // Note or CC number
-  uint8_t data1 = ump[0] & 0xFF;
-  uint32_t data2 = ump[1];
+  const uint8_t status = packet[1] >> 4;
+  const uint8_t channel = packet[1] & 0x0f;
+  const uint8_t index = packet[2];
+  const uint32_t data = readUmpWord(packet.data() + 4);
+  UMPEvent decoded;
+  decoded.group = packet[0] & 0x0f;
+  decoded.channel = channel;
+  decoded.index = index;
+  decoded.sampleOffset = sample_offset;
 
   switch (status) {
-    case 0x8: // Note Off (64-bit)
-      processMidi2NoteOff(channel, index, data2 >> 16);
-      DBG("MIDI2: UMP Note Off ch=" << (int)channel << " note=" << (int)index
-          << " vel=" << (data2 >> 16) << " (64-bit native)");
+    case 0x8:
+    case 0x9:
+      if (index > 127)
+        return UMPDecodeResult::invalidData;
+      if (packet[3] != 0 || (data & 0xffff) != 0)
+        return UMPDecodeResult::unsupportedAttribute;
+      decoded.type = status == 0x8 || (data >> 16) == 0
+          ? UMPEvent::Type::noteOff : UMPEvent::Type::noteOn;
+      decoded.value = data >> 16;
       break;
-
-    case 0x9: // Note On (64-bit)
-      if ((data2 >> 16) == 0) {
-        processMidi2NoteOff(channel, index, 0);
-      } else {
-        processMidi2NoteOn(channel, index, data2 >> 16);
-      }
-      DBG("MIDI2: UMP Note On ch=" << (int)channel << " note=" << (int)index
-          << " vel=" << (data2 >> 16) << " (64-bit native)");
+    case 0xb:
+      if (index > 127 || packet[3] != 0)
+        return UMPDecodeResult::invalidData;
+      decoded.type = UMPEvent::Type::controlChange;
+      decoded.value = data;
       break;
-
-    case 0xA: // Poly Pressure (64-bit)
-      processMidi2PerNotePressure(channel, index, data2);
-      DBG("MIDI2: UMP Poly Pressure ch=" << (int)channel << " note=" << (int)index
-          << " (32-bit native)");
+    case 0xe:
+      if (packet[2] != 0 || packet[3] != 0)
+        return UMPDecodeResult::invalidData;
+      decoded.type = UMPEvent::Type::pitchBend;
+      decoded.index = 0;
+      decoded.value = data;
       break;
-
-    case 0xB: // Control Change (64-bit)
-      processMidi2ControlChange(channel, index, data2);
-      DBG("MIDI2: UMP CC ch=" << (int)channel << " cc=" << (int)index
-          << " (32-bit native)");
-      break;
-
-    case 0xD: // Channel Pressure (64-bit)
-      // Apply to all notes (use -1 as indicator)
-      if (onPerNotePressure) {
-        float pressure = convertMidi2ToFloat(data2);
-        onPerNotePressure(channel, -1, pressure);
-      }
-      break;
-
-    case 0xE: // Pitch Bend (64-bit)
-      processMidi2PitchBend(channel, data2);
-      DBG("MIDI2: UMP Pitch Bend ch=" << (int)channel << " (32-bit native)");
-      break;
-
-    case 0x0: // Per-Note Pitch Bend
-      processMidi2PerNotePitchBend(channel, index, data2);
-      DBG("MIDI2: UMP Per-Note Pitch Bend ch=" << (int)channel
-          << " note=" << (int)index << " (32-bit native)");
-      break;
-
     default:
-      DBG("MIDI2: Unknown 64-bit status: " << (int)status);
-      break;
+      return UMPDecodeResult::unsupportedStatus;
   }
+
+  event = decoded;
+  return UMPDecodeResult::decoded;
 }
 
-void Midi2Manager::parseUMP_Data128(const uint32_t* ump) {
-  // 128-bit messages for extended data
-  // Word 1: [MT:4][Group:4][Status:4][Channel:4][Index:8][Data1:8]
-  // Words 2-4: Extended data
+Midi2Manager::UMPDecodeResult Midi2Manager::processUMP(
+    std::span<const uint8_t> packet, int sample_offset) {
+  if (!isMidi2Enabled())
+    return UMPDecodeResult::disabled;
 
-  uint8_t status = (ump[0] >> 20) & 0x0F;
-  uint8_t channel = (ump[0] >> 16) & 0x0F;
-  uint8_t index = (ump[0] >> 8) & 0xFF;
+  UMPEvent event;
+  const auto result = decodeUMP(packet, sample_offset, event);
+  if (result == UMPDecodeResult::decoded)
+    dispatchUMPEvent(event);
+  return result;
+}
 
-  if (status == 0xF) {
-    // Per-Note Management or Per-Note Controller
-    uint8_t sub_status = (ump[1] >> 24) & 0xFF;
+void Midi2Manager::processUMP(const uint32_t* ump_data, int num_words) {
+  if (ump_data == nullptr || num_words != 2)
+    return;
 
-    if (sub_status == 0x00) {
-      // Per-Note Management
-      uint8_t option_flags = (ump[1] >> 16) & 0xFF;
-      processMidi2PerNoteManagement(channel, index, option_flags, ump[2]);
-    }
-    else if (sub_status <= 0x7F) {
-      // Per-Note Assignable Controller
-      processMidi2PerNoteController(channel, index, sub_status, ump[2]);
-    }
+  std::array<uint8_t, 8> bytes{};
+  for (int word = 0; word < num_words; ++word) {
+    const uint32_t value = ump_data[word];
+    for (int byte = 0; byte < 4; ++byte)
+      bytes[static_cast<size_t>(word * 4 + byte)] =
+          static_cast<uint8_t>(value >> (24 - byte * 8));
   }
+  processUMP(bytes, 0);
+}
+
+void Midi2Manager::dispatchUMPEvent(const UMPEvent& event) {
+  if (onUMPEvent)
+    onUMPEvent(event);
 }
 
 // ===== MIDI 1.0 Handlers =====
@@ -255,14 +181,13 @@ void Midi2Manager::processMidi1ControlChange(const juce::MidiMessage& msg) {
   int controller = msg.getControllerNumber();
   int value_7bit = msg.getControllerValue();
 
-  // Convert to normalized float (upscaled in MIDI 2.0 mode)
+  // Normalize the original 7-bit MIDI 1.0 value for callbacks.
   float normalized_value = convertMidi1ToFloat(value_7bit);
 
   onControlChange(channel, controller, normalized_value);
 
   if (isMidi2Enabled()) {
-    DBG("MIDI2: CC ch=" << channel << " cc=" << controller
-        << " value=" << normalized_value << " (upscaled from 7-bit)");
+      DBG("MIDI2: MIDI 1.0 CC normalized from 7-bit value");
   }
 }
 
@@ -286,8 +211,7 @@ void Midi2Manager::processMidi1NoteOn(const juce::MidiMessage& msg) {
   onNoteOn(channel, note, normalized_velocity);
 
   if (isMidi2Enabled()) {
-    DBG("MIDI2: Note On ch=" << channel << " note=" << note
-        << " vel=" << normalized_velocity << " (upscaled from 7-bit)");
+    DBG("MIDI2: MIDI 1.0 Note On normalized from 7-bit velocity");
   }
 }
 
@@ -314,8 +238,7 @@ void Midi2Manager::processMidi1PitchBend(const juce::MidiMessage& msg) {
   onPitchBend(channel, normalized_value);
 
   if (isMidi2Enabled()) {
-    DBG("MIDI2: Pitch Bend ch=" << channel
-        << " value=" << normalized_value << " (upscaled from 14-bit)");
+    DBG("MIDI2: MIDI 1.0 Pitch Bend normalized from 14-bit value");
   }
 }
 
@@ -341,113 +264,6 @@ void Midi2Manager::processMidi1Aftertouch(const juce::MidiMessage& msg) {
     // For channel pressure, use note -1 as a special indicator
     onPerNotePressure(channel, -1, normalized_pressure);
   }
-}
-
-// ===== MIDI 2.0 Handlers (Native high-resolution) =====
-
-void Midi2Manager::processMidi2ControlChange(int channel, int controller, uint32_t value_32bit) {
-  if (!onControlChange)
-    return;
-
-  float normalized_value = convertMidi2ToFloat(value_32bit);
-  onControlChange(channel, controller, normalized_value);
-
-  DBG("MIDI2: Native CC ch=" << channel << " cc=" << controller
-      << " value=" << normalized_value << " (32-bit precision)");
-}
-
-void Midi2Manager::processMidi2NoteOn(int channel, int note, uint16_t velocity_16bit) {
-  if (!onNoteOn)
-    return;
-
-  float normalized_velocity = convertMidi2Velocity(velocity_16bit);
-  onNoteOn(channel, note, normalized_velocity);
-
-  DBG("MIDI2: Native Note On ch=" << channel << " note=" << note
-      << " vel=" << normalized_velocity << " (16-bit precision)");
-}
-
-void Midi2Manager::processMidi2NoteOff(int channel, int note, uint16_t velocity_16bit) {
-  if (!onNoteOff)
-    return;
-
-  float normalized_velocity = convertMidi2Velocity(velocity_16bit);
-  onNoteOff(channel, note, normalized_velocity);
-}
-
-void Midi2Manager::processMidi2PitchBend(int channel, uint32_t value_32bit) {
-  if (!onPitchBend)
-    return;
-
-  float normalized_value = convertMidi2PitchBend(value_32bit);
-  onPitchBend(channel, normalized_value);
-
-  DBG("MIDI2: Native Pitch Bend ch=" << channel
-      << " value=" << normalized_value << " (32-bit precision)");
-}
-
-void Midi2Manager::processMidi2PerNotePitchBend(int channel, int note, uint32_t value_32bit) {
-  if (!onPerNotePitchBend)
-    return;
-
-  float normalized_value = convertMidi2PitchBend(value_32bit);
-  onPerNotePitchBend(channel, note, normalized_value);
-
-  DBG("MIDI2: Per-Note Pitch Bend ch=" << channel << " note=" << note
-      << " value=" << normalized_value << " (32-bit precision)");
-}
-
-void Midi2Manager::processMidi2PerNotePressure(int channel, int note, uint32_t pressure_32bit) {
-  if (!onPerNotePressure)
-    return;
-
-  float normalized_pressure = convertMidi2ToFloat(pressure_32bit);
-  onPerNotePressure(channel, note, normalized_pressure);
-
-  DBG("MIDI2: Per-Note Pressure ch=" << channel << " note=" << note
-      << " pressure=" << normalized_pressure << " (32-bit precision)");
-}
-
-void Midi2Manager::processMidi2PerNoteController(int channel, int note, int controller, uint32_t value_32bit) {
-  if (!onPerNoteController)
-    return;
-
-  float normalized_value = convertMidi2ToFloat(value_32bit);
-  onPerNoteController(channel, note, controller, normalized_value);
-
-  DBG("MIDI2: Per-Note Controller ch=" << channel << " note=" << note
-      << " cc=" << controller << " value=" << normalized_value << " (32-bit precision)");
-}
-
-void Midi2Manager::processMidi2PerNoteManagement(int channel, int note, uint8_t option_flags, uint32_t data) {
-  if (!onPerNoteManagement)
-    return;
-
-  // Decode option flags for detune and tuning
-  // Bit 0: Detune present
-  // Bit 1: Tuning present
-
-  float detune = 0.0f;
-  float tuning = 0.0f;
-
-  if (option_flags & 0x01) {
-    // Detune: 7-bit signed value in cents (-64 to +63)
-    int8_t detune_raw = (data >> 25) & 0x7F;
-    if (detune_raw & 0x40) detune_raw |= 0x80; // Sign extend
-    detune = static_cast<float>(detune_raw);
-  }
-
-  if (option_flags & 0x02) {
-    // Tuning: 7-bit signed value in semitones (-64 to +63)
-    int8_t tuning_raw = (data >> 18) & 0x7F;
-    if (tuning_raw & 0x40) tuning_raw |= 0x80; // Sign extend
-    tuning = static_cast<float>(tuning_raw);
-  }
-
-  onPerNoteManagement(channel, note, detune, tuning);
-
-  DBG("MIDI2: Per-Note Management ch=" << channel << " note=" << note
-      << " detune=" << detune << " cents, tuning=" << tuning << " semitones");
 }
 
 } // namespace helmboy

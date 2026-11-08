@@ -46,6 +46,7 @@ namespace mopo {
 
       virtual Processor* clone() const { return new DcFilter(*this); }
       virtual void process();
+  void resetState() override { reset(); }
 
       void computeCoefficients() {
         coefficient_ = 1.0 - COEFFICIENT_TO_SR_CONSTANT / getSampleRate();

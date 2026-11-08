@@ -1,7 +1,7 @@
 <map id="TextSelector" name="TextSelector">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,752,159,885"/>
-<area shape="rect" id="Node000002" href="$classSynthSlider.html" title="Custom slider control for synthesis parameters." alt="" coords="14,123,151,704"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,719,85,752,80,752,80,719"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="60,5,104,75"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="85,89,85,123,80,123,80,89"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="23,976,177,1109"/>
+<area shape="rect" id="Node000002" href="$classSynthSlider.html" title="Custom slider control for synthesis parameters." alt="" coords="5,123,194,928"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,940,102,977,97,976,99,945"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="78,5,122,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="100,87,102,123,97,123,100,92"/>
 </map>

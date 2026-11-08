@@ -1,0 +1,5 @@
+<map id="mopo::Distortion" name="mopo::Distortion">
+<area shape="rect" id="Node000001" title="Processeur de distorsion audio avec plusieurs modes (soft/hard clip, fold, etc.)." alt="" coords="12,592,150,832"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="5,5,156,544"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="81,556,83,593,78,592,80,562"/>
+</map>

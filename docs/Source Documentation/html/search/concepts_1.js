@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['floatingpoint_0',['FloatingPoint',['../conceptFloatingPoint.html',1,'']]]
+  ['bufferlike_0',['BufferLike',['../conceptmopo_1_1utils_1_1BufferLike.html',1,'mopo::utils']]]
 ];

@@ -1,5 +1,5 @@
 <map id="HelmBoyGraphics" name="HelmBoyGraphics">
-<area shape="rect" id="Node000001" title="Composant graphique pour affichage du logo et des icônes de modulation." alt="" coords="5,123,173,597"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="34,5,144,75"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,89,92,123,87,123,87,89"/>
+<area shape="rect" id="Node000001" title="Composant graphique pour affichage du logo et des icônes de modulation." alt="" coords="5,123,214,789"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="55,5,165,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,87,112,123,107,123,110,92"/>
 </map>

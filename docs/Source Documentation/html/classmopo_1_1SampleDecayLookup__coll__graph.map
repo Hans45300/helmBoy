@@ -1,0 +1,5 @@
+<map id="mopo::SampleDecayLookup" name="mopo::SampleDecayLookup">
+<area shape="rect" id="Node000001" title="Acc�s statique � la recherche de d�croissance d&#39;�chantillon." alt="" coords="32,168,207,237"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1SampleDecayLookupSingleton.html" title="Singleton pour la recherche rapide de la d�croissance d&#39;�chantillon." alt="" coords="5,5,234,96"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,94,122,152,117,150,118,98"/>
+</map>

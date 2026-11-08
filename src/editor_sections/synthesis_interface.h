@@ -25,6 +25,7 @@
 #include <JuceHeader.h>
 #include "helmBoy_engine.h"
 
+#include "chorus_section.h"
 #include "delay_section.h"
 #include "distortion_section.h"
 #include "dynamic_section.h"
@@ -134,9 +135,13 @@ class SynthesisInterface  : public SynthSection {
 
   private:
     std::unique_ptr<EnvelopeSection> amplitude_envelope_section_;
+    std::unique_ptr<ChorusSection> chorus_section_;
     std::unique_ptr<DelaySection> delay_section_;
     std::unique_ptr<DynamicSection> dynamic_section_;
     std::unique_ptr<EnvelopeSection> extra_envelope_section_;
+    std::unique_ptr<EnvelopeSection> mod_envelope_2_section_;
+    std::unique_ptr<EnvelopeSection> mod_envelope_3_section_;
+    std::unique_ptr<EnvelopeSection> mod_envelope_4_section_;
     std::unique_ptr<ExtraModSection> extra_mod_section_;
     std::unique_ptr<FeedbackSection> feedback_section_;
     std::unique_ptr<EnvelopeSection> filter_envelope_section_;
@@ -146,6 +151,8 @@ class SynthesisInterface  : public SynthSection {
     std::unique_ptr<LfoSection> mono_lfo_2_section_;
     std::unique_ptr<LfoSection> mono_lfo_3_section_;
     std::unique_ptr<LfoSection> mono_lfo_4_section_;
+    std::unique_ptr<LfoSection> mono_lfo_5_section_;
+    std::unique_ptr<LfoSection> mono_lfo_6_section_;
     std::unique_ptr<MidiKeyboardComponent> keyboard_;
     std::unique_ptr<MixerSection> mixer_section_;
     std::unique_ptr<OscillatorSection> oscillator_section_;

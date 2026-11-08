@@ -17,20 +17,20 @@ The oscillator system consists of several key components:
 
 ### Signal Flow
 
-```
-Oscillator 1 ?????> Cross Modulation ?????> FM Modulation ?????> Ring Modulation ??> Output
-               ?                       ?                    ?
-Oscillator 2 ????????????????????????????????????????????????
+```text
+OSC1 and OSC2 -> oscillator modulation and sync -> oscillator mix -> filter -> effects -> output
 ```
 
 ## Oscillator Features
 
 ### Waveform Types
 
-Each oscillator supports 11 different waveform types (0-10):
+output volume is automatically reduced to prevent clipping. This is calculated as:
+
+```text
 
 | Index | Waveform | Description |
-|-------|----------|-------------|
+| ------- | ---------- | ------------- |
 | 0 | Sine | Pure sine wave - fundamental harmonic only |
 | 1 | Triangle | Triangular waveform - odd harmonics with 1/n² falloff |
 | 2 | Square | Square wave - odd harmonics only |
@@ -59,6 +59,10 @@ The band-limited algorithm ensures that:
 - No aliasing artifacts occur at high frequencies
 - Waveforms remain rich and full at low frequencies
 - CPU usage is optimized for real-time performance
+
+### Hard Sync
+
+Hard Sync is a toggle parameter, `osc_hard_sync`, and is off by default. When enabled, Oscillator 1 is the master and resets Oscillator 2's phase at each OSC1 cycle. The reset also applies to Oscillator 2's unison voices. Hard Sync is available as a modulation destination.
 
 ### Pitch Control
 
@@ -289,7 +293,8 @@ Each unison voice maintains separate buffers:
 ### Unison and Volume
 
 When unison voice count increases, the output volume is automatically reduced to prevent clipping. This is calculated as:
-```
+
+```text
 output_scale = 1.0 / sqrt(num_voices)
 ```
 

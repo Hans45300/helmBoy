@@ -56,7 +56,7 @@ namespace mopo {
    * - Modulation source synchronization
    * - Event scheduling and processing
    *
-   * @section implementation Implementation Pattern
+  * @section tick_implementation Implementation Pattern
    *
    * Typical implementation follows this pattern:
    * ```cpp
@@ -76,7 +76,7 @@ namespace mopo {
    * };
    * ```
    *
-   * @section performance Performance Considerations
+  * @section tick_performance Performance Considerations
    *
    * While tick-based processing provides sample accuracy, consider:
    * - Use block processing for heavy computations when possible

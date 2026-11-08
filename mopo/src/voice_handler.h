@@ -77,6 +77,8 @@ namespace mopo {
       [[nodiscard]] int event_sample() { return event_sample_; }
       [[nodiscard]] mopo::mopo_float aftertouch() { return aftertouch_; }
       [[nodiscard]] int aftertouch_sample() { return aftertouch_sample_; }
+      [[nodiscard]] mopo::mopo_float channelAftertouch() { return channel_aftertouch_; }
+      [[nodiscard]] int channelAftertouchSample() { return channel_aftertouch_sample_; }
 
       /**
        * @brief Active la voix avec une note et une vélocité données.
@@ -114,10 +116,12 @@ namespace mopo {
        * @param sample Échantillon d'application.
        */
       void setAftertouch(mopo::mopo_float aftertouch, int sample = 0);
+      void setChannelAftertouch(mopo::mopo_float aftertouch, int sample = 0);
       /**
        * @brief Indique si un nouvel aftertouch est disponible.
        */
       [[nodiscard]] bool hasNewAftertouch();
+      [[nodiscard]] bool hasNewChannelAftertouch();
       /**
        * @brief Vide la file d'événements de la voix.
        */
@@ -130,6 +134,8 @@ namespace mopo {
       KeyState key_state_ = KeyState::Released;
       int aftertouch_sample_ = -1;
       mopo::mopo_float aftertouch_ = 0.0f;
+      int channel_aftertouch_sample_ = -1;
+      mopo::mopo_float channel_aftertouch_ = 0.0f;
       mopo::Processor* processor_ = nullptr;
   };
   /**
@@ -192,6 +198,9 @@ namespace mopo {
        * @param sample Échantillon de déclenchement.
        */
       void allNotesOff(int sample = 0) override;
+        /** Immediately retire all voices and pending triggers without changing controls.
+          Caller must exclusively own processing; existing voice storage is reused. */
+        void resetState() override;
       /**
        * @brief Traite un événement MIDI note-on.
        * @param note Note à jouer.
@@ -211,7 +220,8 @@ namespace mopo {
       /**
        * @brief Applique de l'aftertouch à une note spécifique.
        */
-      void setAftertouch(mopo::mopo_float note, mopo::mopo_float aftertouch, int sample = 0);
+      void setAftertouch(mopo::mopo_float note, mopo::mopo_float aftertouch,
+             int sample = 0, int channel = -1);
       /**
        * @brief Applique de l'aftertouch à un canal entier.
        */
@@ -232,6 +242,7 @@ namespace mopo {
       [[nodiscard]] mopo::Output* channel() { return &channel_; }
       [[nodiscard]] mopo::Output* velocity() { return &velocity_; }
       [[nodiscard]] mopo::Output* aftertouch() { return &aftertouch_; }
+      [[nodiscard]] mopo::Output* channel_aftertouch() { return &channel_aftertouch_; }
       [[nodiscard]] size_t polyphony() { return polyphony_; }
 
       /**
@@ -323,6 +334,7 @@ namespace mopo {
     mopo::Output channel_;
     mopo::Output velocity_;
     mopo::Output aftertouch_;
+    mopo::Output channel_aftertouch_;
 
     mopo::CircularQueue<mopo::mopo_float> pressed_notes_;
     mopo::CircularQueue<mopo::Voice*> all_voices_;

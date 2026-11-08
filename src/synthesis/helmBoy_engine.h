@@ -25,6 +25,7 @@
 #include "mopo.h"
 #include "helmBoy_common.h"
 #include "helmBoy_module.h"
+#include <mutex>
 
 namespace mopo {
 /**
@@ -34,9 +35,14 @@ namespace mopo {
   class Arpeggiator;
   class HelmBoyVoiceHandler;
   class HelmBoyLfo;
+  class Output;
   class PeakMeter;
+  class Chorus;
+  class Delay;
+  class DcFilter;
+  class Reverb;
+  class Limiter;
   class Value;
-  class ValueSwitch;
 
   /**
    * @brief The main synthesis engine for HelmBoy synthesizer
@@ -81,6 +87,7 @@ namespace mopo {
        * the engine for audio processing.
        */
       void init() override;
+      bool ensureDeferredModuleInit();
 
       /**
        * @brief Processes one buffer of audio samples
@@ -89,6 +96,11 @@ namespace mopo {
        * to generate synthesized audio output.
        */
       void process() override;
+      /** Reset persistent effect state on the audio thread at a silent block boundary. */
+      void resetEffectState();
+        /** Immediate host reset of voices, arpeggiator and processor state.
+          Requires exclusive processing ownership; preserves controls and routes. */
+        void resetState() override;
 
       /**
        * @brief Sets the audio buffer size
@@ -173,7 +185,8 @@ namespace mopo {
       void setPitchWheel(mopo_float value, int channel = 0);
       void setBpm(mopo_float bpm);
       void correctToTime(mopo_float samples) override;
-      void setAftertouch(mopo_float note, mopo_float value, int sample = 0);
+      void setAftertouch(mopo_float note, mopo_float value, int sample = 0,
+             int channel = -1);
       void setChannelAftertouch(int channel, mopo_float value, int sample = 0);
 
       // Sustain pedal events.
@@ -183,21 +196,33 @@ namespace mopo {
     private:
       HelmBoyVoiceHandler* voice_handler_;
       Arpeggiator* arpeggiator_;
-      ValueSwitch* arp_on_;
+      Output* arp_on_;
       bool was_playing_arp_;
 
-      Value* lfo_1_retrigger_;
-      Value* lfo_2_retrigger_;
-      Value* lfo_3_retrigger_;
-      Value* lfo_4_retrigger_;
-      Value* step_sequencer_retrigger_;
+      Output* lfo_1_retrigger_;
+      Output* lfo_2_retrigger_;
+      Output* lfo_3_retrigger_;
+      Output* lfo_4_retrigger_;
+      Output* lfo_5_retrigger_;
+      Output* lfo_6_retrigger_;
+      Output* step_sequencer_retrigger_;
       Value* bps_;
       HelmBoyLfo* lfo_1_;
       HelmBoyLfo* lfo_2_;
       HelmBoyLfo* lfo_3_;
       HelmBoyLfo* lfo_4_;
+      HelmBoyLfo* lfo_5_;
+      HelmBoyLfo* lfo_6_;
       PeakMeter* peak_meter_;
+      Chorus* chorus_ = nullptr;
+      Delay* delay_ = nullptr;
+      DcFilter* dc_filter_left_ = nullptr;
+      DcFilter* dc_filter_right_ = nullptr;
+      Reverb* reverb_ = nullptr;
+      Limiter* limiter_ = nullptr;
       StepGenerator* step_sequencer_;
+        bool deferred_module_init_done_ = false;
+      std::mutex deferred_module_init_mutex_;
 
       std::set<ModulationConnection*> mod_connections_;
   };

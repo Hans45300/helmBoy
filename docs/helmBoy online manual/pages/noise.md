@@ -2,18 +2,25 @@
 
 ## Overview
 
-The noise generator provides white noise that can be mixed with the oscillators.
+The noise generator provides a colored-noise source that can be mixed with the oscillators.
 
 ## Parameters
 
-### Volume
+### Level
 
-Controls the level of noise in the mix.
+The Noise panel has a single **Amp** control. Its level is also available in the [Mixer](mixer.md).
 
-### Type
+### Noise Color
 
-- **White Noise**: Equal energy across all frequencies
-- **Pink Noise**: Equal energy per octave (if available)
+The **NC** knob in the **SUB / NOISE** section continuously changes the noise
+spectrum from Brown (minimum) through Pink, White, and Blue to Violet (maximum).
+White at the centre produces the original noise samples unchanged. Noise Color
+supports automation and modulation; changes are smoothed during playback.
+
+The coloration blends a low-pass Brown reference and a high-pass Violet
+reference around the unchanged White signal. The filter corner is 1 kHz, and
+the blend curve has smooth transitions through the Brown/Pink/White/Blue/Violet
+regions.
 
 ## Applications
 

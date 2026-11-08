@@ -57,7 +57,8 @@ class ExtraModSection : public SynthSection {
     void drawTextToRightOfComponent(Graphics& g, Component* component, String text);
 
   private:
-    std::unique_ptr<ModulationButton> aftertouch_mod_;
+    std::unique_ptr<ModulationButton> channel_aftertouch_mod_;
+    std::unique_ptr<ModulationButton> poly_aftertouch_mod_;
     std::unique_ptr<ModulationButton> note_mod_;
     std::unique_ptr<ModulationButton> velocity_mod_;
     std::unique_ptr<ModulationButton> mod_wheel_mod_;

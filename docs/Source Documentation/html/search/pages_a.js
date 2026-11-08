@@ -1,12 +1,16 @@
 var searchData=
 [
-  ['management_0',['Management',['../classLoadSave.html#loadsave_patches',1,'Patch Management'],['../classLoadSave.html#loadsave_settings',1,'Settings Management']]],
-  ['mapping_1',['Mapping',['../classMidiManager.html#midi_mapping',1,'Controller Mapping'],['../classXYPad.html#xypad_mapping',1,'Parameter Mapping']]],
-  ['messages_2',['Supported Messages',['../classhelmboy_1_1Midi2Manager.html#midi2_messages',1,'']]],
-  ['midi_20events_3',['Supported MIDI Events',['../classMidiManager.html#midi_events',1,'']]],
-  ['model_4',['Interaction Model',['../classXYPad.html#xypad_interaction',1,'']]],
-  ['modes_5',['Slider Modes',['../classSynthSlider.html#synthslider_modes',1,'']]],
-  ['modulation_20capabilities_6',['Modulation Capabilities',['../classmopo_1_1HelmBoyOscillators.html#helmosc_modulation',1,'']]],
-  ['modulation_20integration_7',['Modulation Integration',['../classSynthSlider.html#synthslider_modulation',1,'']]],
-  ['modulation_20targets_8',['Modulation Targets',['../classDelaySection.html#delay_modulation',1,'']]]
+  ['implementation_20guidelines_0',['Implementation Guidelines',['../classmopo_1_1NoteHandler.html#implementation',1,'']]],
+  ['implementation_20pattern_1',['Implementation Pattern',['../classmopo_1_1TickRouter.html#tick_implementation',1,'']]],
+  ['import_20and_20export_2',['Bank import and export',['../bank_import_export.html',1,'']]],
+  ['in_3',['Plug-in',['../architecture.html#autotoc_md4',1,'']]],
+  ['inheritance_20chain_4',['Inheritance Chain',['../classSynthSection.html#synthsection_inheritance',1,'']]],
+  ['init_5',['A/B comparison and Init',['../ab_comparison.html',1,'']]],
+  ['initialisation_20et_20portée_20des_20garanties_6',['Initialisation et portée des garanties',['../architecture.html#autotoc_md8',1,'']]],
+  ['integration_7',['Integration',['../classSynthSlider.html#synthslider_modulation',1,'Modulation Integration'],['../classOscilloscope.html#scope_integration',1,'System Integration'],['../classPatchSelector.html#integration',1,'System Integration']]],
+  ['integration_20usage_8',['Integration Usage',['../classGlobalToolTip.html#usage_integration',1,'']]],
+  ['interaction_9',['User Interaction',['../classSynthSlider.html#synthslider_interaction',1,'']]],
+  ['interaction_20model_10',['Interaction Model',['../classXYPad.html#xypad_interaction',1,'']]],
+  ['interface_20visualisations_20et_20threads_11',['Interface, visualisations et threads',['../gui_and_threads.html',1,'']]],
+  ['introduction_12',['Introduction',['../index.html#intro_sec',1,'']]]
 ];

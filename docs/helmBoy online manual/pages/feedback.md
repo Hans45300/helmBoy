@@ -4,32 +4,29 @@
 
 ![Feedback example](../pictures/Feedback.png)
 
-The feedback section routes the oscillator output back to modulate the oscillators, creating self-modulation effects.
+The Feedback section has three independent feedback paths: **Osc1**, **Osc2**, and **Sub + Noise**. Each path has its own Amount, Transpose, and Tune controls.
 
-## Parameters
+## Feedback Groups
 
-### Feedback Amount
+### Osc1
 
-- **Range**: -100% to +100%
-- **Effect**: Intensity of feedback modulation
-- **Negative values**: Inverted feedback
+Controls the feedback loop for Oscillator 1. Half of the ring-modulation signal is included in this path.
 
-### Transpose
+### Osc2
 
-- **Range**: -24 to +24 semitones
-- **Purpose**: Pitch shift the feedback signal
+Controls the feedback loop for Oscillator 2. The other half of the ring-modulation signal is included in this path.
 
-### Tune
+### Sub + Noise
 
-- **Range**: -100 to +100 cents
-- **Purpose**: Fine-tune feedback pitch
+Controls one shared feedback loop for the sub oscillator and noise source.
 
-## Sonic Characteristics
+## Controls
 
-- **Low amounts**: Subtle harmonic enrichment
-- **Medium amounts**: Resonant, formant-like tones
-- **High amounts**: Aggressive, distorted timbres
-- **Negative amounts**: Phase-inverted resonances
+- **Amount**: Sets the signed feedback level. Positive and negative values produce different feedback polarity.
+- **Transpose**: Changes the note-tracked delay period in semitone steps.
+- **Tune**: Fine-adjusts the delay period in cents.
+
+Each control can also be used as a modulation destination. Existing presets load with their former shared feedback settings applied to all three groups.
 
 ## See Also
 

@@ -19,6 +19,7 @@
  */
 
 #include "lfo_section.h"
+#include "utils.h"
 
 #include "colors.h"
 #include "fonts.h"
@@ -35,7 +36,7 @@
  * @file lfo_section.cpp
  * @brief Implementation of the LfoSection UI.
  *
- * Handles layout, painting and OpenGL waveform viewer integration for LFOs.
+ * Handles layout, painting and JUCE CPU waveform viewer integration for LFOs.
  */
 
 LfoSection::LfoSection(String name, std::string value_prepend, bool retrigger, bool can_animate) :
@@ -59,7 +60,7 @@ LfoSection::LfoSection(String name, std::string value_prepend, bool retrigger, b
 
   addSlider((tempo_ = std::make_unique<SynthSlider>(value_prepend + "_tempo")).get());
   tempo_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-  tempo_->setStringLookup(mopo::strings::synced_frequencies);
+  tempo_->setStringLookup(mopo::strings::lfo_synced_frequencies);
   tempo_->setLookAndFeel(TextLookAndFeel::instance());
   tempo_->setMouseDragSensitivity(TEMPO_DRAG_SENSITIVITY);
 
@@ -69,17 +70,26 @@ LfoSection::LfoSection(String name, std::string value_prepend, bool retrigger, b
   sync_->setFreeSlider(frequency_.get());
   sync_->setStringLookup(mopo::strings::freq_sync_styles);
 
-  addSlider((phase_offset_ = std::make_unique<SynthSlider>(value_prepend + "_phase_stretch")).get());
-  phase_offset_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  addSlider((phase_stretch_ = std::make_unique<SynthSlider>(value_prepend + "_phase_stretch")).get());
+  phase_stretch_->setSliderStyle(Slider::LinearBar);
+  phase_stretch_->setTooltip(TRANS("Phase stretch (PS)"));
+  addSlider((phase_offset_ = std::make_unique<SynthSlider>(value_prepend + "_phase_offset")).get());
+  phase_offset_->setSliderStyle(Slider::LinearBar);
+  phase_offset_->setTooltip(TRANS("Phase offset (PH)"));
 
-  addSlider((wave_selector_ = std::make_unique<WaveSelector>(value_prepend + "_waveform")).get());
+    addSlider((wave_selector_ = std::make_unique<WaveSelector>(
+      value_prepend + "_waveform", WaveSelectorKind::Lfo)).get());
   wave_selector_->setSliderStyle(Slider::LinearBar);
-  wave_selector_->setStringLookup(mopo::strings::waveforms);
+  wave_selector_->setStringLookup(mopo::strings::lfo_waveforms);
 
-  addOpenGLComponent((wave_viewer_ = std::make_unique<OpenGLWaveViewer>(WAVE_VIEWER_RESOLUTION)).get());
+  addAndMakeVisible((wave_viewer_ = std::make_unique<WaveViewer>(WAVE_VIEWER_RESOLUTION)).get());
   wave_viewer_->setAmplitudeSlider(amplitude_.get());
   wave_viewer_->setWaveSlider(wave_selector_.get());
+  wave_viewer_->setPhaseStretchSlider(phase_stretch_.get());
+  wave_viewer_->setPhaseOffsetSlider(phase_offset_.get());
   wave_viewer_->setName(value_prepend);
+  wave_viewer_->setControlRate(true);
+  wave_viewer_->showRealtimeFeedback(can_animate_);
 
   addModulationButton((modulation_button_ = std::make_unique<ModulationButton>(value_prepend)).get());
   modulation_button_->setLookAndFeel(ModulationLookAndFeel::instance());
@@ -98,6 +108,7 @@ LfoSection::~LfoSection() {
   tempo_ = nullptr;
   sync_ = nullptr;
   amplitude_ = nullptr;
+  phase_stretch_ = nullptr;
   phase_offset_ = nullptr;
 }
 
@@ -126,45 +137,64 @@ void LfoSection::paintBackground(Graphics& g) {
                text_height + 1,
                Justification::centred, false);
   }
-  drawTextForComponent(g, TRANS("PS"), phase_offset_.get());
+  drawTextForComponent(g, TRANS("PS"), phase_stretch_.get(), 0);
+  drawTextForComponent(g, TRANS("PH"), phase_offset_.get(), 0);
   component_shadow.drawForRectangle(g, wave_viewer_->getBounds());
 }
 
 void LfoSection::resized() {
   int control_section_width = size_ratio_ * CONTROL_SECTION_WIDTH;
   int y = getHeight() - control_section_width + size_ratio_ * 6.0f;
-  int knob_width = getStandardKnobSize();
   int mod_button_width = getModButtonWidth();
   int text_width = size_ratio_ * TEXT_WIDTH;
   int text_height = size_ratio_ * TEXT_HEIGHT;
   int slider_width = size_ratio_ * SLIDER_WIDTH;
+  int phase_label_height = size_ratio_ * 10;
+  if (slider_width < 1)
+    slider_width = 1;
+  if (phase_label_height < 1)
+    phase_label_height = 1;
+  int phase_footer_height = slider_width + phase_label_height;
   int title_width = getTitleWidth();
   int mod_button_x = size_ratio_ * 10.0f;
 
   int wave_height = getHeight() - title_width - control_section_width - slider_width * 2;
+  int viewer_height = wave_height - phase_footer_height;
+  if (viewer_height < 0)
+    viewer_height = 0;
   wave_selector_->setBounds(slider_width, title_width, getWidth() - slider_width, slider_width * 2);
   wave_viewer_->setBounds(slider_width, title_width + slider_width * 2,
-                          getWidth() - slider_width, wave_height);
+                          getWidth() - slider_width, viewer_height);
 
-  amplitude_->setBounds(0, title_width + slider_width * 2, slider_width, wave_height);
+  amplitude_->setBounds(0, title_width + slider_width * 2, slider_width, viewer_height);
+  const int phase_slider_gap = size_ratio_ * 4;
+  const int phase_area_x = slider_width;
+  const int phase_area_width = getWidth() - slider_width;
+  const int phase_slider_width = (phase_area_width - phase_slider_gap) / 2;
+  const int phase_slider_y = wave_viewer_->getBottom();
+  phase_offset_->setBounds(phase_area_x, phase_slider_y,
+                           phase_slider_width, slider_width);
+  phase_stretch_->setBounds(phase_area_x + phase_slider_width + phase_slider_gap,
+                            phase_slider_y, phase_slider_width, slider_width);
 
   modulation_button_->setBounds(mod_button_x, y, mod_button_width, mod_button_width);
-  retrigger_->setBounds(proportionOfWidth(0.5f) - text_height, y, text_height, text_height);
+  int frequency_group_width = text_width + text_height;
+  if (retrigger_->isVisible())
+    frequency_group_width += text_height;
+  int frequency_x = (getWidth() - frequency_group_width) / 2;
+  if (retrigger_->isVisible())
+    frequency_x += text_height;
+  retrigger_->setBounds(frequency_x - text_height, y, text_height, text_height);
 
-  frequency_->setBounds(proportionOfWidth(0.5f), y, text_width, text_height);
+  frequency_->setBounds(frequency_x, y, text_width, text_height);
   sync_->setBounds(frequency_->getBounds().getX() + text_width, frequency_->getBounds().getY(),
                    text_height, text_height);
 
   tempo_->setBounds(frequency_->getBounds());
 
   SynthSection::resized();
-
   frequency_->setPopupDisplayEnabled(false, false, nullptr);
   tempo_->setPopupDisplayEnabled(false, false, nullptr);
-
-  phase_offset_->setBounds((getWidth() - (knob_width / 2.0f)),
-                        getHeight() - knob_width * .85f,
-                        knob_width / 2.0f, knob_width / 2.0f);
 }
 
 void LfoSection::reset() {

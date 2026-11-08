@@ -1,0 +1,11 @@
+<map id="mopo::TickRouter" name="mopo::TickRouter">
+<area shape="rect" id="Node000001" title="Specialized processor router for sample&#45;by&#45;sample processing." alt="" coords="5,851,120,963"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="65,5,226,587"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,604,73,851,67,851,104,599"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1Processor.html" title=" " alt="" coords="144,659,296,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="136,584,144,634,145,642,139,642,138,635,136,589"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="202,643,199,611,198,589,198,584,204,610,208,644"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="169,1227,269,1467"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="171,1152,177,1202,178,1211,173,1210,172,1203,170,1157"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="227,1226,228,1203,231,1174,233,1169,233,1203,232,1228"/>
+</map>

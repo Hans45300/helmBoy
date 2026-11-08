@@ -1,0 +1,11 @@
+<map id="mopo::TriggerWait" name="mopo::TriggerWait">
+<area shape="rect" id="Node000001" title="Attente d&#39;un trigger, puis d�clenchement conditionnel." alt="" coords="5,776,122,952"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="151,5,302,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="150,518,137,574,86,777,81,776,132,573,151,513"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="146,573,307,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="222,514,224,525,223,574,218,573,218,525,221,519"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="338,744,438,984"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="291,499,310,548,321,572,345,650,364,728,358,728,339,651,316,574,305,550,291,504"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="224,573,226,521,227,515,229,574"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="388,743,381,637,373,581,361,526,337,458,309,395,310,390,342,456,366,525,379,580,387,636,393,745"/>
+</map>

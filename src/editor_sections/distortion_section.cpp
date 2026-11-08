@@ -62,7 +62,7 @@ void DistortionSection::paintBackground(Graphics& g) {
   int knob_width = getStandardKnobSize();
 
   g.setColour(Colors::control_label_text);
-  g.setFont(Fonts::instance()->proportional_regular().withPointHeight(size_ratio_ * 10.0f));
+  g.setFont(Fonts::instance()->proportional_regular().withPointHeight(size_ratio_ * 8.0f));
 
   g.drawText(TRANS("TYPE"),
              type_->getBounds().getX() - size_ratio_ * 5.0f,

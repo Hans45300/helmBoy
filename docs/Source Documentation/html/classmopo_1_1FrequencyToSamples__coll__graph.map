@@ -1,0 +1,13 @@
+<map id="mopo::FrequencyToSamples" name="mopo::FrequencyToSamples">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,1204,182,1359"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Operator.html" title="Base class for simple arithmetic and logic operators." alt="" coords="31,787,156,941"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,955,96,1204,91,1204,91,957"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1Processor.html" title=" " alt="" coords="185,5,336,501"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="184,518,171,574,115,788,110,786,166,573,185,513"/>
+<area shape="rect" id="Node000004" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="180,573,341,1155"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="255,514,258,525,257,574,252,573,252,525,255,519"/>
+<area shape="rect" id="Node000005" href="$structmopo_1_1Output.html" title=" " alt="" coords="372,744,472,984"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="325,499,344,548,355,572,379,650,398,728,392,728,373,651,350,574,339,550,325,504"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="258,573,260,521,261,515,263,574"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="422,744,415,637,407,581,395,526,371,458,344,395,344,390,376,456,400,525,413,580,421,636,427,745"/>
+</map>

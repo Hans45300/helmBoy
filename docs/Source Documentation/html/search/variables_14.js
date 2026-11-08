@@ -1,19 +1,10 @@
 var searchData=
 [
-  ['was_5fanimating_5f_0',['was_animating_',['../classHelmEditor.html#ac7a341910a3a0764f2adcb5de26bbc09',1,'HelmEditor']]],
-  ['was_5fplaying_5farp_5f_1',['was_playing_arp_',['../classmopo_1_1HelmBoyEngine.html#ae5d9d1eccc3fb08a3d642f3952722034',1,'mopo::HelmBoyEngine']]],
-  ['wave_5famp_5f_2',['wave_amp_',['../classOpenGLWaveViewer.html#aba8244497dc49451e6c991d6980292bd',1,'OpenGLWaveViewer::wave_amp_'],['../classWaveViewer.html#a4a1e7a5dddf63f579e395ebba09ef741',1,'WaveViewer::wave_amp_']]],
-  ['wave_5fbuffers1_5f_3',['wave_buffers1_',['../classmopo_1_1HelmBoyOscillators.html#af1015712deb1950c2e3d00b36714aa28',1,'mopo::HelmBoyOscillators']]],
-  ['wave_5fbuffers2_5f_4',['wave_buffers2_',['../classmopo_1_1HelmBoyOscillators.html#a9300a30e2de6e253984bb92dbebb6e30',1,'mopo::HelmBoyOscillators']]],
-  ['wave_5fpath_5f_5',['wave_path_',['../classOpenGLWaveViewer.html#a82318c5421abc2870757279c15ed930d',1,'OpenGLWaveViewer::wave_path_'],['../classOscilloscope.html#a852c1d17ffdb8132467ff034140ac5de',1,'Oscilloscope::wave_path_'],['../classWaveViewer.html#a07923dbba3ee87748682d6b6e7b22a9e',1,'WaveViewer::wave_path_']]],
-  ['wave_5fphase_5f_6',['wave_phase_',['../classOpenGLWaveViewer.html#a5c859b46abc53f2668208b3557601a3c',1,'OpenGLWaveViewer::wave_phase_'],['../classWaveViewer.html#a689e9921b253986eb35af14acd0cb32c',1,'WaveViewer::wave_phase_']]],
-  ['wave_5fselector_5f_7',['wave_selector_',['../classLfoSection.html#ac52829bc35edeabda456253a1eb594cd',1,'LfoSection::wave_selector_'],['../classSubSection.html#ac2d2b2adfa56ac12595189a5fbb114fd',1,'SubSection::wave_selector_']]],
-  ['wave_5fselector_5f1_5f_8',['wave_selector_1_',['../classOscillatorSection.html#a134b96d1a334049a7f7256f1e2824e7a',1,'OscillatorSection']]],
-  ['wave_5fselector_5f2_5f_9',['wave_selector_2_',['../classOscillatorSection.html#aa256134f4aa51bd8739bba91213afe89',1,'OscillatorSection']]],
-  ['wave_5fslider_5f_10',['wave_slider_',['../classOpenGLWaveViewer.html#a07ba80411961a3416132e115f9d92cb0',1,'OpenGLWaveViewer::wave_slider_'],['../classWaveViewer.html#afac7dbaf630427316bd8ae9c6abfbcba',1,'WaveViewer::wave_slider_']]],
-  ['wave_5fviewer_5f_11',['wave_viewer_',['../classLfoSection.html#ad89151c057a146e3b9bece0ed9b79048',1,'LfoSection::wave_viewer_'],['../classSubSection.html#a97c15425317559431aa831aa74417486',1,'SubSection::wave_viewer_']]],
-  ['wave_5fviewer_5f1_5f_12',['wave_viewer_1_',['../classOscillatorSection.html#a9e0da957a2bee9b4601324f172c8b838',1,'OscillatorSection']]],
-  ['wave_5fviewer_5f2_5f_13',['wave_viewer_2_',['../classOscillatorSection.html#a0f84b1816c6e2769be315d9e3fa7cc0e',1,'OscillatorSection']]],
-  ['waveforms_14',['waveforms',['../namespacemopo_1_1strings.html#ad3fc9b1be344327d94dbecb83f999195',1,'mopo::strings']]],
-  ['waves_5f_15',['waves_',['../classmopo_1_1FixedPointWaveLookup.html#ae8f52d447a0c42b8848c8e1e9e7e44ef',1,'mopo::FixedPointWaveLookup']]]
+  ['unison_5fdetune_5f1_5f_0',['unison_detune_1_',['../classOscillatorSection.html#ac0d56239fc2b263a627d11d4b6c5117f',1,'OscillatorSection']]],
+  ['unison_5fdetune_5f2_5f_1',['unison_detune_2_',['../classOscillatorSection.html#a2dc0fabea2a5b735f447c4dfe9404cc3',1,'OscillatorSection']]],
+  ['unison_5fharmonize_5f1_5f_2',['unison_harmonize_1_',['../classOscillatorSection.html#af55ab00ab0fa83bd054f7262661e6411',1,'OscillatorSection']]],
+  ['unison_5fharmonize_5f2_5f_3',['unison_harmonize_2_',['../classOscillatorSection.html#a485a940977eea77a5051592c24fbf00a',1,'OscillatorSection']]],
+  ['unison_5fvoices_5f1_5f_4',['unison_voices_1_',['../classOscillatorSection.html#a343ad2ddff2fe83fcfd29c8d91742bda',1,'OscillatorSection']]],
+  ['unison_5fvoices_5f2_5f_5',['unison_voices_2_',['../classOscillatorSection.html#acce1f8480d6f1afa9fabce72223219a7',1,'OscillatorSection']]],
+  ['up_5fsaw_5f_6',['up_saw_',['../classWaveSelector.html#acc304291174d9f13a816d3e07c99bb38',1,'WaveSelector::up_saw_'],['../classmopo_1_1FixedPointWaveLookup.html#a931da3d9aab200b436a721c3eb27b5fc',1,'mopo::FixedPointWaveLookup::up_saw_']]]
 ];

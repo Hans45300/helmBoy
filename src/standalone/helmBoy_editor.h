@@ -29,19 +29,19 @@
 #include "memory.h"
 #include "midi_manager.h"
 #include "midi_2_manager.h"
-#include "helmBoy_computer_keyboard.h"
 #include "helmBoy_engine.h"
 #include "synth_base.h"
 #include "synth_gui_interface.h"
 
-class HelmBoyEditor : public AudioAppComponent,
+class HelmBoyEditor : public Component,
+                   public AudioSource,
                    public SynthBase,
                    public SynthGuiInterface {
   public:
     HelmBoyEditor(bool use_gui = true);
     ~HelmBoyEditor();
 
-    // AudioAppComponent
+    // AudioSource / Component
     void prepareToPlay(int buffer_size, double sample_rate) override;
     void getNextAudioBlock(const AudioSourceChannelInfo& buffer) override;
     void releaseResources() override;
@@ -53,19 +53,30 @@ class HelmBoyEditor : public AudioAppComponent,
     [[nodiscard]] std::optional<SynthGuiInterface*> getGuiInterface() override { return this; }
 
     // SynthGuiInterface
-    AudioDeviceManager* getAudioDeviceManager() override { return &deviceManager; }
+    AudioDeviceManager* getAudioDeviceManager() override { return device_manager_.get(); }
 
     // MIDI 2.0
-    helmboy::Midi2Manager* getMidi2Manager() { return midi2_manager_.get(); }
+    helmboy::Midi2Manager* getMidi2Manager() override { return midi2_manager_.get(); }
 
+    bool startAudioSubsystem();
+    bool initializeGuiComponents();
     void animate(bool animate);
+    void ensureGuiReady();
 
   private:
-    std::unique_ptr<HelmBoyComputerKeyboard> computer_keyboard_;
     std::unique_ptr<helmboy::Midi2Manager> midi2_manager_;
+    std::unique_ptr<AudioDeviceManager> device_manager_;
+    std::unique_ptr<AudioSourcePlayer> audio_source_player_;
     CriticalSection critical_section_;
+    bool audio_channels_initialized_ = false;
+    bool midi_inputs_registered_ = false;
+    bool audio_started_ = false;
+    bool gui_components_initialized_ = false;
+    bool startup_patch_initialized_ = false;
     // Flag d'animation accessible sans prendre la section critique
     std::atomic<bool> is_animating_{false};
+    // Guard flag: disable MIDI callbacks before shutdown to prevent access to freed members
+    std::atomic<bool> midi_callbacks_enabled_{false};
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HelmBoyEditor)
 };

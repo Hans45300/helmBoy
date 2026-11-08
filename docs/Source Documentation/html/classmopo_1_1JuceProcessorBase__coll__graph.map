@@ -1,0 +1,11 @@
+<map id="mopo::JuceProcessorBase&lt; JuceDSPType, NumChannels &gt;" name="mopo::JuceProcessorBase&lt; JuceDSPType, NumChannels &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,683,215,1045"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="244,5,395,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="240,485,175,684,170,682,238,490"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="239,573,400,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="315,514,317,525,317,574,311,573,312,525,314,519"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="431,744,531,984"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="384,499,403,548,414,572,438,650,457,728,452,727,433,651,409,574,398,550,384,504"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="317,573,319,521,320,515,322,574"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="481,743,475,637,467,581,454,526,431,458,402,395,403,390,436,456,459,525,472,580,480,636,486,745"/>
+</map>

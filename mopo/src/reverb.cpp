@@ -21,243 +21,235 @@
 #include "reverb.h"
 
 #include "operators.h"
-#include "reverb_all_pass.h"
-#include "reverb_comb.h"
-#include "reverb_tuning.h"
+
+#include <cmath>
+#include <cstdio>
+
+namespace {
+  inline bool isFiniteReverbValue(mopo::mopo_float value) {
+    return std::isfinite(static_cast<double>(value));
+  }
+}
 
 namespace mopo {
 
-  Reverb::Reverb() : ProcessorRouter(static_cast<int>(Inputs::NumInputs), 2), current_dry_(0.0f), current_wet_(0.0f) {
-    static const Value gain(FIXED_GAIN);
+  namespace {
+    class ReverbAudioInput : public Processor {
+      public:
+        ReverbAudioInput() : Processor(2, 2) { }
+        Processor* clone() const override { return new ReverbAudioInput(*this); }
+        void process() override {
+          const Output* left = input(0)->source;
+          const Output* right = input(1)->source;
+          if (right == &null_source_)
+            right = left;
+          MOPO_ASSERT(left->buffer_size >= buffer_size_ && right->buffer_size >= buffer_size_);
+          for (int sample = 0; sample < buffer_size_; ++sample) {
+            output(0)->buffer[sample] = left->buffer[sample];
+            output(1)->buffer[sample] = right->buffer[sample];
+          }
+        }
+    };
+  }
 
-    Bypass* audio_input = new Bypass();
+  void Reverb::processJucePath(const mopo_float* audio,
+                               const mopo_float* audio_right,
+                               mopo_float* dest_left,
+                               mopo_float* dest_right,
+                               mopo_float wet_in) {
+    // Safety checks: ensure buffers and size are valid
+    if (!audio || !audio_right || !dest_left || !dest_right || buffer_size_ <= 0 || sample_rate_ <= 0) {
+      // Keep deterministic output even when preconditions are not met.
+      if (audio && audio_right && dest_left && dest_right && buffer_size_ > 0) {
+        for (int i = 0; i < buffer_size_; ++i) {
+          dest_left[i] = audio[i];
+          dest_right[i] = audio_right[i];
+        }
+      }
+      return;
+    }
+
+    // Lazy initialization: create juce::Reverb on first call.
+    if (!juce_reverb_) {
+      try {
+        juce_reverb_ = std::make_unique<juce::Reverb>();
+      } catch (...) {
+        // Allocation failed: fail safe with dry pass-through.
+        for (int i = 0; i < buffer_size_; ++i) {
+          dest_left[i] = audio[i];
+          dest_right[i] = audio_right[i];
+        }
+        return;
+      }
+    }
+
+    // (Re)initialize juce::Reverb when the sample rate changes.
+    if (juce_last_sample_rate_ != sample_rate_ && sample_rate_ > 0.0) {
+      juce_reverb_->setSampleRate(static_cast<double>(sample_rate_));
+      juce_reverb_->reset();
+      juce_last_sample_rate_ = sample_rate_;
+    }
+
+    // Resize float conversion buffers if the block size has changed.
+    if (static_cast<int>(juce_left_buf_.size()) != buffer_size_) {
+      try {
+        juce_left_buf_.assign(buffer_size_, 0.0f);
+        juce_right_buf_.assign(buffer_size_, 0.0f);
+      } catch (...) {
+        // Buffer resize failed: fail safe with dry pass-through.
+        for (int i = 0; i < buffer_size_; ++i) {
+          dest_left[i] = audio[i];
+          dest_right[i] = audio_right[i];
+        }
+        return;
+      }
+    }
+
+    // Read StereoWidth [0, 1]; stub default in engine is 1.0 (full stereo).
+    const mopo_float sw_raw = input(static_cast<int>(Inputs::StereoWidth))->at(0);
+    const float stereo_width = isFiniteReverbValue(sw_raw)
+        ? static_cast<float>(utils::clamp(sw_raw, 0.0, 1.0))
+        : 1.0f;
+
+    // Read FreezeMode [0, 1]. 0 = normal, >=0.5 = infinite decay.
+    const mopo_float fm_raw = input(static_cast<int>(Inputs::FreezeMode))->at(0);
+    const float freeze_mode = isFiniteReverbValue(fm_raw)
+        ? static_cast<float>(utils::clamp(fm_raw, 0.0, 1.0))
+        : 0.0f;
+
+    // Map feedback [-1, 1] -> roomSize [0, 1].
+    const mopo_float fb_raw = input(static_cast<int>(Inputs::Feedback))->at(0);
+    const mopo_float fb_safe = isFiniteReverbValue(fb_raw)
+        ? utils::clamp(fb_raw, -1.0, 1.0) : 0.7;
+    const float room_size = static_cast<float>((fb_safe + 1.0) * 0.5);
+
+    // Map damping [0, 1].
+    const mopo_float damp_raw = input(static_cast<int>(Inputs::Damping))->at(0);
+    const float damping = isFiniteReverbValue(damp_raw)
+        ? static_cast<float>(utils::clamp(damp_raw, 0.0, 1.0))
+        : 0.5f;
+
+    // Map wet_in to juce::Reverb parameters, compensating for internal scale factors
+    // (juce applies x3 to wetLevel and x2 to dryLevel, so we pre-divide to match
+    // the established equal-power wet/dry mix).
+    const float wet_sqrt = static_cast<float>(std::sqrt(wet_in));
+    const float dry_sqrt = static_cast<float>(std::sqrt(1.0 - wet_in));
+
+    juce::Reverb::Parameters params;
+    params.roomSize   = room_size;
+    params.damping    = damping;
+    params.wetLevel   = wet_sqrt / 3.0f;
+    params.dryLevel   = dry_sqrt / 2.0f;
+    params.width      = stereo_width;
+    params.freezeMode = freeze_mode;
+    juce_reverb_->setParameters(params);
+
+    // Convert both input channels without collapsing the stereo image.
+    for (int i = 0; i < buffer_size_; ++i) {
+      juce_left_buf_[i]  = static_cast<float>(audio[i]);
+      juce_right_buf_[i] = static_cast<float>(audio_right[i]);
+    }
+
+    // Safety check: ensure juce_reverb_ is valid before using it
+    if (!juce_reverb_) {
+      // Fallback: copy audio directly if reverb isn't initialized
+      for (int i = 0; i < buffer_size_; ++i) {
+        dest_left[i] = audio[i];
+        dest_right[i] = audio_right[i];
+      }
+      return;
+    }
+
+    juce_reverb_->processStereo(juce_left_buf_.data(), juce_right_buf_.data(), buffer_size_);
+
+    // float->double to output buffers.
+    for (int i = 0; i < buffer_size_; ++i) {
+      dest_left[i]  = static_cast<mopo_float>(juce_left_buf_[i]);
+      dest_right[i] = static_cast<mopo_float>(juce_right_buf_[i]);
+    }
+  }
+
+  Reverb::Reverb() : ProcessorRouter(static_cast<int>(Inputs::NumInputs), 2) {
+    ReverbAudioInput* audio_input = new ReverbAudioInput();
     LinearSmoothBuffer* feedback_input = new LinearSmoothBuffer();
     cr::Clamp* damping_clamp = new cr::Clamp(0.0f, 1.0f);
     LinearSmoothBuffer* damping_input = new LinearSmoothBuffer();
+    LinearSmoothBuffer* stereo_width_input = new LinearSmoothBuffer();
+    LinearSmoothBuffer* wet_input = new LinearSmoothBuffer();
+    cr::Bypass* freeze_mode_input = new cr::Bypass();
 
   registerInput(audio_input->input(), static_cast<int>(Inputs::Audio));
+  registerInput(audio_input->input(1), static_cast<int>(Inputs::AudioRight));
   registerInput(feedback_input->input(), static_cast<int>(Inputs::Feedback));
   registerInput(damping_clamp->input(0), static_cast<int>(Inputs::Damping));
+  registerInput(stereo_width_input->input(), static_cast<int>(Inputs::StereoWidth));
+  registerInput(wet_input->input(), static_cast<int>(Inputs::Wet));
+  registerInput(freeze_mode_input->input(), static_cast<int>(Inputs::FreezeMode));
     damping_input->plug(damping_clamp);
 
-    Multiply* gained_input = new Multiply();
-    gained_input->plug(audio_input, 0);
-    gained_input->plug(&gain, 1);
-
     addProcessor(audio_input);
-    addProcessor(gained_input);
     addProcessor(feedback_input);
     addProcessor(damping_clamp);
     addProcessor(damping_input);
+    addProcessor(stereo_width_input);
+    addProcessor(wet_input);
+    addProcessor(freeze_mode_input);
+  }
 
-    VariableAdd* left_comb_total = new VariableAdd(NUM_COMB);
-    for (int i = 0; i < NUM_COMB; ++i) {
-      ReverbComb* comb = new ReverbComb(1 + mopo::MAX_SAMPLE_RATE * COMB_TUNINGS[i]);
-      Value* time = new cr::Value(COMB_TUNINGS[i]);
-      addIdleProcessor(time);
-      cr::TimeToSamples* samples = new cr::TimeToSamples();
-      samples->plug(time);
+  Reverb::Reverb(const Reverb& other)
+      : ProcessorRouter(other)
+        // juce_reverb_ left as nullptr for lazy initialization
+  {
+    // The unique_ptr juce_reverb_ is left empty; it will be created lazily
+    // on the first call to processJucePath(). We don't copy it because
+    // juce::Reverb has a deleted copy constructor.
+  }
 
-  comb->plug(gained_input, static_cast<int>(ReverbComb::Inputs::Audio));
-  comb->plug(samples, static_cast<int>(ReverbComb::Inputs::SampleDelay));
-  comb->plug(feedback_input, static_cast<int>(ReverbComb::Inputs::Feedback));
-  comb->plug(damping_input, static_cast<int>(ReverbComb::Inputs::Damping));
-      left_comb_total->plugNext(comb);
-      addProcessor(samples);
-      addProcessor(comb);
-    }
-
-    VariableAdd* right_comb_total = new VariableAdd(NUM_COMB);
-    for (int i = 0; i < NUM_COMB; ++i) {
-      mopo_float tuning = COMB_TUNINGS[i] + STEREO_SPREAD;
-      ReverbComb* comb = new ReverbComb(1 + mopo::MAX_SAMPLE_RATE * tuning);
-      Value* time = new cr::Value(tuning);
-      addIdleProcessor(time);
-      cr::TimeToSamples* samples = new cr::TimeToSamples();
-      samples->plug(time);
-
-  comb->plug(gained_input, static_cast<int>(ReverbComb::Inputs::Audio));
-  comb->plug(samples, static_cast<int>(ReverbComb::Inputs::SampleDelay));
-  comb->plug(feedback_input, static_cast<int>(ReverbComb::Inputs::Feedback));
-  comb->plug(damping_input, static_cast<int>(ReverbComb::Inputs::Damping));
-      right_comb_total->plugNext(comb);
-      addProcessor(samples);
-      addProcessor(comb);
-    }
-
-    addProcessor(left_comb_total);
-    addProcessor(right_comb_total);
-
-    reverb_wet_left_ = left_comb_total;
-    for (int i = 0; i < NUM_ALL_PASS; ++i) {
-      ReverbAllPass* all_pass = new ReverbAllPass(1 + mopo::MAX_SAMPLE_RATE * ALL_PASS_TUNINGS[i]);
-      Value* time = new cr::Value(ALL_PASS_TUNINGS[i]);
-      addIdleProcessor(time);
-      cr::TimeToSamples* samples = new cr::TimeToSamples();
-      samples->plug(time);
-
-  all_pass->plug(reverb_wet_left_, static_cast<int>(ReverbAllPass::Inputs::Audio));
-  all_pass->plug(samples, static_cast<int>(ReverbAllPass::Inputs::SampleDelay));
-  all_pass->plug(&utils::value_half, static_cast<int>(ReverbAllPass::Inputs::Feedback));
-
-      addProcessor(all_pass);
-      addProcessor(samples);
-      reverb_wet_left_ = all_pass;
-    }
-
-    reverb_wet_right_ = right_comb_total;
-    for (int i = 0; i < NUM_ALL_PASS; ++i) {
-      mopo_float tuning = ALL_PASS_TUNINGS[i] + STEREO_SPREAD;
-      ReverbAllPass* all_pass = new ReverbAllPass(1 + mopo::MAX_SAMPLE_RATE * tuning);
-      Value* time = new cr::Value(tuning);
-      addIdleProcessor(time);
-      cr::TimeToSamples* samples = new cr::TimeToSamples();
-      samples->plug(time);
-
-  all_pass->plug(reverb_wet_right_, static_cast<int>(ReverbAllPass::Inputs::Audio));
-  all_pass->plug(samples, static_cast<int>(ReverbAllPass::Inputs::SampleDelay));
-  all_pass->plug(&utils::value_half, static_cast<int>(ReverbAllPass::Inputs::Feedback));
-
-      addProcessor(all_pass);
-      addProcessor(samples);
-      reverb_wet_right_ = all_pass;
-    }
+  void Reverb::resetState() {
+    ProcessorRouter::resetState();
+    if (juce_reverb_ != nullptr)
+      juce_reverb_->reset();
   }
 
   void Reverb::process() {
   MOPO_ASSERT(inputMatchesBufferSize(static_cast<int>(Inputs::Audio)));
 
-    ProcessorRouter::process();
   const mopo_float* audio = input(static_cast<int>(Inputs::Audio))->source->buffer;
-  const mopo_float* left_wet_audio = reverb_wet_left_->output()->buffer;
-  const mopo_float* right_wet_audio = reverb_wet_right_->output()->buffer;
-  mopo_float* dest_left = output(0)->buffer;
-  mopo_float* dest_right = output(1)->buffer;
+  const Output* right_source = input(static_cast<int>(Inputs::AudioRight))->source;
+  if (right_source == &null_source_)
+    right_source = input(static_cast<int>(Inputs::Audio))->source;
+  MOPO_ASSERT(right_source->buffer_size >= buffer_size_);
+  const mopo_float* audio_right = right_source->buffer;
+  Output* out_left = output(0);
+  Output* out_right = output(1);
 
-  mopo_float wet_in = utils::clamp(input(static_cast<int>(Inputs::Wet))->at(0), 0.0, 1.0);
-    mopo_float next_wet = sqrt(wet_in);
-    mopo_float next_dry = sqrt(1.0 - wet_in);
-    mopo_float wet_inc = (next_wet - current_wet_) / buffer_size_;
-    mopo_float dry_inc = (next_dry - current_dry_) / buffer_size_;
+  // Safety check: ensure outputs are valid and have buffers
+  if (!out_left || !out_left->buffer || !out_right || !out_right->buffer) {
+    // Fallback: silently return if outputs aren't ready
+    return;
+  }
 
-    #include <xsimd/xsimd.hpp>
-    using batch = xsimd::batch<mopo_float>;
-    constexpr std::size_t simd_size = batch::size;
-    int simd_end = buffer_size_ - (buffer_size_ % simd_size);
-    batch dry_start = batch(current_dry_);
-    batch wet_start = batch(current_wet_);
-    batch dry_inc_v = batch(dry_inc);
-    batch wet_inc_v = batch(wet_inc);
-    for (int i = 0; i < simd_end; i += simd_size) {
-      alignas(alignof(batch)) mopo_float idx_arr[simd_size];
-      for (std::size_t j = 0; j < simd_size; ++j) idx_arr[j] = static_cast<mopo_float>(i + static_cast<int>(j));
-      batch idx = batch::load_aligned(idx_arr);
-      batch dry = dry_start + idx * dry_inc_v;
-      batch wet = wet_start + idx * wet_inc_v;
-      batch a = batch::load_unaligned(&audio[i]);
-      batch l = batch::load_unaligned(&left_wet_audio[i]);
-      batch r = batch::load_unaligned(&right_wet_audio[i]);
-      (dry * a + wet * l).store_unaligned(&dest_left[i]);
-      (dry * a + wet * r).store_unaligned(&dest_right[i]);
+  mopo_float* dest_left = out_left->buffer;
+  mopo_float* dest_right = out_right->buffer;
+
+  mopo_float wet_in = input(static_cast<int>(Inputs::Wet))->at(0);
+#if defined(HELMBOY_DEBUG_REVERB)
+    const mopo_float wet_in_raw = wet_in;
+#endif
+    if (!isFiniteReverbValue(wet_in)) {
+#if defined(HELMBOY_DEBUG_REVERB)
+      std::fprintf(stderr, "[HelmBoy][Reverb] non-finite wet_in=%g ? forced 0\n",
+                   static_cast<double>(wet_in_raw));
+#endif
+      wet_in = 0.0;
     }
-    for (int i = simd_end; i < buffer_size_; ++i) {
-      mopo_float dry = current_dry_ + i * dry_inc;
-      mopo_float wet = current_wet_ + i * wet_inc;
-      dest_left[i] = dry * audio[i] + wet * left_wet_audio[i];
-      dest_right[i] = dry * audio[i] + wet * right_wet_audio[i];
-    }
+    wet_in = utils::clamp(wet_in, 0.0, 1.0);
+#if defined(HELMBOY_DEBUG_REVERB)
+    if (std::isfinite(static_cast<double>(wet_in_raw)) && wet_in_raw != wet_in)
+      std::fprintf(stderr, "[HelmBoy][Reverb] wet_in clamped raw=%g ? %g\n",
+                   static_cast<double>(wet_in_raw), static_cast<double>(wet_in));
+#endif
 
-    current_dry_ = next_dry;
-    current_wet_ = next_wet;
+    processJucePath(audio, audio_right, dest_left, dest_right, wet_in);
   }
 } // namespace mopo
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

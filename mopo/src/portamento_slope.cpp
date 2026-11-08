@@ -33,7 +33,6 @@ namespace mopo {
 
   /**
    * @brief Passe la valeur cible directement en sortie (bypass).
-   * @param start Indice de d�but dans le buffer.
    */
   void PortamentoSlope::processBypass(int start) {
     mopo_float* dest = output(0)->buffer;
@@ -109,10 +108,6 @@ namespace mopo {
 
   /**
    * @brief Applique un tick d'interpolation vers la cible.
-   * @param i Indice dans le buffer.
-   * @param target Valeur cible.
-   * @param increment Pas d'incr�mentation.
-   * @param decay Facteur de d�croissance.
    */
   inline void PortamentoSlope::tick(int i, mopo_float target,
                                     mopo_float increment, mopo_float decay) {
@@ -128,93 +123,3 @@ namespace mopo {
   }
 
 } // namespace mopo
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

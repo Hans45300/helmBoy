@@ -1,0 +1,5 @@
+<map id="mopo::Delay" name="mopo::Delay">
+<area shape="rect" id="Node000001" title="Processeur de d�lai avec gestion wet/dry, temps de d�lai et feedback." alt="" coords="5,592,204,1141"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="29,5,180,544"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,556,107,593,102,592,105,562"/>
+</map>

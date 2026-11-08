@@ -74,6 +74,7 @@ class PatchBrowser : public Overlay,
     void visibilityChanged() override;
 
     void selectedFilesChanged(FileListBoxModel* model) override;
+    void fileDoubleClicked(FileListBoxModel* model, int row_number) override;
     void textEditorTextChanged(TextEditor& editor) override;
     void textEditorEscapeKeyPressed(TextEditor& editor) override;
 
@@ -95,12 +96,15 @@ class PatchBrowser : public Overlay,
     void setSelector(PatchSelector* selector) { selector_ = selector; }
 
   private:
+    void ensureInitialScan();
+    void loadSelectedPatch();
     bool loadFromFile(File& patch);
     void setPatchInfo(File& patch);
     void scanBanks();
     void scanFolders();
     void scanPatches();
     void scanAll();
+    void updateExportButtonState();
     float getBanksWidth();
     float getFoldersWidth();
     float getPatchesWidth();
@@ -124,9 +128,11 @@ class PatchBrowser : public Overlay,
     SaveSection* save_section_;
     DeleteSection* delete_section_;
     std::unique_ptr<TextButton> save_as_button_;
+    std::unique_ptr<TextButton> move_rename_patch_button_;
     std::unique_ptr<TextButton> delete_patch_button_;
     std::unique_ptr<TextButton> import_bank_button_;
     std::unique_ptr<TextButton> export_bank_button_;
+    std::unique_ptr<TextButton> preset_root_button_;
 
     std::unique_ptr<TextButton> hide_button_;
     std::unique_ptr<TextButton> done_button_;
@@ -136,6 +142,9 @@ class PatchBrowser : public Overlay,
     File external_patch_;
     String author_;
     String license_;
+    bool suppress_model_notifications_ = false;
+    bool initial_scan_done_ = false;
+    std::unique_ptr<FileChooser> file_chooser_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PatchBrowser)
 };

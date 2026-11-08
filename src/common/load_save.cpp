@@ -20,10 +20,12 @@
 
 #include "load_save.h"
 #include <JuceHeader.h>
+#include <cmath>
 #include <memory>
 #include <functional>
 #include "helmBoy_common.h"
 #include "midi_manager.h"
+#include "patch_bank_archive.h"
 #include "synth_base.h"
 
 #define LINUX_FACTORY_PATCH_DIRECTORY "/usr/share/helmBoy/patches"
@@ -34,6 +36,12 @@
 #define PAY_WAIT_DAYS 4
 
 namespace {
+  const StringArray kSupportedPatchExtensions = { ".helm", ".helmboy" };
+  static constexpr const char* kMidiLearnConfigKey = "midi_learn";
+  static constexpr const char* kAudioDeviceStateConfigKey = "audio_device_state";
+  static constexpr const char* kEnabledMidiInputsConfigKey = "enabled_midi_inputs";
+  static constexpr const char* kMidiInputsProfileKey      = "midi_inputs";
+  static constexpr int kLfoTempoIndexVersion = 2;
 
   String createPatchLicense(String author) {
     return "Patch (c) by " + author +
@@ -51,6 +59,115 @@ namespace {
   int getDaysSinceEpoch() {
     int64 ms_since_epoch = Time::currentTimeMillis();
     return ms_since_epoch / MS_PER_DAY;
+  }
+
+  void logPresetWarning(const String& message) {
+    Logger::writeToLog("[Preset Load] " + message);
+  }
+
+  String mapLegacyPolyLfoName(const String& name) {
+    if (name == "poly_lfo")
+      return "poly_lfo_1";
+    if (name == "poly_lfo_amp")
+      return "poly_lfo_1_amp";
+    if (name == "poly_lfo_phase")
+      return "poly_lfo_1_phase";
+    if (name == "poly_lfo_amplitude")
+      return "poly_lfo_1_amplitude";
+    if (name == "poly_lfo_frequency")
+      return "poly_lfo_1_frequency";
+    if (name == "poly_lfo_sync")
+      return "poly_lfo_1_sync";
+    if (name == "poly_lfo_tempo")
+      return "poly_lfo_1_tempo";
+    if (name == "poly_lfo_waveform")
+      return "poly_lfo_1_waveform";
+    if (name == "poly_lfo_phase_stretch")
+      return "poly_lfo_1_phase_stretch";
+    return name;
+  }
+
+  String getLegacyAliasForControl(const String& control_name) {
+    if (control_name.startsWith("poly_lfo_1_"))
+      return "poly_lfo_" + control_name.fromFirstOccurrenceOf("poly_lfo_1_", false, false);
+    return {};
+  }
+
+  bool matchesPatchNameFilter(const File& file, const String& name_filter) {
+    String trimmed_filter = name_filter.trim();
+    if (trimmed_filter.isEmpty())
+      return true;
+
+    return file.getFileNameWithoutExtension().containsIgnoreCase(trimmed_filter);
+  }
+
+  Array<var> serializeMidiLearnMap(const MidiManager::midi_map& midi_learn_map) {
+    Array<var> midi_learn_object;
+    for (const auto& midi_mapping : midi_learn_map) {
+      DynamicObject* midi_map_object = new DynamicObject();
+      Array<var> midi_destinations_object;
+
+      midi_map_object->setProperty("source", midi_mapping.first);
+
+      for (const auto& midi_destination : midi_mapping.second) {
+        if (midi_destination.second == nullptr)
+          continue;
+
+        DynamicObject* midi_destination_object = new DynamicObject();
+        midi_destination_object->setProperty("destination", String(midi_destination.first));
+        midi_destination_object->setProperty("min_range", midi_destination.second->min);
+        midi_destination_object->setProperty("max_range", midi_destination.second->max);
+        midi_destinations_object.add(midi_destination_object);
+      }
+
+      midi_map_object->setProperty("destinations", midi_destinations_object);
+      midi_learn_object.add(midi_map_object);
+    }
+
+    return midi_learn_object;
+  }
+
+  MidiManager::midi_map deserializeMidiLearnMap(var midi_learn_var) {
+    MidiManager::midi_map midi_learn_map;
+    Array<var>* midi_learn = midi_learn_var.getArray();
+    if (midi_learn == nullptr)
+      return midi_learn_map;
+
+    for (const auto& midi_source : *midi_learn) {
+      DynamicObject* source_object = midi_source.getDynamicObject();
+      if (source_object == nullptr)
+        continue;
+
+      var source_var = source_object->getProperty("source");
+      if (!source_var.isInt() && !source_var.isInt64() && !source_var.isDouble())
+        continue;
+
+      int source = source_var;
+      if (!source_object->hasProperty("destinations"))
+        continue;
+
+      Array<var>* destinations = source_object->getProperty("destinations").getArray();
+      if (destinations == nullptr)
+        continue;
+
+      for (const auto& midi_destination : *destinations) {
+        DynamicObject* destination_object = midi_destination.getDynamicObject();
+        if (destination_object == nullptr)
+          continue;
+
+        String destination_name = destination_object->getProperty("destination").toString().trim();
+        if (destination_name.isEmpty())
+          continue;
+
+        std::string dest = destination_name.toStdString();
+        if (!mopo::Parameters::isParameter(dest))
+          continue;
+
+        midi_learn_map[source][dest] = &mopo::Parameters::getDetails(dest);
+      }
+    }
+
+    return midi_learn_map;
   }
 } // namespace
 
@@ -75,6 +192,7 @@ var LoadSave::stateToVar(SynthBase* synth,
   }
 
   settings_object->setProperty("modulations", modulation_states);
+  settings_object->setProperty("lfo_tempo_index_version", kLfoTempoIndexVersion);
 
   DynamicObject* state_object = new DynamicObject();
   String author = save_info["author"];
@@ -92,28 +210,101 @@ void LoadSave::loadControls(SynthBase* synth,
   mopo::control_map controls = synth->getControls();
   for (auto& control : controls) {
     String name = control.first;
+    mopo::ValueDetails details = mopo::Parameters::getDetails(name.toStdString());
+
+    bool has_preset_value = false;
+    mopo::mopo_float value = details.default_value;
     if (properties.contains(name)) {
-      mopo::mopo_float value = properties[name];
-      control.second->set(value);
+      value = properties[name];
+      has_preset_value = true;
     }
     else {
-      mopo::ValueDetails details = mopo::Parameters::getDetails(name.toStdString());
-      control.second->set(details.default_value);
+      // Legacy Helm compatibility: map poly_lfo_* keys to poly_lfo_1_* controls.
+      String legacy_alias = getLegacyAliasForControl(name);
+      if (!legacy_alias.isEmpty() && properties.contains(legacy_alias)) {
+        value = properties[legacy_alias];
+        has_preset_value = true;
+        logPresetWarning("Mapped legacy control '" + legacy_alias + "' to '" + name + "'.");
+      }
     }
+
+    if (!std::isfinite(static_cast<double>(value))) {
+      logPresetWarning("Control '" + name + "' has non-finite value. Falling back to default.");
+      value = details.default_value;
+    }
+
+    mopo::mopo_float clamped = jlimit(details.min, details.max, value);
+    if (clamped != value) {
+      String source = has_preset_value ? "preset" : "default";
+      logPresetWarning("Control '" + name + "' from " + source +
+                       " is out of range. Clamped from " + String(value) +
+                       " to " + String(clamped) + ".");
+    }
+
+    control.second->set(clamped);
   }
 }
 
 void LoadSave::loadModulations(SynthBase* synth,
                                const Array<var>* modulations) {
   synth->clearModulations();
+
+  if (modulations == nullptr)
+    return;
+
   const var* modulation = modulations->begin();
 
   for (; modulation != modulations->end(); ++modulation) {
+    if (!modulation->isObject()) {
+      logPresetWarning("Ignored malformed modulation entry (expected object).");
+      continue;
+    }
+
     DynamicObject* mod = modulation->getDynamicObject();
-    std::string source = mod->getProperty("source").toString().toStdString();
-    std::string destination = mod->getProperty("destination").toString().toStdString();
-    mopo::ModulationConnection* connection = synth->getModulationBank().get(source, destination);
-    synth->setModulationAmount(connection, mod->getProperty("amount"));
+    if (mod == nullptr) {
+      logPresetWarning("Ignored malformed modulation entry (null object).");
+      continue;
+    }
+
+    String source_name = mapLegacyPolyLfoName(mod->getProperty("source").toString().trim());
+    String destination_name = mapLegacyPolyLfoName(mod->getProperty("destination").toString().trim());
+    var amount_value = mod->getProperty("amount");
+
+    if (source_name.isEmpty() || destination_name.isEmpty()) {
+      logPresetWarning("Ignored modulation with empty source or destination.");
+      continue;
+    }
+
+    if (!amount_value.isDouble() && !amount_value.isInt() && !amount_value.isInt64() && !amount_value.isBool()) {
+      logPresetWarning("Ignored modulation '" + source_name + " -> " + destination_name +
+                       "' because amount is not numeric.");
+      continue;
+    }
+
+    if (!mopo::Parameters::isParameter(destination_name.toStdString())) {
+      logPresetWarning("Ignored modulation with unknown destination '" + destination_name + "'.");
+      continue;
+    }
+
+    mopo::mopo_float amount = amount_value;
+    if (!std::isfinite(static_cast<double>(amount))) {
+      logPresetWarning("Ignored modulation '" + source_name + " -> " + destination_name +
+                       "' because amount is non-finite.");
+      continue;
+    }
+
+    const mopo::ValueDetails destination_details =
+        mopo::Parameters::getDetails(destination_name.toStdString());
+    const mopo::mopo_float clamped_amount =
+        mopo::clampModulationAmount(destination_details, amount);
+    if (clamped_amount != amount) {
+      logPresetWarning("Clamped modulation '" + source_name + " -> " + destination_name +
+                       "' amount from " + String(amount) + " to " + String(clamped_amount) + ".");
+    }
+
+    mopo::ModulationConnection* connection = synth->getModulationBank().get(
+        source_name.toStdString(), destination_name.toStdString());
+    synth->setModulationAmount(connection, clamped_amount);
   }
 }
 
@@ -135,6 +326,7 @@ void LoadSave::initSynth(SynthBase* synth, std::map<std::string, String>& save_i
   for (auto& control : controls) {
     mopo::ValueDetails details = mopo::Parameters::getDetails(control.first);
     control.second->set(details.default_value);
+    synth->rememberControlSnapshotValue(control.first, details.default_value);
   }
 
   save_info["author"] = "";
@@ -142,11 +334,10 @@ void LoadSave::initSynth(SynthBase* synth, std::map<std::string, String>& save_i
   save_info["folder_name"] = "";
 }
 
-void LoadSave::varToState(SynthBase* synth,
-                          std::map<std::string, String>& save_info,
-                          var state) {
+LoadSave::PreparedSynthState LoadSave::prepareState(var state) {
+  PreparedSynthState prepared;
   if (!state.isObject())
-    return;
+    return prepared;
 
   DynamicObject* object_state = state.getDynamicObject();
   NamedValueSet properties = object_state->getProperties();
@@ -165,8 +356,98 @@ void LoadSave::varToState(SynthBase* synth,
 
   var settings = properties["settings"];
   DynamicObject* settings_object = settings.getDynamicObject();
+  if (settings_object == nullptr) {
+    logPresetWarning("Preset has no valid 'settings' object. Loading aborted.");
+    return prepared;
+  }
+
   NamedValueSet settings_properties = settings_object->getProperties();
+  int lfo_tempo_index_version = 0;
+  const var saved_lfo_tempo_index_version =
+      settings_properties["lfo_tempo_index_version"];
+  if (saved_lfo_tempo_index_version.isDouble() ||
+      saved_lfo_tempo_index_version.isInt() ||
+      saved_lfo_tempo_index_version.isInt64())
+    lfo_tempo_index_version =
+        static_cast<int>(saved_lfo_tempo_index_version);
+  if (lfo_tempo_index_version < kLfoTempoIndexVersion) {
+    static constexpr const char* legacy_lfo_tempo_controls[] = {
+      "mono_lfo_1_tempo", "mono_lfo_2_tempo", "mono_lfo_3_tempo",
+      "mono_lfo_4_tempo", "mono_lfo_5_tempo", "mono_lfo_6_tempo",
+      "poly_lfo_1_tempo", "poly_lfo_2_tempo", "poly_lfo_tempo"
+    };
+    bool migrated_lfo_tempo = false;
+    for (const char* control_name : legacy_lfo_tempo_controls) {
+      if (!settings_properties.contains(control_name))
+        continue;
+      const var old_value = settings_properties[control_name];
+      if (!old_value.isDouble() && !old_value.isInt() && !old_value.isInt64())
+        continue;
+      settings_properties.set(
+          control_name,
+          mopo::migrateLegacyLfoTempoIndex(static_cast<mopo::mopo_float>(old_value)));
+      migrated_lfo_tempo = true;
+    }
+    if (migrated_lfo_tempo)
+      logPresetWarning("Migrated LFO tempo divisions to the extended index table.");
+  }
   Array<var>* modulations = settings_properties["modulations"].getArray();
+  Array<var> empty_modulations;
+  if (modulations == nullptr)
+    modulations = &empty_modulations;
+
+  for (int index = modulations->size(); --index >= 0;) {
+    if (modulations->getReference(index).getDynamicObject() == nullptr) {
+      logPresetWarning("Ignored non-object modulation before preset migration.");
+      modulations->remove(index);
+    }
+  }
+
+  Array<var> poly_aftertouch_migrations;
+  for (int index = modulations->size(); --index >= 0;) {
+    DynamicObject* modulation = modulations->getReference(index).getDynamicObject();
+    if (modulation == nullptr ||
+        modulation->getProperty("source").toString().trim() != "aftertouch")
+      continue;
+
+    String destination = modulation->getProperty("destination").toString().trim();
+    var amount = modulation->getProperty("amount");
+    bool channel_route_exists = false;
+    bool poly_route_exists = false;
+    for (int candidate_index = 0; candidate_index < modulations->size(); ++candidate_index) {
+      if (candidate_index == index)
+        continue;
+      DynamicObject* candidate = modulations->getReference(candidate_index).getDynamicObject();
+      if (candidate == nullptr ||
+          candidate->getProperty("destination").toString().trim() != destination)
+        continue;
+
+      String source = candidate->getProperty("source").toString().trim();
+      channel_route_exists = channel_route_exists || source == "channel_aftertouch";
+      poly_route_exists = poly_route_exists || source == "poly_aftertouch";
+    }
+    for (const var& pending_modulation : poly_aftertouch_migrations) {
+      DynamicObject* pending = pending_modulation.getDynamicObject();
+      if (pending != nullptr &&
+          pending->getProperty("destination").toString().trim() == destination)
+        poly_route_exists = true;
+    }
+
+    if (channel_route_exists)
+      modulations->remove(index);
+    else
+      modulation->setProperty("source", "channel_aftertouch");
+
+    if (!poly_route_exists) {
+      DynamicObject* poly_modulation = new DynamicObject();
+      poly_modulation->setProperty("source", "poly_aftertouch");
+      poly_modulation->setProperty("destination", destination);
+      poly_modulation->setProperty("amount", amount);
+      poly_aftertouch_migrations.add(poly_modulation);
+    }
+  }
+  for (const var& modulation : poly_aftertouch_migrations)
+    modulations->add(modulation);
 
   // After 0.5.0 mixer was added and osc_mix was removed. And scaling of oscillators was changed.
   if (compareVersionStrings(version, "0.5.0") <= 0) {
@@ -331,9 +612,185 @@ void LoadSave::varToState(SynthBase* synth,
     settings_properties.set("beats_per_minute", old_bpm / 60.0);
   }
 
-  loadControls(synth, settings_properties);
-  loadModulations(synth, modulations);
-  loadSaveState(save_info, properties);
+  const auto copyLegacyFeedbackValue = [&settings_properties](const char* legacy_name,
+                                                              const char* new_name) {
+    String legacy_control(legacy_name);
+    String new_control(new_name);
+    if (!settings_properties.contains(new_control) &&
+        settings_properties.contains(legacy_control))
+      settings_properties.set(new_control, settings_properties[legacy_control]);
+  };
+  copyLegacyFeedbackValue("osc_feedback_amount", "osc_2_feedback_amount");
+  copyLegacyFeedbackValue("osc_feedback_transpose", "osc_2_feedback_transpose");
+  copyLegacyFeedbackValue("osc_feedback_tune", "osc_2_feedback_tune");
+  copyLegacyFeedbackValue("osc_feedback_amount", "sub_noise_feedback_amount");
+  copyLegacyFeedbackValue("osc_feedback_transpose", "sub_noise_feedback_transpose");
+  copyLegacyFeedbackValue("osc_feedback_tune", "sub_noise_feedback_tune");
+
+  static const char* feedback_modulation_destinations[][3] = {
+      {"osc_feedback_amount", "osc_2_feedback_amount", "sub_noise_feedback_amount"},
+      {"osc_feedback_transpose", "osc_2_feedback_transpose", "sub_noise_feedback_transpose"},
+      {"osc_feedback_tune", "osc_2_feedback_tune", "sub_noise_feedback_tune"}
+  };
+  Array<var> migrated_feedback_modulations;
+  for (const var& modulation : *modulations) {
+    DynamicObject* source_modulation = modulation.getDynamicObject();
+    if (source_modulation == nullptr)
+      continue;
+
+    String source_name = source_modulation->getProperty("source").toString();
+    String destination_name = source_modulation->getProperty("destination").toString();
+    for (const auto& destination_set : feedback_modulation_destinations) {
+      if (destination_name != destination_set[0])
+        continue;
+
+      for (int destination_index = 1; destination_index < 3; ++destination_index) {
+        String new_destination(destination_set[destination_index]);
+        bool route_exists = false;
+        const auto checkRoute = [&](const Array<var>& routes) {
+          for (const var& candidate : routes) {
+            DynamicObject* candidate_object = candidate.getDynamicObject();
+            if (candidate_object != nullptr &&
+                candidate_object->getProperty("source").toString() == source_name &&
+                candidate_object->getProperty("destination").toString() == new_destination)
+              return true;
+          }
+          return false;
+        };
+        route_exists = checkRoute(*modulations) ||
+                       checkRoute(migrated_feedback_modulations);
+        if (route_exists)
+          continue;
+
+        DynamicObject* migrated_modulation = new DynamicObject();
+        migrated_modulation->setProperty("source", source_modulation->getProperty("source"));
+        migrated_modulation->setProperty("destination", new_destination);
+        migrated_modulation->setProperty("amount", source_modulation->getProperty("amount"));
+        migrated_feedback_modulations.add(migrated_modulation);
+      }
+    }
+  }
+  for (const var& modulation : migrated_feedback_modulations)
+    modulations->add(modulation);
+
+  const auto all_details = mopo::Parameters::lookup_.getAllDetails();
+  prepared.controls.reserve(all_details.size());
+  for (const auto& [name, details] : all_details) {
+    String control_name(name);
+    bool has_preset_value = false;
+    mopo::mopo_float value = details.default_value;
+    if (settings_properties.contains(control_name)) {
+      value = settings_properties[control_name];
+      has_preset_value = true;
+    }
+    else {
+      String legacy_alias = getLegacyAliasForControl(control_name);
+      if (!legacy_alias.isEmpty() && settings_properties.contains(legacy_alias)) {
+        value = settings_properties[legacy_alias];
+        has_preset_value = true;
+        logPresetWarning("Mapped legacy control '" + legacy_alias + "' to '" + control_name + "'.");
+      }
+    }
+
+    if (!std::isfinite(static_cast<double>(value))) {
+      logPresetWarning("Control '" + control_name + "' has non-finite value. Falling back to default.");
+      value = details.default_value;
+    }
+
+    mopo::mopo_float clamped = jlimit(details.min, details.max, value);
+    if (clamped != value) {
+      String source = has_preset_value ? "preset" : "default";
+      logPresetWarning("Control '" + control_name + "' from '" + source +
+                       "' is out of range. Clamped from " + String(value) +
+                       " to " + String(clamped) + ".");
+    }
+    prepared.controls.emplace_back(name, clamped);
+  }
+
+  prepared.modulations.reserve(static_cast<size_t>(modulations->size()));
+  for (const var& modulation : *modulations) {
+    DynamicObject* mod = modulation.getDynamicObject();
+    if (mod == nullptr)
+      continue;
+
+    String source_name = mapLegacyPolyLfoName(mod->getProperty("source").toString().trim());
+    String destination_name = mapLegacyPolyLfoName(mod->getProperty("destination").toString().trim());
+    var amount_value = mod->getProperty("amount");
+
+    if (source_name.isEmpty() || destination_name.isEmpty()) {
+      logPresetWarning("Ignored modulation with empty source or destination.");
+      continue;
+    }
+    if (!amount_value.isDouble() && !amount_value.isInt() && !amount_value.isInt64() && !amount_value.isBool()) {
+      logPresetWarning("Ignored modulation '" + source_name + " -> " + destination_name +
+                       "' because amount is not numeric.");
+      continue;
+    }
+    if (!mopo::Parameters::isParameter(destination_name.toStdString())) {
+      logPresetWarning("Ignored modulation with unknown destination '" + destination_name + "'.");
+      continue;
+    }
+
+    mopo::mopo_float amount = amount_value;
+    if (!std::isfinite(static_cast<double>(amount))) {
+      logPresetWarning("Ignored modulation '" + source_name + " -> " + destination_name +
+                       "' because amount is non-finite.");
+      continue;
+    }
+
+    const mopo::ValueDetails& destination_details =
+        mopo::Parameters::getDetails(destination_name.toStdString());
+    const mopo::mopo_float clamped_amount =
+        mopo::clampModulationAmount(destination_details, amount);
+    if (clamped_amount != amount) {
+      logPresetWarning("Clamped modulation '" + source_name + " -> " + destination_name +
+                       "' amount from " + String(amount) + " to " + String(clamped_amount) + ".");
+    }
+    prepared.modulations.push_back({source_name.toStdString(), destination_name.toStdString(), clamped_amount});
+  }
+
+  std::map<std::string, String> metadata;
+  loadSaveState(metadata, properties);
+  prepared.metadata.reserve(metadata.size());
+  for (auto& entry : metadata)
+    prepared.metadata.push_back(entry);
+
+  prepared.valid = true;
+  return prepared;
+}
+
+bool LoadSave::applyPreparedState(SynthBase* synth,
+                                  std::map<std::string, String>& save_info,
+                                  const PreparedSynthState& prepared) {
+  if (synth == nullptr || !prepared.valid)
+    return false;
+
+  mopo::control_map& controls = synth->getControls();
+  for (const auto& [name, value] : prepared.controls) {
+    auto control = controls.find(name);
+    if (control != controls.end() && control->second != nullptr) {
+      control->second->set(value);
+      synth->rememberControlSnapshotValue(name, value);
+    }
+  }
+
+  synth->clearModulations();
+  for (const auto& modulation : prepared.modulations) {
+    mopo::ModulationConnection* connection = synth->getModulationBank().get(
+        modulation.source, modulation.destination);
+    synth->setModulationAmount(connection, modulation.amount);
+  }
+
+  for (const auto& [name, value] : prepared.metadata)
+    save_info[name] = value;
+  return true;
+}
+
+void LoadSave::varToState(SynthBase* synth,
+                          std::map<std::string, String>& save_info,
+                          var state) {
+  PreparedSynthState prepared = prepareState(std::move(state));
+  applyPreparedState(synth, save_info, prepared);
 }
 
 String LoadSave::getAuthor(var state) {
@@ -387,14 +844,15 @@ var LoadSave::getConfigVar() {
 }
 
 void LoadSave::saveVarToConfig(var config_state) {
-  if (!isInstalled())
-    return;
-
   File config_file = getConfigFile();
 
-  if (!config_file.exists())
-    config_file.create();
-  config_file.replaceWithText(JSON::toString(config_state));
+  if (!config_file.exists() && config_file.create().failed()) {
+    Logger::writeToLog("[Config] Unable to create config file: " + config_file.getFullPathName());
+    return;
+  }
+
+  if (!config_file.replaceWithText(JSON::toString(config_state)))
+    Logger::writeToLog("[Config] Unable to write config file: " + config_file.getFullPathName());
 }
 
 void LoadSave::saveVersionConfig() {
@@ -424,16 +882,6 @@ void LoadSave::saveShouldAskForMoney(bool should_ask) {
 
   DynamicObject* config_object = config_var.getDynamicObject();
   config_object->setProperty("should_ask_for_payment", should_ask);
-  saveVarToConfig(config_object);
-}
-
-void LoadSave::saveUpdateCheckConfig(bool check_for_updates) {
-  var config_var = getConfigVar();
-  if (!config_var.isObject())
-    config_var = new DynamicObject();
-
-  DynamicObject* config_object = config_var.getDynamicObject();
-  config_object->setProperty("check_for_updates", check_for_updates);
   saveVarToConfig(config_object);
 }
 
@@ -467,8 +915,152 @@ void LoadSave::saveWindowSize(float window_size) {
   saveVarToConfig(config_object);
 }
 
-void LoadSave::saveLayoutConfig(mopo::StringLayout* layout) {
-  if (layout == nullptr)
+void LoadSave::saveMidiMapConfig(MidiManager* midi_manager) {
+  if (midi_manager == nullptr)
+    return;
+
+  MidiManager::midi_map midi_learn_map = midi_manager->getMidiLearnMap();
+  var config_var = getConfigVar();
+  if (!config_var.isObject())
+    config_var = new DynamicObject();
+
+  DynamicObject* config_object = config_var.getDynamicObject();
+  config_object->setProperty(kMidiLearnConfigKey, serializeMidiLearnMap(midi_learn_map));
+  saveVarToConfig(config_object);
+}
+
+bool LoadSave::saveAudioDeviceState(const AudioDeviceManager& device_manager) {
+  std::unique_ptr<XmlElement> state_xml = device_manager.createStateXml();
+  if (state_xml == nullptr)
+    return false;
+
+  var config_var = getConfigVar();
+  if (!config_var.isObject())
+    config_var = new DynamicObject();
+
+  DynamicObject* config_object = config_var.getDynamicObject();
+  config_object->setProperty(kAudioDeviceStateConfigKey, state_xml->toString());
+  saveVarToConfig(config_object);
+  return true;
+}
+
+std::unique_ptr<XmlElement> LoadSave::loadAudioDeviceState() {
+  var config_var = getConfigVar();
+  if (!config_var.isObject())
+    return nullptr;
+
+  DynamicObject* config_object = config_var.getDynamicObject();
+  String audio_state = config_object->getProperty(kAudioDeviceStateConfigKey).toString();
+  if (audio_state.trim().isEmpty())
+    return nullptr;
+
+  return parseXML(audio_state);
+}
+
+void LoadSave::saveEnabledMidiInputs(const StringArray& midi_input_identifiers) {
+  var config_var = getConfigVar();
+  if (!config_var.isObject())
+    config_var = new DynamicObject();
+
+  Array<var> stored_identifiers;
+  for (const auto& identifier : midi_input_identifiers)
+    stored_identifiers.add(identifier);
+
+  DynamicObject* config_object = config_var.getDynamicObject();
+  config_object->setProperty(kEnabledMidiInputsConfigKey, stored_identifiers);
+  saveVarToConfig(config_object);
+}
+
+StringArray LoadSave::loadEnabledMidiInputs() {
+  StringArray enabled_identifiers;
+  var config_var = getConfigVar();
+  if (!config_var.isObject())
+    return enabled_identifiers;
+
+  DynamicObject* config_object = config_var.getDynamicObject();
+  var raw_value = config_object->getProperty(kEnabledMidiInputsConfigKey);
+  Array<var>* raw_array = raw_value.getArray();
+  if (raw_array == nullptr)
+    return enabled_identifiers;
+
+  for (const auto& entry : *raw_array) {
+    String identifier = entry.toString().trim();
+    if (identifier.isNotEmpty())
+      enabled_identifiers.addIfNotAlreadyThere(identifier);
+  }
+
+  return enabled_identifiers;
+}
+
+bool LoadSave::saveMidiProfileToFile(const File& file, MidiManager* midi_manager,
+                                       AudioDeviceManager* device_manager) {
+  if (midi_manager == nullptr || file == File())
+    return false;
+
+  File parent_directory = file.getParentDirectory();
+  if (!parent_directory.exists()) {
+    Result created = parent_directory.createDirectory();
+    if (created.failed())
+      return false;
+  }
+
+  DynamicObject* profile_object = new DynamicObject();
+  profile_object->setProperty(kMidiLearnConfigKey,
+                              serializeMidiLearnMap(midi_manager->getMidiLearnMap()));
+
+  if (device_manager != nullptr) {
+    Array<var> enabled_ids;
+    for (const auto& info : juce::MidiInput::getAvailableDevices()) {
+      if (device_manager->isMidiInputDeviceEnabled(info.identifier))
+        enabled_ids.add(info.identifier);
+    }
+    profile_object->setProperty(kMidiInputsProfileKey, enabled_ids);
+  }
+
+  return file.replaceWithText(JSON::toString(var(profile_object)));
+}
+
+bool LoadSave::loadMidiProfileFromFile(const File& file, MidiManager* midi_manager,
+                                         AudioDeviceManager* device_manager) {
+  if (midi_manager == nullptr || !file.existsAsFile())
+    return false;
+
+  var profile_state;
+  if (!JSON::parse(file.loadFileAsString(), profile_state).wasOk())
+    return false;
+
+  if (!profile_state.isObject())
+    return false;
+
+  DynamicObject* profile_object = profile_state.getDynamicObject();
+  if (!profile_object->hasProperty(kMidiLearnConfigKey))
+    return false;
+
+  midi_manager->setMidiLearnMap(deserializeMidiLearnMap(profile_object->getProperty(kMidiLearnConfigKey)));
+  saveMidiMapConfig(midi_manager);
+
+  if (device_manager != nullptr && profile_object->hasProperty(kMidiInputsProfileKey)) {
+    Array<var>* saved_ids = profile_object->getProperty(kMidiInputsProfileKey).getArray();
+    if (saved_ids != nullptr) {
+      StringArray wanted;
+      for (const auto& id : *saved_ids) {
+        String s = id.toString().trim();
+        if (s.isNotEmpty())
+          wanted.add(s);
+      }
+      for (const auto& info : juce::MidiInput::getAvailableDevices()) {
+        if (wanted.contains(info.identifier))
+          // Avant : device_manager->setMidiInputEnabled(info.identifier, true);
+          device_manager->setMidiInputDeviceEnabled(info.identifier, true); // Aprï¿½s
+      }
+    }
+  }
+
+  return true;
+}
+
+void LoadSave::loadConfig(MidiManager* midi_manager) {
+  if (midi_manager == nullptr)
     return;
 
   var config_var = getConfigVar();
@@ -476,104 +1068,11 @@ void LoadSave::saveLayoutConfig(mopo::StringLayout* layout) {
     config_var = new DynamicObject();
 
   DynamicObject* config_object = config_var.getDynamicObject();
-  DynamicObject* layout_object = new DynamicObject();
-  String chromatic_layout;
-  wchar_t up_key = L'\0';
-  wchar_t down_key = L'\0';
-
-  if (layout) {
-    chromatic_layout = String(layout->getLayout().data());
-    up_key = layout->getUpKey();
-    down_key = layout->getDownKey();
-  }
-  else {
-    chromatic_layout = String(getComputerKeyboardLayout().data());
-    std::pair<wchar_t, wchar_t> octave_controls = getComputerKeyboardOctaveControls();
-    down_key = octave_controls.first;
-    up_key = octave_controls.second;
-  }
-
-  layout_object->setProperty("chromatic_layout", chromatic_layout);
-  layout_object->setProperty("octave_up", String() + up_key);
-  layout_object->setProperty("octave_down", String() + down_key);
-  config_object->setProperty("keyboard_layout", layout_object);
-  saveVarToConfig(config_object);
-}
-
-void LoadSave::saveMidiMapConfig(MidiManager* midi_manager) {
-  MidiManager::midi_map midi_learn_map = midi_manager->getMidiLearnMap();
-  var config_var = getConfigVar();
-  if (!config_var.isObject())
-    config_var = new DynamicObject();
-
-  DynamicObject* config_object = config_var.getDynamicObject();
-
-  Array<var> midi_learn_object;
-  for (auto& midi_mapping : midi_learn_map) {
-    DynamicObject* midi_map_object = new DynamicObject();
-    Array<var> midi_destinations_object;
-
-    midi_map_object->setProperty("source", midi_mapping.first);
-
-    for (auto& midi_destination : midi_mapping.second) {
-      DynamicObject* midi_destination_object = new DynamicObject();
-
-      midi_destination_object->setProperty("destination", String(midi_destination.first));
-      midi_destination_object->setProperty("min_range", midi_destination.second->min);
-      midi_destination_object->setProperty("max_range", midi_destination.second->max);
-      midi_destinations_object.add(midi_destination_object);
-    }
-
-    midi_map_object->setProperty("destinations", midi_destinations_object);
-    midi_learn_object.add(midi_map_object);
-  }
-
-  config_object->setProperty("midi_learn", midi_learn_object);
-  saveVarToConfig(config_object);
-}
-
-void LoadSave::loadConfig(MidiManager* midi_manager, mopo::StringLayout* layout) {
-  var config_var = getConfigVar();
-  if (!config_var.isObject())
-    config_var = new DynamicObject();
-
-  DynamicObject* config_object = config_var.getDynamicObject();
   NamedValueSet config_properties = config_object->getProperties();
 
-  // Computer Keyboard Layout
-  if (layout) {
-    layout->setLayout(getComputerKeyboardLayout());
-    std::pair<wchar_t, wchar_t> octave_controls = getComputerKeyboardOctaveControls();
-    layout->setDownKey(octave_controls.first);
-    layout->setUpKey(octave_controls.second);
-  }
-
   // Midi Learn Map
-  if (config_properties.contains("midi_learn")) {
-    MidiManager::midi_map midi_learn_map = midi_manager->getMidiLearnMap();
-
-    Array<var>* midi_learn = config_properties["midi_learn"].getArray();
-    var* midi_source = midi_learn->begin();
-
-    for (; midi_source != midi_learn->end(); ++midi_source) {
-      DynamicObject* source_object = midi_source->getDynamicObject();
-      int source = source_object->getProperty("source");
-
-      if (source_object->hasProperty("destinations")) {
-        Array<var>* destinations = source_object->getProperty("destinations").getArray();
-        var* midi_destination = destinations->begin();
-
-        for (; midi_destination != destinations->end(); ++midi_destination) {
-          DynamicObject* destination_object = midi_destination->getDynamicObject();
-
-          String destination_name = destination_object->getProperty("destination").toString();
-          std::string dest = destination_name.toStdString();
-          midi_learn_map[source][dest] = &mopo::Parameters::getDetails(dest);
-        }
-      }
-    }
-    midi_manager->setMidiLearnMap(midi_learn_map);
-  }
+  if (config_properties.contains(kMidiLearnConfigKey))
+    midi_manager->setMidiLearnMap(deserializeMidiLearnMap(config_properties[kMidiLearnConfigKey]));
 }
 
 bool LoadSave::isInstalled() {
@@ -591,8 +1090,7 @@ bool LoadSave::wasUpgraded() {
     return true;
 
   Array<File> patches;
-  String extension = String("*.") + mopo::PATCH_EXTENSION;
-  getBankDirectory().findChildFiles(patches, File::findFiles, true, extension);
+  findPatchFiles(getBankDirectory(), patches, true);
   if (patches.size() == 0)
     return true;
 
@@ -600,16 +1098,26 @@ bool LoadSave::wasUpgraded() {
                                ProjectInfo::versionString) < 0;
 }
 
-bool LoadSave::shouldCheckForUpdates() {
-  var config_state = getConfigVar();
-  DynamicObject* config_object = config_state.getDynamicObject();
-  if (!config_state.isObject())
-    return true;
+String LoadSave::getSupportedPatchFileWildcard() {
+  return "*.helm;*.helmboy;*.helmBoy";
+}
 
-  if (!config_object->hasProperty("check_for_updates"))
-    return true;
+bool LoadSave::isSupportedPatchFile(const File& file) {
+  String extension = file.getFileExtension().toLowerCase();
+  return kSupportedPatchExtensions.contains(extension);
+}
 
-  return config_object->getProperty("check_for_updates");
+void LoadSave::findPatchFiles(const File& directory, Array<File>& results,
+                              bool recursive, String name_filter) {
+  if (!directory.isDirectory())
+    return;
+
+  Array<File> candidates;
+  directory.findChildFiles(candidates, File::findFiles, recursive, "*");
+  for (const auto& candidate : candidates) {
+    if (isSupportedPatchFile(candidate) && matchesPatchNameFilter(candidate, name_filter))
+      results.add(candidate);
+  }
 }
 
 bool LoadSave::shouldAnimateWidgets() {
@@ -628,7 +1136,7 @@ bool LoadSave::shouldEnableMidi2() {
   var config_state = getConfigVar();
   DynamicObject* config_object = config_state.getDynamicObject();
   if (!config_state.isObject())
-    return false;  // MIDI 2.0 désactivé par défaut
+    return false;  // MIDI 2.0 dï¿½sactivï¿½ par dï¿½faut
 
   if (!config_object->hasProperty("enable_midi2"))
     return false;
@@ -645,7 +1153,15 @@ float LoadSave::loadWindowSize() {
   if (!config_object->hasProperty("window_size"))
     return 1.0f;
 
-  return config_object->getProperty("window_size");
+  var window_size_var = config_object->getProperty("window_size");
+  if (!window_size_var.isDouble() && !window_size_var.isInt() && !window_size_var.isInt64())
+    return 1.0f;
+
+  double window_size = static_cast<double>(window_size_var);
+  if (!std::isfinite(window_size))
+    return 1.0f;
+
+  return static_cast<float>(jlimit(0.75, 1.6, window_size));
 }
 
 String LoadSave::loadVersion() {
@@ -686,44 +1202,6 @@ bool LoadSave::shouldAskForPayment() {
   return getDaysSinceEpoch() - day_last_asked > days_to_wait;
 }
 
-std::wstring LoadSave::getComputerKeyboardLayout() {
-  var config_state = getConfigVar();
-
-  if (config_state.isVoid())
-    return mopo::DEFAULT_KEYBOARD;
-
-  DynamicObject* config_object = config_state.getDynamicObject();
-  NamedValueSet config_properties = config_object->getProperties();
-
-  if (config_properties.contains("keyboard_layout")) {
-    DynamicObject* layout = config_properties["keyboard_layout"].getDynamicObject();
-
-    if (layout->hasProperty("chromatic_layout"))
-      return layout->getProperty("chromatic_layout").toString().toWideCharPointer();
-  }
-
-  return mopo::DEFAULT_KEYBOARD;
-}
-
-std::pair<wchar_t, wchar_t> LoadSave::getComputerKeyboardOctaveControls() {
-  std::pair<wchar_t, wchar_t> octave_controls(mopo::DEFAULT_KEYBOARD_OCTAVE_DOWN,
-                                              mopo::DEFAULT_KEYBOARD_OCTAVE_UP);
-  var config_state = getConfigVar();
-  if (config_state.isVoid())
-    return octave_controls;
-
-  DynamicObject* config_object = config_state.getDynamicObject();
-  NamedValueSet config_properties = config_object->getProperties();
-
-  if (config_properties.contains("keyboard_layout")) {
-    DynamicObject* layout = config_properties["keyboard_layout"].getDynamicObject();
-    octave_controls.first = layout->getProperty("octave_down").toString()[0];
-    octave_controls.second = layout->getProperty("octave_up").toString()[0];
-  }
-
-  return octave_controls;
-}
-
 File LoadSave::getFactoryBankDirectory() {
   File patch_dir = File("");
 #ifdef LINUX
@@ -739,7 +1217,54 @@ File LoadSave::getFactoryBankDirectory() {
   return patch_dir;
 }
 
+void LoadSave::saveCustomPatchRootDirectory(File directory) {
+  var config_var = getConfigVar();
+  if (!config_var.isObject())
+    config_var = new DynamicObject();
+
+  DynamicObject* config_object = config_var.getDynamicObject();
+  config_object->setProperty("custom_patch_root", directory.getFullPathName());
+  saveVarToConfig(config_object);
+}
+
+void LoadSave::clearCustomPatchRootDirectory() {
+  var config_var = getConfigVar();
+  if (!config_var.isObject())
+    return;
+
+  DynamicObject* config_object = config_var.getDynamicObject();
+  config_object->removeProperty("custom_patch_root");
+  saveVarToConfig(config_object);
+}
+
+File LoadSave::getCustomPatchRootDirectory() {
+  var config_var = getConfigVar();
+  if (!config_var.isObject())
+    return File();
+
+  DynamicObject* config_object = config_var.getDynamicObject();
+  if (!config_object->hasProperty("custom_patch_root"))
+    return File();
+
+  String custom_path = config_object->getProperty("custom_patch_root").toString().trim();
+  if (custom_path.isEmpty())
+    return File();
+
+  return File(custom_path);
+}
+
 File LoadSave::getBankDirectory() {
+  File custom_dir = getCustomPatchRootDirectory();
+  if (custom_dir != File()) {
+    if (!custom_dir.exists())
+      custom_dir.createDirectory();
+
+    if (custom_dir.isDirectory())
+      return custom_dir;
+
+    Logger::writeToLog("[Preset Load] custom_patch_root is not a directory, falling back to default.");
+  }
+
   if (!isInstalled())
 #ifdef HELM_LV2GEN_FACTORY_PRESET_PATH
     return File(HELM_LV2GEN_FACTORY_PRESET_PATH);
@@ -785,179 +1310,102 @@ File LoadSave::getDidPayInitiallyFile() {
 }
 
 void LoadSave::exportBank(String bank_name) {
-  File banks_dir = getBankDirectory();
-  File bank = banks_dir.getChildFile(bank_name);
-  Array<File> patches;
-  bank.findChildFiles(patches, File::findFiles, true, String("*.") + mopo::PATCH_EXTENSION);
-
-  // ZipFile::Builder is non-copyable; store it in a shared_ptr so we can
-  // capture it by value into the async callback safely.
-  std::shared_ptr<ZipFile::Builder> zip_builder = std::make_shared<ZipFile::Builder>();
-
-  for (File patch : patches)
-    zip_builder->addFile(patch, 2, patch.getRelativePathFrom(banks_dir));
-
-  auto chooser = std::make_shared<FileChooser>("Export Bank As", File::getSpecialLocation(File::userHomeDirectory),
-                                               String("*.") + EXPORTED_BANK_EXTENSION);
-  // Capture zip_builder by value since the callback runs asynchronously.
-  chooser->launchAsync(FileBrowserComponent::saveMode,
-                       [chooser, zip_builder](const FileChooser& fc) {
-                         File file = fc.getResult();
-                         if (file == File()) {
-                           // User cancelled - silent return, no error message
-                           return;
-                         }
-
-                         File out_file = file.withFileExtension(EXPORTED_BANK_EXTENSION);
-
-                         try {
-                             // Create stream in limited scope so it closes before validation
-                             {
-                               FileOutputStream out_stream(out_file);
-                               double* progress = nullptr;
-                               zip_builder->writeToStream(out_stream, progress);
-                               out_stream.flush();
-                             } // Stream closed here, all data flushed to disk
-                           }
-                           catch (...) {
-                             MessageManager::callAsync([]() {
-                               AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon,
-                                                                 TRANS("Export Failed"),
-                                                                 TRANS("An unexpected error occurred while exporting the bank."));
-                             });
-                             return;
-                           }
-
-                           // Basic validation: file should exist and be non-empty.
-                           if (!out_file.exists() || out_file.getSize() == 0) {
-                             MessageManager::callAsync([]() {
-                               AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon,
-                                                                 TRANS("Export Failed"),
-                                                                 TRANS("Failed to export bank. The file was not created or is empty."));
-                             });
-                           }
-                           else {
-                             MessageManager::callAsync([]() {
-                               AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon,
-                                                                 TRANS("Export Successful"),
-                                                                 TRANS("Bank exported successfully."));
-                             });
-                           }
-                       });
+  Array<File> selected_items;
+  selected_items.add(getBankDirectory().getChildFile(bank_name));
+  exportBank(std::move(selected_items));
 }
 
-void LoadSave::importBank() {
-  auto chooser = std::make_shared<FileChooser>("Import Bank",
-                                              File::getSpecialLocation(File::userHomeDirectory),
-                                              String("*.") + EXPORTED_BANK_EXTENSION);
+void LoadSave::exportBank(Array<File> selected_items) {
+  const File bank_root = getBankDirectory();
+  auto chooser = std::make_shared<FileChooser>(
+      TRANS("Export Bank As"), File::getSpecialLocation(File::userHomeDirectory),
+      String("*.") + EXPORTED_BANK_EXTENSION);
+  chooser->launchAsync(FileBrowserComponent::saveMode,
+      [chooser, selected_items = std::move(selected_items), bank_root](const FileChooser& fc) {
+        const File selected_file = fc.getResult();
+        if (selected_file == File())
+          return;
 
-  // No instance pointer is captured. Use the static API to get the bank
-  // directory so the async callback doesn't rely on an object's lifetime.
-  chooser->launchAsync(FileBrowserComponent::openMode,
-                       [chooser](const FileChooser& fc) {
-                         File file = fc.getResult();
-                         if (!file.exists()) {
-                           // User cancelled - silent return
-                           return;
-                         }
-                         if (file.existsAsFile()) {
-                           try {
-                             // ZipFile needs an InputStream and takes ownership
-                             FileInputStream* input_stream = new FileInputStream(file);
-                             if (!input_stream->openedOk()) {
-                               delete input_stream;
-                               MessageManager::callAsync([]() {
-                                 AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon,
-                                                                   TRANS("Import Failed"),
-                                                                   TRANS("Failed to open the bank file."));
-                               });
-                               return;
-                             }
+        const File output_file = selected_file.withFileExtension(EXPORTED_BANK_EXTENSION);
+        String error;
+        if (!PatchBankArchive::exportFiles(selected_items, bank_root, output_file, error)) {
+          AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon,
+              TRANS("Export Failed"), error);
+          return;
+        }
+        AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon,
+            TRANS("Export Successful"), TRANS("Bank exported successfully."));
+      });
+}
 
-                             ZipFile zip_file(input_stream, true); // true = ZipFile takes ownership
+void LoadSave::importBank(std::function<void()> completion) {
+  auto chooser = std::make_shared<FileChooser>(
+      TRANS("Import Preset or Bank"),
+      File::getSpecialLocation(File::userHomeDirectory),
+      "*.helm;*.helmboy;*.helmbank;*.helmBoyBank");
+  chooser->launchAsync(FileBrowserComponent::openMode | FileBrowserComponent::canSelectFiles,
+      [chooser, completion = std::move(completion)](const FileChooser& fc) {
+        const File source = fc.getResult();
+        if (!source.existsAsFile())
+          return;
 
-                             // Check if any files will be overwritten
-                             File bank_dir = LoadSave::getBankDirectory();
-                             bool has_conflicts = false;
-                             StringArray conflicting_files;
+        const String extension = source.getFileExtension().toLowerCase();
+        const bool is_archive = extension == ".helmbank" ||
+                                extension == ".helmboybank";
+        const bool is_patch = extension == ".helm" || extension == ".helmboy";
+        if (!is_archive && !is_patch) {
+          AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon,
+              TRANS("Import Failed"), TRANS("The selected file type is not supported."));
+          return;
+        }
 
-                             for (int i = 0; i < zip_file.getNumEntries(); i++) {
-                               const ZipFile::ZipEntry* entry = zip_file.getEntry(i);
-                               if (entry != nullptr && !entry->filename.endsWithChar('/')) {
-                                 File target = bank_dir.getChildFile(entry->filename);
-                                 if (target.existsAsFile()) {
-                                   has_conflicts = true;
-                                   conflicting_files.add(entry->filename);
-                                   if (conflicting_files.size() >= 5) // Limit displayed files
-                                     break;
-                                 }
-                               }
-                             }
+        const File destination = getUserBankDirectory();
+        StringArray conflicts;
+        if (is_archive)
+          conflicts = PatchBankArchive::getImportConflicts(source, destination);
+        else {
+          const File target = destination.getChildFile(
+              source.getFileNameWithoutExtension() + ".helmboy");
+          if (target.existsAsFile())
+            conflicts.add(target.getFileName());
+        }
 
-                             // If conflicts exist, ask for confirmation
-                             if (has_conflicts) {
-                               String message = TRANS("Some files already exist and will be overwritten:");
-                               message += "\n\n";
-                               for (const String& filename : conflicting_files)
-                                 message += "• " + filename + "\n";
-                               if (zip_file.getNumEntries() > conflicting_files.size())
-                                 message += TRANS("• ... and more\n");
-                               message += "\n" + TRANS("Do you want to continue?");
+        auto import = [source, destination, is_archive,
+                       completion](bool overwrite_existing) {
+          String error;
+          const bool imported = is_archive
+              ? PatchBankArchive::importArchive(source, destination,
+                                                overwrite_existing, error)
+              : PatchBankArchive::importPatch(source, destination,
+                                              overwrite_existing, error);
+          if (!imported) {
+            AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon,
+                TRANS("Import Failed"), error);
+            return;
+          }
+          AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon,
+              TRANS("Import Successful"), TRANS("Preset content imported successfully."));
+          if (completion)
+            completion();
+        };
 
-                               // Use a shared flag to communicate between message thread and this thread
-                               auto should_proceed = std::make_shared<std::atomic<int>>(0); // 0=waiting, 1=yes, 2=no
+        if (conflicts.isEmpty()) {
+          import(false);
+          return;
+        }
 
-                               MessageManager::callAsync([message, should_proceed]() {
-                                 NativeMessageBox::showOkCancelBox(AlertWindow::WarningIcon,
-                                                                   TRANS("Overwrite Confirmation"),
-                                                                   message,
-                                                                   nullptr,
-                                                                   ModalCallbackFunction::create([should_proceed](int result) {
-                                                                     should_proceed->store(result);
-                                                                   }));
-                               });
-
-                               // Wait for user response (with timeout)
-                               int timeout = 0;
-                               while (should_proceed->load() == 0 && timeout < 300) { // 30 seconds max
-                                 Thread::sleep(100);
-                                 timeout++;
-                               }
-
-                               if (should_proceed->load() != 1) {
-                                 // User cancelled
-                                 return;
-                               }
-                             }
-
-                             // Proceed with extraction
-                             bool ok = zip_file.uncompressTo(bank_dir);
-                             if (!ok) {
-                               // Show an alert on the message thread.
-                               MessageManager::callAsync([]() {
-                                 AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon,
-                                                                   TRANS("Import Failed"),
-                                                                   TRANS("Failed to import bank. The archive may be corrupted."));
-                               });
-                             }
-                             else {
-                               // Import successful
-                               MessageManager::callAsync([]() {
-                                 AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon,
-                                                                   TRANS("Import Successful"),
-                                                                   TRANS("Bank imported successfully."));
-                               });
-                             }
-                           }
-                           catch (...) {
-                             MessageManager::callAsync([]() {
-                               AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon,
-                                                                 TRANS("Import Failed"),
-                                                                 TRANS("An unexpected error occurred while importing the bank."));
-                             });
-                           }
-                         }
-                       });
+        String message = TRANS("Some files already exist and will be overwritten:");
+        message += "\n\n";
+        for (int i = 0; i < std::min(5, conflicts.size()); ++i)
+          message += "- " + conflicts[i] + "\n";
+        if (conflicts.size() > 5)
+          message += TRANS("- ... and more\n");
+        message += "\n" + TRANS("Do you want to continue?");
+        NativeMessageBox::showOkCancelBox(
+            AlertWindow::WarningIcon, TRANS("Overwrite Confirmation"), message,
+            nullptr, ModalCallbackFunction::create(
+                [import](int result) { if (result == 1) import(true); }));
+      });
 }
 
 int LoadSave::compareVersionStrings(String a, String b) {
@@ -991,8 +1439,7 @@ int LoadSave::getNumPatches() {
   bank_directory = getBankDirectory();
 
   Array<File> patches;
-  bank_directory.findChildFiles(patches, File::findFiles, true,
-                                String("*.") + mopo::PATCH_EXTENSION);
+  findPatchFiles(bank_directory, patches, true);
   return patches.size();
 }
 
@@ -1015,8 +1462,11 @@ File LoadSave::getPatchFile(int bank_index, int folder_index, int patch_index) {
 
   Array<File> folders;
   for (File bank : banks) {
+    // Keep bank root selectable as a save/load folder to support classic folder/file layout.
+    folders.add(bank);
+
     Array<File> bank_folders;
-    bank.findChildFiles(bank_folders, File::findDirectories, false);
+    bank.findChildFiles(bank_folders, File::findDirectories, true);
     bank_folders.sort(file_sorter);
     folders.addArray(bank_folders);
   }
@@ -1033,8 +1483,7 @@ File LoadSave::getPatchFile(int bank_index, int folder_index, int patch_index) {
   Array<File> patches;
   for (File folder : folders) {
     Array<File> folder_patches;
-    folder.findChildFiles(folder_patches, File::findFiles, false,
-                          String("*.") + mopo::PATCH_EXTENSION);
+    findPatchFiles(folder, folder_patches, false);
     folder_patches.sort(file_sorter);
     patches.addArray(folder_patches);
   }
@@ -1047,28 +1496,9 @@ File LoadSave::getPatchFile(int bank_index, int folder_index, int patch_index) {
 
 Array<File> LoadSave::getAllPatches() {
   static const FileSorterAscending file_sorter;
-
-  File bank_directory = getBankDirectory();
-  Array<File> banks;
-  bank_directory.findChildFiles(banks, File::findDirectories, false);
-  banks.sort(file_sorter);
-
-  Array<File> folders;
-  for (File bank : banks) {
-    Array<File> bank_folders;
-    bank.findChildFiles(bank_folders, File::findDirectories, false);
-    bank_folders.sort(file_sorter);
-    folders.addArray(bank_folders);
-  }
-
   Array<File> patches;
-  for (File folder : folders) {
-    Array<File> folder_patches;
-    folder.findChildFiles(folder_patches, File::findFiles, false,
-                          String("*.") + mopo::PATCH_EXTENSION);
-    folder_patches.sort(file_sorter);
-    patches.addArray(folder_patches);
-  }
+  findPatchFiles(getBankDirectory(), patches, true);
+  patches.sort(file_sorter);
 
   return patches;
 }

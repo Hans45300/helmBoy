@@ -1,3 +1,20 @@
 <map id="mopo::ModulationConnection" name="mopo::ModulationConnection">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,185,203"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="250,1409,430,1564"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1cr_1_1Value.html" title="Processeur Value en mode control rate." alt="" coords="224,1225,326,1316"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="289,1313,314,1394,309,1393,287,1318"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1Value.html" title="Processeur de valeur constante ou control�e." alt="" coords="5,787,88,941"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="45,953,52,1004,62,1055,78,1106,102,1153,128,1184,160,1210,193,1231,226,1249,221,1250,190,1235,157,1214,124,1188,98,1156,73,1108,57,1057,47,1005,45,959"/>
+<area shape="rect" id="Node000004" href="$classmopo_1_1Processor.html" title=" " alt="" coords="163,5,314,501"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="157,425,129,498,103,574,75,685,58,788,53,787,70,684,97,573,124,496,158,420"/>
+<area shape="rect" id="Node000005" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="112,573,272,1155"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="192,514,193,526,190,574,185,573,188,525,191,519"/>
+<area shape="rect" id="Node000006" href="$structmopo_1_1Output.html" title=" " alt="" coords="297,744,397,984"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="268,498,280,549,287,573,322,727,317,727,281,574,274,550,268,504"/>
+<area shape="rect" id="Node000008" href="$classmopo_1_1Operator.html" title="Base class for simple arithmetic and logic operators." alt="" coords="420,787,545,941"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="323,348,383,432,410,477,432,524,454,592,469,661,478,728,483,787,478,786,473,729,464,662,449,593,427,526,405,480,379,434,323,354"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="191,573,194,525,197,521,198,516,200,526,196,574"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="348,744,344,637,331,526,319,467,319,462,336,525,350,637,353,745"/>
+<area shape="rect" id="Node000007" href="$classmopo_1_1cr_1_1Multiply.html" title=" " alt="" coords="387,1204,501,1337"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="414,1335,386,1396,382,1392,410,1339"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="476,954,453,1205,448,1204,472,958"/>
 </map>

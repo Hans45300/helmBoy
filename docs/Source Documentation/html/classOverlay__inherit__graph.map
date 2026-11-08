@@ -1,13 +1,15 @@
 <map id="Overlay" name="Overlay">
-<area shape="rect" id="Node000001" title=" " alt="" coords="311,123,432,320"/>
-<area shape="rect" id="Node000003" href="$classAboutSection.html" title=" " alt="" coords="5,496,174,949"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="300,266,240,311,212,339,188,369,155,431,130,497,125,495,150,429,184,367,208,335,236,307,297,262"/>
-<area shape="rect" id="Node000004" href="$classDeleteSection.html" title=" " alt="" coords="198,560,357,885"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="353,335,311,561,305,560,348,334"/>
-<area shape="rect" id="Node000005" href="$classPatchBrowser.html" title=" " alt="" coords="382,368,547,1077"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="395,334,401,368,396,369,390,335"/>
-<area shape="rect" id="Node000006" href="$classSaveSection.html" title=" " alt="" coords="571,379,769,1067"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="446,262,507,308,536,336,561,366,573,384,569,387,557,370,532,339,504,312,443,266"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="332,5,410,75"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="374,90,374,123,368,123,368,90"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="408,123,529,320"/>
+<area shape="rect" id="Node000003" href="$classAboutSection.html" title=" " alt="" coords="5,517,174,992"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="392,244,342,264,287,290,233,325,188,370,165,403,146,440,118,518,113,517,141,438,160,401,184,366,230,321,284,286,340,259,395,240"/>
+<area shape="rect" id="Node000004" href="$classDeleteSection.html" title=" " alt="" coords="198,592,357,917"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="399,314,371,369,349,424,331,481,304,593,299,591,326,479,344,422,366,367,401,309"/>
+<area shape="rect" id="Node000005" href="$classHelmBoySplashScreen.html" title=" " alt="" coords="381,645,556,864"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="470,333,471,646,466,645,467,337"/>
+<area shape="rect" id="Node000006" href="$classPatchBrowser.html" title=" " alt="" coords="580,368,758,1141"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="538,310,571,367,582,394,577,393,566,369,537,315"/>
+<area shape="rect" id="Node000007" href="$classSaveSection.html" title=" " alt="" coords="782,411,980,1099"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="542,237,600,256,661,283,721,319,748,341,772,366,803,411,798,411,768,370,744,345,718,324,659,288,598,261,544,243"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="430,5,507,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="469,87,471,123,466,122,468,92"/>
 </map>

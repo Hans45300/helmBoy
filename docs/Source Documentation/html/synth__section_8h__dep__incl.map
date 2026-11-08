@@ -1,190 +1,200 @@
 <map id="src/editor_sections/synth_section.h" name="src/editor_sections/synth_section.h">
-<area shape="rect" id="Node000001" title="Base class for UI sections used in the HelmBoy interface." alt="" coords="2800,5,2932,48"/>
-<area shape="rect" id="Node000002" href="$patch__selector_8h.html" title="Interface principale de sélection et gestion de patches (load/save/browse)." alt="" coords="804,187,957,229"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="2785,32,2407,38,1880,51,1384,71,1203,84,1097,99,1044,117,993,140,912,188,909,184,991,136,1042,112,1096,93,1203,78,1384,65,1880,45,2406,33,2784,26"/>
-<area shape="rect" id="Node000004" href="$full__interface_8h.html" title="Main synthesizer interface integrating all UI components." alt="" coords="2252,277,2384,320"/>
-<area shape="poly" id="edge78_Node000001_Node000004" title=" " alt="" coords="2785,32,2549,39,2248,51,1974,71,1876,84,1820,98,1791,115,1772,133,1758,156,1745,188,1737,210,1738,218,1744,227,1769,240,1816,252,1956,271,2117,284,2252,292,2252,297,2116,289,1955,276,1815,257,1767,245,1740,231,1733,220,1732,209,1739,186,1753,154,1768,130,1788,111,1818,94,1875,78,1973,66,2247,46,2548,34,2785,27"/>
-<area shape="rect" id="Node000021" href="$about__section_8cpp.html" title="Implementation of the AboutSection overlay UI." alt="" coords="342,467,473,509"/>
-<area shape="poly" id="edge45_Node000001_Node000021" title=" " alt="" coords="2785,30,2429,32,1940,40,1697,49,1483,61,1318,77,1260,87,1223,98,1180,118,1147,138,1135,151,1126,166,1120,184,1118,207,1118,300,1114,349,1102,387,1083,416,1057,437,1026,450,989,458,949,460,904,459,701,442,592,442,539,449,487,461,464,469,462,464,485,456,538,444,592,437,701,436,904,453,948,455,989,452,1024,445,1054,432,1079,413,1097,385,1109,348,1113,300,1113,207,1115,183,1121,163,1131,147,1144,134,1178,113,1221,94,1259,82,1317,72,1483,56,1697,43,1940,35,2429,27,2785,25"/>
-<area shape="rect" id="Node000027" href="$synth__section_8cpp.html" title="Implementation of the SynthSection base UI class." alt="" coords="498,467,629,509"/>
-<area shape="poly" id="edge104_Node000001_Node000027" title=" " alt="" coords="2785,31,2451,36,1997,47,1772,55,1574,67,1421,81,1367,89,1332,99,1280,117,1237,135,1221,147,1209,162,1201,181,1198,207,1198,300,1195,337,1185,366,1165,390,1135,413,1092,432,1034,443,966,449,893,451,750,452,689,455,641,461,616,469,614,463,640,456,689,449,750,447,893,446,966,443,1033,438,1090,427,1133,408,1162,386,1180,364,1190,336,1193,300,1193,207,1196,180,1204,159,1217,143,1235,130,1278,112,1331,93,1366,84,1420,76,1574,61,1772,50,1997,41,2451,30,2784,26"/>
-<area shape="rect" id="Node000037" href="$arp__section_8h.html" title="UI section for the arpeggiator controls." alt="" coords="1343,96,1474,139"/>
-<area shape="poly" id="edge46_Node000001_Node000037" title=" " alt="" coords="2785,32,2568,37,2260,48,1901,68,1537,99,1475,107,1475,102,1536,93,1901,63,2259,43,2568,32,2785,27"/>
-<area shape="rect" id="Node000039" href="$bpm__section_8h.html" title="UI section exposing BPM control for the synth (header)." alt="" coords="1548,96,1680,139"/>
-<area shape="poly" id="edge49_Node000001_Node000039" title=" " alt="" coords="2785,31,2592,33,2322,43,2012,63,1853,79,1698,99,1681,102,1680,96,1698,93,1853,73,2012,58,2322,37,2592,28,2785,25"/>
-<area shape="rect" id="Node000041" href="$delay__section_8h.html" title="Digital delay effect control UI section." alt="" coords="1831,96,1962,139"/>
-<area shape="poly" id="edge52_Node000001_Node000041" title=" " alt="" coords="2785,32,2634,37,2432,48,2204,68,1974,99,1963,101,1962,95,1974,93,2203,63,2431,43,2633,32,2785,27"/>
-<area shape="rect" id="Node000044" href="$distortion__section_8h.html" title="UI section for distortion effect controls." alt="" coords="1986,96,2124,139"/>
-<area shape="poly" id="edge57_Node000001_Node000044" title=" " alt="" coords="2785,34,2498,54,2318,73,2137,99,2125,101,2124,96,2136,93,2317,68,2497,49,2785,29"/>
-<area shape="rect" id="Node000046" href="$dynamic__section_8h.html" title="Header for dynamics&#45;related synth UI controls (portamento, legato)." alt="" coords="2148,96,2282,139"/>
-<area shape="poly" id="edge60_Node000001_Node000046" title=" " alt="" coords="2785,37,2563,60,2429,77,2296,99,2283,101,2282,96,2295,93,2429,72,2563,54,2784,32"/>
-<area shape="rect" id="Node000048" href="$envelope__section_8h.html" title="UI section for ADSR envelope controls and visualization." alt="" coords="2307,96,2444,139"/>
-<area shape="poly" id="edge63_Node000001_Node000048" title=" " alt="" coords="2785,42,2632,66,2456,99,2445,101,2444,96,2455,93,2631,61,2785,37"/>
-<area shape="rect" id="Node000050" href="$extra__mod__section_8h.html" title="UI section exposing extra modulation sources (aftertouch, velocity...)." alt="" coords="2468,96,2614,139"/>
-<area shape="poly" id="edge66_Node000001_Node000050" title=" " alt="" coords="2786,52,2615,99,2613,94,2784,47"/>
-<area shape="rect" id="Node000052" href="$feedback__section_8h.html" title="UI section for oscillator feedback controls (transpose, tune, amount)." alt="" coords="2638,96,2776,139"/>
-<area shape="poly" id="edge69_Node000001_Node000052" title=" " alt="" coords="2817,58,2746,98,2743,93,2814,54"/>
-<area shape="rect" id="Node000054" href="$filter__section_8h.html" title="UI section for filter controls, cutoff, resonance and response." alt="" coords="2800,96,2932,139"/>
-<area shape="poly" id="edge72_Node000001_Node000054" title=" " alt="" coords="2869,64,2869,96,2863,96,2863,64"/>
-<area shape="rect" id="Node000056" href="$formant__section_8h.html" title="UI section for formant control (XY pad and sliders)." alt="" coords="2956,96,3088,139"/>
-<area shape="poly" id="edge75_Node000001_Node000056" title=" " alt="" coords="2917,54,2987,93,2984,98,2914,58"/>
-<area shape="rect" id="Node000058" href="$lfo__section_8h.html" title="UI section for LFO controls and visualization." alt="" coords="3112,96,3244,139"/>
-<area shape="poly" id="edge79_Node000001_Node000058" title=" " alt="" coords="2948,48,3113,95,3111,100,2946,53"/>
-<area shape="rect" id="Node000060" href="$mixer__section_8h.html" title="UI section for mixer controls (osc, sub, noise volumes)." alt="" coords="3268,96,3400,139"/>
-<area shape="poly" id="edge82_Node000001_Node000060" title=" " alt="" coords="2947,38,3091,62,3256,93,3269,96,3267,101,3255,99,3090,67,2946,43"/>
-<area shape="rect" id="Node000062" href="$modulation__manager_8h.html" title="Manages modulation overlays, meters and modulation sliders." alt="" coords="4721,277,4878,320"/>
-<area shape="poly" id="edge85_Node000001_Node000062" title=" " alt="" coords="2947,25,3278,25,3743,33,3986,41,4213,54,4408,71,4554,93,4623,106,4678,117,4703,126,4727,139,4751,159,4776,185,4790,207,4798,232,4803,277,4797,277,4792,233,4785,209,4772,188,4747,162,4724,144,4700,131,4676,122,4622,111,4554,99,4407,76,4212,59,3986,47,3743,38,3278,31,2947,30"/>
-<area shape="rect" id="Node000063" href="$noise__section_8h.html" title="UI section for noise generator controls (volume)." alt="" coords="4836,96,4968,139"/>
-<area shape="poly" id="edge87_Node000001_Node000063" title=" " alt="" coords="2947,26,3323,31,3864,42,4415,62,4645,76,4818,93,4836,96,4835,102,4818,99,4644,82,4414,67,3864,47,3323,36,2947,31"/>
-<area shape="rect" id="Node000065" href="$oscillator__section_8h.html" title=" " alt="" coords="3424,96,3561,139"/>
-<area shape="poly" id="edge89_Node000001_Node000065" title=" " alt="" coords="2948,32,3159,55,3285,73,3412,93,3424,96,3423,101,3411,99,3285,78,3158,61,2947,38"/>
-<area shape="rect" id="Node000067" href="$reverb__section_8h.html" title="UI section for reverb effect controls (feedback, damping, mix)." alt="" coords="3586,96,3717,139"/>
-<area shape="poly" id="edge92_Node000001_Node000067" title=" " alt="" coords="2947,29,3226,49,3400,68,3574,93,3586,96,3585,101,3574,99,3399,73,3225,54,2947,34"/>
-<area shape="rect" id="Node000069" href="$step__sequencer__section_8h.html" title="UI section for the graphical step sequencer and controls." alt="" coords="3741,96,3919,139"/>
-<area shape="poly" id="edge95_Node000001_Node000069" title=" " alt="" coords="2948,29,3289,49,3508,68,3729,93,3742,95,3741,100,3728,99,3507,73,3288,54,2947,34"/>
-<area shape="rect" id="Node000071" href="$stutter__section_8h.html" title="UI section providing stutter and resample effects controls." alt="" coords="3943,96,4074,139"/>
-<area shape="poly" id="edge98_Node000001_Node000071" title=" " alt="" coords="2947,25,3125,28,3370,38,3649,58,3792,74,3932,93,3943,95,3942,101,3931,99,3791,79,3649,64,3369,43,3125,34,2947,31"/>
-<area shape="rect" id="Node000073" href="$sub__section_8h.html" title="Header for the sub&#45;oscillator UI subsection." alt="" coords="4099,96,4230,139"/>
-<area shape="poly" id="edge101_Node000001_Node000073" title=" " alt="" coords="2947,24,3148,26,3431,34,3757,55,3923,72,4086,93,4099,96,4098,101,4086,99,3923,77,3756,60,3431,39,3148,31,2947,30"/>
-<area shape="rect" id="Node000075" href="$voice__section_8h.html" title="Header for voice&#45;related synth UI controls (polyphony, pitch bend)." alt="" coords="4255,96,4386,139"/>
-<area shape="poly" id="edge105_Node000001_Node000075" title=" " alt="" coords="2947,27,3596,48,3969,68,4125,80,4242,93,4255,96,4254,101,4242,99,4124,85,3969,73,3596,54,2947,33"/>
-<area shape="rect" id="Node000077" href="$volume__section_8h.html" title=" " alt="" coords="4411,96,4542,139"/>
-<area shape="poly" id="edge108_Node000001_Node000077" title=" " alt="" coords="2947,27,3250,33,3669,46,4090,66,4266,79,4398,93,4411,95,4410,101,4398,99,4265,84,4090,71,3669,52,3250,39,2947,32"/>
-<area shape="rect" id="Node000003" href="$patch__selector_8cpp.html" title=" " alt="" coords="5,467,159,509"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="808,237,142,469,140,464,806,232"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="973,212,2252,291,2252,296,973,218"/>
-<area shape="rect" id="Node000025" href="$patch__browser_8cpp.html" title="Implementation of the PatchBrowser overlay used to load and manage patches." alt="" coords="182,467,318,509"/>
-<area shape="poly" id="edge44_Node000002_Node000025" title=" " alt="" coords="847,242,798,281,734,328,659,374,580,413,512,435,457,442,401,447,331,461,306,469,305,463,329,456,400,442,456,437,511,430,578,408,657,370,731,323,795,277,844,238"/>
-<area shape="rect" id="Node000005" href="$synth__gui__interface_8h.html" title="Interface between synth core and the GUI / full interface." alt="" coords="2333,368,2487,411"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="2352,329,2391,366,2387,370,2348,333"/>
-<area shape="rect" id="Node000017" href="$synth__button_8cpp.html" title=" " alt="" coords="839,467,992,509"/>
-<area shape="poly" id="edge37_Node000004_Node000017" title=" " alt="" coords="2237,314,1902,359,1468,413,1337,425,1234,430,1133,439,1004,461,975,469,974,463,1003,456,1132,434,1234,425,1336,420,1467,408,1901,354,2237,309"/>
-<area shape="rect" id="Node000018" href="$synth__slider_8cpp.html" title=" " alt="" coords="3873,467,4027,509"/>
-<area shape="poly" id="edge38_Node000004_Node000018" title=" " alt="" coords="2399,305,3219,386,3646,430,3862,456,3891,463,3890,469,3862,461,3646,436,3219,391,2399,311"/>
-<area shape="rect" id="Node000022" href="$full__interface_8cpp.html" title="Implementation of the top&#45;level FullInterface UI component." alt="" coords="4051,467,4182,509"/>
-<area shape="poly" id="edge39_Node000004_Node000022" title=" " alt="" coords="2399,302,2760,327,3230,365,3636,406,3889,434,4040,456,4066,464,4064,469,4039,461,3888,440,3635,411,3230,371,2759,332,2399,308"/>
-<area shape="rect" id="Node000023" href="$modulation__manager_8cpp.html" title="Implementation of modulation manager: highlights, meters and sliders." alt="" coords="4714,467,4884,509"/>
-<area shape="poly" id="edge40_Node000004_Node000023" title=" " alt="" coords="2399,300,2970,321,3364,340,3766,365,4031,381,4237,393,4442,413,4703,456,4734,463,4733,469,4701,461,4441,418,4236,398,4030,386,3766,371,3364,346,2970,326,2399,305"/>
-<area shape="rect" id="Node000024" href="$open__gl__modulation__manager_8cpp.html" title="Implementation of OpenGLModulationManager (OpenGL visualization of modulations)." alt="" coords="4206,459,4347,517"/>
-<area shape="poly" id="edge41_Node000004_Node000024" title=" " alt="" coords="2399,300,2847,321,3147,340,3452,365,3614,385,3776,408,3894,419,3986,425,4078,434,4195,456,4207,459,4206,464,4193,461,4077,440,3986,431,3893,425,3775,413,3613,391,3451,371,3147,346,2847,327,2399,306"/>
-<area shape="rect" id="Node000030" href="$plugin_2helmBoy__editor_8h.html" title=" " alt="" coords="4370,467,4503,509"/>
-<area shape="poly" id="edge42_Node000004_Node000030" title=" " alt="" coords="2399,298,2614,301,2919,312,3273,332,3455,347,3633,365,3698,375,3748,386,3862,408,4002,422,4112,425,4221,432,4285,441,4360,456,4386,463,4384,469,4359,461,4284,446,4221,438,4112,431,4002,427,3862,413,3747,391,3697,380,3632,371,3454,352,3273,337,2919,317,2614,307,2399,303"/>
-<area shape="rect" id="Node000033" href="$standalone_2helmBoy__editor_8h.html" title=" " alt="" coords="653,467,815,509"/>
-<area shape="poly" id="edge43_Node000004_Node000033" title=" " alt="" coords="2237,307,1901,329,1685,347,1468,371,1341,391,1214,413,1105,426,1020,433,935,442,827,461,797,469,796,463,825,456,934,437,1019,428,1104,421,1214,408,1340,386,1467,365,1685,342,1901,323,2237,301"/>
-<area shape="rect" id="Node000036" href="$open__gl__component_8cpp.html" title=" " alt="" coords="2143,368,2309,411"/>
-<area shape="poly" id="edge36_Node000004_Node000036" title=" " alt="" coords="2288,333,2249,370,2245,366,2284,329"/>
-<area shape="poly" id="edge15_Node000005_Node000003" title=" " alt="" coords="2318,413,2217,422,2102,428,1838,434,1233,429,924,427,633,429,376,439,266,449,170,461,139,469,138,463,170,456,265,443,376,434,633,424,924,421,1233,424,1838,428,2102,423,2217,417,2317,408"/>
-<area shape="rect" id="Node000006" href="$synth__base_8cpp.html" title=" " alt="" coords="1741,475,1930,501"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="2319,414,2212,429,2129,436,2047,445,1944,461,1879,477,1878,471,1943,456,2046,439,2128,431,2212,423,2318,408"/>
-<area shape="rect" id="Node000007" href="$synth__gui__interface_8cpp.html" title=" " alt="" coords="1955,467,2108,509"/>
-<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="2319,414,2121,461,2096,469,2094,464,2120,456,2318,409"/>
-<area shape="rect" id="Node000008" href="$bpm__slider_8cpp.html" title=" " alt="" coords="2132,467,2285,509"/>
-<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="2354,420,2253,469,2251,464,2352,415"/>
-<area shape="rect" id="Node000009" href="$graphical__step__sequencer_8cpp.html" title=" " alt="" coords="2309,467,2511,509"/>
-<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="2413,426,2413,466,2407,466,2407,426"/>
-<area shape="rect" id="Node000010" href="$modulation__button_8cpp.html" title=" " alt="" coords="2534,467,2691,509"/>
-<area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="2468,415,2570,464,2568,469,2466,420"/>
-<area shape="rect" id="Node000011" href="$modulation__meter_8cpp.html" title=" " alt="" coords="2715,467,2868,509"/>
-<area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="2502,407,2704,456,2729,463,2728,469,2703,461,2501,413"/>
-<area shape="rect" id="Node000012" href="$open__gl__envelope_8cpp.html" title=" " alt="" coords="2892,467,3046,509"/>
-<area shape="poly" id="edge11_Node000005_Node000012" title=" " alt="" coords="2502,397,2679,419,2781,436,2881,456,2909,463,2908,469,2880,461,2780,441,2678,424,2501,402"/>
-<area shape="rect" id="Node000013" href="$open__gl__modulation__meter_8cpp.html" title=" " alt="" coords="3070,467,3275,509"/>
-<area shape="poly" id="edge12_Node000005_Node000013" title=" " alt="" coords="2503,394,2754,415,2906,433,3058,456,3095,464,3094,469,3058,461,2906,438,2754,421,2502,399"/>
-<area shape="rect" id="Node000014" href="$open__gl__peak__meter_8cpp.html" title=" " alt="" coords="3300,467,3470,509"/>
-<area shape="poly" id="edge13_Node000005_Node000014" title=" " alt="" coords="2502,389,2653,394,2849,404,3068,424,3288,456,3321,464,3320,469,3287,461,3067,430,2848,410,2652,399,2502,394"/>
-<area shape="rect" id="Node000015" href="$open__gl__wave__viewer_8cpp.html" title=" " alt="" coords="3494,467,3672,509"/>
-<area shape="poly" id="edge14_Node000005_Node000015" title=" " alt="" coords="2502,387,2684,390,2928,399,3204,420,3345,436,3482,456,3517,463,3516,469,3482,461,3344,441,3204,425,2928,405,2684,395,2502,393"/>
-<area shape="rect" id="Node000016" href="$retrigger__selector_8cpp.html" title=" " alt="" coords="3696,467,3849,509"/>
-<area shape="poly" id="edge16_Node000005_Node000016" title=" " alt="" coords="2502,390,2762,397,3103,409,3440,429,3579,441,3685,456,3716,463,3714,469,3684,461,3579,447,3440,434,3103,415,2762,402,2502,395"/>
-<area shape="poly" id="edge17_Node000005_Node000017" title=" " alt="" coords="2318,413,2118,432,1948,438,1797,434,1657,427,1517,422,1369,422,1201,434,1004,461,973,469,972,463,1003,456,1200,428,1368,417,1518,416,1657,422,1798,429,1948,432,2118,427,2317,408"/>
-<area shape="poly" id="edge18_Node000005_Node000018" title=" " alt="" coords="2502,391,3244,418,3635,437,3778,447,3862,456,3893,464,3892,469,3862,461,3777,452,3635,442,3244,423,2502,396"/>
-<area shape="rect" id="Node000019" href="$tempo__selector_8cpp.html" title=" " alt="" coords="1016,467,1169,509"/>
-<area shape="poly" id="edge19_Node000005_Node000019" title=" " alt="" coords="2318,413,2145,430,1998,436,1867,434,1746,429,1625,425,1496,426,1351,437,1181,461,1150,469,1149,463,1180,456,1351,431,1496,421,1625,419,1746,423,1868,428,1998,430,2145,425,2317,408"/>
-<area shape="rect" id="Node000020" href="$wave__viewer_8cpp.html" title=" " alt="" coords="1193,467,1347,509"/>
-<area shape="poly" id="edge20_Node000005_Node000020" title=" " alt="" coords="2318,414,2172,428,2048,434,1836,430,1734,428,1625,430,1503,440,1360,461,1329,469,1327,464,1359,456,1502,435,1625,425,1734,423,1836,425,2048,429,2172,423,2317,408"/>
-<area shape="poly" id="edge21_Node000005_Node000021" title=" " alt="" coords="2318,413,2133,426,1908,431,1391,428,1127,426,880,430,661,440,568,449,487,461,459,469,457,463,485,456,567,444,661,435,879,424,1127,421,1391,422,1908,426,2133,421,2318,408"/>
-<area shape="poly" id="edge22_Node000005_Node000022" title=" " alt="" coords="2502,390,3335,415,3781,434,3944,445,4040,456,4067,463,4066,469,4039,461,3943,450,3781,440,3335,420,2502,396"/>
-<area shape="poly" id="edge23_Node000005_Node000023" title=" " alt="" coords="2502,389,3670,412,4322,432,4561,444,4702,456,4737,464,4736,469,4702,461,4561,449,4322,437,3670,417,2502,395"/>
-<area shape="poly" id="edge24_Node000005_Node000024" title=" " alt="" coords="2502,388,2854,390,3343,399,3598,408,3835,420,4040,436,4194,456,4207,459,4206,464,4194,461,4039,441,3835,425,3597,413,3343,405,2854,396,2502,393"/>
-<area shape="poly" id="edge25_Node000005_Node000025" title=" " alt="" coords="2318,413,2118,427,1873,432,1313,427,1027,425,758,428,520,439,419,448,331,461,302,469,301,463,329,456,418,443,520,434,757,423,1027,420,1313,422,1873,426,2117,422,2317,408"/>
-<area shape="rect" id="Node000026" href="$save__section_8cpp.html" title="Implementation of the SaveSection overlay used to save patches." alt="" coords="1371,467,1502,509"/>
-<area shape="poly" id="edge26_Node000005_Node000026" title=" " alt="" coords="2318,413,2196,426,2091,431,1913,429,1828,428,1737,431,1635,441,1516,461,1489,469,1487,463,1515,456,1634,436,1737,426,1828,422,1913,424,2091,426,2195,421,2317,408"/>
-<area shape="poly" id="edge27_Node000005_Node000027" title=" " alt="" coords="2318,413,2148,425,1942,430,1468,428,1227,428,1001,431,801,441,715,450,641,461,614,469,612,463,640,456,715,445,800,436,1000,426,1227,422,1468,423,1941,425,2148,420,2318,408"/>
-<area shape="rect" id="Node000028" href="$synthesis__interface_8cpp.html" title="Implementation of the SynthesisInterface UI orchestration." alt="" coords="4527,467,4690,509"/>
-<area shape="poly" id="edge28_Node000005_Node000028" title=" " alt="" coords="2502,388,2910,389,3492,398,3797,406,4083,418,4330,435,4516,456,4549,464,4548,469,4515,461,4329,440,4083,423,3797,411,3492,403,2910,395,2502,393"/>
-<area shape="rect" id="Node000029" href="$modulation__look__and__feel_8cpp.html" title=" " alt="" coords="1527,467,1717,509"/>
-<area shape="poly" id="edge29_Node000005_Node000029" title=" " alt="" coords="2318,413,2229,425,2152,431,2021,435,1892,441,1817,448,1729,461,1694,469,1693,463,1728,456,1816,443,1892,436,2021,430,2152,426,2228,419,2318,408"/>
-<area shape="poly" id="edge30_Node000005_Node000030" title=" " alt="" coords="2502,390,3498,412,4043,432,4242,443,4360,456,4388,464,4386,469,4359,461,4242,449,4043,437,3498,417,2502,395"/>
-<area shape="poly" id="edge33_Node000005_Node000033" title=" " alt="" coords="2318,413,2091,434,1898,440,1728,436,1569,428,1410,420,1241,420,1050,432,943,444,826,461,794,469,793,464,826,456,942,439,1050,426,1241,415,1410,415,1569,422,1728,431,1898,435,2091,429,2317,408"/>
-<area shape="rect" id="Node000031" href="$plugin_2helmBoy__editor_8cpp.html" title=" " alt="" coords="4292,565,4424,608"/>
-<area shape="poly" id="edge31_Node000030_Node000031" title=" " alt="" coords="4413,523,4377,567,4373,563,4409,519"/>
-<area shape="rect" id="Node000032" href="$helmBoy__plugin_8cpp.html" title=" " alt="" coords="4448,565,4580,608"/>
-<area shape="poly" id="edge32_Node000030_Node000032" title=" " alt="" coords="4465,520,4500,563,4496,567,4461,523"/>
-<area shape="rect" id="Node000034" href="$standalone_2helmBoy__editor_8cpp.html" title=" " alt="" coords="560,565,721,608"/>
-<area shape="poly" id="edge34_Node000033_Node000034" title=" " alt="" coords="706,522,662,567,659,563,702,518"/>
-<area shape="rect" id="Node000035" href="$main_8cpp.html" title=" " alt="" coords="746,573,909,600"/>
-<area shape="poly" id="edge35_Node000033_Node000035" title=" " alt="" coords="766,518,817,571,813,575,762,522"/>
-<area shape="poly" id="edge48_Node000037_Node000004" title=" " alt="" coords="1367,150,1347,169,1331,189,1325,209,1327,219,1333,227,1351,239,1381,249,1472,266,1595,278,1736,286,2028,294,2252,295,2252,301,2028,300,1736,292,1594,283,1472,271,1380,254,1349,244,1329,231,1322,221,1320,209,1326,187,1343,165,1364,146"/>
-<area shape="rect" id="Node000038" href="$arp__section_8cpp.html" title="Implementation of the ArpSection UI for the arpeggiator." alt="" coords="1343,187,1474,229"/>
-<area shape="poly" id="edge47_Node000037_Node000038" title=" " alt="" coords="1411,154,1411,186,1406,186,1406,154"/>
-<area shape="poly" id="edge51_Node000039_Node000004" title=" " alt="" coords="1572,150,1552,169,1537,189,1531,209,1533,219,1539,227,1552,236,1575,245,1644,259,1737,270,1845,279,2072,290,2252,294,2252,299,2071,295,1845,284,1737,276,1643,264,1573,250,1549,241,1535,231,1528,221,1526,209,1532,187,1548,165,1569,146"/>
-<area shape="rect" id="Node000040" href="$bpm__section_8cpp.html" title="UI implementation for the BPM control section." alt="" coords="1548,187,1680,229"/>
-<area shape="poly" id="edge50_Node000039_Node000040" title=" " alt="" coords="1617,154,1617,186,1611,186,1611,154"/>
-<area shape="rect" id="Node000042" href="$delay__section_8cpp.html" title="Implementation of the DelaySection UI." alt="" coords="1754,187,1885,229"/>
-<area shape="poly" id="edge53_Node000041_Node000042" title=" " alt="" coords="1871,152,1839,188,1835,185,1867,149"/>
-<area shape="rect" id="Node000043" href="$synthesis__interface_8h.html" title="Central UI container for all synthesis sections and controls." alt="" coords="3270,187,3419,229"/>
-<area shape="poly" id="edge54_Node000041_Node000043" title=" " alt="" coords="1978,136,2172,158,2337,167,2483,167,2619,162,2755,157,2901,156,3065,164,3258,184,3270,186,3269,191,3258,189,3065,169,2901,162,2755,163,2619,168,2483,172,2337,173,2171,164,1978,142"/>
-<area shape="poly" id="edge55_Node000043_Node000004" title=" " alt="" coords="3255,232,2999,263,2751,283,2537,294,2384,299,2384,293,2537,288,2751,277,2999,258,3254,227"/>
-<area shape="poly" id="edge56_Node000043_Node000028" title=" " alt="" coords="3435,227,3740,291,3978,336,4215,384,4516,456,4543,464,4542,469,4515,461,4214,390,3977,341,3739,296,3434,233"/>
-<area shape="poly" id="edge59_Node000044_Node000043" title=" " alt="" coords="2140,136,2310,155,2454,163,2581,164,2700,161,2819,158,2946,158,3090,166,3258,184,3270,186,3269,191,3258,189,3089,171,2946,164,2819,163,2700,166,2581,169,2454,169,2309,161,2140,141"/>
-<area shape="rect" id="Node000045" href="$distortion__section_8cpp.html" title="Implementation of DistortionSection UI." alt="" coords="1908,187,2061,229"/>
-<area shape="poly" id="edge58_Node000044_Node000045" title=" " alt="" coords="2032,153,2003,188,1999,185,2027,149"/>
-<area shape="poly" id="edge62_Node000046_Node000043" title=" " alt="" coords="2298,136,2444,153,2568,161,2677,163,2779,161,2882,159,2991,160,3114,168,3258,184,3270,186,3269,191,3258,189,3113,173,2990,166,2882,165,2780,166,2677,168,2567,166,2443,159,2297,141"/>
-<area shape="rect" id="Node000047" href="$dynamic__section_8cpp.html" title="Implementation of dynamics section UI (portamento, legato)." alt="" coords="2085,187,2234,229"/>
-<area shape="poly" id="edge61_Node000046_Node000047" title=" " alt="" coords="2196,153,2175,188,2170,185,2192,151"/>
-<area shape="poly" id="edge65_Node000048_Node000043" title=" " alt="" coords="2460,136,2581,151,2684,159,2860,161,3036,163,3138,170,3258,184,3270,186,3269,191,3258,189,3138,175,3035,168,2860,166,2683,164,2580,157,2459,142"/>
-<area shape="rect" id="Node000049" href="$envelope__section_8cpp.html" title="Implementation of EnvelopeSection UI (ADSR + visualization)." alt="" coords="2257,187,2408,229"/>
-<area shape="poly" id="edge64_Node000048_Node000049" title=" " alt="" coords="2361,154,2345,188,2340,185,2356,152"/>
-<area shape="poly" id="edge68_Node000050_Node000043" title=" " alt="" coords="2630,136,2725,148,2806,155,2945,160,3084,165,3164,172,3258,184,3270,186,3269,191,3258,189,3164,177,3083,170,2945,165,2806,161,2724,154,2629,142"/>
-<area shape="rect" id="Node000051" href="$extra__mod__section_8cpp.html" title="Implementation of the ExtraModSection UI." alt="" coords="2432,187,2593,229"/>
-<area shape="poly" id="edge67_Node000050_Node000051" title=" " alt="" coords="2532,154,2522,187,2517,186,2527,153"/>
-<area shape="poly" id="edge71_Node000052_Node000043" title=" " alt="" coords="2792,136,2924,154,3027,161,3129,167,3258,184,3270,186,3269,191,3258,189,3129,173,3026,166,2923,159,2792,142"/>
-<area shape="rect" id="Node000053" href="$feedback__section_8cpp.html" title="Implementation of the FeedbackSection UI." alt="" coords="2616,187,2769,229"/>
-<area shape="poly" id="edge70_Node000052_Node000053" title=" " alt="" coords="2704,154,2699,187,2693,186,2699,153"/>
-<area shape="poly" id="edge74_Node000054_Node000043" title=" " alt="" coords="2947,136,3035,152,3104,161,3173,170,3258,184,3270,186,3269,192,3258,189,3172,175,3104,166,3035,157,2946,142"/>
-<area shape="rect" id="Node000055" href="$filter__section_8cpp.html" title="Implementation of the filter UI section." alt="" coords="2792,187,2924,229"/>
-<area shape="poly" id="edge73_Node000054_Node000055" title=" " alt="" coords="2865,154,2863,187,2857,186,2860,154"/>
-<area shape="poly" id="edge77_Node000056_Node000043" title=" " alt="" coords="3103,138,3270,184,3269,189,3102,143"/>
-<area shape="rect" id="Node000057" href="$formant__section_8cpp.html" title="Implementation of the FormantSection UI." alt="" coords="2948,187,3091,229"/>
-<area shape="poly" id="edge76_Node000056_Node000057" title=" " alt="" coords="3024,154,3023,186,3017,186,3018,154"/>
-<area shape="poly" id="edge81_Node000058_Node000043" title=" " alt="" coords="3232,144,3307,184,3305,189,3229,149"/>
-<area shape="rect" id="Node000059" href="$lfo__section_8cpp.html" title="Implementation of the LfoSection UI." alt="" coords="3115,187,3246,229"/>
-<area shape="poly" id="edge80_Node000058_Node000059" title=" " alt="" coords="3182,154,3183,186,3177,186,3176,154"/>
-<area shape="poly" id="edge84_Node000060_Node000043" title=" " alt="" coords="3341,154,3345,186,3340,187,3336,155"/>
-<area shape="rect" id="Node000061" href="$mixer__section_8cpp.html" title="Implementation of the MixerSection UI." alt="" coords="3443,187,3574,229"/>
-<area shape="poly" id="edge83_Node000060_Node000061" title=" " alt="" coords="3390,144,3469,184,3467,189,3387,148"/>
-<area shape="poly" id="edge86_Node000062_Node000023" title=" " alt="" coords="4802,335,4802,466,4797,466,4797,335"/>
-<area shape="rect" id="Node000064" href="$noise__section_8cpp.html" title="Implementation of the NoiseSection UI." alt="" coords="4836,187,4968,229"/>
-<area shape="poly" id="edge88_Node000063_Node000064" title=" " alt="" coords="4905,154,4905,186,4899,186,4899,154"/>
-<area shape="poly" id="edge91_Node000065_Node000043" title=" " alt="" coords="3446,149,3381,188,3378,184,3444,145"/>
-<area shape="rect" id="Node000066" href="$oscillator__section_8cpp.html" title="Implementation of the oscillator UI section." alt="" coords="3598,187,3750,229"/>
-<area shape="poly" id="edge90_Node000065_Node000066" title=" " alt="" coords="3550,143,3633,184,3631,189,3548,148"/>
-<area shape="poly" id="edge94_Node000067_Node000043" title=" " alt="" coords="3571,144,3417,189,3416,183,3570,139"/>
-<area shape="rect" id="Node000068" href="$reverb__section_8cpp.html" title="Implementation of ReverbSection UI." alt="" coords="3774,187,3910,229"/>
-<area shape="poly" id="edge93_Node000067_Node000068" title=" " alt="" coords="3711,143,3799,184,3796,189,3709,148"/>
-<area shape="poly" id="edge97_Node000069_Node000043" title=" " alt="" coords="3727,142,3577,165,3432,189,3420,192,3419,186,3431,184,3576,160,3726,136"/>
-<area shape="rect" id="Node000070" href="$step__sequencer__section_8cpp.html" title="Implementation of StepSequencerSection UI." alt="" coords="3934,187,4126,229"/>
-<area shape="poly" id="edge96_Node000069_Node000070" title=" " alt="" coords="3892,143,3984,184,3982,188,3890,148"/>
-<area shape="poly" id="edge100_Node000071_Node000043" title=" " alt="" coords="3928,142,3788,160,3678,166,3569,172,3432,189,3420,191,3419,186,3431,184,3569,167,3678,161,3788,155,3928,136"/>
-<area shape="rect" id="Node000072" href="$stutter__section_8cpp.html" title="Implementation of the StutterSection UI." alt="" coords="4150,187,4286,229"/>
-<area shape="poly" id="edge99_Node000071_Node000072" title=" " alt="" coords="4073,143,4170,184,4168,188,4071,148"/>
-<area shape="poly" id="edge103_Node000073_Node000043" title=" " alt="" coords="4084,141,3985,155,3900,162,3756,166,3613,170,3529,177,3432,189,3420,191,3419,186,3431,184,3529,172,3612,165,3756,161,3900,157,3984,149,4084,136"/>
-<area shape="rect" id="Node000074" href="$sub__section_8cpp.html" title="Implementation of the sub&#45;oscillator editor subsection." alt="" coords="4310,187,4441,229"/>
-<area shape="poly" id="edge102_Node000073_Node000074" title=" " alt="" coords="4229,143,4327,184,4325,188,4227,148"/>
-<area shape="poly" id="edge106_Node000075_Node000043" title=" " alt="" coords="4240,141,4117,157,4012,164,3834,166,3656,168,3553,175,3432,189,3420,191,3419,186,3431,184,3552,170,3656,163,3834,161,4012,159,4117,151,4239,136"/>
-<area shape="rect" id="Node000076" href="$voice__section_8cpp.html" title="Implementation of the voice controls UI (polyphony, pitch bend, etc.)." alt="" coords="4466,187,4597,229"/>
-<area shape="poly" id="edge107_Node000075_Node000076" title=" " alt="" coords="4385,143,4483,184,4481,188,4383,148"/>
-<area shape="poly" id="edge109_Node000077_Node000043" title=" " alt="" coords="4396,141,4250,159,4125,167,4015,168,3912,167,3809,165,3700,166,3576,173,3432,189,3420,191,3419,186,3431,184,3576,168,3700,161,3809,159,3912,161,4015,163,4125,162,4249,154,4396,136"/>
-<area shape="rect" id="Node000078" href="$volume__section_8cpp.html" title="Implementation of VolumeSection UI (volume slider + peak meters)." alt="" coords="4621,187,4762,229"/>
-<area shape="poly" id="edge110_Node000077_Node000078" title=" " alt="" coords="4542,142,4642,184,4640,188,4540,147"/>
+<area shape="rect" id="Node000001" title="Base class for UI sections used in the HelmBoy interface." alt="" coords="3601,5,3732,48"/>
+<area shape="rect" id="Node000002" href="$patch__selector_8h.html" title="Interface principale de s�lection et gestion de patches (load/save/browse)." alt="" coords="250,187,403,229"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="3582,28,2960,31,2013,38,1529,46,1096,58,759,75,640,86,562,99,504,116,448,140,360,188,357,184,446,135,502,111,560,93,639,81,758,70,1096,53,1529,40,2013,32,2960,25,3587,27"/>
+<area shape="rect" id="Node000004" href="$full__interface_8h.html" title="Main synthesizer interface integrating all UI components." alt="" coords="2403,277,2535,320"/>
+<area shape="poly" id="edge82_Node000001_Node000004" title=" " alt="" coords="3582,29,3296,37,2914,49,2560,69,2433,83,2388,90,2359,98,2308,123,2266,153,2253,169,2246,187,2247,207,2258,228,2287,256,2324,275,2364,287,2405,296,2400,296,2363,292,2322,280,2284,260,2254,231,2242,208,2241,187,2248,167,2263,149,2306,118,2357,94,2387,85,2432,77,2560,64,2913,44,3296,32,3588,29"/>
+<area shape="rect" id="Node000019" href="$about__section_8cpp.html" title="Implementation of the AboutSection overlay UI." alt="" coords="342,459,473,501"/>
+<area shape="poly" id="edge46_Node000001_Node000019" title=" " alt="" coords="3582,29,3022,36,2182,48,1372,68,1074,82,969,90,899,99,842,105,786,106,684,108,642,115,610,132,599,145,590,161,584,181,582,207,582,300,579,328,569,353,554,377,536,399,493,434,451,461,449,456,490,430,532,395,550,374,564,351,574,326,577,300,577,207,579,181,585,159,594,142,607,128,641,110,683,102,786,101,842,100,898,93,968,85,1073,77,1372,63,2182,42,3022,31,3588,28"/>
+<area shape="rect" id="Node000024" href="$synth__section_8cpp.html" title="Implementation of the SynthSection base UI class." alt="" coords="498,459,629,501"/>
+<area shape="poly" id="edge112_Node000001_Node000024" title=" " alt="" coords="3582,29,2933,40,2463,50,1964,66,1487,89,1273,103,1084,119,926,138,805,159,760,171,728,183,709,195,702,207,702,300,699,326,691,351,664,395,629,433,595,460,593,456,626,429,660,392,686,349,694,325,697,300,697,206,705,191,726,178,759,165,804,154,925,133,1083,114,1273,97,1487,83,1964,61,2463,45,2933,34,3588,28"/>
+<area shape="rect" id="Node000037" href="$arp__section_8h.html" title="UI section for the arpeggiator controls." alt="" coords="2370,96,2501,139"/>
+<area shape="poly" id="edge47_Node000001_Node000037" title=" " alt="" coords="3582,31,3149,53,2858,72,2564,99,2502,107,2502,102,2563,93,2858,66,3148,47,3588,30"/>
+<area shape="rect" id="Node000039" href="$bpm__section_8h.html" title="UI section exposing BPM control for the synth (header)." alt="" coords="2575,96,2707,139"/>
+<area shape="poly" id="edge50_Node000001_Node000039" title=" " alt="" coords="3583,31,3221,53,2985,72,2747,99,2708,105,2707,100,2746,93,2985,67,3221,48,3588,31"/>
+<area shape="rect" id="Node000041" href="$chorus__section_8h.html" title=" " alt="" coords="2966,96,3097,139"/>
+<area shape="poly" id="edge53_Node000001_Node000041" title=" " alt="" coords="3583,35,3370,60,3240,77,3111,99,3098,101,3097,96,3110,93,3240,72,3370,55,3588,34"/>
+<area shape="rect" id="Node000044" href="$delay__section_8h.html" title="Digital delay effect control UI section." alt="" coords="3122,96,3253,139"/>
+<area shape="poly" id="edge58_Node000001_Node000044" title=" " alt="" coords="3588,39,3436,66,3266,99,3254,101,3253,96,3264,93,3435,61,3583,40"/>
+<area shape="rect" id="Node000046" href="$distortion__section_8h.html" title="UI section for distortion effect controls." alt="" coords="3277,96,3416,139"/>
+<area shape="poly" id="edge61_Node000001_Node000046" title=" " alt="" coords="3588,50,3416,99,3415,94,3583,51"/>
+<area shape="rect" id="Node000048" href="$dynamic__section_8h.html" title="Header for dynamics&#45;related synth UI controls (portamento, legato)." alt="" coords="3439,96,3574,139"/>
+<area shape="poly" id="edge64_Node000001_Node000048" title=" " alt="" coords="3618,55,3544,98,3543,93,3613,57"/>
+<area shape="rect" id="Node000050" href="$envelope__section_8h.html" title="UI section for ADSR envelope controls and visualization." alt="" coords="3598,96,3735,139"/>
+<area shape="poly" id="edge67_Node000001_Node000050" title=" " alt="" coords="3668,62,3668,97,3664,94,3665,66"/>
+<area shape="rect" id="Node000052" href="$extra__mod__section_8h.html" title="UI section exposing extra modulation sources (aftertouch, velocity...)." alt="" coords="3758,96,3905,139"/>
+<area shape="poly" id="edge70_Node000001_Node000052" title=" " alt="" coords="3719,53,3796,96,3791,95,3718,58"/>
+<area shape="rect" id="Node000054" href="$feedback__section_8h.html" title="UI section for oscillator feedback controls (transpose, tune, amount)." alt="" coords="3929,96,4068,139"/>
+<area shape="poly" id="edge73_Node000001_Node000054" title=" " alt="" coords="3747,47,3932,98,3926,98,3747,52"/>
+<area shape="rect" id="Node000056" href="$filter__section_8h.html" title="UI section for filter controls, cutoff, resonance and response." alt="" coords="4091,96,4223,139"/>
+<area shape="poly" id="edge76_Node000001_Node000056" title=" " alt="" coords="3748,36,3902,60,4080,93,4094,99,4088,98,4079,99,3902,66,3748,42"/>
+<area shape="rect" id="Node000058" href="$formant__section_8h.html" title="UI section for formant control (XY pad and sliders)." alt="" coords="5546,96,5677,139"/>
+<area shape="poly" id="edge79_Node000001_Node000058" title=" " alt="" coords="3748,26,4109,31,4625,42,5149,62,5368,76,5533,93,5548,98,5543,98,5533,99,5368,81,5149,67,4625,47,4109,36,3748,31"/>
+<area shape="rect" id="Node000059" href="$lfo__section_8h.html" title="UI section for LFO controls and visualization." alt="" coords="4247,96,4379,139"/>
+<area shape="poly" id="edge83_Node000001_Node000059" title=" " alt="" coords="3747,32,3968,54,4102,72,4235,93,4250,99,4244,98,4234,99,4101,77,3967,59,3747,37"/>
+<area shape="rect" id="Node000061" href="$limiter__section_8h.html" title=" " alt="" coords="2061,96,2192,139"/>
+<area shape="poly" id="edge86_Node000001_Node000061" title=" " alt="" coords="3582,30,2900,54,2502,73,2337,85,2212,99,2193,102,2192,97,2211,93,2337,80,2502,68,2900,49,3588,29"/>
+<area shape="rect" id="Node000063" href="$mixer__section_8h.html" title="UI section for mixer controls (osc, sub, noise volumes)." alt="" coords="4403,96,4535,139"/>
+<area shape="poly" id="edge89_Node000001_Node000063" title=" " alt="" coords="3747,29,4033,49,4212,67,4391,93,4406,99,4400,98,4390,99,4211,73,4032,54,3748,34"/>
+<area shape="rect" id="Node000065" href="$modulation__manager_8h.html" title="Manages modulation overlays, meters and modulation sliders." alt="" coords="2679,187,2835,229"/>
+<area shape="poly" id="edge92_Node000001_Node000065" title=" " alt="" coords="3582,30,3385,38,3139,50,2919,69,2842,83,2816,90,2800,98,2783,117,2771,140,2760,188,2756,184,2766,139,2778,114,2797,94,2814,85,2841,77,2918,64,3138,44,3385,32,3588,29"/>
+<area shape="rect" id="Node000066" href="$noise__section_8h.html" title="UI section for noise generator controls (volume)." alt="" coords="5762,96,5893,139"/>
+<area shape="poly" id="edge95_Node000001_Node000066" title=" " alt="" coords="3747,25,4061,26,4539,34,5107,54,5401,71,5689,93,5764,105,5759,105,5689,99,5401,77,5107,60,4539,39,4061,31,3748,30"/>
+<area shape="rect" id="Node000068" href="$oscillator__section_8h.html" title=" " alt="" coords="4559,96,4696,139"/>
+<area shape="poly" id="edge97_Node000001_Node000068" title=" " alt="" coords="3747,27,3897,33,4096,44,4321,64,4547,93,4561,98,4556,98,4546,99,4320,69,4096,50,3897,38,3747,32"/>
+<area shape="rect" id="Node000070" href="$reverb__section_8h.html" title="UI section for reverb effect controls (feedback, damping, mix)." alt="" coords="4721,96,4852,139"/>
+<area shape="poly" id="edge100_Node000001_Node000070" title=" " alt="" coords="3747,25,3922,29,4161,39,4434,59,4573,74,4709,93,4723,98,4718,98,4709,99,4573,79,4433,64,4161,44,3922,34,3747,31"/>
+<area shape="rect" id="Node000072" href="$step__sequencer__section_8h.html" title="UI section for the graphical step sequencer and controls." alt="" coords="4876,96,5054,139"/>
+<area shape="poly" id="edge103_Node000001_Node000072" title=" " alt="" coords="3747,26,3945,30,4221,41,4540,61,4704,75,4864,93,4879,98,4873,98,4863,99,4703,81,4540,66,4221,46,3944,36,3747,31"/>
+<area shape="rect" id="Node000074" href="$stutter__section_8h.html" title="UI section providing stutter and resample effects controls." alt="" coords="5078,96,5209,139"/>
+<area shape="poly" id="edge106_Node000001_Node000074" title=" " alt="" coords="3747,27,4408,48,4788,67,4947,80,5067,93,5080,98,5075,98,5066,99,4946,85,4788,73,4407,53,3748,32"/>
+<area shape="rect" id="Node000076" href="$sub__section_8h.html" title="Header for the sub&#45;oscillator and noise UI subsection." alt="" coords="5234,96,5365,139"/>
+<area shape="poly" id="edge109_Node000001_Node000076" title=" " alt="" coords="3747,27,4054,33,4480,46,4908,66,5086,78,5221,93,5236,98,5231,98,5221,99,5086,84,4908,71,4480,51,4054,39,3748,32"/>
+<area shape="rect" id="Node000078" href="$voice__section_8h.html" title="Header for voice&#45;related synth UI controls (polyphony, pitch bend)." alt="" coords="5390,96,5521,139"/>
+<area shape="poly" id="edge113_Node000001_Node000078" title=" " alt="" coords="3747,26,4082,32,4553,44,5029,64,5227,77,5377,93,5392,98,5387,98,5377,99,5227,83,5029,69,4553,49,4082,37,3748,32"/>
+<area shape="rect" id="Node000080" href="$volume__section_8h.html" title=" " alt="" coords="2810,96,2941,139"/>
+<area shape="poly" id="edge116_Node000001_Node000080" title=" " alt="" coords="3582,32,3305,54,3130,73,2955,99,2942,101,2941,96,2954,93,3129,68,3305,49,3588,31"/>
+<area shape="rect" id="Node000003" href="$patch__selector_8cpp.html" title=" " alt="" coords="164,459,318,501"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="318,243,250,459,245,457,313,245"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="418,210,2403,292,2402,297,418,216"/>
+<area shape="rect" id="Node000022" href="$patch__browser_8cpp.html" title="Implementation of the PatchBrowser overlay used to load and manage patches." alt="" coords="5,459,141,501"/>
+<area shape="poly" id="edge45_Node000002_Node000022" title=" " alt="" coords="299,243,94,460,90,456,295,239"/>
+<area shape="rect" id="Node000005" href="$synth__gui__interface_8h.html" title="Interface between synth core and the GUI / full interface." alt="" coords="2295,368,2448,411"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="2438,330,2396,370,2393,365,2433,332"/>
+<area shape="rect" id="Node000010" href="$graphical__envelope_8cpp.html" title=" " alt="" coords="654,459,815,501"/>
+<area shape="poly" id="edge36_Node000004_Node000010" title=" " alt="" coords="2386,300,2185,305,1899,315,1568,335,1399,351,1233,371,1117,390,1001,414,810,461,809,455,1000,409,1116,385,1233,365,1398,345,1568,330,1898,309,2185,300,2391,300"/>
+<area shape="rect" id="Node000015" href="$synth__button_8cpp.html" title=" " alt="" coords="839,459,992,501"/>
+<area shape="poly" id="edge37_Node000004_Node000015" title=" " alt="" coords="2385,303,2002,324,1749,344,1493,371,1355,391,1217,416,993,463,992,458,1216,411,1354,386,1493,365,1748,338,2001,319,2391,302"/>
+<area shape="rect" id="Node000016" href="$synth__slider_8cpp.html" title=" " alt="" coords="1016,459,1170,501"/>
+<area shape="poly" id="edge38_Node000004_Node000016" title=" " alt="" coords="2385,308,2177,330,1878,363,1533,407,1183,461,1170,464,1170,458,1182,456,1532,402,1878,358,2176,325,2390,307"/>
+<area shape="rect" id="Node000020" href="$full__interface_8cpp.html" title="Implementation of the top&#45;level FullInterface UI component." alt="" coords="3465,459,3596,501"/>
+<area shape="poly" id="edge40_Node000004_Node000020" title=" " alt="" coords="2476,333,2492,375,2504,394,2520,408,2543,418,2579,426,2686,438,2824,445,2979,448,3275,450,3386,452,3452,456,3467,461,3462,461,3451,461,3385,457,3275,456,2979,454,2824,450,2686,443,2578,432,2541,423,2517,413,2500,397,2487,377,2473,337"/>
+<area shape="rect" id="Node000021" href="$modulation__manager_8cpp.html" title="Implementation of modulation manager: highlights, meters and sliders." alt="" coords="3961,459,4132,501"/>
+<area shape="poly" id="edge41_Node000004_Node000021" title=" " alt="" coords="2532,324,2613,366,2642,390,2654,400,2671,408,2727,424,2791,435,2944,450,3119,455,3305,454,3669,447,3825,448,3951,456,3963,460,3958,460,3950,461,3825,453,3669,452,3305,459,3119,460,2944,455,2791,441,2725,429,2669,413,2651,404,2638,394,2610,370,2531,329"/>
+<area shape="rect" id="Node000026" href="$volume__section_8cpp.html" title="Implementation of VolumeSection UI (volume slider + peak meters)." alt="" coords="4156,459,4297,501"/>
+<area shape="poly" id="edge42_Node000004_Node000026" title=" " alt="" coords="2543,323,2661,366,2713,390,2735,400,2766,408,2827,419,2898,427,3064,437,3253,440,3453,440,3842,440,4010,445,4144,456,4158,461,4153,460,4143,461,4009,450,3842,445,3453,446,3253,446,3064,442,2898,432,2826,424,2764,413,2733,405,2710,395,2659,370,2543,328"/>
+<area shape="rect" id="Node000028" href="$plugin_2helmBoy__editor_8h.html" title=" " alt="" coords="3620,459,3752,501"/>
+<area shape="poly" id="edge43_Node000004_Node000028" title=" " alt="" coords="2494,330,2535,377,2554,397,2570,408,2597,417,2639,424,2759,434,3085,444,3412,448,3535,451,3608,456,3622,461,3617,461,3607,461,3534,456,3412,454,3085,449,2759,439,2639,429,2596,422,2568,413,2551,401,2531,381,2492,335"/>
+<area shape="rect" id="Node000032" href="$standalone_2helmBoy__editor_8h.html" title=" " alt="" coords="3776,459,3938,501"/>
+<area shape="poly" id="edge44_Node000004_Node000032" title=" " alt="" coords="2512,327,2567,366,2593,390,2604,400,2621,408,2670,423,2728,434,2864,448,3021,453,3187,453,3513,447,3653,448,3765,456,3779,460,3773,460,3765,461,3653,454,3513,452,3187,458,3020,459,2864,453,2727,439,2669,428,2619,413,2601,404,2589,394,2563,370,2510,332"/>
+<area shape="rect" id="Node000035" href="$filter__response_8cpp.html" title=" " alt="" coords="2118,368,2271,411"/>
+<area shape="poly" id="edge35_Node000004_Node000035" title=" " alt="" coords="2393,325,2259,370,2258,365,2388,326"/>
+<area shape="rect" id="Node000036" href="$formant__section_8cpp.html" title="Implementation of the FormantSection UI." alt="" coords="2777,368,2921,411"/>
+<area shape="poly" id="edge39_Node000004_Node000036" title=" " alt="" coords="2550,316,2780,371,2774,371,2550,321"/>
+<area shape="poly" id="edge13_Node000005_Node000003" title=" " alt="" coords="2283,411,2126,430,1984,442,1733,451,1511,447,1304,437,1097,428,876,424,625,433,484,445,331,461,319,463,318,458,330,456,484,439,625,428,875,419,1097,422,1304,432,1511,442,1733,445,1984,436,2125,425,2277,411"/>
+<area shape="rect" id="Node000006" href="$synth__base_8cpp.html" title=" " alt="" coords="1408,467,1597,493"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="2282,411,2178,426,2091,434,1943,439,1796,444,1609,461,1563,469,1563,463,1609,456,1796,439,1943,434,2091,429,2177,421,2277,411"/>
+<area shape="rect" id="Node000007" href="$synth__gui__interface_8cpp.html" title=" " alt="" coords="1622,459,1775,501"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="2283,411,2141,431,2032,437,1924,444,1787,461,1776,463,1775,458,1786,456,1923,439,2032,432,2141,425,2277,411"/>
+<area shape="rect" id="Node000008" href="$bpm__slider_8cpp.html" title=" " alt="" coords="1799,459,1952,501"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="2282,411,2121,438,1964,461,1953,463,1953,458,1963,456,2120,432,2277,412"/>
+<area shape="rect" id="Node000009" href="$button__modulation__slider_8cpp.html" title=" " alt="" coords="1976,459,2170,501"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="2290,415,2144,461,2143,455,2285,416"/>
+<area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="2282,411,2060,436,1872,444,1706,443,1552,438,1398,433,1233,432,1046,440,827,461,816,463,815,458,826,456,1046,435,1232,426,1398,427,1552,433,1706,438,1872,439,2059,430,2277,411"/>
+<area shape="rect" id="Node000011" href="$graphical__step__sequencer_8cpp.html" title=" " alt="" coords="2194,459,2395,501"/>
+<area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="2346,421,2313,461,2311,456,2341,424"/>
+<area shape="rect" id="Node000012" href="$modulation__button_8cpp.html" title=" " alt="" coords="2419,459,2575,501"/>
+<area shape="poly" id="edge11_Node000005_Node000012" title=" " alt="" coords="2414,417,2470,459,2465,457,2412,422"/>
+<area shape="rect" id="Node000013" href="$modulation__meter_8cpp.html" title=" " alt="" coords="2599,459,2752,501"/>
+<area shape="poly" id="edge12_Node000005_Node000013" title=" " alt="" coords="2458,413,2607,458,2602,458,2457,418"/>
+<area shape="rect" id="Node000014" href="$retrigger__selector_8cpp.html" title=" " alt="" coords="2776,459,2930,501"/>
+<area shape="poly" id="edge14_Node000005_Node000014" title=" " alt="" coords="2464,407,2468,408,2617,432,2765,456,2778,461,2773,461,2765,461,2616,437,2467,413,2463,413"/>
+<area shape="poly" id="edge15_Node000005_Node000015" title=" " alt="" coords="2282,411,2086,433,1921,441,1776,441,1640,437,1505,433,1360,433,1196,441,1004,461,993,463,992,458,1003,456,1196,436,1360,428,1505,428,1640,432,1776,436,1921,436,2086,428,2277,411"/>
+<area shape="poly" id="edge16_Node000005_Node000016" title=" " alt="" coords="2282,411,2113,431,1971,439,1846,440,1730,437,1613,435,1489,436,1348,444,1183,461,1171,463,1170,458,1182,456,1347,438,1488,431,1613,430,1730,432,1846,434,1971,434,2113,426,2277,411"/>
+<area shape="rect" id="Node000017" href="$tempo__selector_8cpp.html" title=" " alt="" coords="2954,459,3107,501"/>
+<area shape="poly" id="edge17_Node000005_Node000017" title=" " alt="" coords="2464,407,2468,408,2601,424,2705,431,2810,439,2943,456,2956,461,2951,460,2942,461,2809,444,2705,437,2601,430,2467,413,2463,413"/>
+<area shape="rect" id="Node000018" href="$wave__viewer_8cpp.html" title=" " alt="" coords="3131,459,3284,501"/>
+<area shape="poly" id="edge18_Node000005_Node000018" title=" " alt="" coords="2464,407,2468,408,2567,420,2651,426,2794,431,2937,436,3021,443,3120,456,3133,461,3128,460,3119,461,3021,449,2937,441,2794,436,2650,432,2566,425,2467,413,2463,413"/>
+<area shape="poly" id="edge19_Node000005_Node000019" title=" " alt="" coords="2283,411,2138,429,2008,439,1776,447,1572,443,1381,433,1191,424,987,422,757,432,628,444,487,461,475,463,473,458,486,456,627,439,757,427,987,416,1191,419,1381,428,1572,437,1776,441,2008,434,2138,424,2277,411"/>
+<area shape="poly" id="edge20_Node000005_Node000020" title=" " alt="" coords="2464,407,2468,408,2617,423,2744,430,2960,428,3065,427,3176,429,3303,438,3452,456,3467,461,3462,461,3451,461,3303,443,3176,434,3065,432,2960,434,2744,435,2617,429,2467,413,2463,413"/>
+<area shape="poly" id="edge21_Node000005_Node000021" title=" " alt="" coords="2463,396,2620,408,2822,417,2994,420,3286,418,3427,419,3578,423,3749,435,3951,456,3963,460,3958,460,3950,461,3748,440,3578,429,3427,424,3286,424,2994,425,2822,422,2620,413,2463,402"/>
+<area shape="poly" id="edge22_Node000005_Node000022" title=" " alt="" coords="2282,411,2111,432,1957,443,1815,449,1682,451,1440,445,1214,432,988,420,746,416,615,419,473,427,319,441,152,461,142,463,140,458,151,456,319,436,473,422,614,414,746,411,988,415,1214,427,1440,440,1682,446,1814,444,1957,438,2111,426,2277,411"/>
+<area shape="rect" id="Node000023" href="$save__section_8cpp.html" title="Implementation of the SaveSection overlay used to save patches." alt="" coords="3309,459,3440,501"/>
+<area shape="poly" id="edge23_Node000005_Node000023" title=" " alt="" coords="2464,407,2468,408,2594,422,2700,428,2883,429,3065,431,3172,440,3297,456,3311,461,3306,460,3297,461,3171,445,3065,437,2883,434,2700,433,2593,427,2467,413,2463,413"/>
+<area shape="poly" id="edge24_Node000005_Node000024" title=" " alt="" coords="2282,411,2031,437,1819,445,1633,441,1458,433,1284,425,1098,423,888,434,770,445,641,461,630,463,629,458,641,456,770,440,888,428,1098,418,1284,420,1459,428,1633,436,1819,439,2031,432,2277,411"/>
+<area shape="rect" id="Node000025" href="$synthesis__interface_8cpp.html" title="Implementation of the SynthesisInterface UI orchestration." alt="" coords="4321,459,4484,501"/>
+<area shape="poly" id="edge25_Node000005_Node000025" title=" " alt="" coords="2464,393,2765,408,3000,415,3200,416,3539,411,3702,412,3877,417,4075,431,4309,456,4323,460,4317,460,4309,461,4075,437,3877,423,3702,417,3539,417,3200,421,3000,420,2765,413,2464,399"/>
+<area shape="poly" id="edge26_Node000005_Node000026" title=" " alt="" coords="2464,395,2670,408,2895,416,3085,417,3409,411,3565,411,3732,416,3921,430,4144,456,4158,461,4153,460,4143,461,3921,435,3731,421,3565,416,3409,416,3085,422,2895,421,2670,413,2464,400"/>
+<area shape="rect" id="Node000027" href="$modulation__look__and__feel_8cpp.html" title=" " alt="" coords="1194,459,1384,501"/>
+<area shape="poly" id="edge27_Node000005_Node000027" title=" " alt="" coords="2282,411,2146,429,2031,437,1837,440,1642,442,1529,448,1396,461,1385,463,1384,458,1395,456,1529,443,1642,436,1837,435,2031,432,2145,424,2277,411"/>
+<area shape="poly" id="edge28_Node000005_Node000028" title=" " alt="" coords="2464,402,2519,408,2684,420,2825,424,3064,422,3180,421,3303,425,3443,435,3608,456,3622,461,3617,461,3607,461,3443,441,3303,430,3180,427,3064,427,2825,429,2684,425,2518,413,2464,407"/>
+<area shape="poly" id="edge32_Node000005_Node000032" title=" " alt="" coords="2464,399,2569,408,2751,418,2906,422,3168,421,3295,421,3430,425,3584,436,3765,456,3779,460,3773,460,3765,461,3584,441,3430,431,3295,426,3168,426,2906,427,2751,423,2569,413,2464,404"/>
+<area shape="rect" id="Node000029" href="$force__editor__rtti_8cpp.html" title=" " alt="" coords="3612,549,3761,592"/>
+<area shape="poly" id="edge29_Node000028_Node000029" title=" " alt="" coords="3688,515,3688,551,3684,547,3684,519"/>
+<area shape="rect" id="Node000030" href="$plugin_2helmBoy__editor_8cpp.html" title=" " alt="" coords="3299,549,3431,592"/>
+<area shape="poly" id="edge30_Node000028_Node000030" title=" " alt="" coords="3608,503,3432,554,3431,548,3602,504"/>
+<area shape="rect" id="Node000031" href="$helmBoy__plugin_8cpp.html" title=" " alt="" coords="3455,549,3587,592"/>
+<area shape="poly" id="edge31_Node000028_Node000031" title=" " alt="" coords="3637,508,3560,551,3559,546,3632,510"/>
+<area shape="rect" id="Node000033" href="$standalone_2helmBoy__editor_8cpp.html" title=" " alt="" coords="3786,549,3947,592"/>
+<area shape="poly" id="edge33_Node000032_Node000033" title=" " alt="" coords="3863,515,3866,551,3862,547,3859,519"/>
+<area shape="rect" id="Node000034" href="$main_8cpp.html" title=" " alt="" coords="3971,557,4135,584"/>
+<area shape="poly" id="edge34_Node000032_Node000034" title=" " alt="" coords="3917,506,4028,557,4022,556,3916,511"/>
+<area shape="poly" id="edge49_Node000037_Node000004" title=" " alt="" coords="2444,152,2467,279,2463,276,2441,156"/>
+<area shape="rect" id="Node000038" href="$arp__section_8cpp.html" title="Implementation of the ArpSection UI for the arpeggiator." alt="" coords="2267,187,2399,229"/>
+<area shape="poly" id="edge48_Node000037_Node000038" title=" " alt="" coords="2403,148,2358,188,2356,184,2398,150"/>
+<area shape="poly" id="edge52_Node000039_Node000004" title=" " alt="" coords="2643,152,2636,193,2629,213,2618,231,2600,249,2580,263,2536,284,2534,278,2577,258,2597,244,2614,228,2624,211,2631,192,2639,156"/>
+<area shape="rect" id="Node000040" href="$bpm__section_8cpp.html" title="UI implementation for the BPM control section." alt="" coords="2473,187,2604,229"/>
+<area shape="poly" id="edge51_Node000039_Node000040" title=" " alt="" coords="2608,148,2564,188,2561,184,2603,150"/>
+<area shape="rect" id="Node000042" href="$chorus__section_8cpp.html" title=" " alt="" coords="2910,187,3049,229"/>
+<area shape="poly" id="edge54_Node000041_Node000042" title=" " alt="" coords="3014,151,2993,189,2990,184,3010,153"/>
+<area shape="rect" id="Node000043" href="$synthesis__interface_8h.html" title="Central UI container for all synthesis sections and controls." alt="" coords="4266,187,4416,229"/>
+<area shape="poly" id="edge55_Node000041_Node000043" title=" " alt="" coords="3113,136,3286,156,3434,164,3564,165,3685,162,3806,158,3936,158,4083,166,4255,184,4269,189,4263,188,4254,189,4082,171,3936,163,3807,163,3685,167,3564,170,3433,170,3286,161,3113,141"/>
+<area shape="poly" id="edge56_Node000043_Node000004" title=" " alt="" coords="4254,229,4083,248,3867,261,3359,281,2868,294,2535,299,2535,294,2868,288,3359,276,3866,256,4083,243,4248,230"/>
+<area shape="poly" id="edge57_Node000043_Node000025" title=" " alt="" coords="4351,242,4400,460,4395,457,4347,247"/>
+<area shape="poly" id="edge60_Node000044_Node000043" title=" " alt="" coords="3269,136,3418,154,3545,162,3658,164,3763,162,3867,160,3980,160,4106,167,4255,184,4269,189,4263,188,4254,189,4106,173,3979,166,3868,165,3763,167,3658,169,3545,168,3418,160,3269,142"/>
+<area shape="rect" id="Node000045" href="$delay__section_8cpp.html" title="Implementation of the DelaySection UI." alt="" coords="3073,187,3204,229"/>
+<area shape="poly" id="edge59_Node000044_Node000045" title=" " alt="" coords="3171,151,3151,189,3148,184,3167,154"/>
+<area shape="poly" id="edge63_Node000046_Node000043" title=" " alt="" coords="3431,136,3556,151,3662,159,3844,161,4025,162,4131,169,4255,184,4269,189,4263,188,4254,189,4130,175,4025,168,3844,166,3662,164,3555,157,3431,141"/>
+<area shape="rect" id="Node000047" href="$distortion__section_8cpp.html" title="Implementation of DistortionSection UI." alt="" coords="3228,187,3380,229"/>
+<area shape="poly" id="edge62_Node000046_Node000047" title=" " alt="" coords="3332,151,3315,189,3312,184,3328,154"/>
+<area shape="poly" id="edge66_Node000048_Node000043" title=" " alt="" coords="3589,136,3690,149,3776,157,3923,161,4070,165,4155,171,4255,184,4269,189,4263,189,4254,189,4154,177,4069,170,3923,166,3776,162,3690,155,3589,141"/>
+<area shape="rect" id="Node000049" href="$dynamic__section_8cpp.html" title="Implementation of dynamics section UI (portamento, legato)." alt="" coords="3404,187,3552,229"/>
+<area shape="poly" id="edge65_Node000048_Node000049" title=" " alt="" coords="3497,152,3487,188,3483,184,3493,155"/>
+<area shape="poly" id="edge69_Node000050_Node000043" title=" " alt="" coords="3750,136,3892,154,4004,161,4115,167,4255,184,4269,189,4263,189,4254,189,4114,172,4003,166,3892,160,3750,142"/>
+<area shape="rect" id="Node000051" href="$envelope__section_8cpp.html" title="Implementation of EnvelopeSection UI (ADSR + visualization)." alt="" coords="3576,187,3727,229"/>
+<area shape="poly" id="edge68_Node000050_Node000051" title=" " alt="" coords="3662,152,3657,188,3653,184,3659,156"/>
+<area shape="poly" id="edge72_Node000052_Node000043" title=" " alt="" coords="3920,136,4015,152,4089,160,4162,169,4255,184,4269,189,4263,189,4254,189,4162,174,4088,166,4014,157,3920,142"/>
+<area shape="rect" id="Node000053" href="$extra__mod__section_8cpp.html" title="Implementation of the ExtraModSection UI." alt="" coords="3752,187,3912,229"/>
+<area shape="poly" id="edge71_Node000052_Node000053" title=" " alt="" coords="3833,152,3834,188,3830,185,3830,156"/>
+<area shape="poly" id="edge75_Node000054_Node000043" title=" " alt="" coords="4083,138,4269,188,4263,187,4082,143"/>
+<area shape="rect" id="Node000055" href="$feedback__section_8cpp.html" title="Implementation of the FeedbackSection UI." alt="" coords="3936,187,4088,229"/>
+<area shape="poly" id="edge74_Node000054_Node000055" title=" " alt="" coords="4005,152,4011,188,4006,185,4002,156"/>
+<area shape="poly" id="edge78_Node000056_Node000043" title=" " alt="" coords="4214,143,4301,187,4295,186,4213,148"/>
+<area shape="rect" id="Node000057" href="$filter__section_8cpp.html" title="Implementation of the filter UI section." alt="" coords="4111,187,4243,229"/>
+<area shape="poly" id="edge77_Node000056_Node000057" title=" " alt="" coords="4167,152,4175,188,4170,185,4163,156"/>
+<area shape="poly" id="edge80_Node000058_Node000036" title=" " alt="" coords="5692,142,5730,160,5759,180,5769,192,5773,205,5772,218,5763,231,5746,242,5718,251,5628,269,5499,285,5337,300,4934,327,4468,348,3536,377,2921,390,2921,384,3536,371,4468,343,4934,321,5336,295,5499,280,5628,264,5717,246,5744,237,5759,227,5767,216,5768,205,5764,195,5755,184,5727,164,5691,147"/>
+<area shape="poly" id="edge81_Node000058_Node000043" title=" " alt="" coords="5533,138,5363,161,5221,169,5095,170,4977,167,4860,164,4735,164,4594,171,4428,189,4416,191,4416,186,4427,184,4593,166,4735,159,4860,158,4978,162,5095,165,5221,164,5363,155,5528,139"/>
+<area shape="poly" id="edge85_Node000059_Node000043" title=" " alt="" coords="4326,151,4337,188,4332,185,4323,156"/>
+<area shape="rect" id="Node000060" href="$lfo__section_8cpp.html" title="Implementation of the LfoSection UI." alt="" coords="4439,187,4571,229"/>
+<area shape="poly" id="edge84_Node000059_Node000060" title=" " alt="" coords="4372,143,4463,187,4458,186,4371,148"/>
+<area shape="poly" id="edge87_Node000061_Node000004" title=" " alt="" coords="2085,147,2064,169,2048,189,2042,209,2044,218,2050,228,2073,245,2108,259,2152,270,2202,279,2309,290,2406,297,2400,297,2309,295,2202,284,2151,276,2106,264,2070,250,2046,231,2039,220,2037,209,2044,186,2060,165,2080,149"/>
+<area shape="rect" id="Node000062" href="$limiter__section_8cpp.html" title=" " alt="" coords="2059,187,2194,229"/>
+<area shape="poly" id="edge88_Node000061_Node000062" title=" " alt="" coords="2128,152,2128,188,2124,185,2125,156"/>
+<area shape="poly" id="edge91_Node000063_Node000043" title=" " alt="" coords="4430,147,4372,189,4370,184,4425,148"/>
+<area shape="rect" id="Node000064" href="$mixer__section_8cpp.html" title="Implementation of the MixerSection UI." alt="" coords="4595,187,4727,229"/>
+<area shape="poly" id="edge90_Node000063_Node000064" title=" " alt="" coords="4528,143,4619,187,4614,186,4527,148"/>
+<area shape="poly" id="edge93_Node000065_Node000004" title=" " alt="" coords="2677,234,2536,280,2535,275,2672,235"/>
+<area shape="poly" id="edge94_Node000065_Node000021" title=" " alt="" coords="2748,243,2740,284,2737,328,2745,372,2754,392,2767,409,2786,416,2827,423,2961,434,3351,446,3744,452,3951,456,3963,460,3958,460,3950,461,3744,457,3351,452,2961,439,2826,428,2785,421,2763,413,2749,394,2740,374,2732,328,2735,283,2744,246"/>
+<area shape="rect" id="Node000067" href="$noise__section_8cpp.html" title="Implementation of the NoiseSection UI." alt="" coords="5823,187,5955,229"/>
+<area shape="poly" id="edge96_Node000066_Node000067" title=" " alt="" coords="5852,149,5877,188,5872,185,5849,154"/>
+<area shape="poly" id="edge99_Node000068_Node000043" title=" " alt="" coords="4549,143,4409,189,4408,183,4543,144"/>
+<area shape="rect" id="Node000069" href="$oscillator__section_8cpp.html" title="Implementation of the oscillator UI section." alt="" coords="4751,187,4902,229"/>
+<area shape="poly" id="edge98_Node000068_Node000069" title=" " alt="" coords="4689,143,4782,186,4777,186,4688,148"/>
+<area shape="poly" id="edge102_Node000070_Node000043" title=" " alt="" coords="4708,139,4566,166,4428,189,4416,192,4416,186,4427,184,4565,161,4703,140"/>
+<area shape="rect" id="Node000071" href="$reverb__section_8cpp.html" title="Implementation of ReverbSection UI." alt="" coords="4927,187,5062,229"/>
+<area shape="poly" id="edge101_Node000070_Node000071" title=" " alt="" coords="4849,142,4948,186,4943,186,4848,148"/>
+<area shape="poly" id="edge105_Node000072_Node000043" title=" " alt="" coords="4864,139,4739,157,4643,164,4548,172,4428,189,4416,191,4416,186,4427,184,4547,167,4642,159,4738,151,4859,139"/>
+<area shape="rect" id="Node000073" href="$step__sequencer__section_8cpp.html" title="Implementation of StepSequencerSection UI." alt="" coords="5087,187,5278,229"/>
+<area shape="poly" id="edge104_Node000072_Node000073" title=" " alt="" coords="5030,142,5134,186,5129,186,5029,148"/>
+<area shape="poly" id="edge108_Node000074_Node000043" title=" " alt="" coords="5065,139,4967,155,4885,162,4744,167,4604,170,4523,177,4428,189,4416,191,4416,186,4427,184,4523,172,4604,165,4744,161,4884,157,4966,150,5060,139"/>
+<area shape="rect" id="Node000075" href="$stutter__section_8cpp.html" title="Implementation of the StutterSection UI." alt="" coords="5302,187,5438,229"/>
+<area shape="poly" id="edge107_Node000074_Node000075" title=" " alt="" coords="5211,142,5320,186,5314,186,5210,147"/>
+<area shape="poly" id="edge111_Node000076_Node000043" title=" " alt="" coords="5222,138,5099,157,4996,164,4822,166,4648,168,4547,175,4428,189,4416,191,4416,186,4427,184,4546,170,4648,163,4821,161,4996,159,5099,151,5216,139"/>
+<area shape="rect" id="Node000077" href="$sub__section_8cpp.html" title="Implementation of the sub&#45;oscillator editor subsection." alt="" coords="5462,187,5593,229"/>
+<area shape="poly" id="edge110_Node000076_Node000077" title=" " alt="" coords="5368,142,5477,186,5472,186,5367,147"/>
+<area shape="poly" id="edge114_Node000078_Node000043" title=" " alt="" coords="5377,138,5231,159,5109,167,5000,168,4899,167,4691,166,4570,173,4428,189,4416,191,4416,186,4427,184,4570,168,4691,161,4899,161,5000,163,5108,161,5231,153,5372,139"/>
+<area shape="rect" id="Node000079" href="$voice__section_8cpp.html" title="Implementation of the voice controls UI (polyphony, pitch bend, etc.)." alt="" coords="5618,187,5749,229"/>
+<area shape="poly" id="edge115_Node000078_Node000079" title=" " alt="" coords="5524,142,5633,186,5628,186,5523,147"/>
+<area shape="poly" id="edge118_Node000080_Node000026" title=" " alt="" coords="2875,152,2881,193,2889,212,2900,228,2974,293,3046,345,3116,384,3186,412,3255,431,3324,441,3394,446,3465,445,3614,436,3773,426,3859,425,3949,429,4044,438,4144,456,4158,461,4152,461,4143,461,4043,444,3948,434,3859,430,3773,431,3614,441,3465,450,3394,451,3324,447,3254,436,3184,417,3114,389,3043,350,2971,298,2896,231,2884,214,2876,194,2872,156"/>
+<area shape="poly" id="edge117_Node000080_Node000043" title=" " alt="" coords="2957,136,3154,158,3321,167,3469,167,3607,162,3745,157,3892,156,4059,164,4255,184,4269,189,4263,188,4254,189,4059,169,3892,161,3745,162,3607,167,3469,172,3321,172,3153,163,2957,141"/>
 </map>

@@ -20,6 +20,7 @@
 
 #include "helmBoy_module.h"
 
+#include "switch_modulation_processor.h"
 #include "value_switch.h"
 #include "gate.h"
 #include "helmBoy_common.h"
@@ -80,6 +81,32 @@ namespace mopo {
     mono_modulation_switches_[name_str] = control_switch;
 
     return control_switch->output(ValueSwitch::kSwitch);
+  }
+
+  Output* HelmBoyModule::createMonoModSwitchControl(std::string_view name) {
+    std::string name_str{name};
+    Value* base_val = createBaseControl(name_str);
+
+    SwitchModulationProcessor* mono_switch = new SwitchModulationProcessor();
+    mono_switch->plug(base_val, static_cast<int>(SwitchModulationProcessor::kBase));
+    getMonoRouter()->addProcessor(mono_switch);
+
+    mono_switch_mod_destinations_[name_str] = mono_switch;
+    mono_modulation_readout_[name_str] = mono_switch->output();
+    return mono_switch->output();
+  }
+
+  Output* HelmBoyModule::createPolyModSwitchControl(std::string_view name) {
+    std::string name_str{name};
+    Output* mono_output = createMonoModSwitchControl(name_str);
+
+    SwitchModulationProcessor* poly_switch = new SwitchModulationProcessor();
+    poly_switch->plug(mono_output, static_cast<int>(SwitchModulationProcessor::kBase));
+    getPolyRouter()->addProcessor(poly_switch);
+
+    poly_switch_mod_destinations_[name_str] = poly_switch;
+    poly_modulation_readout_[name_str] = poly_switch->output();
+    return poly_switch->output();
   }
 
   Output* HelmBoyModule::createMonoModControl(std::string_view name, bool control_rate,
@@ -188,6 +215,7 @@ namespace mopo {
                                             Output* bps, bool poly, ValueSwitch* owner) {
     static const Value dotted_ratio(2.0 / 3.0);
     static const Value triplet_ratio(3.0 / 2.0);
+    static const Value sync_rounding_offset(0.5);
 
     std::string name_str{name}; // Convert to string for map key
     ProcessorRouter* router = poly ? getPolyRouter() : getMonoRouter();
@@ -200,13 +228,22 @@ namespace mopo {
     Gate* choose_tempo = new Gate();
     choose_tempo->plug(tempo, Gate::kChoice);
 
-    for (int i = 0; i < sizeof(synced_freq_ratios) / sizeof(Value); ++i)
-      choose_tempo->plugNext(&synced_freq_ratios[i]);
+    const bool is_lfo = name.starts_with("mono_lfo_") || name.starts_with("poly_lfo_");
+    const Value* tempo_ratios = is_lfo ? lfo_synced_freq_ratios : synced_freq_ratios;
+    const size_t num_tempo_ratios = is_lfo
+        ? sizeof(lfo_synced_freq_ratios) / sizeof(Value)
+        : sizeof(synced_freq_ratios) / sizeof(Value);
+    for (size_t i = 0; i < num_tempo_ratios; ++i)
+      choose_tempo->plugNext(&tempo_ratios[i]);
 
     Gate* choose_modifier = new Gate();
-    Value* sync = new cr::Value(1);
-    router->addIdleProcessor(sync);
-    choose_modifier->plug(sync, Gate::kChoice);
+    Output* sync = poly
+        ? createPolyModControl(name_str + "_sync", frequency->isControlRate())
+        : createMonoModControl(name_str + "_sync", frequency->isControlRate());
+    Processor* sync_choice = new cr::Add();
+    sync_choice->plug(sync, 0);
+    sync_choice->plug(&sync_rounding_offset, 1);
+    choose_modifier->plug(sync_choice, Gate::kChoice);
     choose_modifier->plugNext(&utils::value_one);
     choose_modifier->plugNext(&utils::value_one);
     choose_modifier->plugNext(&dotted_ratio);
@@ -221,35 +258,38 @@ namespace mopo {
     tempo_frequency->plug(modified_tempo, 0);
     tempo_frequency->plug(bps, 1);
 
-    getMonoRouter()->addProcessor(choose_modifier);
-    getMonoRouter()->addProcessor(choose_tempo);
-    router->addProcessor(modified_tempo);
-    router->addProcessor(tempo_frequency);
-
     Gate* choose_frequency = new Gate();
-    choose_frequency->plug(sync, Gate::kChoice);
-    choose_frequency->plugNext(frequency);
+    choose_frequency->plug(sync_choice, Gate::kChoice);
+    choose_frequency->plugNext(frequency->output());
     choose_frequency->plugNext(tempo_frequency);
     choose_frequency->plugNext(tempo_frequency);
     choose_frequency->plugNext(tempo_frequency);
 
     if (owner) {
+      owner->addProcessor(sync_choice);
       owner->addProcessor(choose_tempo);
       owner->addProcessor(choose_modifier);
       owner->addProcessor(modified_tempo);
       owner->addProcessor(tempo_frequency);
       owner->addProcessor(choose_frequency);
       owner->set(owner->value());
+    } else {
+      router->addProcessor(sync_choice);
+      router->addProcessor(choose_tempo);
+      router->addProcessor(choose_modifier);
+      router->addProcessor(modified_tempo);
+      router->addProcessor(tempo_frequency);
+      router->addProcessor(choose_frequency);
     }
 
-    getMonoRouter()->addProcessor(choose_frequency);
-    controls_[name_str + "_sync"] = sync;
     return choose_frequency->output();
   }
 
   void HelmBoyModule::init() {
-    for (HelmBoyModule* sub_module : sub_modules_)
-      sub_module->init();
+    for (HelmBoyModule* sub_module : sub_modules_) {
+      if (sub_module != nullptr)
+        sub_module->init();
+    }
   }
 
   control_map HelmBoyModule::getControls() {
@@ -285,6 +325,15 @@ namespace mopo {
     return getMonoModulationDestination(name);
   }
 
+  Processor* HelmBoyModule::getSwitchModulationDestination(std::string_view name, bool poly) {
+    Processor* poly_destination = getPolySwitchModulationDestination(name);
+
+    if (poly && poly_destination)
+      return poly_destination;
+
+    return getMonoSwitchModulationDestination(name);
+  }
+
   Processor* HelmBoyModule::getMonoModulationDestination(std::string_view name) {
     std::string name_str{name}; // Convert to string for map key
     if (mono_mod_destinations_.count(name_str))
@@ -299,6 +348,20 @@ namespace mopo {
     return 0;
   }
 
+  Processor* HelmBoyModule::getMonoSwitchModulationDestination(std::string_view name) {
+    std::string name_str{name};
+    if (mono_switch_mod_destinations_.count(name_str))
+      return mono_switch_mod_destinations_[name_str];
+
+    for (HelmBoyModule* sub_module : sub_modules_) {
+      Processor* destination = sub_module->getMonoSwitchModulationDestination(name);
+      if (destination)
+        return destination;
+    }
+
+    return 0;
+  }
+
   Processor* HelmBoyModule::getPolyModulationDestination(std::string_view name) {
     std::string name_str{name}; // Convert to string for map key
     if (poly_mod_destinations_.count(name_str))
@@ -306,6 +369,20 @@ namespace mopo {
 
     for (HelmBoyModule* sub_module : sub_modules_) {
       Processor* destination = sub_module->getPolyModulationDestination(name);
+      if (destination)
+        return destination;
+    }
+
+    return 0;
+  }
+
+  Processor* HelmBoyModule::getPolySwitchModulationDestination(std::string_view name) {
+    std::string name_str{name};
+    if (poly_switch_mod_destinations_.count(name_str))
+      return poly_switch_mod_destinations_[name_str];
+
+    for (HelmBoyModule* sub_module : sub_modules_) {
+      Processor* destination = sub_module->getPolySwitchModulationDestination(name);
       if (destination)
         return destination;
     }
@@ -366,6 +443,16 @@ namespace mopo {
     output_map& all_sources = mod_sources_;
     for (HelmBoyModule* sub_module : sub_modules_) {
       output_map& sub_sources = sub_module->getModulationSources();
+      all_sources.insert(sub_sources.begin(), sub_sources.end());
+    }
+
+    return all_sources;
+  }
+
+  output_map& HelmBoyModule::getVisualTelemetrySources() {
+    output_map& all_sources = visual_telemetry_sources_;
+    for (HelmBoyModule* sub_module : sub_modules_) {
+      output_map& sub_sources = sub_module->getVisualTelemetrySources();
       all_sources.insert(sub_sources.begin(), sub_sources.end());
     }
 

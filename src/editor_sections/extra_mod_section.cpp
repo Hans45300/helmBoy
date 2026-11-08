@@ -30,8 +30,13 @@
  */
 
 ExtraModSection::ExtraModSection(String name) : SynthSection(name) {
-  addModulationButton((aftertouch_mod_ = std::make_unique<ModulationButton>("aftertouch")).get());
-  aftertouch_mod_->setLookAndFeel(ModulationLookAndFeel::instance());
+  addModulationButton((channel_aftertouch_mod_ =
+      std::make_unique<ModulationButton>("channel_aftertouch")).get());
+  channel_aftertouch_mod_->setLookAndFeel(ModulationLookAndFeel::instance());
+
+  addModulationButton((poly_aftertouch_mod_ =
+      std::make_unique<ModulationButton>("poly_aftertouch")).get());
+  poly_aftertouch_mod_->setLookAndFeel(ModulationLookAndFeel::instance());
 
   addModulationButton((note_mod_ = std::make_unique<ModulationButton>("note")).get());
   note_mod_->setLookAndFeel(ModulationLookAndFeel::instance());
@@ -50,7 +55,8 @@ ExtraModSection::ExtraModSection(String name) : SynthSection(name) {
 }
 
 ExtraModSection::~ExtraModSection() {
-  aftertouch_mod_ = nullptr;
+  channel_aftertouch_mod_ = nullptr;
+  poly_aftertouch_mod_ = nullptr;
   note_mod_ = nullptr;
   velocity_mod_ = nullptr;
   mod_wheel_mod_ = nullptr;
@@ -60,17 +66,22 @@ ExtraModSection::~ExtraModSection() {
 
 void ExtraModSection::drawTextToRightOfComponent(Graphics& g, Component* component, String text) {
   float space = size_ratio_ * 6.0f;
-  g.drawText(text, component->getRight() + space, component->getY(), getWidth() / 2,
-             component->getHeight(), Justification::centredLeft, false);
+  int column_right = component->getX() < getWidth() / 2
+      ? getWidth() / 2 - size_ratio_ * 4 : getWidth() - size_ratio_ * 4;
+  int text_x = component->getRight() + space;
+  int text_width = jmax(1, column_right - text_x);
+  g.drawFittedText(text, text_x, component->getY(), text_width,
+                   component->getHeight(), Justification::centredLeft, 1, 0.65f);
 }
 
 void ExtraModSection::paintBackground(Graphics& g) {
   SynthSection::paintBackground(g);
 
   g.setColour(Colors::control_label_text);
-  g.setFont(Fonts::instance()->proportional_regular().withPointHeight(size_ratio_ * 10.0f));
+  g.setFont(Fonts::instance()->proportional_regular().withPointHeight(size_ratio_ * 8.0f));
 
-  drawTextToRightOfComponent(g, aftertouch_mod_.get(), TRANS("AFTERTOUCH"));
+  drawTextToRightOfComponent(g, channel_aftertouch_mod_.get(), TRANS("CHANNEL AFTERTOUCH"));
+  drawTextToRightOfComponent(g, poly_aftertouch_mod_.get(), TRANS("POLY AFTERTOUCH"));
   drawTextToRightOfComponent(g, note_mod_.get(), TRANS("NOTE"));
   drawTextToRightOfComponent(g, velocity_mod_.get(), TRANS("VELOCITY"));
   drawTextToRightOfComponent(g, mod_wheel_mod_.get(), TRANS("MOD WHEEL"));
@@ -79,18 +90,23 @@ void ExtraModSection::paintBackground(Graphics& g) {
 }
 
 void ExtraModSection::resized() {
-  int button_width = getModButtonWidth();
   int title_width = getTitleWidth();
-  int x = size_ratio_ * 30;
-  int x2 = getWidth() / 2 + size_ratio_ * 15.0f;
-  float space = (getHeight() - title_width - (3.0f * button_width)) / 4.0f;
+  int button_width = jmax(1, static_cast<int>(jmin(getModButtonWidth(), size_ratio_ * 28.0f,
+                                                  (getHeight() - title_width) / 4.0f)));
+  int left_x = size_ratio_ * 10;
+  int right_x = getWidth() / 2 + size_ratio_ * 8;
+  float row_space = (getHeight() - title_width - (4.0f * button_width)) / 5.0f;
+  int row_y[4];
+  for (int row = 0; row < 4; ++row)
+    row_y[row] = title_width + row_space + row * (button_width + row_space);
 
-  aftertouch_mod_->setBounds(x, title_width + space, button_width, button_width);
-  note_mod_->setBounds(x, aftertouch_mod_->getBottom() + space, button_width, button_width);
-  velocity_mod_->setBounds(x, note_mod_->getBottom() + space, button_width, button_width);
-  mod_wheel_mod_->setBounds(x2, title_width + space, button_width, button_width);
-  pitch_wheel_mod_->setBounds(x2, mod_wheel_mod_->getBottom() + space, button_width, button_width);
-  random_mod_->setBounds(x2, pitch_wheel_mod_->getBottom() + space, button_width, button_width);
+  channel_aftertouch_mod_->setBounds(left_x, row_y[0], button_width, button_width);
+  poly_aftertouch_mod_->setBounds(right_x, row_y[0], button_width, button_width);
+  note_mod_->setBounds(left_x, row_y[1], button_width, button_width);
+  mod_wheel_mod_->setBounds(right_x, row_y[1], button_width, button_width);
+  velocity_mod_->setBounds(left_x, row_y[2], button_width, button_width);
+  pitch_wheel_mod_->setBounds(right_x, row_y[2], button_width, button_width);
+  random_mod_->setBounds(left_x, row_y[3], button_width, button_width);
 
   SynthSection::resized();
 }

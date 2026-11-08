@@ -1,0 +1,51 @@
+{
+  "settings": {
+    "polyphony": 1,
+    "legato": 1,
+    "portamento": -4.7,
+    "portamento_type": 1,
+    "osc_1_waveform": 0.0,
+    "osc_1_volume": 0.62,
+    "osc_2_waveform": 4.0,
+    "osc_2_transpose": 7.0,
+    "osc_2_volume": 0.4,
+    "ring_modulation": 0.28,
+    "cross_modulation": 0.14,
+    "filter_on": 1,
+    "filter_style": 0,
+    "cutoff": 76.0,
+    "resonance": 0.3,
+    "keytrack": 0.52,
+    "amp_attack": 0.006,
+    "amp_decay": 0.75,
+    "amp_sustain": 0.83,
+    "amp_release": 0.26,
+    "mono_lfo_1_sync": 0,
+    "mono_lfo_1_frequency": 1.2,
+    "mono_lfo_1_waveform": 13.0,
+    "chorus_on": 1,
+    "chorus_rate": 0.56,
+    "chorus_depth": 0.23,
+    "chorus_mix": 0.32,
+    "reverb_on": 1,
+    "reverb_dry_wet": 0.14,
+    "delay_on": 1,
+    "delay_sync": 1,
+    "delay_tempo": 8.0,
+    "delay_feedback": 0.2,
+    "delay_dry_wet": 0.13,
+    "arp_on": 0,
+    "modulations": [
+      {
+        "amount": 0.12,
+        "destination": "ring_modulation",
+        "source": "mono_lfo_1"
+      }
+    ],
+    "lfo_tempo_index_version": 2
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Hades Mirror Signal",
+  "folder_name": "Lead",
+  "synth_version": "1.1.1"
+}

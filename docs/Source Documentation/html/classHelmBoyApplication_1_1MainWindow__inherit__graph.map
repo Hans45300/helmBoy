@@ -1,9 +1,9 @@
 <map id="HelmBoyApplication::MainWindow" name="HelmBoyApplication::MainWindow">
-<area shape="rect" id="Node000001" title=" " alt="" coords="130,123,334,443"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="130,123,334,528"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,5,123,75"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="98,85,133,134,128,137,93,88"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,84,133,152,128,153,91,90"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="147,5,318,75"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="235,89,235,123,230,123,230,89"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="233,87,235,124,230,123,231,92"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="341,5,435,75"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="361,88,336,126,332,123,356,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="364,85,336,141,332,138,361,90"/>
 </map>

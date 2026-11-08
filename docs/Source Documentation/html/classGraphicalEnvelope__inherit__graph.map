@@ -1,7 +1,9 @@
 <map id="GraphicalEnvelope" name="GraphicalEnvelope">
-<area shape="rect" id="Node000001" title=" " alt="" coords="42,208,191,939"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="38,208,221,955"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,48,83,117"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="54,132,65,208,60,209,49,132"/>
-<area shape="rect" id="Node000003" href="$classSynthSlider_1_1SliderListener.html" title=" " alt="" coords="107,5,272,160"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="179,175,173,209,168,208,173,174"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="52,129,68,208,63,208,53,135"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="108,48,151,117"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="130,130,132,208,127,208,129,135"/>
+<area shape="rect" id="Node000004" href="$classSynthSlider_1_1SliderListener.html" title=" " alt="" coords="175,5,340,160"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="235,172,223,226,218,225,233,177"/>
 </map>

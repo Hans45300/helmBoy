@@ -30,6 +30,7 @@
 
 namespace mopo {
   class ValueSwitch;
+  class SwitchModulationProcessor;
 /**
  * @file helmBoy_module.h
  * @brief Base class utilities for HelmBoy modules and control creation helpers.
@@ -49,6 +50,9 @@ namespace mopo {
       Processor* getModulationDestination(std::string_view name, bool poly);
       Processor* getMonoModulationDestination(std::string_view name);
       Processor* getPolyModulationDestination(std::string_view name);
+      Processor* getSwitchModulationDestination(std::string_view name, bool poly);
+      Processor* getMonoSwitchModulationDestination(std::string_view name);
+      Processor* getPolySwitchModulationDestination(std::string_view name);
 
       ValueSwitch* getModulationSwitch(std::string_view name, bool poly);
       ValueSwitch* getMonoModulationSwitch(std::string_view name);
@@ -56,6 +60,7 @@ namespace mopo {
       void updateAllModulationSwitches();
 
       output_map& getModulationSources();
+      output_map& getVisualTelemetrySources();
       virtual output_map& getMonoModulations();
       virtual output_map& getPolyModulations();
       virtual void correctToTime(mopo_float samples);
@@ -69,6 +74,10 @@ namespace mopo {
 
       // Creates a basic non-scaled linear control that you can modulate monophonically
       Output* createBaseModControl(std::string_view name, bool smooth_value = false);
+
+      // Creates a binary switch control that can be modulated with signed thresholds.
+      Output* createMonoModSwitchControl(std::string_view name);
+      Output* createPolyModSwitchControl(std::string_view name);
 
       // Creates any control that you can modulate monophonically.
       Output* createMonoModControl(std::string_view name, bool control_rate,
@@ -89,12 +98,15 @@ namespace mopo {
 
       control_map controls_;
       output_map mod_sources_;
+      output_map visual_telemetry_sources_;
       input_map mono_mod_destinations_;
       input_map poly_mod_destinations_;
       output_map mono_modulation_readout_;
       output_map poly_modulation_readout_;
       std::map<std::string, ValueSwitch*> mono_modulation_switches_;
       std::map<std::string, ValueSwitch*> poly_modulation_switches_;
+      input_map mono_switch_mod_destinations_;
+      input_map poly_switch_mod_destinations_;
   };
 } // namespace mopo
 

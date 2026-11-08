@@ -1,0 +1,49 @@
+{
+  "settings": {
+    "osc_1_unison_voices": 5,
+    "filter_on": 1,
+    "osc_1_volume": 0.78,
+    "resonance": 0.42,
+    "amp_attack": 0.02,
+    "amp_release": 0.32,
+    "osc_2_waveform": 1.0,
+    "mono_lfo_1_waveform": 2.0,
+    "mono_lfo_1_sync": 1,
+    "sub_phase_offset": -45,
+    "amp_decay": 0.48,
+    "polyphony": 1,
+    "distortion_drive": 5,
+    "amp_sustain": 0.42,
+    "portamento_type": 2,
+    "osc_1_waveform": 4.0,
+    "reverb_dry_wet": 0.16,
+    "sub_volume": 0.08,
+    "distortion_on": 1,
+    "portamento": -6,
+    "osc_1_phase_offset": -135,
+    "filter_style": 0,
+    "fil_env_depth": 30,
+    "legato": 1,
+    "osc_2_transpose": 12.0,
+    "arp_on": 0,
+    "reverb_on": 1,
+    "mono_lfo_1_tempo": 9.0,
+    "osc_2_volume": 0.34,
+    "osc_1_unison_detune": 18,
+    "modulations": [
+      {
+        "amount": 0.12,
+        "destination": "osc_2_phase_stretch",
+        "source": "mono_lfo_1"
+      }
+    ],
+    "cutoff": 76.0,
+    "mono_lfo_1_phase_offset": 0,
+    "osc_2_phase_offset": 90,
+    "lfo_tempo_index_version": 2
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Singing Saw",
+  "folder_name": "Lead",
+  "synth_version": "1.1.1"
+}

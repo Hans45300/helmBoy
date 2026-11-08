@@ -26,6 +26,8 @@
 #include "helmBoy_common.h"
 #include "helmBoy_module.h"
 
+#include <atomic>
+#include <mutex>
 #include <vector>
 
 namespace mopo {
@@ -64,6 +66,8 @@ namespace mopo {
       void init() override;
 
       void process() override;
+      /** Reset reusable voices and the shared note-retrigger signal. */
+      void resetState() override;
       void noteOn(mopo_float note, mopo_float velocity = 1,
                   int sample = 0, int channel = 0) override;
       VoiceEvent noteOff(mopo_float note, int sample = 0) override;
@@ -91,32 +95,38 @@ namespace mopo {
 
       void setupPolyModulationReadouts();
 
-      Output* beats_per_second_;
+      Output* beats_per_second_ = nullptr;
 
-      Processor* note_from_center_;
-      Gate* choose_pitch_wheel_;
-      Value* mod_wheel_amounts_[mopo::NUM_MIDI_CHANNELS];
-      Value* pitch_wheel_amounts_[mopo::NUM_MIDI_CHANNELS];
-      Processor* current_frequency_;
-      Envelope* amplitude_envelope_;
-      Processor* amplitude_;
-      SimpleDelay* osc_feedback_;
+      Processor* note_from_center_ = nullptr;
+      Gate* choose_pitch_wheel_ = nullptr;
+      Value* mod_wheel_amounts_[mopo::NUM_MIDI_CHANNELS] = {};
+      Value* pitch_wheel_amounts_[mopo::NUM_MIDI_CHANNELS] = {};
+      Processor* current_frequency_ = nullptr;
+      Envelope* amplitude_envelope_ = nullptr;
+      Processor* amplitude_ = nullptr;
+      SimpleDelay* osc_feedback_ = nullptr;
+      SimpleDelay* osc_2_feedback_ = nullptr;
+      SimpleDelay* sub_noise_feedback_ = nullptr;
+      Processor* osc_feedback_sum_ = nullptr;
 
-      TriggerCombiner* env_trigger_;
-      Envelope* extra_envelope_;
+      TriggerCombiner* env_trigger_ = nullptr;
+      Envelope* extra_envelope_ = nullptr;
+      Envelope* additional_mod_envelopes_[3] = {};
 
-      Value* legato_;
-      Distortion* distorted_filter_;
-      FormantManager* formant_filter_;
-      Envelope* filter_envelope_;
-      BypassRouter* formant_container_;
+      Output* legato_ = nullptr;
+      Distortion* distorted_filter_ = nullptr;
+      FormantManager* formant_filter_ = nullptr;
+      Envelope* filter_envelope_ = nullptr;
+      BypassRouter* formant_container_ = nullptr;
       Output note_retriggered_;
-      HelmBoyLfo* poly_lfo_1_;
-      HelmBoyLfo *poly_lfo_2_;
+      HelmBoyLfo* poly_lfo_1_ = nullptr;
+      HelmBoyLfo *poly_lfo_2_ = nullptr;
 
-      Multiply* output_;
+      Multiply* output_ = nullptr;
 
       output_map poly_readouts_;
+      std::mutex init_mutex_;
+      std::atomic<bool> init_done_{false};
   };
 } // namespace mopo
 

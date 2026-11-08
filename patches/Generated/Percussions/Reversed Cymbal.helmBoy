@@ -1,0 +1,49 @@
+{
+  "settings": {
+    "fil_sustain": 0,
+    "filter_on": 1,
+    "osc_1_volume": 0.65,
+    "resonance": 0.11,
+    "noise_volume": 0.46,
+    "amp_attack": 0.03,
+    "amp_release": 0.32,
+    "mono_lfo_1_sync": 1,
+    "sub_phase_offset": -180,
+    "amp_decay": 0.4,
+    "polyphony": 8,
+    "distortion_drive": 0,
+    "distortion_on": 0,
+    "amp_sustain": 0,
+    "sub_octave": 0,
+    "osc_1_waveform": 10.0,
+    "mono_lfo_1_waveform": 12.0,
+    "sub_volume": 0.02,
+    "fil_attack": 0,
+    "reverb_dry_wet": 0.18,
+    "osc_1_phase_offset": 180,
+    "filter_style": 1,
+    "fil_env_depth": 68,
+    "osc_2_waveform": 9.0,
+    "osc_2_transpose": 12.0,
+    "arp_on": 0,
+    "reverb_on": 1,
+    "mono_lfo_1_tempo": 3.0,
+    "osc_2_volume": 0.22,
+    "modulations": [
+      {
+        "amount": -0.08,
+        "destination": "amp_release",
+        "source": "mono_lfo_3"
+      }
+    ],
+    "cutoff": 113.0,
+    "mono_lfo_1_phase_offset": -135,
+    "noise_color": 0.92,
+    "osc_2_phase_offset": -45,
+    "lfo_tempo_index_version": 2
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Reversed Cymbal",
+  "folder_name": "Percussions",
+  "synth_version": "1.1.1"
+}

@@ -1,0 +1,11 @@
+<map id="mopo::PortamentoSlope" name="mopo::PortamentoSlope">
+<area shape="rect" id="Node000001" title="Processeur de portamento/slope pour interpoler vers une valeur cible." alt="" coords="5,765,156,963"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="185,5,336,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="183,518,112,766,107,765,184,513"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="180,573,341,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="256,514,258,525,258,574,253,573,253,525,255,519"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="372,744,472,984"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="326,499,344,548,355,572,379,650,398,728,393,728,374,651,350,574,339,550,325,504"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="258,573,260,521,261,515,263,574"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="422,743,416,637,408,581,395,526,372,458,344,395,344,390,377,456,401,525,413,580,421,636,428,745"/>
+</map>

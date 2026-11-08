@@ -1,0 +1,11 @@
+<map id="mopo::Oscillator" name="mopo::Oscillator">
+<area shape="rect" id="Node000001" title="Processeur qui g�n�re un flux d&#39;oscillation selon la fr�quence, la phase et la forme d&#39;onde." alt="" coords="5,776,111,952"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="140,5,291,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,519,126,574,79,777,74,776,121,573,139,514"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="135,573,296,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="211,514,213,525,213,574,207,573,208,525,210,519"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="327,744,427,984"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="280,499,299,548,310,572,334,650,353,728,348,728,329,651,305,574,294,550,280,504"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="213,573,215,521,216,515,218,574"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="377,743,371,637,363,581,350,526,327,458,299,395,299,390,332,456,355,525,368,580,376,636,382,745"/>
+</map>

@@ -6,7 +6,7 @@ cmake_install.cmake
 Makefile
 
 # === Submodules folders ===
-externals/
+externals/*
 
 # === inno setup generated binary folder ===
 installer/
@@ -65,4 +65,8 @@ __pycache__/
 
 # === Patch or preset folders (if generated) ===
 patches/generated/
+!patches/Generated/
+!patches/Generated/**
 
+# === Keep submodules folder ===
+!externals/

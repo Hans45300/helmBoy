@@ -1,0 +1,11 @@
+<map id="mopo::StepGenerator" name="mopo::StepGenerator">
+<area shape="rect" id="Node000001" title="G�n�rateur de pas (step sequencer) param�trable." alt="" coords="5,776,140,952"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="169,5,320,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,518,155,574,99,777,94,776,150,573,170,513"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="164,573,325,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="240,514,242,525,242,574,236,573,237,525,239,519"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="356,744,456,984"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="310,499,328,548,339,572,363,650,382,728,377,728,358,651,334,574,323,550,309,504"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="242,573,244,521,245,515,247,574"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="406,743,400,637,392,581,379,526,356,458,328,395,328,390,361,456,385,525,397,580,405,636,412,745"/>
+</map>

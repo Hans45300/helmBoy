@@ -1,9 +1,9 @@
 <map id="MidiManager::Listener" name="MidiManager::Listener">
-<area shape="rect" id="Node000001" title="Listener interface for MIDI&#45;triggered parameter changes." alt="" coords="99,5,286,117"/>
-<area shape="rect" id="Node000002" href="$classSynthBase.html" title="Base synthesizer class providing core functionality." alt="" coords="96,165,289,960"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,132,195,165,190,165,190,132"/>
-<area shape="rect" id="Node000003" href="$classHelmBoyEditor.html" title=" " alt="" coords="5,1051,179,1376"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="132,975,120,1051,115,1051,126,974"/>
-<area shape="rect" id="Node000004" href="$classHelmPlugin.html" title="Main plugin class for HelmBoy synthesizer." alt="" coords="204,1008,381,1419"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="258,974,263,1008,258,1008,253,975"/>
+<area shape="rect" id="Node000001" title="Listener interface for MIDI&#45;triggered parameter changes." alt="" coords="108,5,295,117"/>
+<area shape="rect" id="Node000002" href="$classSynthBase.html" title="Base synthesizer class providing core functionality." alt="" coords="92,165,311,1323"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="202,130,204,166,199,165,201,135"/>
+<area shape="rect" id="Node000003" href="$classHelmBoyEditor.html" title=" " alt="" coords="5,1371,192,1952"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="135,1335,134,1371,129,1371,135,1340"/>
+<area shape="rect" id="Node000004" href="$classHelmPlugin.html" title="Main plugin class for HelmBoy synthesizer." alt="" coords="217,1467,394,1856"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="270,1335,286,1467,281,1466,268,1340"/>
 </map>

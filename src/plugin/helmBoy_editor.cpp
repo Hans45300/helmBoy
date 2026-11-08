@@ -24,15 +24,30 @@
 #include "helmBoy_common.h"
 #include "helmBoy_plugin.h"
 #include "load_save.h"
+#include "startup_trace.h"
+#include <stdexcept>
 
-HelmEditor::HelmEditor(HelmPlugin& helm) : AudioProcessorEditor(&helm), SynthGuiInterface(&helm),
+#define appendPluginHostTraceEditor(message) HELMBOY_STARTUP_TRACE("plugin_host_trace.log", message)
+
+HelmEditor::HelmEditor(HelmPlugin& helm) : AudioProcessorEditor(&helm), SynthGuiInterface(&helm, false),
                                            helm_(helm), was_animating_(true) {
+  appendPluginHostTraceEditor("HelmEditor::HelmEditor begin");
+  if (!initializeGui())
+    throw std::runtime_error("helmBoy editor GUI initialization failed");
+
   setLookAndFeel(DefaultLookAndFeel::instance());
 
+  appendPluginHostTraceEditor("HelmEditor::HelmEditor addAndMakeVisible(gui_) start");
   addAndMakeVisible(gui_.get());
+  appendPluginHostTraceEditor("HelmEditor::HelmEditor addAndMakeVisible(gui_) done");
 
-  gui_->setOutputMemory(helm.getOutputMemory());
+  appendPluginHostTraceEditor("HelmEditor::HelmEditor setOutputMemory start");
+  gui_->setOutputMemorySource(&helm);
+  appendPluginHostTraceEditor("HelmEditor::HelmEditor setOutputMemory done");
+
+  appendPluginHostTraceEditor("HelmEditor::HelmEditor animate start");
   gui_->animate(LoadSave::shouldAnimateWidgets());
+  appendPluginHostTraceEditor("HelmEditor::HelmEditor animate done");
 
   constrainer_.setMinimumSize(2 * mopo::DEFAULT_WINDOW_WIDTH / 3,
                               2 * mopo::DEFAULT_WINDOW_HEIGHT / 3);
@@ -42,9 +57,16 @@ HelmEditor::HelmEditor(HelmPlugin& helm) : AudioProcessorEditor(&helm), SynthGui
 
   float window_size = LoadSave::loadWindowSize();
   setResizable(true, true);
+  appendPluginHostTraceEditor("HelmEditor::HelmEditor setSize start");
   setSize(window_size * mopo::DEFAULT_WINDOW_WIDTH, window_size * mopo::DEFAULT_WINDOW_HEIGHT);
+  appendPluginHostTraceEditor("HelmEditor::HelmEditor setSize done");
 
   repaint();
+  appendPluginHostTraceEditor("HelmEditor::HelmEditor end");
+}
+
+HelmEditor::~HelmEditor() {
+  setLookAndFeel(nullptr);
 }
 
 void HelmEditor::paint(Graphics& g) {
@@ -52,7 +74,8 @@ void HelmEditor::paint(Graphics& g) {
 }
 
 void HelmEditor::resized() {
-  gui_->setBounds(getLocalBounds());
+  if (gui_ != nullptr)
+    gui_->setBounds(getLocalBounds());
   AudioProcessorEditor::resized();
 }
 
@@ -87,100 +110,13 @@ void HelmEditor::updateFullGui() {
 }
 
 void HelmEditor::checkAnimate() {
+  if (gui_ == nullptr)
+    return;
+
   Component* top_level = getTopLevelComponent();
-  bool should_animate = top_level->hasKeyboardFocus(true) && top_level->isShowing();
+  bool should_animate = top_level->isShowing();
   if (was_animating_ != should_animate) {
     gui_->animate(should_animate && LoadSave::shouldAnimateWidgets());
     was_animating_ = should_animate;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

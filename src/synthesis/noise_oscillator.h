@@ -28,7 +28,7 @@ namespace mopo {
 
 /**
  * @file noise_oscillator.h
- * @brief Header for a simple white-noise oscillator processor.
+ * @brief Header for a continuous-colour noise oscillator processor.
  */
 
   constexpr mopo_float NOISE_CONSTANT = 9.19191919191919191919191919191919191919191919;
@@ -39,6 +39,7 @@ namespace mopo {
       enum Inputs {
         kReset,
         kAmplitude,
+        kColor,
         kNumInputs
       };
 
@@ -46,18 +47,29 @@ namespace mopo {
 
       virtual void process();
       virtual Processor* clone() const { return new NoiseOscillator(*this); }
+      void setSampleRate(int sample_rate) override;
 
     protected:
-      inline void tick(int i, mopo_float* dest, mopo_float amplitude) {
+      [[nodiscard]] mopo_float colorSample(mopo_float white, mopo_float color,
+                                            mopo_float brown_gain,
+                                            mopo_float violet_gain) const;
+      inline mopo_float nextWhiteSample() {
         current_noise_value_ *= current_noise_value_;
         current_noise_value_ = current_noise_value_ - floor(current_noise_value_);
-
-        dest[i] = amplitude * (2.0 * current_noise_value_ - 1.0);
-
+        const mopo_float sample = 2.0 * current_noise_value_ - 1.0;
         current_noise_value_ += NOISE_INT_CONSTANT;
+        return sample;
       }
 
+      void resetColorFilter();
+
       mopo_float current_noise_value_;
+      mopo_float color_filter_state_;
+      mopo_float color_filter_coefficient_;
+      mopo_float current_color_;
+      mopo_float target_color_;
+      int color_smoothing_remaining_;
+      int color_smoothing_samples_;
   };
 } // namespace mopo
 

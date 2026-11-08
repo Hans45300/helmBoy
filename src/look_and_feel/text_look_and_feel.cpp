@@ -22,6 +22,7 @@
 
 #include "colors.h"
 #include "fonts.h"
+#include "synth_button.h"
 #include "synth_slider.h"
 
 TextLookAndFeel::TextLookAndFeel() {
@@ -37,13 +38,18 @@ TextLookAndFeel::TextLookAndFeel() {
 void TextLookAndFeel::drawRotarySlider(Graphics& g, int x, int y, int width, int height,
                                        float slider_t, float start_angle, float end_angle,
                                        Slider& slider) {
-  static const float text_percentage = 0.7f;
+  float text_percentage = 0.7f;
   static const int mod_buffer = 5;
+  Rectangle<int> text_bounds(x + mod_buffer, y, width - 2 * mod_buffer, height);
 
   bool active = true;
   SynthSlider* s_slider = dynamic_cast<SynthSlider*>(&slider);
-  if (s_slider)
+  if (s_slider) {
     active = s_slider->isActive();
+    if (s_slider->getName() == "osc_1_unison_detune" ||
+        s_slider->getName() == "osc_2_unison_detune")
+      text_percentage = 0.5f;
+  }
 
   g.setColour(Colors::text_background);
   g.fillRect(x + mod_buffer, y, width - 2 * mod_buffer, height);
@@ -60,8 +66,8 @@ void TextLookAndFeel::drawRotarySlider(Graphics& g, int x, int y, int width, int
     g.setColour(Colors::text_button_normal);
 
   g.setFont(Fonts::instance()->monospace().withPointHeight(height * text_percentage));
-  g.drawText(slider.getTextFromValue(slider.getValue()),
-             x, y, width, height, Justification::centred, false);
+  g.drawFittedText(slider.getTextFromValue(slider.getValue()), text_bounds,
+                   Justification::centred, 1, 0.7f);
 }
 
 void TextLookAndFeel::drawToggleButton(Graphics& g, ToggleButton& button,
@@ -73,6 +79,12 @@ void TextLookAndFeel::drawToggleButton(Graphics& g, ToggleButton& button,
   else
     g.setColour(Colour(0xff313131));
   g.fillRect(button.getLocalBounds());
+
+  SynthButton* synth_button = dynamic_cast<SynthButton*>(&button);
+  if (synth_button && synth_button->isModulationActive()) {
+    g.setColour(Colors::modulation.withAlpha(0.3f));
+    g.fillRect(button.getLocalBounds().toFloat().reduced(1.5f));
+  }
 
   g.setColour(Colours::white);
   int height = button.getHeight();
@@ -90,6 +102,11 @@ void TextLookAndFeel::drawToggleButton(Graphics& g, ToggleButton& button,
   else if (hover) {
     g.setColour(Colour(0x11ffffff));
     g.fillRect(button.getLocalBounds());
+  }
+
+  if (synth_button && synth_button->isModulationEditActive()) {
+    g.setColour(Colors::modulation.withAlpha(0.85f));
+    g.drawRect(button.getLocalBounds().toFloat().reduced(1.5f), 2.5f);
   }
 }
 

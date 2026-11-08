@@ -43,9 +43,16 @@ namespace mopo {
       ProcessorRouter::process();
     else  {
       std::ranges::for_each(std::views::iota(0, numOutputs()), [this](int i) {
+        const Output* source = input(static_cast<int>(Inputs::Audio))->source;
+        if (i == 1 && numInputs() > static_cast<int>(Inputs::AudioRight)) {
+          const Output* right_source = input(static_cast<int>(Inputs::AudioRight))->source;
+          if (right_source != &null_source_)
+            source = right_source;
+        }
+        MOPO_ASSERT(source->buffer_size >= buffer_size_);
         utils::copyBuffer(
-          std::span<mopo_float, MAX_BUFFER_SIZE>(output(i)->buffer, buffer_size_),
-          std::span<const mopo_float, MAX_BUFFER_SIZE>(input(static_cast<int>(Inputs::Audio))->source->buffer, buffer_size_)
+          std::span<mopo_float>(output(i)->buffer, buffer_size_),
+          std::span<const mopo_float>(source->buffer, buffer_size_)
         );
       });
     }

@@ -4,13 +4,19 @@
 
 ![Filter envelope example](../pictures/Filter%20Envelope.png)
 
-The filter envelope modulates the filter cutoff frequency over time, creating dynamic timbral changes.
+The filter envelope modulates the filter cutoff with five stages: Attack, Hold, Decay, Sustain, and Release (AHDSR).
+When its stages are modulated, the envelope display shows the effective contour
+with a translucent fill, alongside the editable base contour.
 
 ## Parameters
 
 ### Attack
 
 Time for the envelope to reach its peak after a note is triggered.
+
+### Hold
+
+Time the envelope stays at its peak after Attack and before Decay.
 
 ### Decay
 

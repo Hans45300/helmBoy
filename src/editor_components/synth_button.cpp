@@ -30,17 +30,15 @@ namespace {
   enum MenuIds {
     kCancel = 0,
     kArmMidiLearn,
-    kClearMidiLearn
+    kClearMidiLearn,
+    kClearModulations,
+    kModulationList
   };
 
-  static void sliderPopupCallback(int result, SynthButton* button) {
-    if (button != nullptr && result != kCancel)
-      button->handlePopupResult(result);
-  }
 } // namespace
 
-SynthButton::SynthButton(String name) : ToggleButton(name), active_(true),
-                                        string_lookup_(nullptr), parent_(nullptr) {
+SynthButton::SynthButton(String name) : ToggleButton(name), active_(true), modulated_(false), modulation_edit_active_(false),
+                                        modulation_active_(false), string_lookup_(nullptr), parent_(nullptr) {
   if (!mopo::Parameters::isParameter(name.toStdString()))
     return;
 
@@ -68,17 +66,54 @@ void SynthButton::setActive(bool active) {
   repaint();
 }
 
+void SynthButton::setModulated(bool modulated) {
+  modulated_ = modulated;
+  repaint();
+}
+
+void SynthButton::setModulationEditActive(bool active) {
+  modulation_edit_active_ = active;
+  repaint();
+}
+
+void SynthButton::setModulationActive(bool active) {
+  if (modulation_active_ == active)
+    return;
+
+  modulation_active_ = active;
+  repaint();
+}
+
 void SynthButton::handlePopupResult(int result) {
   SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
   if (parent == nullptr)
     return;
 
   SynthBase* synth = parent->getSynth();
+  std::vector<mopo::ModulationConnection*> connections =
+      synth->getDestinationConnections(getName().toStdString());
 
   if (result == kArmMidiLearn)
     synth->armMidiLearn(getName().toStdString());
   else if (result == kClearMidiLearn)
     synth->clearMidiLearn(getName().toStdString());
+  else if (result == kClearModulations) {
+    for (auto* connection : connections)
+      synth->disconnectModulation(connection);
+    notifyModulationsChanged();
+  }
+  else if (result >= kModulationList) {
+    int connection_index = result - kModulationList;
+    if (connection_index >= 0 && connection_index < static_cast<int>(connections.size())) {
+      synth->disconnectModulation(connections[connection_index]);
+      notifyModulationsChanged();
+    }
+  }
+}
+
+void SynthButton::notifyModulationsChanged() {
+  for (auto* listener : button_listeners_)
+    listener->modulationsChanged(this);
 }
 
 void SynthButton::mouseDown(const MouseEvent& e) {
@@ -95,14 +130,30 @@ void SynthButton::mouseDown(const MouseEvent& e) {
     if (parent->getSynth()->isMidiMapped(getName().toStdString()))
       m.addItem(kClearMidiLearn, "Clear MIDI Assignment");
 
-    m.showMenuAsync(PopupMenu::Options(),
-                    ModalCallbackFunction::forComponent(sliderPopupCallback, this));
+    std::vector<mopo::ModulationConnection*> connections =
+        parent->getSynth()->getDestinationConnections(getName().toStdString());
+
+    String disconnect("Disconnect from ");
+    for (int i = 0; i < static_cast<int>(connections.size()); ++i)
+      m.addItem(kModulationList + i, disconnect + connections[i]->source);
+
+    if (connections.size() > 1)
+      m.addItem(kClearModulations, "Disconnect all modulations");
+
+    SynthSlider::showModulationPopup(m, this, false,
+                     kModulationList + static_cast<int>(connections.size()),
+                     [this](int result) { handlePopupResult(result); });
   }
   else {
-    ToggleButton::mouseDown(e);
+    for (auto* listener : button_listeners_) {
+      if (listener->modulationGesture(this, e.mods))
+        return;
+    }
 
+    ToggleButton::mouseDown(e);
     if (parent)
       synth->beginChangeGesture(getName().toStdString());
+    ToggleButton::mouseDown(e);
   }
 }
 
@@ -136,93 +187,3 @@ void SynthButton::notifyTooltip() {
     parent_->setToolTipText(name, getTextFromValue(getToggleState()));
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -127,6 +127,7 @@ namespace mopo {
 
   const constexpr int PPQ = 960; // Pulses per quarter note.
   const constexpr mopo_float VOICE_KILL_TIME = 0.02;
+  const constexpr int MAX_DELAY_SAMPLES = 300000;
   const constexpr int NUM_MIDI_CHANNELS = 16;
 
   // Common types of events across different Processors.

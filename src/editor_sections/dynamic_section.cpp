@@ -29,8 +29,8 @@
 #include "fonts.h"
 #include "text_look_and_feel.h"
 
-#define TEXT_WIDTH 40
-#define SELECTOR_WIDTH 75
+#define SELECTOR_WIDTH 64
+#define LEGATO_WIDTH 32
 #define TEXT_HEIGHT 16
 
 DynamicSection::DynamicSection(String name) : SynthSection(name) {
@@ -43,6 +43,7 @@ DynamicSection::DynamicSection(String name) : SynthSection(name) {
   portamento_type_->setStringLookup(mopo::strings::off_auto_on);
   portamento_type_->setPopupPlacement(BubbleComponent::above, 0);
   portamento_type_->setShortStringLookup(mopo::strings::off_auto_on_slider);
+  portamento_type_->setTextSizeScale(0.55f);
 
   addButton((legato_ = std::make_unique<SynthButton>("legato")).get());
   legato_->setLookAndFeel(TextLookAndFeel::instance());
@@ -61,20 +62,27 @@ void DynamicSection::paintBackground(Graphics& g) {
 
   int knob_width = getStandardKnobSize();
   int text_height = size_ratio_ * TEXT_HEIGHT;
+  int label_y = portamento_->getBottom() + size_ratio_ * 4.0f;
+  int label_height = size_ratio_ * 10.0f;
 
   g.setColour(Colors::control_label_text);
-  g.setFont(Fonts::instance()->proportional_regular().withPointHeight(size_ratio_ * 10.0f));
+  g.setFont(Fonts::instance()->proportional_regular().withPointHeight(size_ratio_ * 8.0f));
 
-  drawTextForComponent(g, TRANS("PORTA"), portamento_.get());
-  drawTextForComponent(g, TRANS("PORTA TYPE"), portamento_type_.get(),
-                       size_ratio_ * 4.0f + (knob_width - text_height) / 3.0f);
-  drawTextForComponent(g, TRANS("LEGATO"), legato_.get(),
-                       size_ratio_ * 4.0f + (knob_width - text_height) / 3.0f);
+  int selector_left = portamento_type_->getX();
+  int legato_left = legato_->getX();
+  g.drawFittedText(TRANS("PORTA"), 0, label_y, selector_left, label_height,
+                   Justification::centred, 1, 0.65f);
+  g.drawFittedText(TRANS("PORTA TYPE"), selector_left, label_y,
+                   legato_left - selector_left, label_height,
+                   Justification::centred, 1, 0.65f);
+  g.drawFittedText(TRANS("LEGATO"), legato_left, label_y,
+                   getWidth() - legato_left, label_height,
+                   Justification::centred, 1, 0.65f);
 }
 
 void DynamicSection::resized() {
   int knob_width = getStandardKnobSize();
-  int text_width = size_ratio_ * TEXT_WIDTH;
+  int text_width = size_ratio_ * LEGATO_WIDTH;
   int text_height = size_ratio_ * TEXT_HEIGHT;
   int selector_width = size_ratio_ * SELECTOR_WIDTH;
 

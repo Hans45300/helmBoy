@@ -21,8 +21,11 @@
 #include "filter_response.h"
 
 #include "colors.h"
+#include "full_interface.h"
 #include "midi_lookup.h"
 #include "utils.h"
+
+#include <cmath>
 
 #define MIN_GAIN_DB -30.0
 #define MAX_GAIN_DB 24.0
@@ -43,15 +46,19 @@ FilterResponse::FilterResponse(int resolution) {
   filter_band_.setSampleRate(44100);
   filter_high_.setSampleRate(44100);
   filter_shelf_.setSampleRate(44100);
+  filter_notch_.setSampleRate(44100);
   style_ = mopo::StateVariableFilter::Styles::NumStyles;
   active_ = false;
   resetResponsePath();
 
   setOpaque(true);
   setBufferedToImage(true);
+  startTimerHz(30);
 }
 
-FilterResponse::~FilterResponse() { }
+FilterResponse::~FilterResponse() {
+  stopTimer();
+}
 
 void FilterResponse::paintBackground(Graphics& g) {
   // Fond de la grille d'affichage de la courbe de filtre
@@ -71,26 +78,31 @@ void FilterResponse::paint(Graphics& g) {
               0, 0, getWidth(), getHeight(),
               0, 0, background_.getWidth(), background_.getHeight());
 
-  shadow.drawForPath(g, filter_response_path_);
+  shadow.drawForPath(g, base_filter_response_path_);
 
   g.setColour(Colors::graph_fill);
-  g.fillPath(filter_response_path_);
+  g.fillPath(base_filter_response_path_);
 
   if (active_)
-    g.setColour(Colors::audio);
+    g.setColour(Colors::modulation);
   else
     g.setColour(Colors::graph_disable);
 
-  float line_width = 1.5f * getHeight() / 150.0f;
+  float line_width = 1.0f * getHeight() / 150.0f;
   PathStrokeType stroke(line_width, PathStrokeType::beveled, PathStrokeType::rounded);
-  g.strokePath(filter_response_path_, stroke);
+  g.strokePath(base_filter_response_path_, stroke);
+
+  if (effective_shape_differs_) {
+    g.setColour(Colors::modulation.withAlpha(0.5f));
+    g.fillPath(filter_response_path_);
+    g.setColour(Colors::modulation);
+    g.strokePath(filter_response_path_, stroke);
+  }
 }
 
 void FilterResponse::resized() {
   auto *display = Desktop::getInstance().getDisplays().getPrimaryDisplay();
-  jassert(display != nullptr);
-
-  float scale = display->scale;
+  float scale = display != nullptr ? static_cast<float>(display->scale) : 1.0f;
   background_ = Image(Image::RGB, scale * getWidth(), scale * getHeight(), true);
   Graphics g(background_);
   g.addTransform(AffineTransform::scale(scale, scale));
@@ -101,6 +113,10 @@ void FilterResponse::resized() {
 }
 
 void FilterResponse::mouseDown(const MouseEvent& e) {
+  if (cutoff_slider_ != nullptr)
+    cutoff_slider_->beginParameterEditHistoryGesture();
+  if (resonance_slider_ != nullptr)
+    resonance_slider_->beginParameterEditHistoryGesture();
   setFilterSettingsFromPosition(e.getPosition());
   repaint();
 }
@@ -110,12 +126,27 @@ void FilterResponse::mouseDrag(const MouseEvent& e) {
   repaint();
 }
 
+void FilterResponse::mouseUp(const MouseEvent& e) {
+  if (cutoff_slider_ != nullptr)
+    cutoff_slider_->endParameterEditHistoryGesture();
+  if (resonance_slider_ != nullptr)
+    resonance_slider_->endParameterEditHistoryGesture();
+}
+
 float FilterResponse::getPercentForMidiNote(float midi_note) {
   float frequency = mopo::utils::midiNoteToFrequency(midi_note);
 
   float response = 0.0f;
   if (style_ == mopo::StateVariableFilter::Styles::Shelf)
     response = fabs(filter_shelf_.getAmplitudeResponse(frequency));
+  else if (style_ == mopo::StateVariableFilter::Styles::Notch)
+    response = fabs(filter_notch_.getAmplitudeResponse(frequency));
+  else if (style_ == mopo::StateVariableFilter::Styles::Comb) {
+    const float phase = 2.0f * static_cast<float>(mopo::PI) * frequency * comb_period_seconds_;
+    const float denominator = std::sqrt(1.0f + comb_feedback_ * comb_feedback_ -
+                                        2.0f * comb_feedback_ * std::cos(phase));
+    response = 1.0f / denominator;
+  }
   else {
     float blend = filter_blend_slider_->getValue();
     float low_pass_amount = mopo::utils::clamp(1.0 - blend, 0.0, 1.0);
@@ -136,19 +167,43 @@ float FilterResponse::getPercentForMidiNote(float midi_note) {
 }
 
 void FilterResponse::resetResponsePath() {
-  static const int wrap_size = 10;
-
-  if (cutoff_slider_ == nullptr)
+  if (cutoff_slider_ == nullptr || resonance_slider_ == nullptr ||
+      filter_blend_slider_ == nullptr || filter_shelf_slider_ == nullptr)
     return;
 
-  filter_response_path_.clear();
-  filter_response_path_.startNewSubPath(-wrap_size, getHeight() + wrap_size);
+  const double base_cutoff = cutoff_slider_->getValue();
+  const double base_resonance = resonance_slider_->getValue();
+  const double effective_cutoff = displayed_parameters_valid_
+      ? displayed_cutoff_ : base_cutoff;
+  const double effective_resonance = displayed_parameters_valid_
+      ? displayed_resonance_ : base_resonance;
+
+  setFilterCoefficients(effective_cutoff, effective_resonance);
+  filter_response_path_ = createResponsePath();
+
+  const double cutoff_change = std::abs(
+      cutoff_slider_->valueToProportionOfLength(effective_cutoff) -
+      cutoff_slider_->valueToProportionOfLength(base_cutoff));
+  const double resonance_change = std::abs(
+      resonance_slider_->valueToProportionOfLength(effective_resonance) -
+      resonance_slider_->valueToProportionOfLength(base_resonance));
+  effective_shape_differs_ = cutoff_change >= 0.0005 || resonance_change >= 0.0005;
+
+  setFilterCoefficients(base_cutoff, base_resonance);
+  base_filter_response_path_ = createResponsePath();
+  setFilterCoefficients(effective_cutoff, effective_resonance);
+}
+
+Path FilterResponse::createResponsePath() {
+  static const int wrap_size = 10;
+  Path response_path;
+  response_path.startNewSubPath(-wrap_size, getHeight() + wrap_size);
   float start_percent = getPercentForMidiNote(0.0);
   float last_y = getHeight() * (1.0f - start_percent);
   float last_slope = 0.0f;
   float last_x = 0.0f;
 
-  filter_response_path_.lineTo(-wrap_size, last_y);
+  response_path.lineTo(-wrap_size, last_y);
 
   for (int i = 0; i < resolution_; ++i) {
     float t = (1.0f * i) / (resolution_ - 1);
@@ -163,14 +218,15 @@ void FilterResponse::resetResponsePath() {
       last_x = new_x;
       last_y = new_y;
       last_slope = new_slope;
-      filter_response_path_.lineTo(new_x, new_y);
+      response_path.lineTo(new_x, new_y);
     }
   }
 
   float end_percent = getPercentForMidiNote(cutoff_slider_->getMaximum());
 
-  filter_response_path_.lineTo(getWidth() + wrap_size, getHeight() * (1.0f - end_percent));
-  filter_response_path_.lineTo(getWidth() + wrap_size, getHeight() + wrap_size);
+  response_path.lineTo(getWidth() + wrap_size, getHeight() * (1.0f - end_percent));
+  response_path.lineTo(getWidth() + wrap_size, getHeight() + wrap_size);
+  return response_path;
 }
 
 void FilterResponse::computeFilterCoefficients() {
@@ -179,18 +235,44 @@ void FilterResponse::computeFilterCoefficients() {
     return;
   }
 
+  computeFilterCoefficients(cutoff_slider_->getValue(), resonance_slider_->getValue());
+}
+
+void FilterResponse::computeFilterCoefficients(double cutoff, double resonance_value) {
+  if (cutoff_slider_ == nullptr || resonance_slider_ == nullptr ||
+      filter_blend_slider_ == nullptr || filter_shelf_slider_ == nullptr)
+    return;
+
+  displayed_cutoff_ = cutoff;
+  displayed_resonance_ = resonance_value;
+  displayed_parameters_valid_ = true;
+
+  resetResponsePath();
+}
+
+void FilterResponse::setFilterCoefficients(double cutoff, double resonance_value) {
+  if (cutoff_slider_ == nullptr || resonance_slider_ == nullptr ||
+      filter_blend_slider_ == nullptr || filter_shelf_slider_ == nullptr)
+    return;
+
   mopo::StateVariableFilter::Shelves shelf = static_cast<mopo::StateVariableFilter::Shelves>(
       static_cast<int>(filter_shelf_slider_->getValue()));
-  double frequency = mopo::utils::midiNoteToFrequency(cutoff_slider_->getValue());
-  double resonance = mopo::utils::magnitudeToQ(resonance_slider_->getValue());
+  double frequency = mopo::utils::midiNoteToFrequency(cutoff);
+  double resonance = mopo::utils::magnitudeToQ(resonance_value);
   double decibels = mopo::utils::interpolate(MIN_GAIN_DB, MAX_GAIN_DB,
-                                             resonance_slider_->getValue());
+                                             resonance_value);
   double gain = mopo::utils::dbToGain(decibels);
 
   if (style_ == mopo::StateVariableFilter::Styles::dB24) {
     resonance = sqrt(resonance);
     gain = sqrt(gain);
   }
+
+  const double cutoff_frequency = mopo::utils::midiNoteToFrequency(cutoff);
+  comb_period_seconds_ = static_cast<float>(mopo::utils::clamp(1.0 / cutoff_frequency,
+                                                               0.00001, 0.1));
+  comb_feedback_ = static_cast<float>(mopo::utils::clamp(
+      0.95 * resonance_value, 0.0, 0.95));
 
   if (style_ == mopo::StateVariableFilter::Styles::Shelf) {
   mopo::BiquadFilter::Type type = mopo::BiquadFilter::Type::LowShelf;
@@ -200,12 +282,60 @@ void FilterResponse::computeFilterCoefficients() {
       type = mopo::BiquadFilter::Type::HighShelf;
     filter_shelf_.computeCoefficients(type, frequency, 1.0, gain);
   }
-  else {
+  else if (style_ == mopo::StateVariableFilter::Styles::Notch) {
+    filter_notch_.computeCoefficients(mopo::BiquadFilter::Type::Notch,
+                                      frequency, resonance, 1.0);
+  }
+  else if (style_ != mopo::StateVariableFilter::Styles::Comb) {
   filter_low_.computeCoefficients(mopo::BiquadFilter::Type::LowPass, frequency, resonance, 1.0);
   filter_band_.computeCoefficients(mopo::BiquadFilter::Type::BandPass, frequency, resonance, 1.0);
   filter_high_.computeCoefficients(mopo::BiquadFilter::Type::HighPass, frequency, resonance, 1.0);
   }
-  resetResponsePath();
+}
+
+void FilterResponse::timerCallback() {
+  if (!isShowing() || cutoff_slider_ == nullptr || resonance_slider_ == nullptr)
+    return;
+
+  const double base_cutoff = cutoff_slider_->getValue();
+  const double base_resonance = resonance_slider_->getValue();
+  double effective_cutoff = base_cutoff;
+  double effective_resonance = base_resonance;
+
+  FullInterface* interface = findParentComponentOfClass<FullInterface>();
+  if (interface != nullptr && interface->isAnimating()) {
+    const auto readEffectiveValue = [interface](
+        const char* name, SynthSlider* slider, double previous) {
+      if (!interface->isDestinationModulated(name))
+        return static_cast<double>(slider->getValue());
+
+      float value = static_cast<float>(previous);
+      if (!interface->copyModulatedValue(name, value) || !std::isfinite(value))
+        return previous;
+      return jlimit(slider->getMinimum(), slider->getMaximum(),
+                    static_cast<double>(value));
+    };
+
+    effective_cutoff = readEffectiveValue(
+        "cutoff", cutoff_slider_, displayed_parameters_valid_ ? displayed_cutoff_ : base_cutoff);
+    effective_resonance = readEffectiveValue(
+        "resonance", resonance_slider_,
+        displayed_parameters_valid_ ? displayed_resonance_ : base_resonance);
+  }
+
+  const double cutoff_change = std::abs(
+      cutoff_slider_->valueToProportionOfLength(effective_cutoff) -
+      cutoff_slider_->valueToProportionOfLength(
+          displayed_parameters_valid_ ? displayed_cutoff_ : base_cutoff));
+  const double resonance_change = std::abs(
+      resonance_slider_->valueToProportionOfLength(effective_resonance) -
+      resonance_slider_->valueToProportionOfLength(
+          displayed_parameters_valid_ ? displayed_resonance_ : base_resonance));
+  if (!displayed_parameters_valid_ || cutoff_change >= 0.0005 ||
+      resonance_change >= 0.0005) {
+    computeFilterCoefficients(effective_cutoff, effective_resonance);
+    repaint();
+  }
 }
 
 void FilterResponse::setFilterSettingsFromPosition(Point<int> position) {

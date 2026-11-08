@@ -1,0 +1,11 @@
+<map id="mopo::cr::Value" name="mopo::cr::Value">
+<area shape="rect" id="Node000001" title="Processeur Value en mode control rate." alt="" coords="94,795,196,885"/>
+<area shape="rect" id="Node000004" href="$classmopo_1_1ValueSwitch.html" title=" " alt="" coords="5,965,128,1184"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="127,897,106,967,101,965,125,902"/>
+<area shape="rect" id="Node000005" href="$classmopo_1_1cr_1_1SmoothValue.html" title="Version contr�le de SmoothValue (cr = control rate)." alt="" coords="152,933,299,1216"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="166,897,180,934,174,933,165,902"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Value.html" title="Processeur de valeur constante ou control�e." alt="" coords="104,592,187,747"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="146,759,148,796,143,795,145,764"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1Processor.html" title=" " alt="" coords="70,5,221,544"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="146,556,148,592,143,592,145,562"/>
+</map>

@@ -72,6 +72,7 @@ StepSequencerSection::StepSequencerSection(String name) : SynthSection(name) {
   modulation_button_->setLookAndFeel(ModulationLookAndFeel::instance());
 
   createStepSequencerSliders();
+  updateMeasureMarkers();
 }
 
 StepSequencerSection::~StepSequencerSection() {
@@ -134,6 +135,28 @@ void StepSequencerSection::resized() {
   tempo_->setPopupDisplayEnabled(false, false, nullptr);
 }
 
+void StepSequencerSection::sliderValueChanged(Slider* moved_slider) {
+  SynthSection::sliderValueChanged(moved_slider);
+  if (moved_slider == sync_.get() || moved_slider == tempo_.get())
+    updateMeasureMarkers();
+}
+
+void StepSequencerSection::updateMeasureMarkers() {
+  if (step_sequencer_ == nullptr || sync_ == nullptr || tempo_ == nullptr)
+    return;
+
+  int sync_mode = static_cast<int>(sync_->getValue() + 0.5f);
+  if (sync_mode < 1 || sync_mode > 3) {
+    step_sequencer_->setStepsPerMeasure(0.0f);
+    return;
+  }
+
+  int division = mopo::utils::iclamp(static_cast<int>(tempo_->getValue() + 0.5f), 0, 11);
+  float steps_per_beat = static_cast<float>(mopo::synced_freq_ratios[division].value());
+  float sync_factor = sync_mode == 2 ? 2.0f / 3.0f : (sync_mode == 3 ? 1.5f : 1.0f);
+  step_sequencer_->setStepsPerMeasure(4.0f * steps_per_beat * sync_factor);
+}
+
 void StepSequencerSection::createStepSequencerSliders() {
   for (int i = 0; i < num_steps_->getMaximum(); ++i) {
     String num(i);
@@ -156,6 +179,6 @@ void StepSequencerSection::animate(bool animate) {
 }
 
 void StepSequencerSection::reset() {
-  step_sequencer_->resetBackground();
   SynthSection::reset();
+  updateMeasureMarkers();
 }

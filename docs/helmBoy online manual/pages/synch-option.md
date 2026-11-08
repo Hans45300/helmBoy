@@ -1,26 +1,23 @@
-# Sync Options
+# Synchronization Options
 
 ## Overview
 
 ![Sync block example](../pictures/Synch%20Option.png)
 
-Synchronization settings for various modules.
+HelmBoy provides separate controls for tempo-based rates, note retriggering, and oscillator hard synchronization. These controls do not use an external MIDI clock.
 
 ## Sync Types
 
-### LFO Sync
+### Tempo-Based Rates
 
-- **Free Running**: Continuous oscillation
-- **Retrigger**: Reset phase on each new note
-- **Sync to Tempo**: Lock to host tempo
+The LFOs, delay, arpeggiator, step sequencer, and stutter provide rate or time selectors. Depending on the module, choose free-running seconds or a host/internal tempo division: straight, dotted, or triplet.
 
-### Oscillator Sync
+Both the tempo division (`*_tempo`) and the synchronization mode (`*_sync`) can be modulation destinations. The synchronization mode follows the nearest available choice and displays the effective mode in green while modulation changes it; tempo-division controls show the existing modulation amount indicator.
 
-- **Hard Sync**: Reset slave oscillator phase when master completes cycle
-- **Soft Sync**: Gradual phase alignment
+### LFO and Sequencer Retriggering
 
-### Sequencer Sync
+Where a retrigger selector is present, its modes are **Free**, **Retrigger**, and **Sync to Playhead**. These control how the modulation cycle responds to notes or the host playhead; they are distinct from tempo-rate selection. Retrigger modes can also be modulation destinations: modulation selects the nearest mode, and the selector highlights the effective mode when it changes.
 
-- **Internal**: Use internal clock
-- **External**: Sync to host tempo
-- **MIDI Clock**: Sync to external MIDI clock
+### Oscillator Hard Sync
+
+The **Hard Sync** button in the oscillator section is off by default. When enabled, Oscillator 1 resets Oscillator 2's phase at every master cycle. It is not a gradual or soft-sync mode, and it can also be controlled by modulation.

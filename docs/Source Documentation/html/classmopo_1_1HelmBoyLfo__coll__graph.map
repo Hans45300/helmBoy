@@ -1,5 +1,11 @@
 <map id="mopo::HelmBoyLfo" name="mopo::HelmBoyLfo">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,123,164,320"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="50,5,120,75"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,90,88,123,82,123,82,90"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,712,174,1016"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="204,5,355,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,514,139,713,134,712,200,509"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="199,573,360,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="274,514,276,525,276,574,271,573,271,525,273,519"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="390,744,490,984"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="344,499,363,548,374,572,397,650,417,728,411,727,392,651,369,574,358,550,343,504"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="277,573,279,521,280,515,282,574"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="441,743,434,637,426,581,414,526,390,458,362,395,363,390,395,456,419,525,431,580,440,636,446,745"/>
 </map>

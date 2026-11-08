@@ -46,10 +46,11 @@ void GraphicalStepSequencer::paintBackground(Graphics& g) {
   g.fillAll(Colour(Colors::Color_ff424242));
 
   float x_inc = getWidth() / (1.0f * num_steps_);
-  float line_width = 1.5f * getHeight() / 80.0f;
-  g.setColour(Colour(Colors::Color_ff545454));
-  for (int i = 1; i * x_inc < getWidth(); ++i)
+  float line_width = std::max(2.0f, getHeight() / 40.0f);
+  for (int i = 1; i * x_inc < getWidth(); ++i) {
+    g.setColour(Colour(Colors::Color_ff545454));
     g.drawLine(i * x_inc, 0, i * x_inc, getHeight());
+  }
 
   // Draw shadows.
   float x = 0.0f;
@@ -79,6 +80,14 @@ void GraphicalStepSequencer::paintBackground(Graphics& g) {
     g.fillRect(x, bar_position, x_inc, line_width);
 
     x += x_inc;
+  }
+
+  if (steps_per_measure_ > 0.0f) {
+    g.setColour(Colour(Colors::Color_ff888888));
+    for (float step = 0.0f; step < num_steps_; step += steps_per_measure_) {
+      float measure_x = step * x_inc;
+      g.fillRect(measure_x, 0.0f, 2.0f, static_cast<float>(getHeight()));
+    }
   }
 }
 
@@ -113,9 +122,7 @@ void GraphicalStepSequencer::resized() {
   ensureMinSize();
 
   auto *display = Desktop::getInstance().getDisplays().getPrimaryDisplay();
-  jassert(display != nullptr);
-
-  float scale = display->scale;
+  float scale = display != nullptr ? static_cast<float>(display->scale) : 1.0f;
   background_ = Image(Image::RGB, scale * getWidth(), scale * getHeight(), true);
   resetBackground();
 }
@@ -142,6 +149,12 @@ void GraphicalStepSequencer::mouseDrag(const MouseEvent& e) {
   last_edit_position_ = e.getPosition();
 }
 
+void GraphicalStepSequencer::mouseUp(const MouseEvent& e) {
+  for (auto* slider : sequence_)
+    if (slider != nullptr)
+      slider->endParameterEditHistoryGesture();
+}
+
 void GraphicalStepSequencer::timerCallback() {
   if (step_generator_output_) {
     int new_step = step_generator_output_->buffer[0];
@@ -152,7 +165,7 @@ void GraphicalStepSequencer::timerCallback() {
   }
 }
 
-void GraphicalStepSequencer::setStepSliders(std::vector<Slider*> sliders) {
+void GraphicalStepSequencer::setStepSliders(std::vector<SynthSlider*> sliders) {
   sequence_ = sliders;
   for (int i = 0; i < sliders.size(); ++i)
     sequence_[i]->addListener(this);
@@ -180,6 +193,11 @@ void GraphicalStepSequencer::setNumStepsSlider(SynthSlider* num_steps_slider) {
   resetBackground();
 }
 
+void GraphicalStepSequencer::setStepsPerMeasure(float steps_per_measure) {
+  steps_per_measure_ = steps_per_measure;
+  resetBackground();
+}
+
 void GraphicalStepSequencer::ensureMinSize() {
   if (num_steps_slider_ == nullptr)
     return;
@@ -194,9 +212,7 @@ void GraphicalStepSequencer::resetBackground() {
   ensureMinSize();
 
   auto *display = Desktop::getInstance().getDisplays().getPrimaryDisplay();
-  jassert(display != nullptr);
-
-  float scale = display->scale;
+  float scale = display != nullptr ? static_cast<float>(display->scale) : 1.0f;
   Graphics g(background_);
   g.addTransform(AffineTransform::scale(scale, scale));
   paintBackground(g);
@@ -230,6 +246,7 @@ void GraphicalStepSequencer::changeStep(const MouseEvent& e) {
       float new_value = -2.0f * y / getHeight() + 1.0f;
       new_value = std::max(std::min(new_value, 1.0f), -1.0f);
       new_value = sequence_[step]->snapValue(new_value, Slider::DragMode::absoluteDrag);
+      sequence_[step]->beginParameterEditHistoryGesture();
       sequence_[step]->setValue(new_value);
     }
     y += inc_x * slope;

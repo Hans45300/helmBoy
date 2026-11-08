@@ -1,0 +1,22 @@
+<map id="mopo::VoiceHandler" name="mopo::VoiceHandler">
+<area shape="rect" id="Node000001" title="Gestionnaire de voix polyphoniques (allocation, �tat, etc.)." alt="" coords="162,1896,366,2541"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="35,5,196,587"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="58,604,43,731,27,876,15,1032,9,1196,10,1366,21,1537,43,1707,78,1871,95,1922,115,1973,165,2067,159,2069,110,1975,90,1924,73,1873,38,1708,16,1538,5,1366,4,1196,10,1032,22,875,38,731,59,599"/>
+<area shape="poly" id="edge12_Node000001_Node000002" title=" " alt="" coords="103,584,102,806,104,1058,115,1325,126,1458,140,1589,160,1731,188,1871,189,1880,184,1879,183,1873,155,1732,135,1590,120,1459,110,1325,99,1058,96,806,103,589"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1Processor.html" title=" " alt="" coords="140,659,291,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="128,584,138,634,140,643,134,643,133,635,128,589"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="198,644,193,611,192,589,192,584,198,610,203,644"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="150,1299,250,1539"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="208,1152,207,1282,201,1281,208,1157"/>
+<area shape="poly" id="edge7_Node000001_Node000004" title=" " alt="" coords="197,1536,198,1613,193,1743,193,1799,198,1872,199,1879,193,1879,192,1872,188,1800,188,1743,192,1613,196,1541"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="241,1298,268,1223,275,1174,276,1169,273,1225,246,1300"/>
+<area shape="rect" id="Node000005" href="$classmopo_1_1NoteHandler.html" title="Interface for handling MIDI note events in synthesis modules." alt="" coords="274,1352,398,1485"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="336,1498,333,1672,320,1872,317,1897,312,1896,314,1872,328,1671,335,1503"/>
+<area shape="rect" id="Node000006" href="$classmopo_1_1CircularQueue.html" title=" " alt="" coords="421,1248,560,1589"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="444,1587,362,1881,357,1879,441,1591"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="561,872,580,941"/>
+<area shape="poly" id="edge9_Node000006_Node000007" title=" " alt="" coords="566,938,522,1232,517,1231,565,944"/>
+<area shape="rect" id="Node000008" href="$classmopo_1_1CircularQueue.html" title=" " alt="" coords="584,1248,717,1589"/>
+<area shape="poly" id="edge11_Node000008_Node000007" title=" " alt="" coords="576,938,624,1231,619,1231,575,944"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="628,1587,595,1731,571,1804,541,1873,506,1936,465,1996,379,2103,375,2100,461,1993,501,1933,536,1871,566,1802,590,1729,625,1592"/>
+</map>

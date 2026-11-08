@@ -60,55 +60,76 @@ DelaySection::DelaySection(String name) : SynthSection(name) {
   addSlider((dry_wet_ = std::make_unique<SynthSlider>("delay_dry_wet")).get());
   dry_wet_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
+  addSlider((lp_cutoff_ = std::make_unique<SynthSlider>("delay_lp_cutoff")).get());
+  lp_cutoff_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+
   addButton((on_ = std::make_unique<SynthButton>("delay_on")).get());
   setActivator(on_.get());
+
+  addButton((ping_pong_ = std::make_unique<SynthButton>("delay_ping_pong")).get());
+  ping_pong_->setLookAndFeel(TextLookAndFeel::instance());
+  ping_pong_->setButtonText("");
+  ping_pong_->setTooltip(TRANS("Ping-pong delay feedback"));
 }
 
 DelaySection::~DelaySection() {
   on_ = nullptr;
+  ping_pong_ = nullptr;
   frequency_ = nullptr;
   tempo_ = nullptr;
   sync_ = nullptr;
   feedback_ = nullptr;
   dry_wet_ = nullptr;
+  lp_cutoff_ = nullptr;
 }
 
 void DelaySection::paintBackground(Graphics& g) {
   SynthSection::paintBackground(g);
 
-  int text_height = size_ratio_ * TEXT_HEIGHT;
-  float font_size = size_ratio_ * 10.0f;
-  int knob_width = getStandardKnobSize();
-
   g.setColour(Colors::control_label_text);
-  g.setFont(Fonts::instance()->proportional_regular().withPointHeight(font_size));
+  g.setFont(Fonts::instance()->proportional_regular().withPointHeight(size_ratio_ * 8.0f));
 
-  drawTextForComponent(g, TRANS("FEEDB"), feedback_.get());
-  drawTextForComponent(g, TRANS("MIX"), dry_wet_.get());
-  g.drawText(TRANS("FREQUENCY"),
-             frequency_->getBounds().getX() - size_ratio_ * 5.0f,
-             feedback_->getBounds().getY() + knob_width + size_ratio_ * 4,
-             frequency_->getBounds().getWidth() + text_height + size_ratio_ * 10,
-             size_ratio_ * 10.0f, Justification::centred, false);
+  g.drawFittedText(TRANS("FEEDB"), feedback_->getX(), feedback_->getBottom() + size_ratio_ * 2.0f,
+                   feedback_->getWidth(), size_ratio_ * 10.0f, Justification::centred, 1, 0.65f);
+  g.drawFittedText(TRANS("MIX"), dry_wet_->getX(), dry_wet_->getBottom() + size_ratio_ * 2.0f,
+                   dry_wet_->getWidth(), size_ratio_ * 10.0f, Justification::centred, 1, 0.65f);
+  g.drawFittedText(TRANS("LP"), lp_cutoff_->getX(), lp_cutoff_->getBottom() + size_ratio_ * 2.0f,
+                   lp_cutoff_->getWidth(), size_ratio_ * 10.0f, Justification::centred, 1, 0.65f);
+  const auto ping_pong_bounds = ping_pong_->getBounds();
+  const int ping_pong_label_x = ping_pong_bounds.getRight() + size_ratio_ * 3.0f;
+  const int ping_pong_label_width =
+      std::max(0, static_cast<int>(frequency_->getX() - size_ratio_ * 3.0f -
+                                   ping_pong_label_x));
+  g.drawFittedText(TRANS("PING PONG"),
+                   ping_pong_label_x,
+                   ping_pong_bounds.getY(),
+                   ping_pong_label_width,
+                   ping_pong_bounds.getHeight(), Justification::centredLeft, 1, 0.65f);
 }
 
 void DelaySection::resized() {
   int title_width = getTitleWidth();
   on_->setBounds(size_ratio_ * 2.0f, 0, title_width, title_width);
-  int knob_width = getStandardKnobSize();
+  int knob_width = getSmallKnobSize();
   int text_width = size_ratio_ * TEXT_WIDTH;
   int text_height = size_ratio_ * TEXT_HEIGHT;
 
-  float space = (getWidth() - (2.0f * knob_width) - text_width - text_height) / 4.0f;
-  int knob_y = size_ratio_ * 30;
-  int text_y = size_ratio_ * 44;
+  int horizontal_margin = size_ratio_ * 2;
+  int selector_width = text_width + text_height;
+  int selector_x = std::max(horizontal_margin,
+                            getWidth() - horizontal_margin - selector_width);
+  int label_height = size_ratio_ * 10.0f;
+  int knob_y = getHeight() - knob_width - label_height - size_ratio_ * 3.0f;
+  int selector_y = title_width + (title_width - text_height) / 2;
+  float knob_space = (getWidth() - (3.0f * knob_width)) / 4.0f;
 
-  frequency_->setBounds(space, text_y, text_width, text_height);
-  sync_->setBounds(space + text_width, text_y, text_height, text_height);
+  ping_pong_->setBounds(horizontal_margin, title_width, title_width, title_width);
+  frequency_->setBounds(selector_x, selector_y, text_width, text_height);
+  sync_->setBounds(selector_x + text_width, selector_y, text_height, text_height);
   tempo_->setBounds(frequency_->getBounds());
-  feedback_->setBounds(text_width + text_height + 2 * space, knob_y, knob_width, knob_width);
-  dry_wet_->setBounds(text_width + text_height + knob_width + 3 * space, knob_y,
-                      knob_width, knob_width);
+  feedback_->setBounds(knob_space, knob_y, knob_width, knob_width);
+  dry_wet_->setBounds(2 * knob_space + knob_width, knob_y, knob_width, knob_width);
+  lp_cutoff_->setBounds(3 * knob_space + 2 * knob_width, knob_y, knob_width, knob_width);
 
   SynthSection::resized();
 

@@ -24,6 +24,8 @@
 
 #include "processor.h"
 #include "wave.h"
+#include <array>
+#include <cstdint>
 
 namespace mopo {
 
@@ -45,27 +47,32 @@ namespace mopo {
       enum Outputs {
         kValue,
         kOscPhase,
+        kVisualPhase,
+        kRandomPoint0,
+        kRandomPoint1,
+        kRandomPoint2,
+        kRandomPoint3,
+        kRandomPoint4,
         kNumOutputs
       };
 
-      HelmBoyLfo();
+      explicit HelmBoyLfo(std::uint32_t random_seed = 0x9e3779b9U);
 
       virtual Processor* clone() const override { return new HelmBoyLfo(*this); }
       void process() override;
       void correctToTime(mopo_float samples);
 
     protected:
-      inline mopo_float remapPhase(mopo_float phase, mopo_float stretch) {
-        if (phase < stretch) {
-          return (phase / stretch) * 0.5;
-        } else {
-          return 0.5 + ((phase - stretch) / (1.0 - stretch)) * 0.5;
-        }
-      }
+      mopo_float nextRandomValue();
+      void advanceRandomCycle(Wave::Type waveform);
 
       mopo_float offset_;
+      mopo_float previous_phase_offset_;
       mopo_float last_random_value_;
       mopo_float current_random_value_;
+      mopo_float next_random_value_;
+      std::uint32_t random_state_;
+      std::array<mopo_float, 5> smooth_random_values_;
   };
 } // namespace mopo
 

@@ -24,7 +24,6 @@
 
 #include <JuceHeader.h>
 #include "synth_section.h"
-#include "open_gl_peak_meter.h"
 
 class VolumeSection : public SynthSection {
   public:
@@ -37,13 +36,17 @@ class VolumeSection : public SynthSection {
     /** @brief Destructor. */
     ~VolumeSection();
 
+    /** @brief Paint L/R channel labels beside the stereo peak meters. */
+    void paintBackground(Graphics& g) override;
+
     /** @brief Layout volume slider and peak meters. */
     void resized() override;
 
   private:
     std::unique_ptr<SynthSlider> volume_;
-    std::unique_ptr<OpenGLPeakMeter> peak_meter_left_;
-    std::unique_ptr<OpenGLPeakMeter> peak_meter_right_;
+    std::unique_ptr<SynthSlider> pan_;
+    std::unique_ptr<Component> peak_meter_left_;
+    std::unique_ptr<Component> peak_meter_right_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(VolumeSection)
 };

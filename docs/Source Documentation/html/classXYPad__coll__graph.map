@@ -1,28 +1,24 @@
 <map id="XYPad" name="XYPad">
-<area shape="rect" id="Node000001" title="Two&#45;dimensional parameter control interface." alt="" coords="302,2143,469,2511"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,16,83,85"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="47,100,47,499,47,1781,54,1853,73,1922,101,1989,137,2052,178,2110,221,2164,304,2251,300,2254,217,2167,174,2114,133,2055,97,1991,68,1924,48,1854,42,1781,42,499,42,100"/>
-<area shape="rect" id="Node000008" href="$classSynthSection.html" title="Base class for all synthesizer UI sections." alt="" coords="82,145,266,855"/>
-<area shape="poly" id="edge8_Node000008_Node000002" title=" " alt="" coords="60,99,84,181,79,182,55,100"/>
-<area shape="rect" id="Node000003" href="$classSynthSlider_1_1SliderListener.html" title=" " alt="" coords="478,1703,642,1857"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="535,1872,457,2119,449,2144,444,2142,452,2118,530,1871"/>
-<area shape="rect" id="Node000004" href="$classSynthSlider.html" title="Custom slider control for synthesis parameters." alt="" coords="317,1511,454,2049"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="388,2049,388,2126,383,2126,383,2049"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="404,1148,447,1217"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="425,1233,406,1511,401,1511,420,1232"/>
-<area shape="rect" id="Node000006" href="$structmopo_1_1ValueDetails.html" title=" " alt="" coords="472,1041,595,1324"/>
-<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="501,1324,459,1495,454,1493,496,1323"/>
-<area shape="rect" id="Node000007" href="$classFullInterface.html" title=" " alt="" coords="208,927,379,1439"/>
-<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="335,1438,344,1493,339,1494,330,1439"/>
-<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="241,869,251,926,246,927,236,870"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="107,16,205,85"/>
-<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="161,100,162,145,157,146,155,100"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="229,16,332,85"/>
-<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="271,100,260,146,255,145,266,99"/>
-<area shape="rect" id="Node000011" href="$classSynthButton_1_1ButtonListener.html" title=" " alt="" coords="356,5,530,96"/>
-<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="344,103,304,126,279,147,268,163,263,160,276,144,301,122,341,98"/>
-<area shape="rect" id="Node000012" title=" " alt="" coords="290,465,401,535"/>
-<area shape="poly" id="edge12_Node000007_Node000012" title=" " alt="" coords="344,550,316,927,310,927,339,549"/>
-<area shape="rect" id="Node000013" href="$classOpenGLBackground.html" title=" " alt="" coords="426,263,602,737"/>
-<area shape="poly" id="edge13_Node000007_Node000013" title=" " alt="" coords="452,738,416,855,387,940,382,939,411,854,447,737"/>
+<area shape="rect" id="Node000001" title="Two&#45;dimensional parameter control interface." alt="" coords="157,2344,324,2792"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,37,83,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="44,119,47,520,47,1871,49,1937,57,2005,83,2138,119,2265,159,2378,154,2378,114,2266,78,2140,52,2005,44,1938,42,1871,42,520,44,124"/>
+<area shape="rect" id="Node000008" href="$classSynthSection.html" title="Base class for all synthesizer UI sections." alt="" coords="82,188,266,855"/>
+<area shape="poly" id="edge8_Node000008_Node000002" title=" " alt="" coords="58,118,84,202,79,203,58,123"/>
+<area shape="rect" id="Node000003" href="$classSynthSlider_1_1SliderListener.html" title=" " alt="" coords="359,1792,524,1947"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="422,1959,391,2099,349,2251,320,2345,315,2343,344,2250,385,2097,420,1963"/>
+<area shape="rect" id="Node000004" href="$classSynthSlider.html" title="Custom slider control for synthesis parameters." alt="" coords="146,1488,335,2251"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="241,2248,243,2328,238,2327,239,2253"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="284,1125,327,1195"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="301,1207,278,1489,273,1488,301,1212"/>
+<area shape="rect" id="Node000006" href="$structmopo_1_1ValueDetails.html" title=" " alt="" coords="352,1008,475,1312"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="377,1309,340,1472,335,1471,376,1314"/>
+<area shape="rect" id="Node000007" href="$classFullInterface.html" title=" " alt="" coords="82,904,259,1416"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="196,1413,204,1471,199,1471,196,1419"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="172,867,175,904,169,904,172,872"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="107,37,205,107"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="158,119,163,188,158,188,158,124"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="229,37,332,107"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="268,124,255,189,250,188,269,118"/>
+<area shape="rect" id="Node000011" href="$classSynthButton_1_1ButtonListener.html" title=" " alt="" coords="356,5,530,139"/>
+<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="395,154,268,369,263,367,397,149"/>
 </map>

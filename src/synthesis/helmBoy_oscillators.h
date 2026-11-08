@@ -104,8 +104,13 @@ namespace mopo {
         kCrossMod,
         kFM_amount,
         kRingMod,
+        kRingModOscillator1Amplitude,
+        kRingModOscillator2Amplitude,
         kPhaseStretch1,
         kPhaseStretch2,
+        kHardSync,
+        kOscillator1PhaseOffset,
+        kOscillator2PhaseOffset,
         kNumInputs
       };
 
@@ -114,8 +119,8 @@ namespace mopo {
       virtual void process();
       virtual Processor* clone() const { return new HelmBoyOscillators(*this); }
 
-      Output* getOscillator1Output() { return output(0); }
-      Output* getOscillator2Output() { return output(1); }
+      Output* getOscillator1Output() { return output(1); }
+      Output* getOscillator2Output() { return output(2); }
 
     protected:
       void reset(int i);
@@ -132,20 +137,14 @@ namespace mopo {
       void processInitial();
       void processCrossMod();
       void processVoices();
-      void finishVoices(int voices1, int voices2);
+      void processHardSyncVoices(int voices1, int voices2,
+                 mopo_float stretch1, mopo_float stretch2);
+      void finishVoices(int voices1, int voices2, bool oscillator2_phases_updated = false);
 
       inline unsigned int remapPhase(unsigned int phase, mopo_float stretch) {
         constexpr mopo_float mult = 1.0 / UINT_MAX;
         mopo_float norm_phase = phase * mult; // 0.0 to 1.0
-
-        mopo_float remapped;
-        if (norm_phase < stretch) {
-          remapped = (norm_phase / stretch) * 0.5;
-        } else {
-          remapped = 0.5 + ((norm_phase - stretch) / (1.0 - stretch)) * 0.5;
-        }
-
-        return static_cast<unsigned int>(remapped * UINT_MAX);
+        return static_cast<unsigned int>(utils::remapPhase(norm_phase, stretch) * UINT_MAX);
       }
 
       inline void tickCrossMod(int i, const mopo_float cross_mod, const mopo_float fm_amount,
@@ -153,8 +152,10 @@ namespace mopo {
                                unsigned int phase1, unsigned int phase2) {
         constexpr mopo_float mult = (1.0 / UINT_MAX);
 
-        int master_phase1 = dest_cross_mod2[i] + phase1;
-        int master_phase2 = dest_cross_mod1[i] + phase2;
+        unsigned int master_phase1 = static_cast<unsigned int>(dest_cross_mod2[i]) + phase1 +
+          oscillator1_phase_offsets_[i];
+        unsigned int master_phase2 = static_cast<unsigned int>(dest_cross_mod1[i]) + phase2 +
+          oscillator2_phase_offsets_[i];
         mopo_float sin1 = utils::quickerSin(mult * master_phase1);
         mopo_float sin2 = utils::quickerSin(mult * master_phase2);
         // Cross-modulation bidirectionnelle (inchangée)
@@ -165,8 +166,13 @@ namespace mopo {
       }
 
       inline void tickInitialVoices(int i, mopo_float stretch1, mopo_float stretch2) {
-        int phase1 = oscillator2_cross_mods_[i] + oscillator1_phases_[0] + oscillator1_phase_diffs_[i];
-        int phase2 = oscillator1_cross_mods_[i] + fm_mods_[i] + oscillator2_phases_[0] + oscillator2_phase_diffs_[i];
+        unsigned int phase1 = static_cast<unsigned int>(oscillator2_cross_mods_[i]) +
+          oscillator1_phases_[0] + static_cast<unsigned int>(oscillator1_phase_diffs_[i]) +
+            oscillator1_phase_offsets_[i];
+        unsigned int phase2 = static_cast<unsigned int>(oscillator1_cross_mods_[i]) +
+          static_cast<unsigned int>(fm_mods_[i]) + oscillator2_phases_[0] +
+          static_cast<unsigned int>(oscillator2_phase_diffs_[i]) +
+            oscillator2_phase_offsets_[i];
 
         unsigned int warped_phase1 = remapPhase(phase1, stretch1);
         unsigned int warped_phase2 = remapPhase(phase2, stretch2);
@@ -177,30 +183,45 @@ namespace mopo {
 
       inline void tickVoice1(int i, int voice, const mopo_float* wave_buffer,
                              unsigned int start_phase, int detune, mopo_float stretch) {
-        int phase = oscillator1_cross_mods_[i] + start_phase +
-                    i * detune + oscillator1_phase_diffs_[i];
+        unsigned int phase = static_cast<unsigned int>(oscillator1_cross_mods_[i]) + start_phase +
+              static_cast<unsigned int>(i * detune) +
+              static_cast<unsigned int>(oscillator1_phase_diffs_[i]) +
+                    oscillator1_phase_offsets_[i];
         unsigned int warped_phase = remapPhase(phase, stretch);
         oscillator1_totals_[i] += FixedPointWave::interpretWave(wave_buffer, warped_phase);
       }
 
       inline void tickVoice2(int i, int voice, const mopo_float* wave_buffer,
                              unsigned int start_phase, int detune, mopo_float stretch) {
-        int phase = oscillator1_cross_mods_[i] + fm_mods_[i] + start_phase +
-                    i * detune + oscillator2_phase_diffs_[i];
+        unsigned int phase = static_cast<unsigned int>(oscillator1_cross_mods_[i]) +
+              static_cast<unsigned int>(fm_mods_[i]) + start_phase +
+              static_cast<unsigned int>(i * detune) +
+              static_cast<unsigned int>(oscillator2_phase_diffs_[i]) +
+                    oscillator2_phase_offsets_[i];
         unsigned int warped_phase = remapPhase(phase, stretch);
         oscillator2_totals_[i] += FixedPointWave::interpretWave(wave_buffer, warped_phase);
       }
 
       inline void tickOut(int i, mopo_float* dest,
+              mopo_float* oscillator1_output,
+              mopo_float* oscillator2_output,
                           const mopo_float* amp1, const mopo_float* amp2,
+                          const mopo_float* ring_mod_amp1,
+                          const mopo_float* ring_mod_amp2,
                           const mopo_float* oscillator1_totals,
                           const mopo_float* oscillator2_totals,
                           mopo_float scale1, mopo_float scale2,
                           mopo_float ring_mod_amount) {
         mopo_float osc1_out = amp1[i] * scale1 * oscillator1_totals[i];
         mopo_float osc2_out = amp2[i] * scale2 * oscillator2_totals[i];
-        mopo_float ring_mod = scale1 * oscillator1_totals[i] * scale2 * oscillator2_totals[i] * ring_mod_amount * 2.0;
-        dest[i] = osc1_out + osc2_out + ring_mod;
+        mopo_float ring_mod = scale1 * oscillator1_totals[i] * ring_mod_amp1[i]
+                * scale2 * oscillator2_totals[i] * ring_mod_amp2[i]
+                * ring_mod_amount * 2.0;
+        mopo_float oscillator1_ring_mod = ring_mod * 0.5;
+        mopo_float oscillator2_ring_mod = ring_mod - oscillator1_ring_mod;
+        oscillator1_output[i] = osc1_out + oscillator1_ring_mod;
+        oscillator2_output[i] = osc2_out + oscillator2_ring_mod;
+        dest[i] = oscillator1_output[i] + oscillator2_output[i];
         MOPO_ASSERT(std::isfinite(dest[i]));
       }
 
@@ -222,6 +243,9 @@ namespace mopo {
       int detune_diffs2_[MAX_UNISON];
       int oscillator1_phase_diffs_[MAX_BUFFER_SIZE];
       int oscillator2_phase_diffs_[MAX_BUFFER_SIZE];
+      unsigned int oscillator1_phase_offsets_[MAX_BUFFER_SIZE];
+      unsigned int oscillator2_phase_offsets_[MAX_BUFFER_SIZE];
+        bool oscillator1_cycle_wraps_[MAX_BUFFER_SIZE];
   };
 } // namespace mopo
 

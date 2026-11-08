@@ -31,6 +31,7 @@ namespace mopo {
 void Voice::clearEvents() {
   this->event_sample_ = -1;
   this->aftertouch_sample_ = -1;
+  this->channel_aftertouch_sample_ = -1;
 }
 
 bool Voice::hasNewAftertouch() {
@@ -40,6 +41,15 @@ bool Voice::hasNewAftertouch() {
 void Voice::setAftertouch(mopo::mopo_float aftertouch, int sample) {
   this->aftertouch_ = aftertouch;
   this->aftertouch_sample_ = sample;
+}
+
+void Voice::setChannelAftertouch(mopo::mopo_float aftertouch, int sample) {
+  this->channel_aftertouch_ = aftertouch;
+  this->channel_aftertouch_sample_ = sample;
+}
+
+bool Voice::hasNewChannelAftertouch() {
+  return this->channel_aftertouch_sample_ >= 0;
 }
 
 bool Voice::hasNewEvent() {
@@ -150,6 +160,7 @@ void mopo::VoiceHandler::prepareVoiceTriggers(mopo::Voice* voice) {
   velocity_.clearTrigger();
   voice_event_.clearTrigger();
   aftertouch_.clearTrigger();
+  channel_aftertouch_.clearTrigger();
   channel_.buffer[0] = voice->state().channel;
 
   if (voice->hasNewEvent()) {
@@ -165,6 +176,8 @@ void mopo::VoiceHandler::prepareVoiceTriggers(mopo::Voice* voice) {
 
   if (voice->hasNewAftertouch())
     aftertouch_.trigger(voice->aftertouch(), voice->aftertouch_sample());
+  if (voice->hasNewChannelAftertouch())
+    channel_aftertouch_.trigger(voice->channelAftertouch(), voice->channelAftertouchSample());
 
   voice->clearEvents();
 }
@@ -297,6 +310,31 @@ void mopo::VoiceHandler::allNotesOff(int sample) {
     voice->deactivate(sample);
 }
 
+void mopo::VoiceHandler::resetState() {
+  pressed_notes_.clear();
+  active_voices_.clear();
+  free_voices_.clear();
+  sustain_ = false;
+  last_played_note_ = -1.0f;
+  last_num_voices_ = 0;
+  for (mopo::Voice* voice : all_voices_) {
+    voice->deactivate();
+    voice->clearEvents();
+    voice->processor()->resetState();
+    free_voices_.push_back(voice);
+  }
+  global_router_.resetState();
+  voice_router_.resetState();
+  mopo::ProcessorRouter::resetState();
+  clearAccumulatedOutputs();
+  clearNonaccumulatedOutputs();
+  for (mopo::Output* output : { &voice_event_, &note_, &last_note_, &note_pressed_,
+                               &channel_, &velocity_, &aftertouch_, &channel_aftertouch_ }) {
+    output->clearTrigger();
+    output->clearBuffer();
+  }
+}
+
  mopo::Voice* mopo::VoiceHandler::grabVoice() {
   mopo::Voice* voice = nullptr;
   // First check free voices.
@@ -401,9 +439,11 @@ mopo::VoiceEvent mopo::VoiceHandler::noteOff(mopo::mopo_float note, int sample) 
   return voice_event;
 }
 
-void mopo::VoiceHandler::setAftertouch(mopo::mopo_float note, mopo::mopo_float aftertouch, int sample) {
+void mopo::VoiceHandler::setAftertouch(mopo::mopo_float note, mopo::mopo_float aftertouch,
+                                       int sample, int channel) {
   for (mopo::Voice* voice : active_voices_) {
-    if (voice->state().note == note)
+    if (voice->state().note == note &&
+        (channel < 0 || voice->state().channel == channel))
       voice->setAftertouch(aftertouch, sample);
   }
 }
@@ -411,7 +451,7 @@ void mopo::VoiceHandler::setAftertouch(mopo::mopo_float note, mopo::mopo_float a
 void mopo::VoiceHandler::setChannelAftertouch(int channel, mopo::mopo_float aftertouch, int sample) {
   for (mopo::Voice* voice : active_voices_) {
     if (voice->state().channel == channel)
-      voice->setAftertouch(aftertouch, sample);
+      voice->setChannelAftertouch(aftertouch, sample);
   }
 }
 

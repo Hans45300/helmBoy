@@ -41,6 +41,7 @@ class FileListBoxModel : public ListBoxModel {
         virtual ~Listener() { }
 
         virtual void selectedFilesChanged(FileListBoxModel* model) = 0;
+        virtual void fileDoubleClicked(FileListBoxModel*, int) { }
     };
 
     FileListBoxModel() : listener_(nullptr), sort_ascending_(true), delete_section_(nullptr) { }
@@ -62,13 +63,21 @@ class FileListBoxModel : public ListBoxModel {
     /** @brief Called when the selected rows change. @param last_selected_row Last selected row index. */
     void selectedRowsChanged(int last_selected_row) override;
 
+    /** @brief Notify the listener when a row is double-clicked. */
+    void listBoxItemDoubleClicked(int row_number, const MouseEvent&) override;
+
     /** @brief Handle delete key pressed event for selected row(s). */
     void deleteKeyPressed(int lastRowSelected) override;
 
-    void rescanFiles(const Array<File>& folders, String search = "*", bool find_files = false);
+    void rescanFiles(const Array<File>& folders, String search = "*",
+             bool find_files = false, bool recursive = false);
     File getFileAtRow(int row) { return files_[row]; }
     int getIndexOfFile(File file) { return files_.indexOf(file); }
     void setListener(Listener* listener) { listener_ = listener; }
+    void setShowRelativeDirectoryPaths(bool show, File root = File()) {
+      show_relative_directory_paths_ = show;
+      relative_root_ = root;
+    }
     Array<File> getAllFiles() { return files_; }
     void setDeleteSection(DeleteSection* delete_section) { delete_section_ = delete_section; }
 
@@ -77,6 +86,8 @@ class FileListBoxModel : public ListBoxModel {
     Listener* listener_;
     bool sort_ascending_;
     DeleteSection* delete_section_;
+    bool show_relative_directory_paths_ = false;
+    File relative_root_;
 };
 
 #endif // FILE_LIST_BOX_MODEL_H

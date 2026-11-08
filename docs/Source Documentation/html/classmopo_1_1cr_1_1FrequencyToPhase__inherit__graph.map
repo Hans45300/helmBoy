@@ -1,0 +1,7 @@
+<map id="mopo::cr::FrequencyToPhase" name="mopo::cr::FrequencyToPhase">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,795,187,949"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Operator.html" title="Base class for simple arithmetic and logic operators." alt="" coords="34,592,159,747"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,759,99,795,94,794,95,764"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1Processor.html" title=" " alt="" coords="21,5,172,544"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="97,556,99,592,94,592,96,562"/>
+</map>

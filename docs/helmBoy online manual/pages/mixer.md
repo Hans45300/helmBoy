@@ -16,6 +16,10 @@ Level control for the first oscillator.
 
 Level control for the second oscillator.
 
+### RM 1 / RM 2
+
+Independent input levels for oscillators 1 and 2 in the ring modulator. These do not change the direct oscillator levels above. At 100%, they preserve the previous ring modulation level; reduce either input to attenuate the ring-modulated signal.
+
 ### Sub Oscillator
 
 Level control for the sub oscillator.

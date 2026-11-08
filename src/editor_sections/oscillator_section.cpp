@@ -34,19 +34,22 @@
 #define TEXT_HEIGHT 16
 #define TRANS_WIDTH 42
 #define WAVE_SELECTOR_HEIGHT 20
+#define PHASE_SLIDER_HEIGHT 10
 
 OscillatorSection::OscillatorSection(String name) : SynthSection(name) {
   static const int UNISON_DRAG_SENSITIVITY = 100;
   static const int TRANSPOSE_MOUSE_SENSITIVITY = 800;
 
-  addSlider((wave_selector_1_ = std::make_unique<WaveSelector>("osc_1_waveform")).get());
+  addSlider((wave_selector_1_ = std::make_unique<WaveSelector>(
+      "osc_1_waveform", WaveSelectorKind::Oscillator)).get());
   wave_selector_1_->setSliderStyle(Slider::LinearBar);
-  wave_selector_1_->setStringLookup(mopo::strings::waveforms);
+  wave_selector_1_->setStringLookup(mopo::strings::oscillator_waveforms);
   wave_selector_1_->setPopupPlacement(BubbleComponent::above);
 
-  addSlider((wave_selector_2_ = std::make_unique<WaveSelector>("osc_2_waveform")).get());
+  addSlider((wave_selector_2_ = std::make_unique<WaveSelector>(
+      "osc_2_waveform", WaveSelectorKind::Oscillator)).get());
   wave_selector_2_->setSliderStyle(Slider::LinearBar);
-  wave_selector_2_->setStringLookup(mopo::strings::waveforms);
+  wave_selector_2_->setStringLookup(mopo::strings::oscillator_waveforms);
   wave_selector_2_->setPopupPlacement(BubbleComponent::above);
 
   addAndMakeVisible((wave_viewer_1_ = std::make_unique<WaveViewer>(WAVE_RESOLUTION)).get());
@@ -64,10 +67,24 @@ OscillatorSection::OscillatorSection(String name) : SynthSection(name) {
   ring_mod_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
   addSlider((phase_stretch_1_ = std::make_unique<SynthSlider>("osc_1_phase_stretch")).get());
-  phase_stretch_1_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  phase_stretch_1_->setSliderStyle(Slider::LinearBar);
+  phase_stretch_1_->setTooltip(TRANS("Phase stretch (PS)"));
 
   addSlider((phase_stretch_2_ = std::make_unique<SynthSlider>("osc_2_phase_stretch")).get());
-  phase_stretch_2_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  phase_stretch_2_->setSliderStyle(Slider::LinearBar);
+  phase_stretch_2_->setTooltip(TRANS("Phase stretch (PS)"));
+
+  addSlider((phase_offset_1_ = std::make_unique<SynthSlider>("osc_1_phase_offset")).get());
+  phase_offset_1_->setSliderStyle(Slider::LinearBar);
+  phase_offset_1_->setTooltip(TRANS("Phase offset (PH)"));
+  addSlider((phase_offset_2_ = std::make_unique<SynthSlider>("osc_2_phase_offset")).get());
+  phase_offset_2_->setSliderStyle(Slider::LinearBar);
+  phase_offset_2_->setTooltip(TRANS("Phase offset (PH)"));
+
+  wave_viewer_1_->setPhaseStretchSlider(phase_stretch_1_.get());
+  wave_viewer_2_->setPhaseStretchSlider(phase_stretch_2_.get());
+  wave_viewer_1_->setPhaseOffsetSlider(phase_offset_1_.get());
+  wave_viewer_2_->setPhaseOffsetSlider(phase_offset_2_.get());
 
   addSlider((transpose_1_ = std::make_unique<SynthSlider>("osc_1_transpose")).get());
   transpose_1_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
@@ -112,6 +129,11 @@ OscillatorSection::OscillatorSection(String name) : SynthSection(name) {
   addButton((unison_harmonize_2_ = std::make_unique<SynthButton>("unison_2_harmonize")).get());
   unison_harmonize_2_->setLookAndFeel(TextLookAndFeel::instance());
   unison_harmonize_2_->setButtonText("H");
+
+  addButton((hard_sync_ = std::make_unique<SynthButton>("osc_hard_sync")).get());
+  hard_sync_->setLookAndFeel(TextLookAndFeel::instance());
+  hard_sync_->setButtonText(TRANS("Hard Sync"));
+  hard_sync_->setTooltip(TRANS("Hard Sync"));
 }
 
 /**
@@ -134,11 +156,14 @@ OscillatorSection::~OscillatorSection() {
   unison_detune_2_ = nullptr;
   unison_harmonize_1_ = nullptr;
   unison_harmonize_2_ = nullptr;
+  hard_sync_ = nullptr;
   cross_modulation_ = nullptr;
   fm_amount_ = nullptr;
   ring_mod_ = nullptr;
   phase_stretch_1_ = nullptr;
   phase_stretch_2_ = nullptr;
+  phase_offset_1_ = nullptr;
+  phase_offset_2_ = nullptr;
 }
 
 void OscillatorSection::paintBackground(Graphics& g) {
@@ -181,8 +206,10 @@ void OscillatorSection::paintBackground(Graphics& g) {
   drawTextForComponent(g, TRANS("TUNE"), tune_2_.get());
   drawTextForComponent(g, TRANS("UNISON"), unison_detune_1_.get());
   drawTextForComponent(g, TRANS("UNISON"), unison_detune_2_.get());
-  drawTextForComponent(g, TRANS("PS"), phase_stretch_1_.get());
-  drawTextForComponent(g, TRANS("PS"), phase_stretch_2_.get());
+  drawTextForComponent(g, TRANS("PS"), phase_stretch_1_.get(), 0);
+  drawTextForComponent(g, TRANS("PS"), phase_stretch_2_.get(), 0);
+  drawTextForComponent(g, TRANS("PH"), phase_offset_1_.get(), 0);
+  drawTextForComponent(g, TRANS("PH"), phase_offset_2_.get(), 0);
 
   component_shadow.drawForRectangle(g, wave_viewer_1_->getBounds());
   component_shadow.drawForRectangle(g, wave_viewer_2_->getBounds());
@@ -200,20 +227,33 @@ void OscillatorSection::resized() {
   int trans_width = size_ratio_ * TRANS_WIDTH;
   int wave_selector_height = size_ratio_ * WAVE_SELECTOR_HEIGHT;
   int knob_section_height = size_ratio_ * KNOB_SECTION_HEIGHT;
+  int phase_slider_height = size_ratio_ * PHASE_SLIDER_HEIGHT;
+  int phase_label_height = size_ratio_ * 10;
+  if (phase_slider_height < 1)
+    phase_slider_height = 1;
+  if (phase_label_height < 1)
+    phase_label_height = 1;
+  int phase_footer_height = phase_slider_height + phase_label_height;
 
   float cross_mod_width = CROSS_MOD_WIDTH_PERCENT * getWidth();
   float osc_width = (getWidth() - cross_mod_width) / 2.0f;
   float osc_height = getHeight() - title_width - wave_selector_height - knob_section_height;
+  float viewer_height = osc_height - phase_footer_height;
+  if (viewer_height < 0.0f)
+    viewer_height = 0.0f;
   float osc_y = title_width + wave_selector_height;
 
   wave_selector_1_->setBounds(0.0f, title_width, osc_width, wave_selector_height);
   wave_selector_2_->setBounds(getWidth() - osc_width, title_width, osc_width, wave_selector_height);
-  wave_viewer_1_->setBounds(0.0f, osc_y, osc_width, osc_height);
-  wave_viewer_2_->setBounds(getWidth() - osc_width, osc_y, osc_width, osc_height);
+  wave_viewer_1_->setBounds(0.0f, osc_y, osc_width, viewer_height);
+  wave_viewer_2_->setBounds(getWidth() - osc_width, osc_y, osc_width, viewer_height);
 
   cross_modulation_->setBounds((getWidth() - knob_width) / 2.0f,
-                               osc_y + (osc_height - knob_width) / 2.0f,
+                               osc_y + (viewer_height - knob_width) / 2.0f,
                                knob_width, knob_width);
+  hard_sync_->setBounds((getWidth() - cross_mod_width) / 2.0f,
+                        cross_modulation_->getBottom() + size_ratio_ * 16.0f,
+                        cross_mod_width, size_ratio_ * TEXT_HEIGHT);
 
   float space = (getWidth() - (2.0f * text_width + 2.0f * trans_width + 2.0f * tune_width)) / 5.0f;
   int knob_bottom = getHeight() - size_ratio_ * 22.0f;
@@ -261,18 +301,21 @@ void OscillatorSection::resized() {
                         getHeight() - knob_width*.85f,
                         knob_width / 2.0f, knob_width / 2.0f);
 
-  phase_stretch_1_->setBounds(0.0f,
-                              osc_y + osc_height,
-                              knob_width / 2.0f, knob_width / 2.0f);
-
-  phase_stretch_2_->setBounds((getWidth() - (knob_width / 2.0f)),
-                              osc_y + osc_height,
-                              knob_width / 2.0f, knob_width / 2.0f);
+  const int phase_slider_gap = size_ratio_ * 4;
+  const float phase_slider_width = (osc_width - phase_slider_gap) / 2.0f;
+  const float phase_slider_y = osc_y + viewer_height;
+  phase_offset_1_->setBounds(0.0f, phase_slider_y, phase_slider_width, phase_slider_height);
+  phase_stretch_1_->setBounds(phase_slider_width + phase_slider_gap, phase_slider_y,
+                              phase_slider_width, phase_slider_height);
+  phase_offset_2_->setBounds(getWidth() - osc_width, phase_slider_y,
+                             phase_slider_width, phase_slider_height);
+  phase_stretch_2_->setBounds(getWidth() - osc_width + phase_slider_width + phase_slider_gap,
+                              phase_slider_y, phase_slider_width, phase_slider_height);
 
   float cross_x_padding = size_ratio_ * 8.0f;
   float cross_y_padding = size_ratio_ * 8.0f;
   float cross_width = cross_mod_width - 2.0f * cross_x_padding;
-  float cross_height = osc_height - 2.0f * cross_y_padding;
+  float cross_height = viewer_height - 2.0f * cross_y_padding;
   float cross_percent = 0.2f;
 
   top_left_cross_path_.clear();
@@ -289,20 +332,20 @@ void OscillatorSection::resized() {
                                osc_y + cross_y_padding + cross_percent * cross_height);
 
   bottom_left_cross_path_.clear();
-  bottom_left_cross_path_.startNewSubPath(osc_width, osc_y + osc_height - cross_y_padding);
-  bottom_left_cross_path_.lineTo(osc_width + cross_x_padding, osc_y + osc_height - cross_y_padding);
+  bottom_left_cross_path_.startNewSubPath(osc_width, osc_y + viewer_height - cross_y_padding);
+  bottom_left_cross_path_.lineTo(osc_width + cross_x_padding, osc_y + viewer_height - cross_y_padding);
   bottom_left_cross_path_.lineTo(osc_width + cross_x_padding + cross_percent * cross_width,
-                                 osc_y + osc_height - cross_y_padding -
+                                 osc_y + viewer_height - cross_y_padding -
                                  cross_percent * cross_height);
 
   bottom_right_cross_path_.clear();
   bottom_right_cross_path_.startNewSubPath(getWidth() - osc_width,
-                                           osc_y + osc_height - cross_y_padding);
+                                           osc_y + viewer_height - cross_y_padding);
   bottom_right_cross_path_.lineTo(getWidth() - osc_width - cross_x_padding,
-                                  osc_y + osc_height - cross_y_padding);
+                                  osc_y + viewer_height - cross_y_padding);
   bottom_right_cross_path_.lineTo(getWidth() - osc_width - cross_x_padding -
                                   cross_percent * cross_width,
-                                  osc_y + osc_height - cross_y_padding -
+                                  osc_y + viewer_height - cross_y_padding -
                                   cross_percent * cross_height);
 
   SynthSection::resized();

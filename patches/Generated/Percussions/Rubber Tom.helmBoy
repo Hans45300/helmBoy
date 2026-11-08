@@ -1,0 +1,49 @@
+{
+  "settings": {
+    "fil_sustain": 0,
+    "filter_on": 1,
+    "osc_1_volume": 0.65,
+    "resonance": 0.35,
+    "noise_volume": 0.04,
+    "amp_attack": 0.002,
+    "amp_release": 0.12,
+    "mono_lfo_1_sync": 1,
+    "sub_phase_offset": 0,
+    "amp_decay": 0.28,
+    "polyphony": 8,
+    "distortion_drive": 3,
+    "distortion_on": 1,
+    "amp_sustain": 0,
+    "sub_octave": 1,
+    "osc_1_waveform": 2.0,
+    "mono_lfo_1_waveform": 1.0,
+    "sub_volume": 0.52,
+    "fil_attack": 0,
+    "reverb_dry_wet": 0.05,
+    "osc_1_phase_offset": -90,
+    "filter_style": 1,
+    "fil_env_depth": 68,
+    "osc_2_waveform": 0.0,
+    "osc_2_transpose": -12.0,
+    "arp_on": 0,
+    "reverb_on": 0,
+    "mono_lfo_1_tempo": 7.0,
+    "osc_2_volume": 0.22,
+    "modulations": [
+      {
+        "amount": 0.1,
+        "destination": "noise_color",
+        "source": "mono_lfo_1"
+      }
+    ],
+    "cutoff": 54.0,
+    "mono_lfo_1_phase_offset": 45,
+    "noise_color": 0.38,
+    "osc_2_phase_offset": 135,
+    "lfo_tempo_index_version": 2
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Rubber Tom",
+  "folder_name": "Percussions",
+  "synth_version": "1.1.1"
+}

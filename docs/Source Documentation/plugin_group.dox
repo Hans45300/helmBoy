@@ -1,4 +1,0 @@
-/**
- * @defgroup Plugin Plugin Integration
- * @brief Plugin wrappers and host communication code (VST/VST3/LV2/Standalone).
- */

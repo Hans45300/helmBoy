@@ -1,24 +1,9 @@
 var searchData=
 [
-  ['open_5fgl_5fbackground_2ecpp_0',['open_gl_background.cpp',['../open__gl__background_8cpp.html',1,'']]],
-  ['open_5fgl_5fbackground_2eh_1',['open_gl_background.h',['../open__gl__background_8h.html',1,'']]],
-  ['open_5fgl_5fcomponent_2ecpp_2',['open_gl_component.cpp',['../open__gl__component_8cpp.html',1,'']]],
-  ['open_5fgl_5fcomponent_2eh_3',['open_gl_component.h',['../open__gl__component_8h.html',1,'']]],
-  ['open_5fgl_5fenvelope_2ecpp_4',['open_gl_envelope.cpp',['../open__gl__envelope_8cpp.html',1,'']]],
-  ['open_5fgl_5fenvelope_2eh_5',['open_gl_envelope.h',['../open__gl__envelope_8h.html',1,'']]],
-  ['open_5fgl_5fmodulation_5fmanager_2ecpp_6',['open_gl_modulation_manager.cpp',['../open__gl__modulation__manager_8cpp.html',1,'']]],
-  ['open_5fgl_5fmodulation_5fmanager_2eh_7',['open_gl_modulation_manager.h',['../open__gl__modulation__manager_8h.html',1,'']]],
-  ['open_5fgl_5fmodulation_5fmeter_2ecpp_8',['open_gl_modulation_meter.cpp',['../open__gl__modulation__meter_8cpp.html',1,'']]],
-  ['open_5fgl_5fmodulation_5fmeter_2eh_9',['open_gl_modulation_meter.h',['../open__gl__modulation__meter_8h.html',1,'']]],
-  ['open_5fgl_5foscilloscope_2ecpp_10',['open_gl_oscilloscope.cpp',['../open__gl__oscilloscope_8cpp.html',1,'']]],
-  ['open_5fgl_5foscilloscope_2eh_11',['open_gl_oscilloscope.h',['../open__gl__oscilloscope_8h.html',1,'']]],
-  ['open_5fgl_5fpeak_5fmeter_2ecpp_12',['open_gl_peak_meter.cpp',['../open__gl__peak__meter_8cpp.html',1,'']]],
-  ['open_5fgl_5fpeak_5fmeter_2eh_13',['open_gl_peak_meter.h',['../open__gl__peak__meter_8h.html',1,'']]],
-  ['open_5fgl_5fwave_5fviewer_2ecpp_14',['open_gl_wave_viewer.cpp',['../open__gl__wave__viewer_8cpp.html',1,'']]],
-  ['open_5fgl_5fwave_5fviewer_2eh_15',['open_gl_wave_viewer.h',['../open__gl__wave__viewer_8h.html',1,'']]],
-  ['oscillator_5fsection_2ecpp_16',['oscillator_section.cpp',['../oscillator__section_8cpp.html',1,'']]],
-  ['oscillator_5fsection_2eh_17',['oscillator_section.h',['../oscillator__section_8h.html',1,'']]],
-  ['oscilloscope_2ecpp_18',['oscilloscope.cpp',['../oscilloscope_8cpp.html',1,'']]],
-  ['oscilloscope_2eh_19',['oscilloscope.h',['../oscilloscope_8h.html',1,'']]],
-  ['overlay_2eh_20',['overlay.h',['../overlay_8h.html',1,'']]]
+  ['navigation_2edox_0',['navigation.dox',['../navigation_8dox.html',1,'']]],
+  ['noise_5foscillator_2ecpp_1',['noise_oscillator.cpp',['../noise__oscillator_8cpp.html',1,'']]],
+  ['noise_5foscillator_2eh_2',['noise_oscillator.h',['../noise__oscillator_8h.html',1,'']]],
+  ['noise_5fsection_2ecpp_3',['noise_section.cpp',['../noise__section_8cpp.html',1,'']]],
+  ['noise_5fsection_2eh_4',['noise_section.h',['../noise__section_8h.html',1,'']]],
+  ['note_5fhandler_2eh_5',['note_handler.h',['../note__handler_8h.html',1,'']]]
 ];

@@ -1,0 +1,5 @@
+<map id="mopo::MidiLookup" name="mopo::MidiLookup">
+<area shape="rect" id="Node000001" title="Interface statique pour la recherche de fr�quence MIDI." alt="" coords="32,168,149,237"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1MidiLookupSingleton.html" title="Singleton pour la recherche rapide de fr�quence � partir de cents MIDI." alt="" coords="5,5,176,96"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,94,93,152,88,151,89,98"/>
+</map>

@@ -31,7 +31,7 @@
 #define KNOB_SECTION_WIDTH 70
 #define SLIDER_WIDTH 10
 #define FILTER_TYPE_WIDTH 16
-#define STYLE_SLIDER_WIDTH 60
+#define STYLE_SLIDER_WIDTH 90
 #define KEYTRACK_TOP_PADDING 5
 #define KEYTRACK_HEIGHT 14
 #define KEYTRACK_WIDTH 60
@@ -123,9 +123,11 @@ void FilterSection::paintBackground(Graphics& g) {
   drawTextForComponent(g, TRANS("KEY TRACK"), keytrack_.get());
   drawTextForComponent(g, TRANS("DRIVE"), drive_.get());
 
-  g.setColour(Colour(Colors::Color_ffaaaaaa));
-  g.strokePath(low_pass_, stroke);
-  g.strokePath(high_pass_, stroke);
+  if (blend_->isVisible()) {
+    g.setColour(Colour(Colors::Color_ffaaaaaa));
+    g.strokePath(low_pass_, stroke);
+    g.strokePath(high_pass_, stroke);
+  }
 
   component_shadow.drawForRectangle(g, filter_response_->getBounds());
 }
@@ -212,9 +214,10 @@ void FilterSection::resetResponse() {
   static_cast<mopo::StateVariableFilter::Styles>(static_cast<int>(value));
   filter_response_->setStyle(style);
 
-  bool shelf = style == mopo::StateVariableFilter::Styles::Shelf;
-  blend_->setVisible(!shelf);
-  filter_shelf_->setVisible(shelf);
+  bool pass_family = style == mopo::StateVariableFilter::Styles::dB12 ||
+                     style == mopo::StateVariableFilter::Styles::dB24;
+  blend_->setVisible(pass_family);
+  filter_shelf_->setVisible(style == mopo::StateVariableFilter::Styles::Shelf);
 }
 
 void FilterSection::resizeLowPass(float x, float y, float width, float height) {

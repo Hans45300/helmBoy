@@ -30,10 +30,6 @@ namespace {
     kModulationList
   };
 
-  static void initPatchCallback(int result, ModulationButton* button) {
-    if (button != nullptr && result != 0)
-      button->disconnectIndex(result);
-  }
 } // namespace
 
 ModulationButton::ModulationButton(String name) : ToggleButton(name) { }
@@ -60,8 +56,9 @@ void ModulationButton::mouseDown(const MouseEvent& e) {
     if (connections.size() > 1)
       m.addItem(kDisconnect, "Disconnect all");
 
-    m.showMenuAsync(PopupMenu::Options(),
-                    ModalCallbackFunction::forComponent(initPatchCallback, this));
+    SynthSlider::showModulationPopup(m, this, true,
+                     kModulationList + static_cast<int>(connections.size()),
+                     [this](int result) { disconnectIndex(result); });
   }
   else
     ToggleButton::mouseDown(e);
@@ -91,6 +88,8 @@ void ModulationButton::disconnectIndex(int index) {
   }
   else if (index >= kModulationList) {
     int connection_index = index - kModulationList;
+    if (connection_index < 0 || connection_index >= static_cast<int>(connections.size()))
+      return;
     disconnectModulation(connections[connection_index]);
     repaint();
   }
@@ -104,93 +103,3 @@ void ModulationButton::disconnectModulation(mopo::ModulationConnection* connecti
   for (auto* listener : listeners_)
     listener->modulationDisconnected(connection, modulations_left == 0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

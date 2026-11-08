@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['wave_5fresolution_0',['WAVE_RESOLUTION',['../oscillator__section_8cpp.html#a0c054e0c133febcc89efba4982847190',1,'oscillator_section.cpp']]],
-  ['wave_5fsection_5fwidth_1',['WAVE_SECTION_WIDTH',['../sub__section_8cpp.html#a65ea1b5360b5e74177a5a700740f9586',1,'sub_section.cpp']]],
-  ['wave_5fselector_5fh_2',['WAVE_SELECTOR_H',['../wave__selector_8h.html#ad494b55a24467b9f9328e091525b58ad',1,'wave_selector.h']]],
-  ['wave_5fselector_5fheight_3',['WAVE_SELECTOR_HEIGHT',['../oscillator__section_8cpp.html#a6c4dc0e82b9a81fe420111aa375b8e3f',1,'oscillator_section.cpp']]],
-  ['wave_5fselector_5fwidth_4',['WAVE_SELECTOR_WIDTH',['../sub__section_8cpp.html#a659f51363b1ff67c9fa2063d7d1f4676',1,'sub_section.cpp']]],
-  ['wave_5fviewer_5fh_5',['WAVE_VIEWER_H',['../wave__viewer_8h.html#a0ae33f6c91a5e682410ae4d1da8a3dad',1,'wave_viewer.h']]],
-  ['wave_5fviewer_5fresolution_6',['WAVE_VIEWER_RESOLUTION',['../lfo__section_8cpp.html#aa970b23ae56b636ed4deaed3981ff98c',1,'WAVE_VIEWER_RESOLUTION:&#160;lfo_section.cpp'],['../sub__section_8cpp.html#aa970b23ae56b636ed4deaed3981ff98c',1,'WAVE_VIEWER_RESOLUTION:&#160;sub_section.cpp']]]
+  ['value_5fh_0',['VALUE_H',['../value_8h.html#a4550a6201d88a48fdccc647ec02ba88b',1,'value.h']]],
+  ['value_5fswitch_5fh_1',['VALUE_SWITCH_H',['../value__switch_8h.html#aa4c80a18cbe5590fcf0d0f57f541e34a',1,'value_switch.h']]],
+  ['vectorize_5floop_2',['VECTORIZE_LOOP',['../common_8h.html#abb3c6a3cbe3cf7be75d9994c050df762',1,'common.h']]],
+  ['voice_5fhandler_5fh_3',['VOICE_HANDLER_H',['../voice__handler_8h.html#a705c722ea35287c5d64c0c1d99cff14b',1,'voice_handler.h']]],
+  ['voice_5fsection_5fh_4',['VOICE_SECTION_H',['../voice__section_8h.html#a80458e62e33bcf62c32b2dbaf4c5f95e',1,'voice_section.h']]],
+  ['volume_5fsection_5fh_5',['VOLUME_SECTION_H',['../volume__section_8h.html#a0c8b56998a1b54006df5c8b46d2eaf3c',1,'volume_section.h']]]
 ];

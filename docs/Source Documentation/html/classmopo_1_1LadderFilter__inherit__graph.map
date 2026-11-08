@@ -1,0 +1,5 @@
+<map id="mopo::LadderFilter" name="mopo::LadderFilter">
+<area shape="rect" id="Node000001" title="Filtre ladder (type Moog) basé sur le modèle VA amélioré." alt="" coords="5,592,156,917"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="5,5,156,544"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="81,557,83,592,78,592,80,562"/>
+</map>

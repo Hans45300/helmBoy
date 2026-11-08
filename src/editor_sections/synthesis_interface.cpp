@@ -33,9 +33,13 @@
 SynthesisInterface::SynthesisInterface(
     mopo::control_map controls, MidiKeyboardState* keyboard_state) : SynthSection("synthesis") {
   addSubSection((amplitude_envelope_section_ = std::make_unique<EnvelopeSection>("AMPLITUDE ENVELOPE", "amp")).get());
+  addSubSection((chorus_section_ = std::make_unique<ChorusSection>("CHORUS")).get());
   addSubSection((delay_section_ = std::make_unique<DelaySection>("DELAY")).get());
   addSubSection((dynamic_section_ = std::make_unique<DynamicSection>("DYNAMICS")).get());
-  addSubSection((extra_envelope_section_ = std::make_unique<EnvelopeSection>("MOD ENVELOPE", "mod")).get());
+  addSubSection((extra_envelope_section_ = std::make_unique<EnvelopeSection>("MOD ENVELOPE 1", "mod", true)).get());
+  addSubSection((mod_envelope_2_section_ = std::make_unique<EnvelopeSection>("MOD ENVELOPE 2", "mod_2", true)).get());
+  addSubSection((mod_envelope_3_section_ = std::make_unique<EnvelopeSection>("MOD ENVELOPE 3", "mod_3", true)).get());
+  addSubSection((mod_envelope_4_section_ = std::make_unique<EnvelopeSection>("MOD ENVELOPE 4", "mod_4", true)).get());
   addSubSection((extra_mod_section_ = std::make_unique<ExtraModSection>("KEYBOARD MOD")).get());
   addSubSection((feedback_section_ = std::make_unique<FeedbackSection>("FEEDBACK")).get());
   addSubSection((filter_envelope_section_ = std::make_unique<EnvelopeSection>("FILTER ENVELOPE", "fil")).get());
@@ -45,6 +49,8 @@ SynthesisInterface::SynthesisInterface(
   addSubSection((mono_lfo_2_section_ = std::make_unique<LfoSection>("MONO LFO 2", "mono_lfo_2", true, true)).get());
   addSubSection((mono_lfo_3_section_ = std::make_unique<LfoSection>("MONO LFO 3", "mono_lfo_3", true, true)).get());
   addSubSection((mono_lfo_4_section_ = std::make_unique<LfoSection>("MONO LFO 4", "mono_lfo_4", true, true)).get());
+  addSubSection((mono_lfo_5_section_ = std::make_unique<LfoSection>("MONO LFO 5", "mono_lfo_5", true, true)).get());
+  addSubSection((mono_lfo_6_section_ = std::make_unique<LfoSection>("MONO LFO 6", "mono_lfo_6", true, true)).get());
 
   addAndMakeVisible((keyboard_ = std::make_unique<MidiKeyboard>(*keyboard_state, MidiKeyboardComponent::horizontalKeyboard)).get());
   keyboard_->setWantsKeyboardFocus(false);
@@ -58,7 +64,7 @@ SynthesisInterface::SynthesisInterface(
   addSubSection((distortion_section_ = std::make_unique<DistortionSection>("DISTORTION")).get());
   addSubSection((step_sequencer_section_ = std::make_unique<StepSequencerSection>("STEP SEQUENCER")).get());
   addSubSection((stutter_section_ = std::make_unique<StutterSection>("STUTTER")).get());
-  addSubSection((sub_section_ = std::make_unique<SubSection>("SUB")).get());
+  addSubSection((sub_section_ = std::make_unique<SubSection>("SUB / NOISE")).get());
   addSubSection((voice_section_ = std::make_unique<VoiceSection>("VOICE")).get());
 
   keyboard_->setColour(MidiKeyboardComponent::whiteNoteColourId, Colour(Colors::Color_ff444444));
@@ -81,10 +87,14 @@ SynthesisInterface::SynthesisInterface(
 
 SynthesisInterface::~SynthesisInterface() {
   amplitude_envelope_section_ = nullptr;
+  chorus_section_ = nullptr;
   delay_section_ = nullptr;
   distortion_section_ = nullptr;
   dynamic_section_ = nullptr;
   extra_envelope_section_ = nullptr;
+  mod_envelope_2_section_ = nullptr;
+  mod_envelope_3_section_ = nullptr;
+  mod_envelope_4_section_ = nullptr;
   extra_mod_section_ = nullptr;
   feedback_section_ = nullptr;
   filter_envelope_section_ = nullptr;
@@ -95,6 +105,8 @@ SynthesisInterface::~SynthesisInterface() {
   mono_lfo_2_section_ = nullptr;
   mono_lfo_3_section_ = nullptr;
   mono_lfo_4_section_ = nullptr;
+  mono_lfo_5_section_ = nullptr;
+  mono_lfo_6_section_ = nullptr;
   mixer_section_ = nullptr;
   oscillator_section_ = nullptr;
   poly_lfo_1_section_ = nullptr;
@@ -111,10 +123,14 @@ void SynthesisInterface::paintBackground(Graphics& g) {
   static const DropShadow component_shadow(Colour(Colors::Color_cc000000), 5, Point<int>(0, 1));
 
   section_shadow.drawForRectangle(g, amplitude_envelope_section_->getBounds());
+  section_shadow.drawForRectangle(g, chorus_section_->getBounds());
   section_shadow.drawForRectangle(g, delay_section_->getBounds());
   section_shadow.drawForRectangle(g, distortion_section_->getBounds());
   section_shadow.drawForRectangle(g, dynamic_section_->getBounds());
   section_shadow.drawForRectangle(g, extra_envelope_section_->getBounds());
+  section_shadow.drawForRectangle(g, mod_envelope_2_section_->getBounds());
+  section_shadow.drawForRectangle(g, mod_envelope_3_section_->getBounds());
+  section_shadow.drawForRectangle(g, mod_envelope_4_section_->getBounds());
   section_shadow.drawForRectangle(g, extra_mod_section_->getBounds());
   section_shadow.drawForRectangle(g, feedback_section_->getBounds());
   section_shadow.drawForRectangle(g, filter_envelope_section_->getBounds());
@@ -125,6 +141,8 @@ void SynthesisInterface::paintBackground(Graphics& g) {
   section_shadow.drawForRectangle(g, mono_lfo_2_section_->getBounds());
   section_shadow.drawForRectangle(g, mono_lfo_3_section_->getBounds());
   section_shadow.drawForRectangle(g, mono_lfo_4_section_->getBounds());
+  section_shadow.drawForRectangle(g, mono_lfo_5_section_->getBounds());
+  section_shadow.drawForRectangle(g, mono_lfo_6_section_->getBounds());
   section_shadow.drawForRectangle(g, mixer_section_->getBounds());
   section_shadow.drawForRectangle(g, oscillator_section_->getBounds());
   section_shadow.drawForRectangle(g, poly_lfo_1_section_->getBounds());
@@ -154,17 +172,15 @@ void SynthesisInterface::resized() {
   int audio_height = size_ratio_ * 290.0f;
   int oscillators_height = size_ratio_ * 180.0f;
   int sub_mixer_height = audio_height - oscillators_height - padding_;
-  int filter_height = size_ratio_ * 196.0f;
-  int feedback_height = audio_height - filter_height - padding_;
-  int envelopes_height = size_ratio_ * 210.0f;
+  int envelopes_height = size_ratio_ * 105.0f;
   int step_lfo_height = size_ratio_ * 148.0f;
   int dynamics_height = size_ratio_ * 64.0f;
+  int keyboard_mod_height = dynamics_height + padding_;
   int keyboard_padding = size_ratio_ * 5.0f;
-  int stutter_height = size_ratio_ * 141.0f;
-  int formant_height = audio_height - stutter_height - padding_;
-  int delay_height = size_ratio_ * 91.0f;
-  int reverb_height = size_ratio_ * 91.0f;
-  int distortion_height = audio_height - delay_height - reverb_height - 2.0f * padding_;
+  int effect_height = (audio_height - 2 * padding_) / 3;
+  int last_effect_gap = audio_height - 3 * effect_height - padding_;
+  int feedback_height = effect_height;
+  int filter_height = audio_height - feedback_height - padding_;
 
   oscillator_section_->setBounds(column_1_x, padding_, section_one_width_, oscillators_height);
   sub_section_->setBounds(column_1_x, oscillator_section_->getBottom() + padding_,
@@ -177,30 +193,30 @@ void SynthesisInterface::resized() {
   feedback_section_->setBounds(column_2_x, padding_, section_two_width_, feedback_height);
   filter_section_->setBounds(column_2_x, feedback_section_->getBottom() + padding_,
                              section_two_width_, filter_height);
-  filter_envelope_section_->setBounds(column_2_x, filter_section_->getBottom() + padding_,
-                                      section_two_width_, envelopes_height);
+  filter_envelope_section_->setBounds(column_1_x, amplitude_envelope_section_->getBottom() + padding_,
+                                      section_one_width_, envelopes_height);
 
   int lfo_width = 0.421875f * section_one_width_;
   int step_sequencer_width = section_one_width_ + section_two_width_ + padding_ -
                              3 * (lfo_width + padding_);
 
-  int step_lfo_y = amplitude_envelope_section_->getBottom() + padding_;
+  int step_lfo_y = filter_envelope_section_->getBottom() + padding_;
 
-  // Calculer hauteur: 2/3 pour step_sequencer, 1/3 pour keyboard (réduit de moitié)
+  // Calculer hauteur: 2/3 pour step_sequencer, 1/3 pour keyboard (rï¿½duit de moitiï¿½)
   int available_height = getHeight() - step_lfo_y - 2 * padding_;
   int sequencer_height = ((available_height - padding_) * 2 / 3);
   int keyboard_height = ((available_height - padding_) / 3);
 
-  // Step sequencer étendu sur 3 colonnes
+  // Step sequencer ï¿½tendu sur 3 colonnes
   step_sequencer_section_->setBounds(column_1_x, step_lfo_y,
                                      column_3_x + section_three_width_ - column_1_x, sequencer_height);
 
-    distortion_section_->setBounds(column_4_x, padding_,
-                                 section_three_right_width, distortion_height);
+  distortion_section_->setBounds(column_4_x, padding_,
+                 section_three_right_width, effect_height);
   delay_section_->setBounds(column_4_x, distortion_section_->getBottom() + padding_,
-                            section_three_right_width, delay_height);
-  reverb_section_->setBounds(column_4_x, delay_section_->getBottom() + padding_,
-                             section_three_right_width, reverb_height);
+               section_three_right_width, effect_height);
+  reverb_section_->setBounds(column_4_x, delay_section_->getBottom() + last_effect_gap,
+                section_three_right_width, effect_height);
 
   // LFOs dans la nouvelle colonne 5 (2 par ligne)
   mono_lfo_1_section_->setBounds(column_5_x, padding_,
@@ -213,30 +229,47 @@ void SynthesisInterface::resized() {
   mono_lfo_4_section_->setBounds(mono_lfo_3_section_->getRight() + padding_,
                                  mono_lfo_1_section_->getBottom() + padding_,
                                  section_four_half_width, step_lfo_height);
+  mono_lfo_5_section_->setBounds(column_5_x, mono_lfo_3_section_->getBottom() + padding_,
+                                 section_four_half_width, step_lfo_height);
+  mono_lfo_6_section_->setBounds(mono_lfo_5_section_->getRight() + padding_,
+                                 mono_lfo_5_section_->getY(),
+                                 section_four_half_width, step_lfo_height);
 
-  poly_lfo_1_section_->setBounds(column_5_x, mono_lfo_3_section_->getBottom() + padding_,
-                               section_four_half_width, step_lfo_height);
+  poly_lfo_1_section_->setBounds(column_5_x,
+                                 mono_lfo_5_section_->getBottom() + padding_,
+                                 section_four_half_width, step_lfo_height);
 
-  poly_lfo_2_section_->setBounds(poly_lfo_1_section_->getRight() + padding_, mono_lfo_4_section_->getBottom() + padding_,
-                               section_four_half_width, step_lfo_height);
+  poly_lfo_2_section_->setBounds(poly_lfo_1_section_->getRight() + padding_,
+                                 poly_lfo_1_section_->getY(),
+                                 section_four_half_width, step_lfo_height);
 
-  stutter_section_->setBounds(column_3_x, padding_, section_three_left_width, stutter_height);
+  stutter_section_->setBounds(column_3_x, distortion_section_->getY(),
+                              distortion_section_->getWidth(), effect_height);
+  chorus_section_->setBounds(column_3_x, delay_section_->getY(),
+                             distortion_section_->getWidth(), effect_height);
+  formant_section_->setBounds(column_3_x, reverb_section_->getY(),
+                              distortion_section_->getWidth(), effect_height);
 
-  formant_section_->setBounds(column_3_x, stutter_section_->getBottom() + padding_,
-                              section_three_left_width, formant_height);
-
-  extra_envelope_section_->setBounds(column_3_x, formant_section_->getBottom() + padding_,
+  extra_envelope_section_->setBounds(column_2_x, amplitude_envelope_section_->getY(),
+                                     section_two_width_, envelopes_height);
+  mod_envelope_2_section_->setBounds(column_3_x, amplitude_envelope_section_->getY(),
+                                     section_three_width_, envelopes_height);
+  int second_mod_envelope_y = extra_envelope_section_->getBottom() + padding_;
+  mod_envelope_3_section_->setBounds(column_2_x, second_mod_envelope_y,
+                                     section_two_width_, envelopes_height);
+  mod_envelope_4_section_->setBounds(column_3_x, second_mod_envelope_y,
                                      section_three_width_, envelopes_height);
 
-  // Extra mod, voice et dynamic dans la colonne 5 (sous les LFOs 3 et 4)
+  // Leave one LFO-height gap before the poly LFO row, then compact the lower controls.
   extra_mod_section_->setBounds(column_5_x, poly_lfo_1_section_->getBottom() + padding_,
-                                section_four_width_, step_lfo_height);
-  voice_section_->setBounds(column_5_x, extra_mod_section_->getBottom() + padding_,
-                            section_four_width_, dynamics_height);
-  dynamic_section_->setBounds(column_5_x, voice_section_->getBottom() + padding_,
-                              section_four_width_, dynamics_height);
+                                section_four_width_, keyboard_mod_height);
+  int voice_dynamic_y = extra_mod_section_->getBottom() + padding_;
+  voice_section_->setBounds(column_5_x, voice_dynamic_y,
+                            section_four_half_width, dynamics_height);
+  dynamic_section_->setBounds(voice_section_->getRight() + padding_, voice_dynamic_y,
+                              section_four_half_width, dynamics_height);
 
-  // Keyboard étendu sur les 3 colonnes d'origine, sous le step sequencer (1/3 de hauteur)
+  // Keyboard ï¿½tendu sur les 3 colonnes d'origine, sous le step sequencer (1/3 de hauteur)
   int keyboard_y = step_sequencer_section_->getBottom() + padding_;
   keyboard_->setBounds(column_1_x, keyboard_y + keyboard_padding,
                        column_3_x + section_three_width_ - column_1_x - keyboard_padding,

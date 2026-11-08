@@ -1,9 +1,10 @@
 var searchData=
 [
-  ['lfo_5fsection_5fh_0',['LFO_SECTION_H',['../lfo__section_8h.html#a7010e5d61564d8c6f43e5ed8f4869446',1,'lfo_section.h']]],
-  ['linux_5fbank_5fdirectory_1',['LINUX_BANK_DIRECTORY',['../load__save_8cpp.html#a8c6c3a3d778780bf0d261f1882609ff9',1,'load_save.cpp']]],
-  ['linux_5ffactory_5fpatch_5fdirectory_2',['LINUX_FACTORY_PATCH_DIRECTORY',['../load__save_8cpp.html#ae0e7ba138286e1facb8288b9fa719ded',1,'load_save.cpp']]],
-  ['linux_5fsystem_5fpatch_5fdirectory_3',['LINUX_SYSTEM_PATCH_DIRECTORY',['../patch__browser_8cpp.html#a2c0447907c3beb0090d4d7c5060c5ef6',1,'patch_browser.cpp']]],
-  ['linux_5fuser_5fpatch_5fdirectory_4',['LINUX_USER_PATCH_DIRECTORY',['../patch__browser_8cpp.html#a871f8beb4382b0c2f1c16095e73ec632',1,'patch_browser.cpp']]],
-  ['logo_5fwidth_5',['LOGO_WIDTH',['../about__section_8cpp.html#aaca826667b185ef968585f830dcec417',1,'about_section.cpp']]]
+  ['keytrack_5fheight_0',['KEYTRACK_HEIGHT',['../filter__section_8cpp.html#a04175a119fff49c07d1abe0b715223ea',1,'filter_section.cpp']]],
+  ['keytrack_5ftop_5fpadding_1',['KEYTRACK_TOP_PADDING',['../filter__section_8cpp.html#ae4d616d2918351855acc9075013a7004',1,'filter_section.cpp']]],
+  ['keytrack_5fwidth_2',['KEYTRACK_WIDTH',['../filter__section_8cpp.html#aec548741bb49e1fcfa5a6bad03f2f3b4',1,'filter_section.cpp']]],
+  ['knob_5fsection_5fheight_3',['KNOB_SECTION_HEIGHT',['../oscillator__section_8cpp.html#ab739c1bb086fcaec7dfd4043dcbf24d1',1,'oscillator_section.cpp']]],
+  ['knob_5fsection_5fwidth_4',['KNOB_SECTION_WIDTH',['../filter__section_8cpp.html#aee16dc588a2555d8347c4538a0d8780f',1,'filter_section.cpp']]],
+  ['knob_5fsize_5',['KNOB_SIZE',['../synth__section_8cpp.html#ac348180e098c78210e81ce8fce906ed1',1,'synth_section.cpp']]],
+  ['knob_5fwidth_6',['KNOB_WIDTH',['../arp__section_8cpp.html#ab6addbfb21abd2f1dc584dedd9fd763a',1,'KNOB_WIDTH:&#160;arp_section.cpp'],['../delay__section_8cpp.html#ab6addbfb21abd2f1dc584dedd9fd763a',1,'KNOB_WIDTH:&#160;delay_section.cpp'],['../noise__section_8cpp.html#ab6addbfb21abd2f1dc584dedd9fd763a',1,'KNOB_WIDTH:&#160;noise_section.cpp']]]
 ];

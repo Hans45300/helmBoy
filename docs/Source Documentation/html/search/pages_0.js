@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['architecture_0',['Architecture',['../classhelmboy_1_1Midi2Manager.html#midi2_architecture',1,'Architecture'],['../classSynthBase.html#synthbase_architecture',1,'Architecture']]],
-  ['available_20controls_1',['Available Controls',['../classDelaySection.html#delay_controls',1,'']]]
+  ['0_20et_20décodeur_20ump_0',['MIDI 1.0 et décodeur UMP',['../midi_input.html',1,'']]]
 ];

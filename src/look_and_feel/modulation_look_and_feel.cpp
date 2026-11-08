@@ -21,6 +21,7 @@
 #include "modulation_look_and_feel.h"
 
 #include "../editor_components/HelmBoyGraphics.h"
+#include "button_modulation_slider.h"
 #include "colors.h"
 #include "fonts.h"
 #include "modulation_slider.h"
@@ -33,9 +34,15 @@ ModulationLookAndFeel::ModulationLookAndFeel() {
   setColour(TooltipWindow::textColourId, Colour(0xffdddddd));
 }
 
-void ModulationLookAndFeel::drawLinearSlider(Graphics& g, int x, int y, int width, int height,
-                                             float slider_pos, float min, float max,
+void ModulationLookAndFeel::drawLinearSlider(Graphics& g, int, int, int, int,
+                                             float, float, float,
                                              const Slider::SliderStyle style, Slider& slider) {
+  ButtonModulationSlider* button_slider = dynamic_cast<ButtonModulationSlider*>(&slider);
+  if (button_slider != nullptr) {
+    drawTextModulation(g, slider, slider.getValue(), false);
+    return;
+  }
+
   ModulationSlider* mod_slider = dynamic_cast<ModulationSlider*>(&slider);
   if (!mod_slider)
     return;
@@ -60,24 +67,28 @@ void ModulationLookAndFeel::drawLinearSlider(Graphics& g, int x, int y, int widt
   g.setColour(Colour(0x5500e676));
 
   if (style == Slider::SliderStyle::LinearBar) {
-    float destination_position = width * destination_percentage;
-    float mod_diff = width * mod_percentage;
+    const auto bounds = slider.getLocalBounds().toFloat();
+    float destination_position = bounds.getWidth() * destination_percentage;
+    float mod_diff = bounds.getWidth() * mod_percentage;
     float from = std::min<float>(destination_position + mod_diff, destination_position);
     float to = std::max<float>(destination_position + mod_diff, destination_position);
 
-    g.fillRect(x + from, float(y), to - from, float(height));
+    g.fillRect(bounds.getX() + from, bounds.getY(), to - from, bounds.getHeight());
     g.setColour(Colour(0xffffffff));
-    g.fillRect(x + destination_position + mod_diff, 1.0f * y, 2.0f, 1.0f * height);
+    g.fillRect(bounds.getX() + destination_position + mod_diff, bounds.getY(),
+               2.0f, bounds.getHeight());
   }
   else if (style == Slider::SliderStyle::LinearBarVertical) {
-    float destination_position = height * (1.0f - destination_percentage);
-    float mod_diff = height * mod_percentage;
+    const auto bounds = slider.getLocalBounds().toFloat();
+    float destination_position = bounds.getHeight() * (1.0f - destination_percentage);
+    float mod_diff = bounds.getHeight() * mod_percentage;
     float from = std::min<float>(destination_position - mod_diff, destination_position);
     float to = std::max<float>(destination_position - mod_diff, destination_position);
 
-    g.fillRect(float(x), y + from, float(width), to - from);
+    g.fillRect(bounds.getX(), bounds.getY() + from, bounds.getWidth(), to - from);
     g.setColour(Colour(0xffffffff));
-    g.fillRect(float(x), y + destination_position - mod_diff, 1.0f * width, 2.0f);
+    g.fillRect(bounds.getX(), bounds.getY() + destination_position - mod_diff,
+               bounds.getWidth(), 2.0f);
   }
 }
 
@@ -86,18 +97,21 @@ void ModulationLookAndFeel::drawLinearSliderThumb(Graphics& g, int x, int y, int
                                                   const Slider::SliderStyle style, Slider& slider) {
 }
 
-void ModulationLookAndFeel::drawTextModulation(Graphics& g, Slider& slider, float percent) {
-  if (percent == 0.0f) {
-    g.setColour(Colour(0x11b9f6ca));
-    g.fillRect(0, 0, slider.getWidth(), slider.getHeight());
-    g.setColour(Colour(0xffb9f6ca));
-    g.drawRect(0, 0, slider.getWidth(), slider.getHeight(), 1);
-  }
-  else {
-    g.setColour(Colour(0x1100e676));
-    g.fillRect(0, 0, slider.getWidth(), slider.getHeight());
-    g.setColour(Colors::modulation);
-    g.drawRect(0.0f, 0.0f, float(slider.getWidth()), float(slider.getHeight()), 2.5f);
+void ModulationLookAndFeel::drawTextModulation(Graphics& g, Slider& slider, float percent,
+                                                bool draw_bounds) {
+  if (draw_bounds) {
+    if (percent == 0.0f) {
+      g.setColour(Colour(0x11b9f6ca));
+      g.fillRect(0, 0, slider.getWidth(), slider.getHeight());
+      g.setColour(Colour(0xffb9f6ca));
+      g.drawRect(0, 0, slider.getWidth(), slider.getHeight(), 1);
+    }
+    else {
+      g.setColour(Colour(0x1100e676));
+      g.fillRect(0, 0, slider.getWidth(), slider.getHeight());
+      g.setColour(Colors::modulation);
+      g.drawRect(0.0f, 0.0f, float(slider.getWidth()), float(slider.getHeight()), 2.5f);
+    }
   }
 
   g.setColour(Colour(0x5500e676));
@@ -177,7 +191,7 @@ void ModulationLookAndFeel::drawToggleButton(Graphics& g, ToggleButton& button,
 
   int size = button.getWidth();
 
-  // Déterminer les états actif et sélectionné
+  // Dï¿½terminer les ï¿½tats actif et sï¿½lectionnï¿½
   bool selected = button.getToggleState();
   bool active = false;
 
@@ -186,13 +200,13 @@ void ModulationLookAndFeel::drawToggleButton(Graphics& g, ToggleButton& button,
     active = true;
   }
 
-  // Créer l'image de modulation avec HelmBoyGraphics
-  Image button_image = HelmBoyGraphics::createModulationImage(size, selected, active);
-
-  g.setColour(Colours::white);
-  g.drawImage(button_image,
-              0, 0, button.getWidth(), button.getHeight(),
-              0, 0, button_image.getWidth(), button_image.getHeight());
+    const int icon_width = button.getWidth() * 2 / 3;
+    const int icon_height = button.getHeight() * 2 / 3;
+    const Rectangle<float> icon_bounds(
+      (button.getWidth() - icon_width) / 2.0f,
+      (button.getHeight() - icon_height) / 2.0f,
+      static_cast<float>(icon_width), static_cast<float>(icon_height));
+    HelmBoyGraphics::drawModulationControl(g, icon_bounds, selected, active);
 
   if (is_down) {
     g.setColour(Colour(0x11000000));

@@ -1,11 +1,13 @@
 <map id="HelmBoyEditor" name="HelmBoyEditor">
-<area shape="rect" id="Node000001" title=" " alt="" coords="173,1008,347,1333"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,528,139,597"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,612,105,768,126,864,155,959,176,1011,171,1013,150,961,121,866,100,769,75,613"/>
-<area shape="rect" id="Node000003" href="$classSynthBase.html" title="Base synthesizer class providing core functionality." alt="" coords="164,165,357,960"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="263,975,263,1009,258,1009,258,975"/>
-<area shape="rect" id="Node000004" href="$classMidiManager_1_1Listener.html" title="Listener interface for MIDI&#45;triggered parameter changes." alt="" coords="167,5,354,117"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="263,132,263,165,258,165,258,132"/>
-<area shape="rect" id="Node000005" href="$classSynthGuiInterface.html" title="Glue code exposing the synthesizer to the GUI layer." alt="" coords="381,400,555,725"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="435,740,407,850,371,961,350,1011,345,1009,366,959,402,849,430,739"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="144,1371,331,1952"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,709,83,779"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="43,791,47,891,54,1023,69,1173,82,1248,97,1322,119,1395,147,1467,141,1468,114,1397,92,1323,76,1249,64,1173,48,1024,42,891,43,796"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="107,709,192,779"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="155,791,207,1322,212,1371,206,1371,202,1323,153,795"/>
+<area shape="rect" id="Node000004" href="$classSynthBase.html" title="Base synthesizer class providing core functionality." alt="" coords="216,165,435,1323"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="269,1335,268,1372,263,1370,268,1340"/>
+<area shape="rect" id="Node000005" href="$classMidiManager_1_1Listener.html" title="Listener interface for MIDI&#45;triggered parameter changes." alt="" coords="232,5,419,117"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="326,130,328,166,323,165,325,135"/>
+<area shape="rect" id="Node000006" href="$classSynthGuiInterface.html" title="Glue code exposing the synthesizer to the GUI layer." alt="" coords="459,581,645,907"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="538,919,527,1016,508,1118,483,1223,449,1324,425,1380,396,1435,333,1537,329,1534,391,1433,420,1378,444,1322,477,1221,503,1117,522,1015,536,924"/>
 </map>

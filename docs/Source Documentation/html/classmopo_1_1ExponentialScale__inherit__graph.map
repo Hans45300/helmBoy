@@ -1,0 +1,7 @@
+<map id="mopo::ExponentialScale" name="mopo::ExponentialScale">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,795,157,928"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Operator.html" title="Base class for simple arithmetic and logic operators." alt="" coords="19,592,144,747"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,759,84,796,79,795,80,764"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1Processor.html" title=" " alt="" coords="6,5,157,544"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="81,556,84,592,79,592,81,562"/>
+</map>

@@ -99,6 +99,18 @@ namespace mopo {
     MOPO_ASSERT(num_processors != 0);
   }
 
+  void ProcessorRouter::resetState() {
+    for (auto* processor : local_order_)
+      if (processor != nullptr)
+        processor->resetState();
+    for (auto* processor : idle_processors_)
+      if (processor != nullptr)
+        processor->resetState();
+    for (auto* feedback : local_feedback_order_)
+      if (feedback != nullptr)
+        feedback->resetState();
+  }
+
   void ProcessorRouter::destroy() {
     for (Processor* processor : local_order_)
       processor->destroy();
@@ -381,93 +393,3 @@ namespace mopo {
     return dependencies;
   }
 } // namespace mopo
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

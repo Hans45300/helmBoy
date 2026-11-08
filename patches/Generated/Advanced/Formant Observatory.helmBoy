@@ -1,0 +1,48 @@
+{
+  "settings": {
+    "polyphony": 8,
+    "osc_1_waveform": 4.0,
+    "osc_1_volume": 0.52,
+    "osc_2_waveform": 0.0,
+    "osc_2_transpose": 12.0,
+    "osc_2_volume": 0.34,
+    "noise_volume": 0.12,
+    "noise_color": 0.56,
+    "formant_on": 1,
+    "formant_x": 0.32,
+    "formant_y": 0.68,
+    "filter_on": 1,
+    "filter_style": 2,
+    "cutoff": 75.0,
+    "resonance": 0.24,
+    "amp_attack": 0.24,
+    "amp_decay": 1.4,
+    "amp_sustain": 0.66,
+    "amp_release": 1.1,
+    "mono_lfo_1_sync": 0,
+    "mono_lfo_1_frequency": -1.2,
+    "mono_lfo_1_waveform": 13.0,
+    "chorus_on": 1,
+    "chorus_rate": 0.44,
+    "chorus_depth": 0.26,
+    "chorus_mix": 0.34,
+    "reverb_on": 1,
+    "reverb_dry_wet": 0.28,
+    "modulations": [
+      {
+        "amount": 0.28,
+        "destination": "formant_x",
+        "source": "mono_lfo_1"
+      },
+      {
+        "amount": -0.2,
+        "destination": "formant_y",
+        "source": "mono_lfo_1"
+      }
+    ]
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Formant Observatory",
+  "folder_name": "Advanced",
+  "synth_version": "1.1.1"
+}

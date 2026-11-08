@@ -43,13 +43,13 @@ namespace {
 
   bool isBankDirectory(File bank) {
     Array<File> patches;
-    bank.findChildFiles(patches, File::findFiles, true, String("*.") + mopo::PATCH_EXTENSION);
+    LoadSave::findPatchFiles(bank, patches, true);
 
     return patches.size() && patches[0].getParentDirectory().getParentDirectory() == bank;
   }
 } // namespace
 
-void Startup::doStartupChecks(MidiManager* midi_manager, mopo::StringLayout* layout) {
+void Startup::doStartupChecks(MidiManager* midi_manager) {
   if (!LoadSave::isInstalled())
     return;
 
@@ -62,7 +62,7 @@ void Startup::doStartupChecks(MidiManager* midi_manager, mopo::StringLayout* lay
     LoadSave::saveLastAskedForMoney();
   }
   else
-    LoadSave::loadConfig(midi_manager, layout);
+    LoadSave::loadConfig(midi_manager);
 }
 
 bool Startup::isFirstStartup() {
@@ -81,8 +81,7 @@ void Startup::storeOldFactoryPatches() {
       File factory_dest = old_presets_dest.getChildFile("Factory Presets");
       if (factory_dest.exists() || factory_dest.createDirectory().ok()) {
         Array<File> factory_presets;
-        factory_directory.findChildFiles(factory_presets, File::findFiles, true,
-                                         String("*.") + mopo::PATCH_EXTENSION);
+        LoadSave::findPatchFiles(factory_directory, factory_presets, true);
 
         for (const auto& factory_preset : factory_presets) {
           File new_dest = factory_dest.getChildFile(factory_preset.getFileName());
@@ -96,8 +95,7 @@ void Startup::storeOldFactoryPatches() {
       File cris_dest = old_presets_dest.getChildFile("Cris Owl Alvarez");
       if (cris_dest.exists() || cris_dest.createDirectory().ok()) {
         Array<File> cris_presets;
-        cris_directory.findChildFiles(cris_presets, File::findFiles, true,
-                                      String("*.") + mopo::PATCH_EXTENSION);
+        LoadSave::findPatchFiles(cris_directory, cris_presets, true);
 
         for (const auto& cris_preset : cris_presets) {
           File new_dest = cris_dest.getChildFile(cris_preset.getFileName());
@@ -119,8 +117,7 @@ void Startup::copyFactoryPatches() {
   for (const auto& factory_bank : factory_banks) {
     if (isBankDirectory(factory_bank)) {
       Array<File> patches;
-      factory_bank.findChildFiles(patches, File::findFiles, true,
-                                  String("*.") + mopo::PATCH_EXTENSION);
+      LoadSave::findPatchFiles(factory_bank, patches, true);
 
       for (const auto& patch : patches) {
         String relative_path = patch.getRelativePathFrom(factory_bank_dir);
@@ -147,8 +144,7 @@ void Startup::fixPatchesFolder() {
   File old_user_bank = getOldUserPatchesDirectory();
   File default_user_folder = user_bank.getChildFile("Default");
   Array<File> misplaced_files;
-  old_user_bank.findChildFiles(misplaced_files, File::findFiles, false,
-                               String("*.") + mopo::PATCH_EXTENSION);
+  LoadSave::findPatchFiles(old_user_bank, misplaced_files, false);
   if (misplaced_files.size() && !default_user_folder.exists())
     default_user_folder.createDirectory();
 
@@ -163,8 +159,7 @@ void Startup::updateAllPatches(SynthBase* synth,
                                const CriticalSection& critical_section) {
   File user_bank = LoadSave::getBankDirectory();
   Array<File> all_patches;
-  user_bank.findChildFiles(all_patches, File::findFiles, true,
-                           String("*.") + mopo::PATCH_EXTENSION);
+  LoadSave::findPatchFiles(user_bank, all_patches, true);
 
   for (const auto& patch : all_patches) {
     var parsed_json_state;

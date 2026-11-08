@@ -23,6 +23,8 @@
 #include "colors.h"
 #include "utils.h"
 
+#include <cmath>
+
 #define GRID_CELL_WIDTH 8
 #define GRID_CELL_HEIGHT 16
 
@@ -57,7 +59,7 @@ void XYPad::paint(Graphics& g) {
   float y = (1.0f - y_slider_->getValue()) * getHeight();
 
   Path target;
-  float handle_radius = 0.05f * getWidth();
+  float handle_radius = 0.025f * getWidth();
   target.addEllipse(x - handle_radius, y - handle_radius,
                     2.0f * handle_radius, 2.0f * handle_radius);
 
@@ -71,11 +73,23 @@ void XYPad::paint(Graphics& g) {
   else
     g.setColour(Colors::graph_disable);
 
-  PathStrokeType stroke(0.01f * getWidth(), PathStrokeType::beveled, PathStrokeType::rounded);
+  PathStrokeType stroke(0.005f * getWidth(), PathStrokeType::beveled, PathStrokeType::rounded);
   g.strokePath(target, stroke);
-  float dot_radius = 0.01f * getWidth();
+  float dot_radius = 0.005f * getWidth();
 
   g.fillEllipse(x - dot_radius, y - dot_radius, 2.0f * dot_radius, 2.0f * dot_radius);
+
+  if (effective_position_visible_) {
+    float effective_x = effective_position_.x * getWidth();
+    float effective_y = (1.0f - effective_position_.y) * getHeight();
+    float marker_radius = 0.0175f * getWidth();
+    g.setColour(Colors::modulation);
+    g.drawEllipse(effective_x - marker_radius, effective_y - marker_radius,
+                  2.0f * marker_radius, 2.0f * marker_radius,
+                  jmax(1.0f, 0.003f * getWidth()));
+    g.fillEllipse(effective_x - dot_radius, effective_y - dot_radius,
+                  2.0f * dot_radius, 2.0f * dot_radius);
+  }
 
   if (mouse_down_) {
     g.setColour(Colour(Colors::Color_11ffffff));
@@ -86,9 +100,7 @@ void XYPad::paint(Graphics& g) {
 
 void XYPad::resized() {
   auto *display = Desktop::getInstance().getDisplays().getPrimaryDisplay();
-  jassert(display != nullptr);
-
-  float scale = display->scale;
+  float scale = display != nullptr ? static_cast<float>(display->scale) : 1.0f;
   background_ = Image(Image::RGB, scale * getWidth(), scale * getHeight(), true);
   Graphics g(background_);
   g.addTransform(AffineTransform::scale(scale, scale));
@@ -96,6 +108,10 @@ void XYPad::resized() {
 }
 
 void XYPad::mouseDown(const MouseEvent& e) {
+  if (x_slider_ != nullptr)
+    x_slider_->beginParameterEditHistoryGesture();
+  if (y_slider_ != nullptr)
+    y_slider_->beginParameterEditHistoryGesture();
   setSlidersFromPosition(e.getPosition());
   mouse_down_ = true;
   repaint();
@@ -106,6 +122,10 @@ void XYPad::mouseDrag(const MouseEvent& e) {
 }
 
 void XYPad::mouseUp(const MouseEvent& e) {
+  if (x_slider_ != nullptr)
+    x_slider_->endParameterEditHistoryGesture();
+  if (y_slider_ != nullptr)
+    y_slider_->endParameterEditHistoryGesture();
   mouse_down_ = false;
   repaint();
 }
@@ -139,5 +159,18 @@ void XYPad::setYSlider(SynthSlider* slider) {
 
 void XYPad::setActive(bool active) {
   active_ = active;
+  repaint();
+}
+
+void XYPad::setEffectivePosition(Point<float> position, bool visible) {
+  position.x = jlimit(0.0f, 1.0f, position.x);
+  position.y = jlimit(0.0f, 1.0f, position.y);
+  if (effective_position_visible_ == visible &&
+      std::abs(effective_position_.x - position.x) < 0.001f &&
+      std::abs(effective_position_.y - position.y) < 0.001f)
+    return;
+
+  effective_position_ = position;
+  effective_position_visible_ = visible;
   repaint();
 }

@@ -22,7 +22,13 @@
 #include "helmBoy_common.h"
 #include "helmBoy_editor.h"
 #include "load_save.h"
+#include "startup_trace.h"
+#include <cmath>
+#include <cstdio>
 #include <optional>
+#include <string>
+
+#define appendPluginHostTrace(message) HELMBOY_STARTUP_TRACE("plugin_host_trace.log", message)
 
 #define PITCH_WHEEL_RESOLUTION 0x3fff
 #define MAX_BUFFER_PROCESS 256
@@ -30,23 +36,68 @@
 
 HelmPlugin::HelmPlugin() :
     AudioProcessor(BusesProperties().withOutput("Output", juce::AudioChannelSet::stereo(), true)) {
+  appendPluginHostTrace("HelmPlugin::HelmPlugin begin");
   set_state_time_ = 0;
 
   current_program_ = 0;
 
+  appendPluginHostTrace("HelmPlugin::HelmPlugin loadPatches start");
   loadPatches();
+  appendPluginHostTrace("HelmPlugin::HelmPlugin loadPatches done");
 
-  for (const auto& [name, control] : controls_) {
-    ValueBridge* bridge = new ValueBridge(name, control);
+  appendPluginHostTrace("HelmPlugin::HelmPlugin parameters init start");
+  const auto add_parameter_bridge = [this](const std::string& name, mopo::Value* control) {
+    ValueBridge* bridge = new ValueBridge(name, control, getControlSnapshot(name));
     bridge->setListener(this);
     bridge_lookup_[name] = bridge;
     addParameter(bridge);
+  };
+
+  const auto is_additional_mod_envelope_parameter = [](const std::string& name) {
+    return name.rfind("mod_2_", 0) == 0 ||
+           name.rfind("mod_3_", 0) == 0 ||
+           name.rfind("mod_4_", 0) == 0;
+  };
+  const auto is_phase_offset_parameter = [](const std::string& name) {
+    return name.find("_phase_offset") != std::string::npos;
+  };
+  for (const auto& [name, control] : controls_) {
+    if (name == "limiter_ceiling" || name == "limiter_release" || name == "pan" ||
+      name == "delay_ping_pong" || name == "delay_lp_cutoff" || name == "noise_color" ||
+      is_additional_mod_envelope_parameter(name) || is_phase_offset_parameter(name))
+      continue;
+    add_parameter_bridge(name, control);
+  }
+  add_parameter_bridge("limiter_ceiling", controls_.at("limiter_ceiling"));
+  add_parameter_bridge("limiter_release", controls_.at("limiter_release"));
+  add_parameter_bridge("pan", controls_.at("pan"));
+  add_parameter_bridge("delay_ping_pong", controls_.at("delay_ping_pong"));
+  add_parameter_bridge("delay_lp_cutoff", controls_.at("delay_lp_cutoff"));
+  add_parameter_bridge("noise_color", controls_.at("noise_color"));
+  const char* envelope_stages[] = {"attack", "delay", "hold", "decay", "sustain", "release"};
+  for (int envelope_number = 2; envelope_number <= 4; ++envelope_number) {
+    for (const char* stage : envelope_stages) {
+      const std::string name = "mod_" + std::to_string(envelope_number) + "_" + stage;
+      add_parameter_bridge(name, controls_.at(name));
+    }
+  }
+  for (const auto& [name, control] : controls_) {
+    if (is_phase_offset_parameter(name))
+      add_parameter_bridge(name, control);
+  }
+  appendPluginHostTrace("HelmPlugin::HelmPlugin parameters init done");
+
+  for (std::size_t index = 0; index < helmboy::TailLength::Count; ++index) {
+    const std::string name(helmboy::TailLength::names[index]);
+    tail_controls_[index] = getControlSnapshot(name);
+    tail_defaults_[index] = mopo::Parameters::getDetails(name).default_value;
   }
 
   // Initialize MIDI 2.0 manager with high-resolution callbacks
+  appendPluginHostTrace("HelmPlugin::HelmPlugin midi2 manager start");
   midi2_manager_ = std::make_unique<helmboy::Midi2Manager>();
 
-  // Charger la configuration MIDI 2.0 sauvegardée
+  // Charger la configuration MIDI 2.0 sauvegardï¿½e
   bool enable_midi2 = LoadSave::shouldEnableMidi2();
   midi2_manager_->setMidiVersion(
     enable_midi2 ? helmboy::Midi2Manager::MidiVersion::MIDI_2_0
@@ -74,12 +125,17 @@ HelmPlugin::HelmPlugin() :
     juce::MidiMessage msg = juce::MidiMessage::pitchWheel(channel + 1, midi_value);
     midi_manager_->processMidiMessage(msg, 0);
   };
+
+  appendPluginHostTrace("HelmPlugin::HelmPlugin end");
 }
 
 HelmPlugin::~HelmPlugin() {
+  stopGuiUpdates();
+  appendPluginHostTrace("HelmPlugin::~HelmPlugin begin");
   midi_manager_ = nullptr;
   keyboard_state_ = nullptr;
   midi2_manager_ = nullptr;
+  appendPluginHostTrace("HelmPlugin::~HelmPlugin end");
 }
 
 std::optional<SynthGuiInterface*> HelmPlugin::getGuiInterface() {
@@ -92,19 +148,26 @@ std::optional<SynthGuiInterface*> HelmPlugin::getGuiInterface() {
 }
 
 void HelmPlugin::beginChangeGesture(std::string_view name) {
-  std::string name_str{name}; // Convert to string for map key
-  bridge_lookup_[name_str]->beginChangeGesture();
+  SynthBase::beginChangeGesture(name);
+  const auto bridge = bridge_lookup_.find(name);
+  if (bridge != bridge_lookup_.end())
+    bridge->second->beginChangeGesture();
 }
 
 void HelmPlugin::endChangeGesture(std::string_view name) {
-  std::string name_str{name}; // Convert to string for map key
-  bridge_lookup_[name_str]->endChangeGesture();
+  const auto bridge = bridge_lookup_.find(name);
+  if (bridge != bridge_lookup_.end())
+    bridge->second->endChangeGesture();
+  SynthBase::endChangeGesture(name);
 }
 
 void HelmPlugin::setValueNotifyHost(std::string_view name, mopo::mopo_float value) {
-  std::string name_str{name}; // Convert to string for map key
-  mopo::mopo_float plugin_value =  bridge_lookup_[name_str]->convertToPluginValue(value);
-  bridge_lookup_[name_str]->setValueNotifyHost(plugin_value);
+  const auto bridge = bridge_lookup_.find(name);
+  if (bridge == bridge_lookup_.end())
+    return;
+
+  const mopo::mopo_float plugin_value = bridge->second->convertToPluginValue(value);
+  bridge->second->setValueNotifyHost(plugin_value);
 }
 
 const CriticalSection& HelmPlugin::getCriticalSection() {
@@ -151,49 +214,100 @@ bool HelmPlugin::silenceInProducesSilenceOut() const {
   return false;
 }
 
+double HelmPlugin::estimateTailLengthSeconds() const {
+  helmboy::TailLength::Inputs inputs;
+  inputs.sample_rate = tail_sample_rate_.load(std::memory_order_acquire);
+  inputs.modulated = getTailModulationMask();
+  for (std::size_t index = 0; index < inputs.values.size(); ++index)
+    inputs.values[index] = tail_controls_[index] != nullptr
+        ? tail_controls_[index]->load(std::memory_order_acquire) : tail_defaults_[index];
+  return helmboy::TailLength::estimate(inputs);
+}
+
 double HelmPlugin::getTailLengthSeconds() const {
-  return 0.0;
+  const double seconds = std::max(estimateTailLengthSeconds(),
+      retained_tail_seconds_.load(std::memory_order_acquire));
+  return helmboy::TailLength::forWrapper(seconds,
+      tail_sample_rate_.load(std::memory_order_acquire),
+      wrapperType == AudioProcessor::wrapperType_VST3);
 }
 
 int HelmPlugin::getNumPrograms() {
+  const ScopedLock lock(getCallbackLock());
   return std::max(1, all_patches_.size());
 }
 
 int HelmPlugin::getCurrentProgram() {
+  const ScopedLock lock(getCallbackLock());
   return current_program_;
 }
 
 void HelmPlugin::setCurrentProgram(int index) {
   // Hack for some DAWs that set program on load for VSTs.
-  if (Time::getMillisecondCounter() - set_state_time_ < SET_PROGRAM_WAIT_MILLISECONDS) [[unlikely]]
+  if (Time::getMillisecondCounter() - set_state_time_.load(std::memory_order_acquire) < SET_PROGRAM_WAIT_MILLISECONDS) [[unlikely]]
     return;
 
-  if (all_patches_.size() > index) [[likely]] {
-    current_program_ = index;
-    LoadSave::loadPatchFile(all_patches_[current_program_], this, save_info_);
-    auto editor = getGuiInterface();
-    if (editor.has_value())
-      editor.value()->updateFullGui();
+  File patch;
+  {
+    const ScopedLock lock(getCallbackLock());
+    if (index < 0 || index >= all_patches_.size())
+      return;
+    patch = all_patches_[index];
   }
+
+  var state;
+  if (JSON::parse(patch.loadFileAsString(), state).failed())
+    return;
+  LoadSave::PreparedSynthState prepared = LoadSave::prepareState(std::move(state));
+  if (!prepared.valid)
+    return;
+
+  {
+    const ScopedLock lock(getCallbackLock());
+    if (index >= all_patches_.size() || all_patches_[index] != patch)
+      return;
+    processControlChanges();
+    processModulationChanges();
+    current_program_ = index;
+    requestEffectResetTransition();
+    LoadSave::applyPreparedState(this, save_info_, prepared);
+  }
+  requestGuiRefresh(true);
 }
 
 const String HelmPlugin::getProgramName(int index) {
-  if (all_patches_.size() <= index)
+  const ScopedLock lock(getCallbackLock());
+  if (index < 0 || index >= all_patches_.size())
     return "";
 
   return all_patches_[index].getFileNameWithoutExtension();
 }
 
 void HelmPlugin::changeProgramName(int index, const String& new_name) {
-  if (all_patches_.size() <= index) {
-    File patch = all_patches_[index];
-    File parent = patch.getParentDirectory();
-    File new_patch_location = parent.getChildFile(new_name + "." + mopo::PATCH_EXTENSION);
-    patch.moveFileTo(new_patch_location);
+  File patch;
+  {
+    const ScopedLock lock(getCallbackLock());
+    if (index < 0 || index >= all_patches_.size())
+      return;
+    patch = all_patches_[index];
+  }
+  File new_patch_location = patch.getParentDirectory().getChildFile(new_name + "." + mopo::PATCH_EXTENSION);
+  if (patch.moveFileTo(new_patch_location)) {
+    const ScopedLock lock(getCallbackLock());
+    if (index < all_patches_.size() && all_patches_[index] == patch)
+      all_patches_.set(index, new_patch_location);
   }
 }
 
 void HelmPlugin::prepareToPlay(double sample_rate, int buffer_size) {
+  if (host_callback_busy_.test_and_set(std::memory_order_acquire)) {
+    jassertfalse;
+    return;
+  }
+  auto finish = [this](void*) { finishHostCallback(); };
+  std::unique_ptr<void, decltype(finish)> ownership(this, finish);
+  tail_sample_rate_.store(std::isfinite(sample_rate) && sample_rate > 0.0
+                             ? sample_rate : 44100.0, std::memory_order_release);
   engine_.setSampleRate(sample_rate);
   engine_.setBufferSize(std::min<int>(buffer_size, MAX_BUFFER_PROCESS));
   midi_manager_->setSampleRate(sample_rate);
@@ -204,15 +318,52 @@ void HelmPlugin::releaseResources() {
   // spare memory, etc.
 }
 
+void HelmPlugin::reset() {
+  host_reset_pending_.store(true, std::memory_order_release);
+  if (!host_callback_busy_.test_and_set(std::memory_order_acquire))
+    finishHostCallback();
+}
+
+void HelmPlugin::finishHostCallback(AudioSampleBuffer* buffer) {
+  if (host_reset_pending_.exchange(false, std::memory_order_acq_rel)) {
+    resetProcessingState();
+    retained_tail_seconds_.store(0.0, std::memory_order_release);
+    if (buffer != nullptr)
+      buffer->clear();
+  }
+  else if (buffer != nullptr) {
+    const double elapsed = buffer->getNumSamples() / tail_sample_rate_.load(std::memory_order_acquire);
+    retained_tail_seconds_.store(helmboy::TailLength::retain(
+        retained_tail_seconds_.load(std::memory_order_relaxed),
+        estimateTailLengthSeconds(), elapsed), std::memory_order_release);
+  }
+  host_callback_busy_.clear(std::memory_order_release);
+}
+
 void HelmPlugin::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midi_messages) {
+  if (host_callback_busy_.test_and_set(std::memory_order_acquire)) {
+    buffer.clear();
+    return;
+  }
+  auto finish = [this, &buffer](void*) { finishHostCallback(&buffer); };
+  std::unique_ptr<void, decltype(finish)> ownership(this, finish);
+  if (host_reset_pending_.exchange(false, std::memory_order_acq_rel)) {
+    resetProcessingState();
+    retained_tail_seconds_.store(0.0, std::memory_order_release);
+  }
   int total_samples = buffer.getNumSamples();
   int num_channels = getTotalNumOutputChannels();
-  getPlayHead()->getCurrentPosition(position_info_);
-  if (position_info_.bpm)
-    engine_.setBpm(position_info_.bpm);
+  if (auto* play_head = getPlayHead()) {
+    if (const auto position = play_head->getPosition()) {
+      if (const auto bpm = position->getBpm(); bpm && std::isfinite(*bpm) && *bpm > 0.0)
+        engine_.setBpm(*bpm);
 
-  if (position_info_.isPlaying || position_info_.isLooping || position_info_.isRecording)
-    engine_.correctToTime(position_info_.timeInSamples);
+      if (position->getIsPlaying() || position->getIsLooping() || position->getIsRecording()) {
+        if (const auto time_in_samples = position->getTimeInSamples())
+          engine_.correctToTime(*time_in_samples);
+      }
+    }
+  }
 
   processControlChanges();
   processModulationChanges();
@@ -223,23 +374,35 @@ void HelmPlugin::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midi_messag
   for (auto sample_offset = 0; sample_offset < total_samples;) {
     auto num_samples = std::min<int>(total_samples - sample_offset, MAX_BUFFER_PROCESS);
 
-    // Route MIDI through MIDI 2.0 manager if enabled
-    if (midi2_manager_ && midi2_manager_->isMidi2Enabled()) {
-      for (auto it = midi_messages.cbegin(); it != midi_messages.cend(); ++it) {
-        int midi_sample = (*it).samplePosition;
-        if (midi_sample >= sample_offset && midi_sample < sample_offset + num_samples) {
-          midi2_manager_->processMidiMessage((*it).getMessage());
-        }
-      }
-    } else {
-      // Standard MIDI 1.0 processing via base class
-      processMidi(midi_messages, sample_offset, sample_offset + num_samples);
-    }
+    processMidi(midi_messages, sample_offset, sample_offset + num_samples);
 
     processAudioSafe(&buffer, num_channels, num_samples, sample_offset);
 
     sample_offset += num_samples;
   }
+
+#if HELMBOY_DEBUG_BUFFER_INTEGRITY
+  float peak = 0.0f;
+  for (int channel = 0; channel < num_channels; ++channel) {
+    const float* channel_data = buffer.getReadPointer(channel);
+    for (int sample = 0; sample < total_samples; ++sample) {
+      float value = channel_data[sample];
+      if (!std::isfinite(value)) {
+        std::fprintf(stderr,
+                     "[HELMBOY_DEBUG_BUFFER_INTEGRITY] Non-finite sample ch=%d idx=%d value=%f\n",
+                     channel, sample, value);
+      }
+      peak = std::max(peak, std::fabs(value));
+    }
+  }
+
+  static int block_counter = 0;
+  if ((++block_counter % 512) == 0) {
+    std::fprintf(stderr,
+                 "[HELMBOY_DEBUG_BUFFER_INTEGRITY] block=%d peak=%f channels=%d samples=%d\n",
+                 block_counter, peak, num_channels, total_samples);
+  }
+#endif
 }
 
 bool HelmPlugin::hasEditor() const {
@@ -247,16 +410,31 @@ bool HelmPlugin::hasEditor() const {
 }
 
 AudioProcessorEditor* HelmPlugin::createEditor() {
-  return new HelmEditor(*this);
+  appendPluginHostTrace("HelmPlugin::createEditor begin");
+
+  try {
+    auto* editor = new HelmEditor(*this);
+    appendPluginHostTrace("HelmPlugin::createEditor end");
+    return editor;
+  }
+  catch (const std::exception& ex) {
+    Logger::writeToLog("[Plugin Editor] Initialization failed: " + String(ex.what()));
+  }
+  catch (...) {
+    Logger::writeToLog("[Plugin Editor] Initialization failed with an unknown exception.");
+  }
+
+  return nullptr;
 }
 
-void HelmPlugin::parameterChanged(std::string_view name, mopo::mopo_float value) {
-  std::string name_str{name}; // Convert to string for parameter lookup
-  valueChangedExternal(name_str, value);
+void HelmPlugin::parameterChanged(const std::string& name, mopo::mopo_float value) {
+  valueChangedExternal(name, value);
 }
 
 void HelmPlugin::loadPatches() {
-  all_patches_ = LoadSave::getAllPatches();
+  auto patches = LoadSave::getAllPatches();
+  const ScopedLock lock(getCallbackLock());
+  all_patches_ = std::move(patches);
 }
 
 bool HelmPlugin::isBusesLayoutSupported(const BusesLayout &layouts) const {
@@ -274,19 +452,47 @@ void HelmPlugin::getStateInformation(MemoryBlock& dest_data) {
 }
 
 void HelmPlugin::setStateInformation(const void* data, int size_in_bytes) {
-  set_state_time_ = Time::getMillisecondCounter();
+  if (data == nullptr || size_in_bytes <= 0)
+    return;
 
   MemoryInputStream stream(data, size_in_bytes, false);
   String data_string = stream.readEntireStreamAsString();
   var state;
-  if (JSON::parse(data_string, state).wasOk())
-    LoadSave::varToState(this, save_info_, state);
+  if (JSON::parse(data_string, state).failed() || !state.isObject())
+    return;
+  LoadSave::PreparedSynthState prepared = LoadSave::prepareState(std::move(state));
+  if (!prepared.valid)
+    return;
 
-  auto editor = getGuiInterface();
-  if (editor.has_value())
-    editor.value()->updateFullGui();
+  {
+    const ScopedLock lock(getCallbackLock());
+    set_state_time_.store(Time::getMillisecondCounter(), std::memory_order_release);
+    processControlChanges();
+    processModulationChanges();
+    requestEffectResetTransition();
+    LoadSave::applyPreparedState(this, save_info_, prepared);
+  }
+
+  requestGuiRefresh(true);
 }
 
 AudioProcessor* JUCE_CALLTYPE createPluginFilter() {
-  return new HelmPlugin();
+  appendPluginHostTrace("createPluginFilter begin");
+
+  try {
+    AudioProcessor* plugin = new HelmPlugin();
+    appendPluginHostTrace("createPluginFilter success");
+    return plugin;
+  }
+  catch (const std::exception& ex) {
+    Logger::writeToLog("[Plugin Startup] Initialization failed: " + String(ex.what()));
+    appendPluginHostTrace("createPluginFilter exception: " + juce::String(ex.what()));
+  }
+  catch (...) {
+    Logger::writeToLog("[Plugin Startup] Initialization failed with an unknown exception.");
+    appendPluginHostTrace("createPluginFilter unknown exception");
+  }
+
+  appendPluginHostTrace("createPluginFilter returning nullptr");
+  return nullptr;
 }

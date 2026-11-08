@@ -1,15 +1,20 @@
 var searchData=
 [
-  ['feedbacksection_0',['FeedbackSection',['../classFeedbackSection.html',1,'']]],
-  ['filelistboxmodel_1',['FileListBoxModel',['../classFileListBoxModel.html',1,'']]],
-  ['filesorterascending_2',['FileSorterAscending',['../classFileSorterAscending.html',1,'']]],
-  ['filterresponse_3',['FilterResponse',['../classFilterResponse.html',1,'']]],
-  ['filtersection_4',['FilterSection',['../classFilterSection.html',1,'']]],
-  ['filterselector_5',['FilterSelector',['../classFilterSelector.html',1,'']]],
-  ['fixedpointoscillator_6',['FixedPointOscillator',['../classmopo_1_1FixedPointOscillator.html',1,'mopo']]],
-  ['fixedpointwave_7',['FixedPointWave',['../classmopo_1_1FixedPointWave.html',1,'mopo']]],
-  ['fixedpointwavelookup_8',['FixedPointWaveLookup',['../classmopo_1_1FixedPointWaveLookup.html',1,'mopo']]],
-  ['fonts_9',['Fonts',['../classFonts.html',1,'']]],
-  ['formantsection_10',['FormantSection',['../classFormantSection.html',1,'']]],
-  ['fullinterface_11',['FullInterface',['../classFullInterface.html',1,'']]]
+  ['feedback_0',['Feedback',['../classmopo_1_1cr_1_1Feedback.html',1,'mopo::cr::Feedback'],['../classmopo_1_1Feedback.html',1,'mopo::Feedback']]],
+  ['feedbacksection_1',['FeedbackSection',['../classFeedbackSection.html',1,'']]],
+  ['filelistboxmodel_2',['FileListBoxModel',['../classFileListBoxModel.html',1,'']]],
+  ['filesorterascending_3',['FileSorterAscending',['../classFileSorterAscending.html',1,'']]],
+  ['filterresponse_4',['FilterResponse',['../classFilterResponse.html',1,'']]],
+  ['filtersection_5',['FilterSection',['../classFilterSection.html',1,'']]],
+  ['filterselector_6',['FilterSelector',['../classFilterSelector.html',1,'']]],
+  ['filterstate_7',['FilterState',['../structmopo_1_1Delay_1_1FilterState.html',1,'mopo::Delay']]],
+  ['fixedpointoscillator_8',['FixedPointOscillator',['../classmopo_1_1FixedPointOscillator.html',1,'mopo']]],
+  ['fixedpointwave_9',['FixedPointWave',['../classmopo_1_1FixedPointWave.html',1,'mopo']]],
+  ['fixedpointwavelookup_10',['FixedPointWaveLookup',['../classmopo_1_1FixedPointWaveLookup.html',1,'mopo']]],
+  ['fonts_11',['Fonts',['../classFonts.html',1,'']]],
+  ['formantmanager_12',['FormantManager',['../classmopo_1_1FormantManager.html',1,'mopo']]],
+  ['formantsection_13',['FormantSection',['../classFormantSection.html',1,'']]],
+  ['frequencytophase_14',['FrequencyToPhase',['../classmopo_1_1cr_1_1FrequencyToPhase.html',1,'mopo::cr::FrequencyToPhase'],['../classmopo_1_1FrequencyToPhase.html',1,'mopo::FrequencyToPhase']]],
+  ['frequencytosamples_15',['FrequencyToSamples',['../classmopo_1_1cr_1_1FrequencyToSamples.html',1,'mopo::cr::FrequencyToSamples'],['../classmopo_1_1FrequencyToSamples.html',1,'mopo::FrequencyToSamples']]],
+  ['fullinterface_16',['FullInterface',['../classFullInterface.html',1,'']]]
 ];

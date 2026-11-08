@@ -35,26 +35,95 @@
 #include <cmath>
 #include <span>
 
-#define MIN_RESONANCE 0.1
-#define MAX_RESONANCE 16.0
-#define MIN_CUTTOFF 1.0
+#if defined(HELMBOY_DEBUG_BIQUAD_ROUTING)
+#include <cstdio>
+#endif
+
+#define MIN_RESONANCE 0.1f
+#define MAX_RESONANCE 16.0f
+#define MIN_CUTTOFF 1.0f
 
 namespace mopo {
 
+  bool BiquadFilter::hasDirectJuceIirEquivalent(Type type) {
+    switch (type) {
+      case Type::LowPass:
+      case Type::HighPass:
+      case Type::BandPass:
+      case Type::Notch:
+      case Type::AllPass:
+      case Type::LowShelf:
+      case Type::HighShelf:
+        return true;
+      case Type::BandShelf:
+      case Type::GainedBandPass:
+      case Type::NumTypes:
+      default:
+        return false;
+    }
+  }
+
+  const char* BiquadFilter::getTypeName(Type type) {
+    switch (type) {
+      case Type::LowPass: return "LowPass";
+      case Type::HighPass: return "HighPass";
+      case Type::BandPass: return "BandPass";
+      case Type::LowShelf: return "LowShelf";
+      case Type::HighShelf: return "HighShelf";
+      case Type::BandShelf: return "BandShelf";
+      case Type::AllPass: return "AllPass";
+      case Type::Notch: return "Notch";
+      case Type::GainedBandPass: return "GainedBandPass";
+      case Type::NumTypes: return "NumTypes";
+      default: return "Unknown";
+    }
+  }
+
+  bool BiquadFilter::shouldUseJucePath(Type type) const {
+#if defined(HELMBOY_ENABLE_BIQUAD_JUCE_PATH)
+    return hasDirectJuceIirEquivalent(type);
+#else
+    (void) type;
+    return false;
+#endif
+  }
+
+  BiquadFilter::Coefficients BiquadFilter::lowPassCoefficients(mopo_float cutoff,
+                                                                mopo_float resonance,
+                                                                mopo_float sample_rate) {
+    MOPO_ASSERT(cutoff > 0.0);
+    MOPO_ASSERT(resonance > 0.0);
+    MOPO_ASSERT(sample_rate > 0.0);
+
+    const mopo_float phase_delta = 2.0 * PI * cutoff / sample_rate;
+    const mopo_float real_delta = cos(phase_delta);
+    const mopo_float imag_delta = sin(phase_delta);
+    const mopo_float alpha = imag_delta / (2.0 * resonance);
+    const mopo_float norm = 1.0 + alpha;
+
+    return {
+      (1.0 - real_delta) / (2.0 * norm),
+      (1.0 - real_delta) / norm,
+      (1.0 - real_delta) / (2.0 * norm),
+      -2.0 * real_delta / norm,
+      (1.0 - alpha) / norm
+    };
+  }
+
   BiquadFilter::BiquadFilter() : Processor(static_cast<int>(Inputs::NumInputs), 1) {
   current_type_ = Type::NumTypes;
-    current_cutoff_ = 0.0;
-    current_resonance_ = 0.0;
+    current_cutoff_ = 0.0f;
+    current_resonance_ = 0.0f;
 
-    target_in_0_ = 1.0;
-    target_in_1_ = target_in_2_ = 0.0;
-    target_out_1_ = target_out_2_ = 0.0;
+    target_in_0_ = 1.0f;
+    target_in_1_ = target_in_2_ = 0.0f;
+    target_out_1_ = target_out_2_ = 0.0f;
 
-    in_0_ = 1.0;
-    in_1_ = in_2_ = 0.0;
-    out_1_ = out_2_ = 0.0;
+    in_0_ = 1.0f;
+    in_1_ = in_2_ = 0.0f;
+    out_1_ = out_2_ = 0.0f;
 
-    past_in_1_ = past_in_2_ = past_out_1_ = past_out_2_ = 0.0;
+    past_in_1_ = past_in_2_ = past_out_1_ = past_out_2_ = 0.0f;
   }
 
   std::complex<mopo_float> BiquadFilter::getResponse(mopo_float frequency) {
@@ -74,7 +143,24 @@ namespace mopo {
       mopo_float cutoff = utils::clamp(input(static_cast<int>(Inputs::Cutoff))->at(0), MIN_CUTTOFF, sample_rate_);
       mopo_float resonance = utils::clamp(input(static_cast<int>(Inputs::Resonance))->at(0),
                                          MIN_RESONANCE, MAX_RESONANCE);
-      computeCoefficients(current_type_, cutoff, resonance, input(static_cast<int>(Inputs::Gain))->at(0));
+      mopo_float gain = input(static_cast<int>(Inputs::Gain))->at(0);
+      const bool use_juce_path = shouldUseJucePath(current_type_);
+#if defined(HELMBOY_DEBUG_BIQUAD_ROUTING)
+      static Type last_logged_type = Type::NumTypes;
+      static bool last_logged_route_juce = false;
+      if (current_type_ != last_logged_type || use_juce_path != last_logged_route_juce) {
+        std::fprintf(stderr,
+                     "[HelmBoy][Biquad] type=%s route=%s\n",
+                     getTypeName(current_type_),
+                     use_juce_path ? "juce-compatible" : "legacy-fallback");
+        last_logged_type = current_type_;
+        last_logged_route_juce = use_juce_path;
+      }
+#endif
+      if (use_juce_path)
+        computeCoefficientsJucePath(current_type_, cutoff, resonance, gain);
+      else
+        computeCoefficients(current_type_, cutoff, resonance, gain);
 
     mopo_float delta_in_0 = (target_in_0_ - in_0_) / buffer_size_;
     mopo_float delta_in_1 = (target_in_1_ - in_1_) / buffer_size_;
@@ -129,13 +215,12 @@ namespace mopo {
 
     switch(type) {
         case Type::LowPass: {
-        mopo_float alpha = imag_delta / (2.0 * resonance);
-        mopo_float norm = 1.0 + alpha;
-        target_in_0_ = (1.0 - real_delta) / (2.0 * norm);
-        target_in_1_ = (1.0 - real_delta) / norm;
-        target_in_2_ = target_in_0_;
-        target_out_1_ = -2.0 * real_delta / norm;
-        target_out_2_ = (1.0 - alpha) / norm;
+        const Coefficients coefficients = lowPassCoefficients(cutoff, resonance, sample_rate_);
+        target_in_0_ = coefficients.in_0;
+        target_in_1_ = coefficients.in_1;
+        target_in_2_ = coefficients.in_2;
+        target_out_1_ = coefficients.out_1;
+        target_out_2_ = coefficients.out_2;
         break;
       }
         case Type::HighPass: {
@@ -232,6 +317,107 @@ namespace mopo {
       default: {
         target_in_0_ = 1.0;
         target_in_2_ = target_in_1_ = target_out_2_ = target_out_1_ = 0.0;
+      }
+    }
+
+    current_cutoff_ = cutoff;
+    current_resonance_ = resonance;
+  }
+
+  void BiquadFilter::computeCoefficientsJucePath(Type type,
+                                   mopo_float cutoff,
+                                   mopo_float resonance,
+                                   mopo_float gain) {
+    MOPO_ASSERT(resonance > 0.0);
+    MOPO_ASSERT(cutoff > 0.0);
+    MOPO_ASSERT(gain >= 0.0);
+
+    const mopo_float phase_delta = 2.0 * PI * cutoff / sample_rate_;
+    const mopo_float real_delta = cos(phase_delta);
+    const mopo_float imag_delta = sin(phase_delta);
+
+    switch (type) {
+      case Type::LowPass: {
+        const Coefficients coefficients = lowPassCoefficients(cutoff, resonance, sample_rate_);
+        target_in_0_ = coefficients.in_0;
+        target_in_1_ = coefficients.in_1;
+        target_in_2_ = coefficients.in_2;
+        target_out_1_ = coefficients.out_1;
+        target_out_2_ = coefficients.out_2;
+        break;
+      }
+      case Type::HighPass: {
+        const mopo_float alpha = imag_delta / (2.0 * resonance);
+        const mopo_float norm = 1.0 + alpha;
+        target_in_0_ = (1.0 + real_delta) / (2.0 * norm);
+        target_in_1_ = -(1.0 + real_delta) / norm;
+        target_in_2_ = target_in_0_;
+        target_out_1_ = -2.0 * real_delta / norm;
+        target_out_2_ = (1.0 - alpha) / norm;
+        break;
+      }
+      case Type::BandPass: {
+        const mopo_float alpha = imag_delta / (2.0 * resonance);
+        const mopo_float norm = 1.0 + alpha;
+        target_in_0_ = (imag_delta / 2.0) / norm;
+        target_in_1_ = 0;
+        target_in_2_ = -target_in_0_;
+        target_out_1_ = -2.0 * real_delta / norm;
+        target_out_2_ = (1.0 - alpha) / norm;
+        break;
+      }
+      case Type::LowShelf: {
+        const mopo_float g = std::sqrt(gain);
+        const mopo_float alpha = (imag_delta / 2.0) * std::sqrt((g + 1.0 / g) *
+                                                                 (1.0 / resonance - 1) + 2.0);
+        const mopo_float sq = 2 * std::sqrt(g) * alpha;
+        const mopo_float norm = (g + 1) + (g - 1) * real_delta + sq;
+
+        target_in_0_ = ((g + 1) - (g - 1) * real_delta + sq) * (g / norm);
+        target_in_1_ = 2 * ((g - 1) - (g + 1) * real_delta) * (g / norm);
+        target_in_2_ = ((g + 1) - (g - 1) * real_delta - sq) * (g / norm);
+        target_out_1_ = -2 * ((g - 1) + (g + 1) * real_delta) / norm;
+        target_out_2_ = ((g + 1) + (g - 1) * real_delta - sq) / norm;
+        break;
+      }
+      case Type::HighShelf: {
+        const mopo_float g = std::sqrt(gain);
+        const mopo_float alpha = (imag_delta / 2.0) * std::sqrt((g + 1.0 / g) *
+                                                                 (1.0 / resonance - 1) + 2.0);
+        const mopo_float sq = 2 * std::sqrt(g) * alpha;
+        const mopo_float norm = (g + 1) - (g - 1) * real_delta + sq;
+
+        target_in_0_ = ((g + 1) + (g - 1) * real_delta + sq) * (g / norm);
+        target_in_1_ = -2 * ((g - 1) + (g + 1) * real_delta) * (g / norm);
+        target_in_2_ = ((g + 1) + (g - 1) * real_delta - sq) * (g / norm);
+        target_out_1_ = 2 * ((g - 1) - (g + 1) * real_delta) / norm;
+        target_out_2_ = ((g + 1) - (g - 1) * real_delta - sq) / norm;
+        break;
+      }
+      case Type::AllPass: {
+        const mopo_float alpha = imag_delta / (2.0 * resonance);
+        const mopo_float norm = 1.0 + alpha;
+        target_in_0_ = (1.0 - alpha) / norm;
+        target_in_1_ = -2.0 * real_delta / norm;
+        target_in_2_ = 1.0;
+        target_out_1_ = -2.0 * real_delta / norm;
+        target_out_2_ = (1.0 - alpha) / norm;
+        break;
+      }
+      case Type::Notch: {
+        const mopo_float alpha = imag_delta / (2.0 * resonance);
+        const mopo_float norm = 1.0 + alpha;
+        target_in_0_ = 1.0 / norm;
+        target_in_1_ = -2.0 * real_delta / norm;
+        target_in_2_ = target_in_0_;
+        target_out_1_ = target_in_1_;
+        target_out_2_ = (1.0 - alpha) / norm;
+        break;
+      }
+      default: {
+        // Explicit fallback keeps unsupported modes on legacy coefficient logic.
+        computeCoefficients(type, cutoff, resonance, gain);
+        return;
       }
     }
 

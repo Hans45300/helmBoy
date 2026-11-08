@@ -1,0 +1,11 @@
+<map id="mopo::PortamentoFilter" name="mopo::PortamentoFilter">
+<area shape="rect" id="Node000001" title="Filtre de portamento pour le d�clenchement de notes." alt="" coords="5,787,152,941"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="180,5,332,501"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,518,103,788,98,786,181,513"/>
+<area shape="rect" id="Node000003" href="$classmopo_1_1ProcessorRouter.html" title=" " alt="" coords="176,573,336,1155"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="251,514,253,525,253,574,248,573,248,525,250,519"/>
+<area shape="rect" id="Node000004" href="$structmopo_1_1Output.html" title=" " alt="" coords="367,744,467,984"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="321,499,339,548,350,572,374,650,393,728,388,728,369,651,346,574,335,550,320,504"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="253,573,255,521,257,515,259,574"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="418,743,411,637,403,581,391,526,367,458,339,395,339,390,372,456,396,525,408,580,416,636,423,745"/>
+</map>

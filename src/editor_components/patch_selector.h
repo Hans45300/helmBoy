@@ -23,9 +23,10 @@
 #define PATCH_SELECTOR_H
 #/**
  * @file patch_selector.h
- * @brief Interface principale de sélection et gestion de patches (load/save/browse).
+ * @brief Interface principale de sï¿½lection et gestion de patches (load/save/browse).
  */
 #include <JuceHeader.h>
+#include "synth_base.h"
 #include "patch_browser.h"
 #include "synth_section.h"
 
@@ -100,6 +101,7 @@ class PatchSelector : public SynthSection, public PatchBrowser::PatchSelectedLis
     void buttonClicked(Button* buttonThatWasClicked) override;
     void newPatchSelected(File patch) override;
     void setModified(bool modified);
+      void setUndoRedoAvailability(bool can_undo, bool can_redo);
     void setSaveSection(SaveSection* save_section) { save_section_ = save_section; }
     void setBrowser(PatchBrowser* browser) {
       browser_ = browser;
@@ -110,22 +112,38 @@ class PatchSelector : public SynthSection, public PatchBrowser::PatchSelectedLis
     void initPatch();
     /** Ensure the browse button shows "BROWSE" (used when browser hides). */
     void ensureBrowseButtonIsBrowse();
+    void switchABState();
 
   private:
     void loadFromFile(File& patch);
+    void ensureABSnapshots();
+    void updateABButtonState();
+    void updateBrowseButtonState();
+    void showSaveAs();
+    void confirmSaveCurrentPatch();
+    void saveCurrentPatchAfterConfirmation(const File& target);
 
     String folder_text_;
     String patch_text_;
 
     std::unique_ptr<TextButton> prev_patch_;
     std::unique_ptr<TextButton> next_patch_;
+    std::unique_ptr<TextButton> init_;
+    std::unique_ptr<TextButton> ab_comparison_;
     std::unique_ptr<TextButton> save_;
+    std::unique_ptr<TextButton> save_as_;
     std::unique_ptr<TextButton> export_;
     std::unique_ptr<TextButton> browse_;
+    std::unique_ptr<TextButton> undo_;
+    std::unique_ptr<TextButton> redo_;
   PatchBrowser* browser_;
   bool browse_mode_ = false;
     SaveSection* save_section_;
     bool modified_;
+    SynthGuiStateSnapshot state_a_;
+    SynthGuiStateSnapshot state_b_;
+    bool ab_snapshots_initialized_ = false;
+    bool active_state_b_ = false;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PatchSelector)
 };

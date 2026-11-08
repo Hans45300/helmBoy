@@ -51,6 +51,7 @@ namespace mopo {
         kThreePyramid,
         kFivePyramid,
         kNinePyramid,
+        kSawMobius,
         kWhiteNoise,
         kNumFixedPointWaveforms
       };
@@ -74,6 +75,7 @@ namespace mopo {
       void preprocessSquare();
       void preprocessDownSaw();
       void preprocessUpSaw();
+      void preprocessSawMobius();
   template<size_t steps> requires (steps > 1)
   void preprocessStep(wave_type buffer);
   template<size_t steps> requires (steps > 1)
@@ -91,6 +93,7 @@ namespace mopo {
       mopo_float three_pyramid_[HARMONICS + 1][2 * FIXED_LOOKUP_SIZE];
       mopo_float five_pyramid_[HARMONICS + 1][2 * FIXED_LOOKUP_SIZE];
       mopo_float nine_pyramid_[HARMONICS + 1][2 * FIXED_LOOKUP_SIZE];
+      mopo_float saw_mobius_[HARMONICS + 1][2 * FIXED_LOOKUP_SIZE];
 
       wave_type waves_[kNumFixedPointWaveforms];
   };

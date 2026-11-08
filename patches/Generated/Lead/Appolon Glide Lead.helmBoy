@@ -1,0 +1,60 @@
+{
+  "settings": {
+    "polyphony": 1,
+    "legato": 1,
+    "portamento": -3.8,
+    "portamento_type": 2,
+    "pitch_bend_range": 2.0,
+    "osc_1_waveform": 2.0,
+    "osc_1_phase_stretch": 0.5,
+    "osc_1_volume": 0.67,
+    "osc_2_waveform": 2.0,
+    "osc_2_tune": 0.05,
+    "osc_2_volume": 0.48,
+    "sub_volume": 0.22,
+    "filter_on": 1,
+    "filter_style": 0,
+    "cutoff": 70.0,
+    "resonance": 0.2,
+    "keytrack": 0.65,
+    "fil_env_depth": 16,
+    "amp_attack": 0.005,
+    "amp_decay": 0.75,
+    "amp_sustain": 0.92,
+    "amp_release": 0.25,
+    "mono_lfo_1_sync": 0,
+    "mono_lfo_1_frequency": 2.35,
+    "mono_lfo_1_waveform": 1.0,
+    "mono_lfo_1_amplitude": 0.0,
+    "chorus_on": 1,
+    "chorus_rate": 0.62,
+    "chorus_depth": 0.28,
+    "chorus_mix": 0.35,
+    "reverb_on": 1,
+    "reverb_dry_wet": 0.12,
+    "delay_on": 0,
+    "arp_on": 0,
+    "modulations": [
+      {
+        "amount": 1.0,
+        "destination": "mono_lfo_1_amplitude",
+        "source": "mod_wheel"
+      },
+      {
+        "amount": 0.09,
+        "destination": "osc_1_tune",
+        "source": "mono_lfo_1"
+      },
+      {
+        "amount": 0.09,
+        "destination": "osc_2_tune",
+        "source": "mono_lfo_1"
+      }
+    ],
+    "lfo_tempo_index_version": 2
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Appolon Glide Lead",
+  "folder_name": "Lead",
+  "synth_version": "1.1.1"
+}

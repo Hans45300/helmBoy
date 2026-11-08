@@ -1,0 +1,5 @@
+<map id="mopo::ReverbComb" name="mopo::ReverbComb">
+<area shape="rect" id="Node000001" title="Comb filter used inside the reverb processor." alt="" coords="17,592,145,789"/>
+<area shape="rect" id="Node000002" href="$classmopo_1_1Processor.html" title=" " alt="" coords="5,5,156,544"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="81,556,83,592,78,592,80,561"/>
+</map>

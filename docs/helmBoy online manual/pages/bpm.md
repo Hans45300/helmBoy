@@ -4,7 +4,7 @@
 
 ![BPM example](../pictures/BPM.png)
 
-BPM (Beats Per Minute) controls the internal tempo for all tempo-synchronized features.
+BPM (Beats Per Minute) sets the standalone tempo. In a plug-in host, tempo-synchronized modules can follow the host's tempo when it is available.
 
 ## Parameters
 
@@ -14,22 +14,7 @@ BPM (Beats Per Minute) controls the internal tempo for all tempo-synchronized fe
 - **Default**: 120 BPM
 - **Sync**: Can sync to host DAW tempo
 
-### Sync Mode
-
-#### Internal
-
-helmBoy uses its own internal tempo setting.
-
-#### Host Sync
-
-helmBoy synchronizes to the host DAW's tempo.
-
-- Automatically follows tempo changes in DAW
-- Recommended for DAW projects
-
-#### MIDI Clock
-
-Synchronizes to external MIDI clock messages.
+The BPM control sets the local tempo; there is no separate MIDI Clock input mode. In a plug-in, the host provides timing information to tempo-synchronized modules.
 
 ## Tempo-Synced Features
 
@@ -39,7 +24,7 @@ The following features can synchronize to tempo:
 - **Delay Time**: Rhythmic delays
 - **Arpeggiator**: Note divisions
 - **Step Sequencer**: Step timing
-- **Stutter Effect**: Rhythmic stuttering
+- **Stutter Effect**: Stutter rate and resampling rate
 
 ## Usage
 
@@ -49,11 +34,7 @@ Enable Host Sync for automatic tempo tracking.
 
 ### Standalone
 
-Set internal tempo or use MIDI clock sync.
-
-### Live Performance
-
-Use tap tempo (if available) or MIDI clock for synchronization.
+Set the BPM control directly. Tempo divisions then use this value as their reference.
 
 ## See Also
 

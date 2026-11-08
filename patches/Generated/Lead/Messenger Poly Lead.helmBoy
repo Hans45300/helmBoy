@@ -1,0 +1,53 @@
+{
+  "settings": {
+    "polyphony": 1,
+    "legato": 1,
+    "portamento": -4.3,
+    "portamento_type": 2,
+    "osc_1_waveform": 2.0,
+    "osc_1_phase_stretch": 0.42,
+    "osc_1_volume": 0.65,
+    "osc_2_waveform": 2.0,
+    "osc_2_phase_stretch": 0.58,
+    "osc_2_tune": 0.04,
+    "osc_2_volume": 0.48,
+    "filter_on": 1,
+    "filter_style": 1,
+    "cutoff": 71.0,
+    "resonance": 0.22,
+    "keytrack": 0.5,
+    "fil_env_depth": 18,
+    "amp_attack": 0.006,
+    "amp_decay": 0.72,
+    "amp_sustain": 0.9,
+    "amp_release": 0.28,
+    "mono_lfo_1_sync": 0,
+    "mono_lfo_1_frequency": -0.5,
+    "mono_lfo_1_waveform": 1.0,
+    "chorus_on": 1,
+    "chorus_rate": 0.62,
+    "chorus_depth": 0.3,
+    "chorus_mix": 0.4,
+    "reverb_on": 1,
+    "reverb_dry_wet": 0.13,
+    "delay_on": 0,
+    "arp_on": 0,
+    "modulations": [
+      {
+        "amount": 0.26,
+        "destination": "osc_1_phase_stretch",
+        "source": "mono_lfo_1"
+      },
+      {
+        "amount": -0.26,
+        "destination": "osc_2_phase_stretch",
+        "source": "mono_lfo_1"
+      }
+    ],
+    "lfo_tempo_index_version": 2
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Messenger Poly Lead",
+  "folder_name": "Lead",
+  "synth_version": "1.1.1"
+}

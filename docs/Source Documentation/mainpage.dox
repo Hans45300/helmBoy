@@ -2,6 +2,28 @@
  * @mainpage HelmBoy Documentation
  *
  * @section intro_sec Introduction
- * HelmBoy is a modern subtractive polyphonic synthesizer. This documentation
- * provides an overview of modules, synthesis engine, UI and plugin integrations.
+ * HelmBoy is a polyphonic software synthesizer built around the mopo processor
+ * graph and JUCE application/plugin APIs. This reference combines the API
+ * extracted from the source with the developer guides below.
+ *
+ * @section guides_sec Developer guides
+ * - @ref architecture describes the repository layers, host lifecycles and
+ *   global audio signal path.
+ * - @ref state_and_parameters documents controls, host automation and patch
+ *   persistence.
+ * - @ref midi_input documents the active MIDI 1.0 path and the explicit,
+ *   limited UMP decoder.
+ * - @ref gui_and_threads describes GUI updates, visual snapshots and CPU-rendered components.
+ * - @ref development_and_tests lists build targets and focused test options.
+ *
+ * @section source_layout_sec Source layout
+ * - `src/common`: shared synth façade, controls, persistence and MIDI.
+ * - `src/synthesis`: HelmBoy engine, voice graph and synthesis modules.
+ * - `src/editor_sections` and `src/editor_components`: JUCE interface.
+ * - `mopo/src`: processor graph, parameters and DSP building blocks.
+ * - `src/plugin` and `src/standalone`: host-specific lifecycle adapters.
+ *
+ * The guides describe current source behavior; generated API pages provide
+ * declarations and symbol-level details. Neither is a claim of runtime or
+ * host certification.
  */

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['patchcommands_0',['PatchCommands',['../classHelmBoyApplication_1_1MainWindow.html#a32fd1bb1fea4b6c6e94ffddf7940298a',1,'HelmBoyApplication::MainWindow']]],
-  ['propertyrequest_1',['PropertyRequest',['../classhelmboy_1_1Midi2Manager.html#a6aa186d8282f1a52af973b3feb4cc728',1,'helmboy::Midi2Manager']]]
+  ['outputs_0',['Outputs',['../classmopo_1_1HelmBoyLfo.html#a47c06de4f8d9727147362ddf04d93bd3',1,'mopo::HelmBoyLfo::Outputs'],['../classmopo_1_1ValueSwitch.html#a382f91c91571a66adbd3915a5c50e64a',1,'mopo::ValueSwitch::Outputs'],['../classmopo_1_1Envelope.html#a0c0a1c778588eb977146e01b64d36a62',1,'mopo::Envelope::Outputs'],['../classmopo_1_1Limiter.html#a82e08b6a2fa889d6ea90469567324c91',1,'mopo::Limiter::Outputs'],['../classmopo_1_1MonoPanner.html#a9e90451033691c29180b326e1d981085',1,'mopo::MonoPanner::Outputs'],['../classmopo_1_1Oscillator.html#a440b32eafa9f3cb13decc8c31c4b49d7',1,'mopo::Oscillator::Outputs'],['../classmopo_1_1StepGenerator.html#a570c4333b55179880cfe4f65483ad422',1,'mopo::StepGenerator::Outputs'],['../classmopo_1_1StereoBalance.html#a18647d4593bc78b734f7d27b013e5473',1,'mopo::StereoBalance::Outputs'],['../classmopo_1_1LegatoFilter.html#afc68a6e8de36f6f19fbf1897bb2586df',1,'mopo::LegatoFilter::Outputs']]]
 ];

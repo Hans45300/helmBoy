@@ -31,6 +31,9 @@
 #include "value.h"
 #include "operators.h"
 
+#include <algorithm>
+#include <cmath>
+#include <limits>
 #include <map>
 #include <string>
 #include <memory>
@@ -63,7 +66,82 @@ namespace mopo {
     bool display_invert;
     std::string display_units;
     std::string display_name;
+  bool deprecated = false;
   } typedef ValueDetails;
+
+  /** Convert presentation values using metadata only; never access DSP state. */
+  inline bool tryDisplayToInternal(const ValueDetails& details, double display_value,
+                                   double& internal_value) {
+    if (!std::isfinite(display_value) ||
+        std::abs(details.display_multiply) < std::numeric_limits<double>::epsilon())
+      return false;
+
+    double value = display_value / details.display_multiply;
+    if (details.display_invert) {
+      if (std::abs(value) < std::numeric_limits<double>::epsilon())
+        return false;
+      value = 1.0 / value;
+    }
+    value -= details.post_offset;
+    switch (details.display_skew) {
+      case DisplaySkew::kQuadratic:
+        if (value < 0.0)
+          return false;
+        value = std::sqrt(value);
+        break;
+      case DisplaySkew::kExponential:
+        if (value <= 0.0)
+          return false;
+        value = std::log2(value);
+        break;
+      case DisplaySkew::kSquareRoot:
+        if (value < 0.0)
+          return false;
+        value = value * value;
+        break;
+      default:
+        break;
+    }
+    if (!std::isfinite(value))
+      return false;
+    internal_value = value;
+    return true;
+  }
+
+  /** Apply the established display curve, offset, inversion and unit scale. */
+  inline bool tryInternalToDisplay(const ValueDetails& details, double internal_value,
+                                   double& display_value) {
+    if (!std::isfinite(internal_value))
+      return false;
+
+    double value = internal_value;
+    switch (details.display_skew) {
+      case DisplaySkew::kQuadratic:
+        value = std::pow(value, 2.0);
+        break;
+      case DisplaySkew::kExponential:
+        value = std::pow(2.0, value);
+        break;
+      case DisplaySkew::kSquareRoot:
+        if (value < 0.0)
+          return false;
+        value = std::sqrt(value);
+        break;
+      default:
+        break;
+    }
+    value += details.post_offset;
+    if (details.display_invert) {
+      if (std::abs(value) < std::numeric_limits<double>::epsilon())
+        return false;
+      value = 1.0 / value;
+    }
+    value *= details.display_multiply;
+    if (!std::isfinite(value))
+      return false;
+    display_value = value;
+    return true;
+  }
 
   namespace strings {
 
@@ -87,13 +165,17 @@ namespace mopo {
     const std::string filter_style[] = {
       "12dB",
       "24dB",
-      "Shelf"
+      "Shelf",
+      "Notch",
+      "Comb"
     };
 
     const std::string filter_style_short[] = {
       "12",
       "24",
-      "SH"
+      "SH",
+      "N",
+      "C"
     };
 
     const std::string arp_patterns[] = {
@@ -148,12 +230,27 @@ namespace mopo {
       "all pass"
     };
 
-    const std::string waveforms[] = {
+    const std::string oscillator_waveforms[] = {
       "sin",
       "triangle",
       "square",
-      "saw up",
       "saw down",
+      "saw up",
+      "3 step",
+      "4 step",
+      "8 step",
+      "3 pyramid",
+      "5 pyramid",
+      "9 pyramid",
+      "saw mobius",
+    };
+
+    const std::string lfo_waveforms[] = {
+      "sin",
+      "triangle",
+      "square",
+      "saw down",
+      "saw up",
       "3 step",
       "4 step",
       "8 step",
@@ -162,6 +259,7 @@ namespace mopo {
       "9 pyramid",
       "sample and hold",
       "sample and glide",
+      "smooth random",
     };
 
     const std::string synced_frequencies[] = {
@@ -178,9 +276,26 @@ namespace mopo {
       "1/32",
       "1/64",
     };
+
+    const std::string lfo_synced_frequencies[] = {
+      "64/1",
+      "32/1",
+      "16/1",
+      "8/1",
+      "4/1",
+      "2/1",
+      "1/1",
+      "1/2",
+      "1/4",
+      "1/8",
+      "1/16",
+      "1/32",
+      "1/64",
+      "1/128",
+    };
   } // namespace strings
 
-  const constexpr mopo_float MAX_STEPS = 64;
+  const constexpr mopo_float MAX_STEPS = 128;
   const constexpr int NUM_FORMANTS = 4;
   const constexpr int NUM_CHANNELS = 2;
   const constexpr int MEMORY_SAMPLE_RATE = 22000;
@@ -189,11 +304,6 @@ namespace mopo {
   const constexpr int DEFAULT_MODULATION_CONNECTIONS = 256;
   const constexpr int DEFAULT_WINDOW_WIDTH = 1320;
   const constexpr int DEFAULT_WINDOW_HEIGHT = 850;
-
-  const constexpr int DEFAULT_KEYBOARD_OFFSET = 48;
-  const std::wstring DEFAULT_KEYBOARD = L"awsedftgyhujkolp;'";
-  const constexpr wchar_t DEFAULT_KEYBOARD_OCTAVE_UP = 'x';
-  const constexpr wchar_t DEFAULT_KEYBOARD_OCTAVE_DOWN = 'z';
 
   const std::string PATCH_EXTENSION = "helmBoy";
 
@@ -217,6 +327,28 @@ namespace mopo {
     cr::Value(8.0),
     cr::Value(16.0),
   };
+
+  const mopo::cr::Value lfo_synced_freq_ratios[] = {
+    cr::Value(1.0 / 256.0),
+    cr::Value(1.0 / 128.0),
+    cr::Value(1.0 / 64.0),
+    cr::Value(1.0 / 32.0),
+    cr::Value(1.0 / 16.0),
+    cr::Value(1.0 / 8.0),
+    cr::Value(1.0 / 4.0),
+    cr::Value(1.0 / 2.0),
+    cr::Value(1.0),
+    cr::Value(2.0),
+    cr::Value(4.0),
+    cr::Value(8.0),
+    cr::Value(16.0),
+    cr::Value(32.0),
+  };
+
+  /** @brief Remap an old LFO division index into the extended tempo table. */
+  [[nodiscard]] inline mopo_float migrateLegacyLfoTempoIndex(mopo_float index) {
+    return std::clamp(index, mopo_float{0.0}, mopo_float{11.0}) + 1.0;
+  }
 
   struct ModulationConnection {
     /** @brief Default construct an empty modulation connection. */
@@ -269,23 +401,6 @@ namespace mopo {
       std::vector<ModulationConnection*> all_connections_;
   };
 
-  class StringLayout {
-    public:
-      std::wstring getLayout() { return layout_; }
-      void setLayout(std::wstring layout) { layout_ = layout; }
-
-      wchar_t getUpKey() { return up_key_; }
-      void setUpKey(wchar_t up_key) { up_key_ = up_key; }
-
-      wchar_t getDownKey() { return down_key_; }
-      void setDownKey(wchar_t down_key) { down_key_ = down_key; }
-
-    protected:
-      std::wstring layout_;
-      int up_key_;
-      int down_key_;
-  };
-
   class ValueDetailsLookup {
     public:
       ValueDetailsLookup();
@@ -321,6 +436,24 @@ namespace mopo {
 
       static ValueDetailsLookup lookup_;
   };
+
+  /** @brief Return the symmetric modulation-depth limit for a destination range. */
+  [[nodiscard]] inline mopo_float modulationAmountLimit(mopo_float minimum,
+                                                        mopo_float maximum) {
+    return maximum - minimum;
+  }
+
+  /** @brief Return the symmetric modulation-depth limit for a destination. */
+  [[nodiscard]] inline mopo_float modulationAmountLimit(const ValueDetails& destination) {
+    return modulationAmountLimit(destination.min, destination.max);
+  }
+
+  /** @brief Clamp a finite modulation amount to the destination's symmetric range. */
+  [[nodiscard]] inline mopo_float clampModulationAmount(const ValueDetails& destination,
+                                                        mopo_float amount) {
+    const mopo_float limit = modulationAmountLimit(destination);
+    return std::clamp(amount, -limit, limit);
+  }
 } // namespace mopo
 
 #endif // HELM_COMMON_H

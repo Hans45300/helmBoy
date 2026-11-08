@@ -1,0 +1,43 @@
+{
+  "settings": {
+    "polyphony": 12,
+    "velocity_track": 0.4,
+    "osc_1_waveform": 0.0,
+    "osc_1_volume": 0.65,
+    "osc_2_waveform": 4.0,
+    "osc_2_transpose": 12.0,
+    "osc_2_volume": 0.28,
+    "cross_modulation": 0.12,
+    "filter_on": 1,
+    "filter_style": 0,
+    "cutoff": 82.0,
+    "resonance": 0.25,
+    "fil_env_depth": 24,
+    "fil_decay": 0.58,
+    "fil_sustain": 0.08,
+    "amp_attack": 0.002,
+    "amp_decay": 1.1,
+    "amp_sustain": 0.06,
+    "amp_release": 0.7,
+    "chorus_on": 1,
+    "chorus_rate": 0.52,
+    "chorus_depth": 0.22,
+    "chorus_mix": 0.34,
+    "reverb_on": 1,
+    "reverb_dry_wet": 0.24,
+    "delay_on": 0,
+    "arp_on": 0,
+    "modulations": [
+      {
+        "amount": 12.0,
+        "destination": "cutoff",
+        "source": "velocity"
+      }
+    ],
+    "lfo_tempo_index_version": 2
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Hermes Glass Mallet",
+  "folder_name": "Keys",
+  "synth_version": "1.1.1"
+}

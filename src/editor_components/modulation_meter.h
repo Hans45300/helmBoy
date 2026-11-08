@@ -22,8 +22,11 @@
 #define MODULATION_METER_H
 
 #include <JuceHeader.h>
+#include <array>
 #include "processor.h"
 #include "synth_slider.h"
+
+class SynthBase;
 
 #/**
  * @file modulation_meter.h
@@ -38,9 +41,10 @@ class ModulationMeter : public Component {
      * @param poly_total Source poly de modulation (total).
      * @param slider Slider lié pour affichage contextuel.
      */
-    ModulationMeter(const mopo::Output* mono_total,
+    ModulationMeter(SynthBase* synth,
+            const mopo::Output* mono_total,
                     const mopo::Output* poly_total,
-                    const SynthSlider* slider);
+                    SynthSlider* slider);
     virtual ~ModulationMeter();
 
     /** @brief Dessine le meter. */
@@ -50,6 +54,7 @@ class ModulationMeter : public Component {
 
     /** @brief Met à jour la valeur interne du meter. */
     void updateValue();
+    bool copyModulatedValue(float& value) const;
     /** @brief Met à jour le dessin à l'écran (invalidate/redraw). */
     void updateDrawing();
 
@@ -57,6 +62,8 @@ class ModulationMeter : public Component {
     void setModulated(bool modulated) { modulated_ = modulated; }
 
   private:
+    Colour getMeterColour() const;
+
     void drawSlider(Graphics& g);
     void drawTextSlider(Graphics& g);
 
@@ -64,9 +71,12 @@ class ModulationMeter : public Component {
     void fillHorizontalRect(Graphics& g, float x1, float x2, float height);
     void fillVerticalRect(Graphics& g, float y1, float y2, float width);
 
+    SynthBase* synth_;
     const mopo::Output* mono_total_;
     const mopo::Output* poly_total_;
-    const SynthSlider* destination_;
+    SynthSlider* destination_;
+    std::array<int, 2> telemetry_indices_ { -1, -1 };
+    int telemetry_count_ = 0;
 
     double current_value_;
     float knob_percent_;
@@ -75,7 +85,7 @@ class ModulationMeter : public Component {
     PathStrokeType knob_stroke_;
     float full_radius_;
     float outer_radius_;
-    bool modulated_;
+    bool modulated_ = false;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ModulationMeter)
 };

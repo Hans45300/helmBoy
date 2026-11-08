@@ -1,0 +1,45 @@
+{
+  "settings": {
+    "polyphony": 8,
+    "osc_1_waveform": 4.0,
+    "osc_1_volume": 0.56,
+    "osc_2_waveform": 2.0,
+    "osc_2_transpose": 19.0,
+    "osc_2_volume": 0.36,
+    "filter_on": 1,
+    "filter_style": 4,
+    "filter_blend": 1.25,
+    "filter_drive": 3.0,
+    "cutoff": 80.0,
+    "resonance": 0.44,
+    "amp_attack": 0.01,
+    "amp_decay": 1.1,
+    "amp_sustain": 0.48,
+    "amp_release": 0.55,
+    "mono_lfo_1_sync": 0,
+    "mono_lfo_1_frequency": -0.7,
+    "mono_lfo_1_waveform": 1.0,
+    "chorus_on": 1,
+    "chorus_rate": 0.48,
+    "chorus_depth": 0.24,
+    "chorus_mix": 0.3,
+    "reverb_on": 1,
+    "reverb_dry_wet": 0.16,
+    "modulations": [
+      {
+        "amount": 12.0,
+        "destination": "cutoff",
+        "source": "mono_lfo_1"
+      },
+      {
+        "amount": 0.16,
+        "destination": "filter_blend",
+        "source": "mono_lfo_1"
+      }
+    ]
+  },
+  "author": "HelmBoy Generated",
+  "patch_name": "Spectral Comb",
+  "folder_name": "Advanced",
+  "synth_version": "1.1.1"
+}
